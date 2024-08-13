@@ -97,22 +97,33 @@ export default function UpdatePostOnNews({navigation, route}) {
   
   console.log('ReceivedData', receivedData);
 
+  // useEffect(() => {
+  //   // Make the API request and update the 'data' state
+  //   const fetchPreCategory = async () => {
+  //     setComment(receivedData?.description);
+  //     // setCategoryId(receivedData?.disc_category);
+  //     setImageInfo({uri: receivedData?.image});
+  //     setImageUrl(receivedData?.image);
+  //     isDataFetched(true);
+  //   };
+
+  //   fetchPreCategory();
+  // }, []);
+
+
+
   useEffect(() => {
-    // Make the API request and update the 'data' state
-    const fetchPreCategory = async () => {
+    if (receivedData) {
       setComment(receivedData?.description);
-      // setCategoryId(receivedData?.disc_category);
-      setImageInfo({uri: receivedData?.image});
+      setCategoryId(receivedData?.category_id);
+      setSubCategory(receivedData?.sub_category_id);
+  
+      // setCategorySelect(receivedData);
       setImageUrl(receivedData?.image);
+      setImageInfo({uri: receivedData?.image});
       isDataFetched(true);
-    };
-
-    fetchPreCategory();
-  }, []);
-
-
-
-
+    } 
+  }, [receivedData]);
 
 
   useEffect(() => {
@@ -181,8 +192,8 @@ export default function UpdatePostOnNews({navigation, route}) {
           label: category.name,
           value: category.id.toString()
         }));
-
-        setCategorySelect(categories);
+        const reverseData = data.AllCategories.reverse();
+        setCategorySelect(reverseData);
       } else {
         console.error('Failed to fetch categories:', response.status, response.statusText);
       }
@@ -208,7 +219,8 @@ export default function UpdatePostOnNews({navigation, route}) {
 
       if (response.ok) {
         const result = await response.json();
-        setSubCate(result.AllCategories);
+        const reverseData = result.AllCategories.reverse();
+        setSubCate(reverseData);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
       }
@@ -787,12 +799,14 @@ export default function UpdatePostOnNews({navigation, route}) {
             selectedTextStyle={{fontSize: 16, color: '#000000'}}
             // inputSearchStyle={styles.inputSearchStyle}
             // iconStyle={styles.iconStyle}
-            value={category}
+            value={categoryId}
             data={categoriesSelect}
             search={false}
             maxHeight={200}
-            labelField="label"
-            valueField="value"
+            labelField="name"
+            valueField="id"
+            // labelField="label"
+            // valueField="value"
             placeholder={'Select Category'}
             searchPlaceholder="Search..."
             onFocus={handleCategoryFocus}
@@ -801,7 +815,7 @@ export default function UpdatePostOnNews({navigation, route}) {
             // onBlur={() => setIsFocus(false)}
             onChange={item => {
               //setCategory(item.label);
-              setCategoryId(item.value);
+              setCategoryId(item.id);
               setIsFocus(false);
             }}
             renderRightIcon={() => (

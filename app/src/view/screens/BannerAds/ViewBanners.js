@@ -417,13 +417,24 @@ export default function ViewBanners({ navigation }) {
       </View>
 
       <View style={{ marginTop: hp(.5), flex: 1 }}>
-        {/* <FlatList
-          style={{ flexGrow: 1 }}
-          showsVerticalScrollIndicator={false}
-          data={allBanners}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => renderBlogs(item)}
-        /> */}
+      {loading ? (
+         <View
+         style={{
+           position: "absolute",
+           top: 0,
+           bottom: 0,
+           left: 0,
+           right: 0,
+           justifyContent: "center",
+           alignItems: "center",
+         }}
+       >
+         <ActivityIndicator size="large" color="#FACA4E" />
+         {/* <ActivityIndicator size="large" color="#0000ff" style={styles.loading} /> */}
+       </View>
+      ) : allBanners.length === 0 ? (
+        <Text style={styles.placeholder}>Your ads will show here</Text>
+      ) : (
         <FlatList
           style={{ flexGrow: 1 }}
           showsVerticalScrollIndicator={false}
@@ -431,7 +442,19 @@ export default function ViewBanners({ navigation }) {
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => renderBlogs(item)}
         />
-      </View>
+      )}
+    </View>
+
+      {/* <View style={{ marginTop: hp(.5), flex: 1 }}>
+      
+        <FlatList
+          style={{ flexGrow: 1 }}
+          showsVerticalScrollIndicator={false}
+          data={allBanners}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => renderBlogs(item)}
+        />
+      </View> */}
       {/* <View
         style={{
           position: "absolute",
@@ -473,5 +496,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
+  },
+  placeholder: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: 18,
+    color: '#888',
   },
 });

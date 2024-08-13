@@ -52,6 +52,7 @@ import { base_url } from '../../../../../baseUrl';
 import {SelectCountry, Dropdown} from 'react-native-element-dropdown';
 import CustomDialog from '../../../assets/Custom/CustomDialog';
 import { CLOUD_NAME, CLOUDINARY_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
+import CustomLoaderButton from '../../../assets/Custom/CustomLoaderButton';
 
 const Category = [
   {label: 'Item 1', value: '1'},
@@ -107,6 +108,9 @@ export default function PostOnNews({navigation}) {
   const [subcategoryError, setSubcategoryError] = useState("");
   const [subCate, setSubCate] = useState([]);
   const [subcategory, setSubCategory] = useState("");
+  const [profileNameError, setProfileNameError] = useState("");
+  const [imageError, setImageError] = useState("");
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -174,8 +178,8 @@ export default function PostOnNews({navigation}) {
           label: category.name,
           value: category.id.toString()
         }));
-
-        setCategorySelect(categories);
+          const reverseData = categories.reverse();
+        setCategorySelect(reverseData);
       } else {
         console.error('Failed to fetch categories:', response.status, response.statusText);
       }
@@ -201,7 +205,8 @@ export default function PostOnNews({navigation}) {
 
       if (response.ok) {
         const result = await response.json();
-        setSubCate(result.AllCategories);
+        const reverseData = result.AllCategories.reverse();
+        setSubCate(reverseData);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
       }
@@ -761,6 +766,9 @@ export default function PostOnNews({navigation}) {
             //height={hp(5)}
           />
         </View>
+        <View style={{marginHorizontal:hp('4%'), marginTop:hp('-2%')}}>
+{profileNameError ? <Text style={styles.errorText}>{profileNameError}</Text> : null}
+        </View>
 
         <TouchableOpacity
           onPress={() => ref_RBSheetCamera.current.open()}
@@ -786,7 +794,9 @@ export default function PostOnNews({navigation}) {
             Add Image
           </Text>
         </TouchableOpacity>
-
+        <View style={{marginHorizontal:hp('4%'), marginTop:hp('-2%')}}>
+{imageError ? <Text style={styles.errorText}>{imageError}</Text> : null}
+        </View>
         {imageUri !== null ? (
           <View
             style={{
@@ -880,6 +890,9 @@ export default function PostOnNews({navigation}) {
               />
             )}
           />
+              <View style={{ marginTop:hp(-3), marginBottom:hp(3)}}>
+                    {categoryError ? <Text style={styles.errorText}>{categoryError}</Text> : null}
+                    </View>
         </View>
 
         <View style={{ marginHorizontal: wp(7) }}>
@@ -936,9 +949,8 @@ export default function PostOnNews({navigation}) {
               />
             )}
           />
-          <View>
-
-           {subcategoryError ? <Text style={styles.errorText}>{subcategoryError}</Text> : null}
+         <View style={{ marginTop:hp(-3), marginBottom:hp(3)}}>
+          {subcategoryError ? <Text style={styles.errorText}>{subcategoryError}</Text> : null}
           </View>
         </View>
       </ScrollView>
@@ -950,7 +962,54 @@ export default function PostOnNews({navigation}) {
           justifyContent: 'flex-end',
           alignSelf: 'center',
         }}>
-        <CustomButton
+
+             <CustomLoaderButton
+              title={"Post"}
+              load={loading}
+              customClick={() => {
+                let hasError = false;
+
+        
+                if (!comment) {
+                  setProfileNameError("Title is required");
+                  hasError = true;
+                } else {
+                  setProfileNameError("");
+                }
+                if (!imageUri) {
+                  setImageError("Image is required");
+                  hasError = true;
+                } else {
+                  setImageError("");
+                }
+
+                if (!categoryId) {
+                  setCategoryError("Category is required");
+                  hasError = true;
+                } else {
+                  setCategoryError("");
+                }
+
+                if (!subcategory) {
+                  setSubcategoryError("Subcategory is required");
+                  hasError = true;
+                } else {
+                  setSubcategoryError("");
+                }
+
+
+
+                if (!hasError) {
+                  if (!loading) {
+                    setLoading(true);
+                    upload();
+                  }  else {
+                    ref_RBSendOffer.current.open();
+                  }
+                }
+              }}
+            />
+        {/* <CustomButton
           title="Post"
           load={false}
           // checkdisable={inn == '' && cm == '' ? true : false}
@@ -961,7 +1020,7 @@ export default function PostOnNews({navigation}) {
               ref_RBSendOffer.current.open();
             }
           }}
-        />
+        /> */}
       </View>
 
       <RBSheet
@@ -1042,7 +1101,7 @@ export default function PostOnNews({navigation}) {
         </View>
       </RBSheet>
 
-      <View
+      {/* <View
         style={{
           position: 'absolute',
           top: 0,
@@ -1053,7 +1112,7 @@ export default function PostOnNews({navigation}) {
           alignItems: 'center',
         }}>
         {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
+      </View> */}
 
       <CustomDialog
         visible={modalVisible}
@@ -1292,5 +1351,10 @@ const styles = StyleSheet.create({
     borderRadius: wp(1.8),
     borderWidth: 1,
     borderColor: '#FACA4E',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 4,
   },
 });

@@ -198,7 +198,7 @@ export default function UpdateQAFI({navigation, route}) {
           label: category.name,
           value: category.id.toString()
         }));
-        console.log('categooooooooooooooooooooo', data.AllCategories)
+        // console.log('categooooooooooooooooooooo', data.AllCategories)
         setCategorySelect(data.AllCategories);
       } else {
         console.error('Failed to fetch categories:', response.status, response.statusText);
