@@ -1,0 +1,1151 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.watchagotchamtechub"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="33" />
+10
+11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+11-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:14:5-77
+11-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:14:22-75
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:3:5-67
+12-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:3:22-64
+13    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+13-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\debug\AndroidManifest.xml:7:5-79
+13-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\debug\AndroidManifest.xml:7:22-76
+14    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+14-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\debug\AndroidManifest.xml:8:5-81
+14-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\debug\AndroidManifest.xml:8:22-78
+15
+16    <meta-data
+16-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\debug\AndroidManifest.xml:12:6-14:63
+17        android:name="com.google.android.geo.API_KEY"
+17-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\debug\AndroidManifest.xml:13:6-51
+18        android:value="AIzaSyD2gv4DJD2-xSnjvdfPmdyjhbhFyPgqMrI" />
+18-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\debug\AndroidManifest.xml:14:6-61
+19
+20    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+20-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:4:5-80
+20-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:4:22-77
+21    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+21-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:5:5-81
+21-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:5:22-78
+22    <uses-permission android:name="android.permission.VIBRATE" />
+22-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:6:5-66
+22-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:6:22-63
+23    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+23-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:7:5-79
+23-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:7:22-76
+24    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+24-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:8:5-80
+24-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:8:22-78
+25    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+25-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:9:5-71
+25-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:9:22-68
+26    <uses-permission android:name="android.permission.RECORD_VIDEO" />
+26-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:10:5-71
+26-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:10:22-68
+27    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+27-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:11:5-78
+27-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:11:22-76
+28    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+28-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:12:5-80
+28-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:12:22-77
+29    <uses-permission android:name="android.permission.WAKE_LOCK" />
+29-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:13:5-68
+29-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:13:22-65
+30    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+30-->[com.facebook.flipper:flipper:0.182.0] C:\Users\user\.gradle\caches\transforms-3\2c4aa7449f1f2904e68bb900cc469463\transformed\jetified-flipper-0.182.0\AndroidManifest.xml:16:5-76
+30-->[com.facebook.flipper:flipper:0.182.0] C:\Users\user\.gradle\caches\transforms-3\2c4aa7449f1f2904e68bb900cc469463\transformed\jetified-flipper-0.182.0\AndroidManifest.xml:16:22-73
+31
+32    <queries>
+32-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-11:15
+33        <intent>
+33-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:9-10:18
+34            <action android:name="android.media.action.IMAGE_CAPTURE" />
+34-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:13-73
+34-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:21-70
+35        </intent>
+36        <!-- Added to check the default browser that will host the AuthFlow. -->
+37        <intent>
+37-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:13:9-17:18
+38            <action android:name="android.intent.action.VIEW" />
+38-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:14:13-65
+38-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:14:21-62
+39
+40            <data android:scheme="http" />
+40-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:13-43
+40-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:19-40
+41        </intent> <!-- Added to check if Chrome is installed for browser-based payment authentication (e.g. 3DS1). -->
+42        <package android:name="com.android.chrome" /> <!-- Needs to be explicitly declared on Android R+ -->
+42-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:11:9-54
+42-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:11:18-51
+43        <package android:name="com.google.android.apps.maps" />
+43-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\user\.gradle\caches\transforms-3\a39d5af885abfec723ce2b144fa628e9\transformed\jetified-play-services-maps-18.0.2\AndroidManifest.xml:33:9-64
+43-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\user\.gradle\caches\transforms-3\a39d5af885abfec723ce2b144fa628e9\transformed\jetified-play-services-maps-18.0.2\AndroidManifest.xml:33:18-61
+44    </queries>
+45
+46    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" /> <!-- Required to access Google Play Licensing -->
+46-->[:react-native-launcher-kit] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-launcher-kit\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-77
+46-->[:react-native-launcher-kit] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-launcher-kit\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:7:22-74
+47    <uses-permission android:name="com.android.vending.CHECK_LICENSE" />
+47-->[:rn-fetch-blob] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\rn-fetch-blob\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:5-73
+47-->[:rn-fetch-blob] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\rn-fetch-blob\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:22-70
+48    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+48-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:23:5-77
+48-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:23:22-74
+49    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+49-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:26:5-82
+49-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:26:22-79
+50    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+50-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\user\.gradle\caches\transforms-3\74f92321eeb8fc6cd3def359c18ccc43\transformed\jetified-play-services-measurement-api-21.5.0\AndroidManifest.xml:25:5-79
+50-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\user\.gradle\caches\transforms-3\74f92321eeb8fc6cd3def359c18ccc43\transformed\jetified-play-services-measurement-api-21.5.0\AndroidManifest.xml:25:22-76
+51    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_ATTRIBUTION" />
+51-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\user\.gradle\caches\transforms-3\74f92321eeb8fc6cd3def359c18ccc43\transformed\jetified-play-services-measurement-api-21.5.0\AndroidManifest.xml:26:5-88
+51-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\user\.gradle\caches\transforms-3\74f92321eeb8fc6cd3def359c18ccc43\transformed\jetified-play-services-measurement-api-21.5.0\AndroidManifest.xml:26:22-85
+52    <uses-permission android:name="android.permission.ACCESS_ADSERVICES_AD_ID" />
+52-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\user\.gradle\caches\transforms-3\74f92321eeb8fc6cd3def359c18ccc43\transformed\jetified-play-services-measurement-api-21.5.0\AndroidManifest.xml:27:5-82
+52-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\user\.gradle\caches\transforms-3\74f92321eeb8fc6cd3def359c18ccc43\transformed\jetified-play-services-measurement-api-21.5.0\AndroidManifest.xml:27:22-79
+53
+54    <uses-feature
+54-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\user\.gradle\caches\transforms-3\a39d5af885abfec723ce2b144fa628e9\transformed\jetified-play-services-maps-18.0.2\AndroidManifest.xml:26:5-28:35
+55        android:glEsVersion="0x00020000"
+55-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\user\.gradle\caches\transforms-3\a39d5af885abfec723ce2b144fa628e9\transformed\jetified-play-services-maps-18.0.2\AndroidManifest.xml:27:9-41
+56        android:required="true" />
+56-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\user\.gradle\caches\transforms-3\a39d5af885abfec723ce2b144fa628e9\transformed\jetified-play-services-maps-18.0.2\AndroidManifest.xml:28:9-32
+57
+58    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+58-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\user\.gradle\caches\transforms-3\07517768c97b3415ba9dd9c9dfcfe5ae\transformed\jetified-play-services-measurement-21.5.0\AndroidManifest.xml:26:5-110
+58-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\user\.gradle\caches\transforms-3\07517768c97b3415ba9dd9c9dfcfe5ae\transformed\jetified-play-services-measurement-21.5.0\AndroidManifest.xml:26:22-107
+59
+60    <permission
+60-->[androidx.core:core:1.10.0] C:\Users\user\.gradle\caches\transforms-3\545afe4c0e12a7bd8a3ef11968696623\transformed\core-1.10.0\AndroidManifest.xml:22:5-24:47
+61        android:name="com.watchagotchamtechub.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+61-->[androidx.core:core:1.10.0] C:\Users\user\.gradle\caches\transforms-3\545afe4c0e12a7bd8a3ef11968696623\transformed\core-1.10.0\AndroidManifest.xml:23:9-81
+62        android:protectionLevel="signature" />
+62-->[androidx.core:core:1.10.0] C:\Users\user\.gradle\caches\transforms-3\545afe4c0e12a7bd8a3ef11968696623\transformed\core-1.10.0\AndroidManifest.xml:24:9-44
+63
+64    <uses-permission android:name="com.watchagotchamtechub.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" /> <!-- for android -->
+64-->[androidx.core:core:1.10.0] C:\Users\user\.gradle\caches\transforms-3\545afe4c0e12a7bd8a3ef11968696623\transformed\core-1.10.0\AndroidManifest.xml:26:5-97
+64-->[androidx.core:core:1.10.0] C:\Users\user\.gradle\caches\transforms-3\545afe4c0e12a7bd8a3ef11968696623\transformed\core-1.10.0\AndroidManifest.xml:26:22-94
+65    <!-- <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/> -->
+66    <!-- <uses-permission android:name="com.android.launcher.permission.WRITE_SETTINGS"/> -->
+67    <!-- <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" /> -->
+68    <!-- <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" /> -->
+69    <!-- for Samsung -->
+70    <uses-permission android:name="com.sec.android.provider.badge.permission.READ" />
+70-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:19:5-86
+70-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:19:22-83
+71    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE" /> <!-- for htc -->
+71-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:20:5-87
+71-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:20:22-84
+72    <uses-permission android:name="com.htc.launcher.permission.READ_SETTINGS" />
+72-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:23:5-81
+72-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:23:22-78
+73    <uses-permission android:name="com.htc.launcher.permission.UPDATE_SHORTCUT" /> <!-- for sony -->
+73-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:24:5-83
+73-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:24:22-80
+74    <uses-permission android:name="com.sonyericsson.home.permission.BROADCAST_BADGE" />
+74-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:27:5-88
+74-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:27:22-85
+75    <uses-permission android:name="com.sonymobile.home.permission.PROVIDER_INSERT_BADGE" /> <!-- for apex -->
+75-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:28:5-92
+75-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:28:22-89
+76    <uses-permission android:name="com.anddoes.launcher.permission.UPDATE_COUNT" /> <!-- for solid -->
+76-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:31:5-84
+76-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:31:22-81
+77    <uses-permission android:name="com.majeur.launcher.permission.UPDATE_BADGE" /> <!-- for huawei -->
+77-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:34:5-83
+77-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:34:22-80
+78    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
+78-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:37:5-91
+78-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:37:22-88
+79    <uses-permission android:name="com.huawei.android.launcher.permission.READ_SETTINGS" />
+79-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:38:5-92
+79-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:38:22-89
+80    <uses-permission android:name="com.huawei.android.launcher.permission.WRITE_SETTINGS" /> <!-- for ZUK -->
+80-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:39:5-93
+80-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:39:22-90
+81    <uses-permission android:name="android.permission.READ_APP_BADGE" /> <!-- for OPPO -->
+81-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:42:5-73
+81-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:42:22-70
+82    <uses-permission android:name="com.oppo.launcher.permission.READ_SETTINGS" />
+82-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:45:5-82
+82-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:45:22-79
+83    <uses-permission android:name="com.oppo.launcher.permission.WRITE_SETTINGS" /> <!-- for EvMe -->
+83-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:46:5-83
+83-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:46:22-80
+84    <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_READ" />
+84-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:49:5-88
+84-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:49:22-85
+85    <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_WRITE" />
+85-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:50:5-89
+85-->[me.leolin:ShortcutBadger:1.1.22] C:\Users\user\.gradle\caches\transforms-3\5825a2dab041ed57a3d3eb31193c085f\transformed\jetified-ShortcutBadger-1.1.22\AndroidManifest.xml:50:22-86
+86
+87    <application
+87-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:19:5-63:19
+88        android:name="com.watchagotchamtechub.MainApplication"
+88-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:21:7-38
+89        android:allowBackup="false"
+89-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:25:7-34
+90        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+90-->[androidx.core:core:1.10.0] C:\Users\user\.gradle\caches\transforms-3\545afe4c0e12a7bd8a3ef11968696623\transformed\core-1.10.0\AndroidManifest.xml:28:18-86
+91        android:debuggable="true"
+92        android:icon="@mipmap/ic_launcher"
+92-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:23:7-41
+93        android:label="@string/app_name"
+93-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:22:7-39
+94        android:roundIcon="@mipmap/ic_launcher_round"
+94-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:24:7-52
+95        android:theme="@style/AppTheme"
+95-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:26:7-38
+96        android:usesCleartextTraffic="true" >
+96-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:20:7-42
+97        <activity
+97-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\debug\AndroidManifest.xml:21:9-111
+98            android:name="com.facebook.react.devsupport.DevSettingsActivity"
+98-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\debug\AndroidManifest.xml:21:19-83
+99            android:exported="false" />
+99-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\debug\AndroidManifest.xml:21:84-108
+100        <activity
+100-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:27:7-39:18
+101            android:name="com.watchagotchamtechub.MainActivity"
+101-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:28:9-37
+102            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+102-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:30:9-118
+103            android:exported="true"
+103-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:33:9-32
+104            android:label="@string/app_name"
+104-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:29:9-41
+105            android:launchMode="singleTask"
+105-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:31:9-40
+106            android:windowSoftInputMode="adjustResize" >
+106-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:32:9-51
+107            <intent-filter>
+107-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:34:9-38:25
+108                <action android:name="android.intent.action.MAIN" />
+108-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:35:13-65
+108-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:35:21-62
+109
+110                <category android:name="android.intent.category.LAUNCHER" />
+110-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:36:13-73
+110-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:36:23-70
+111
+112                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+112-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:37:13-77
+112-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:37:21-75
+113            </intent-filter>
+114        </activity>
+115
+116        <meta-data
+116-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:40:7-41:44
+117            android:name="com.dieam.reactnativepushnotification.notification_foreground"
+117-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:40:19-95
+118            android:value="false" /> <!-- Change the resource name to your App's accent color - or any other color you want -->
+118-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:41:21-42
+119        <meta-data
+119-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:43:9-44:54
+120            android:name="com.dieam.reactnativepushnotification.notification_color"
+120-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:43:21-92
+121            android:resource="@color/white" /> <!-- or @android:color/{name} to use a standard color -->
+121-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:44:21-52
+122        <receiver
+122-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:46:9-155
+123            android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationActions"
+123-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:46:66-152
+124            android:enabled="true"
+124-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:46:19-41
+125            android:exported="true" />
+125-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:46:42-65
+126        <receiver
+126-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:47:9-157
+127            android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationPublisher"
+127-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:47:66-154
+128            android:enabled="true"
+128-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:47:19-41
+129            android:exported="true" />
+129-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:47:42-65
+130        <receiver
+130-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:48:9-54:20
+131            android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationBootEventReceiver"
+131-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:48:67-163
+132            android:enabled="true"
+132-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:48:19-41
+133            android:exported="true" >
+133-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:48:42-65
+134            <intent-filter>
+134-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:49:13-53:29
+135                <action android:name="android.intent.action.BOOT_COMPLETED" />
+135-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:50:17-79
+135-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:50:25-76
+136                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+136-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:51:17-82
+136-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:51:25-79
+137                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+137-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:52:17-81
+137-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:52:25-79
+138            </intent-filter>
+139        </receiver>
+140
+141        <service
+141-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:56:9-62:19
+142            android:name="com.dieam.reactnativepushnotification.modules.RNPushNotificationListenerService"
+142-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:57:13-107
+143            android:exported="false" >
+143-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:58:13-37
+144            <intent-filter>
+144-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:59:13-61:29
+145                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+145-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:60:17-78
+145-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:60:25-75
+146            </intent-filter>
+147        </service>
+148        <service
+148-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:9-14:40
+149            android:name="io.invertase.firebase.messaging.ReactNativeFirebaseMessagingHeadlessService"
+149-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:13-103
+150            android:exported="false" />
+150-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-37
+151        <service
+151-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:15:9-21:19
+152            android:name="io.invertase.firebase.messaging.ReactNativeFirebaseMessagingService"
+152-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-95
+153            android:exported="false" >
+153-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:17:13-37
+154            <intent-filter>
+154-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:59:13-61:29
+155                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+155-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:60:17-78
+155-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:60:25-75
+156            </intent-filter>
+157        </service>
+158
+159        <receiver
+159-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:9-30:20
+160            android:name="io.invertase.firebase.messaging.ReactNativeFirebaseMessagingReceiver"
+160-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:24:13-96
+161            android:exported="true"
+161-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:25:13-36
+162            android:permission="com.google.android.c2dm.permission.SEND" >
+162-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:26:13-73
+163            <intent-filter>
+163-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-29:29
+164                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+164-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:17-81
+164-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:25-78
+165            </intent-filter>
+166        </receiver>
+167
+168        <meta-data
+168-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:32:9-34:36
+169            android:name="firebase_messaging_auto_init_enabled"
+169-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:33:13-64
+170            android:value="true" />
+170-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:34:13-33
+171        <meta-data
+171-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:35:9-37:32
+172            android:name="com.google.firebase.messaging.default_notification_channel_id"
+172-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:36:13-89
+173            android:value="" />
+173-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:37:13-29
+174        <meta-data
+174-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:38:9-40:47
+175            android:name="com.google.firebase.messaging.default_notification_color"
+175-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:39:13-84
+176            android:resource="@color/white" />
+176-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:40:13-44
+177        <meta-data
+177-->[:react-native-firebase_app] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:9-11:36
+178            android:name="app_data_collection_default_enabled"
+178-->[:react-native-firebase_app] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:13-63
+179            android:value="true" />
+179-->[:react-native-firebase_app] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-33
+180
+181        <service
+181-->[:react-native-firebase_app] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:13:9-21:19
+182            android:name="com.google.firebase.components.ComponentDiscoveryService"
+182-->[:react-native-firebase_app] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:14:13-84
+183            android:directBootAware="true"
+183-->[:react-native-firebase_app] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:15:13-43
+184            android:exported="false" >
+184-->[:react-native-firebase_app] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-37
+185            <meta-data
+185-->[:react-native-firebase_app] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-20:85
+186                android:name="com.google.firebase.components:io.invertase.firebase.app.ReactNativeFirebaseAppRegistrar"
+186-->[:react-native-firebase_app] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:19:17-120
+187                android:value="com.google.firebase.components.ComponentRegistrar" />
+187-->[:react-native-firebase_app] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:17-82
+188            <meta-data
+188-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:57:13-59:85
+189                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingKtxRegistrar"
+189-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:58:17-122
+190                android:value="com.google.firebase.components.ComponentRegistrar" />
+190-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:59:17-82
+191            <meta-data
+191-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:60:13-62:85
+192                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
+192-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:61:17-119
+193                android:value="com.google.firebase.components.ComponentRegistrar" />
+193-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:62:17-82
+194            <meta-data
+194-->[com.google.firebase:firebase-datatransport:18.1.7] C:\Users\user\.gradle\caches\transforms-3\0bae73db390fd6d7d0d8731c5a5de2e8\transformed\jetified-firebase-datatransport-18.1.7\AndroidManifest.xml:27:13-29:85
+195                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
+195-->[com.google.firebase:firebase-datatransport:18.1.7] C:\Users\user\.gradle\caches\transforms-3\0bae73db390fd6d7d0d8731c5a5de2e8\transformed\jetified-firebase-datatransport-18.1.7\AndroidManifest.xml:28:17-115
+196                android:value="com.google.firebase.components.ComponentRegistrar" />
+196-->[com.google.firebase:firebase-datatransport:18.1.7] C:\Users\user\.gradle\caches\transforms-3\0bae73db390fd6d7d0d8731c5a5de2e8\transformed\jetified-firebase-datatransport-18.1.7\AndroidManifest.xml:29:17-82
+197            <meta-data
+197-->[com.google.firebase:firebase-firestore:24.10.0] C:\Users\user\.gradle\caches\transforms-3\3dd7023b307e76ebab9774eb4f4b35d6\transformed\jetified-firebase-firestore-24.10.0\AndroidManifest.xml:17:13-19:85
+198                android:name="com.google.firebase.components:com.google.firebase.firestore.FirebaseFirestoreKtxRegistrar"
+198-->[com.google.firebase:firebase-firestore:24.10.0] C:\Users\user\.gradle\caches\transforms-3\3dd7023b307e76ebab9774eb4f4b35d6\transformed\jetified-firebase-firestore-24.10.0\AndroidManifest.xml:18:17-122
+199                android:value="com.google.firebase.components.ComponentRegistrar" />
+199-->[com.google.firebase:firebase-firestore:24.10.0] C:\Users\user\.gradle\caches\transforms-3\3dd7023b307e76ebab9774eb4f4b35d6\transformed\jetified-firebase-firestore-24.10.0\AndroidManifest.xml:19:17-82
+200            <meta-data
+200-->[com.google.firebase:firebase-firestore:24.10.0] C:\Users\user\.gradle\caches\transforms-3\3dd7023b307e76ebab9774eb4f4b35d6\transformed\jetified-firebase-firestore-24.10.0\AndroidManifest.xml:20:13-22:85
+201                android:name="com.google.firebase.components:com.google.firebase.firestore.FirestoreRegistrar"
+201-->[com.google.firebase:firebase-firestore:24.10.0] C:\Users\user\.gradle\caches\transforms-3\3dd7023b307e76ebab9774eb4f4b35d6\transformed\jetified-firebase-firestore-24.10.0\AndroidManifest.xml:21:17-111
+202                android:value="com.google.firebase.components.ComponentRegistrar" />
+202-->[com.google.firebase:firebase-firestore:24.10.0] C:\Users\user\.gradle\caches\transforms-3\3dd7023b307e76ebab9774eb4f4b35d6\transformed\jetified-firebase-firestore-24.10.0\AndroidManifest.xml:22:17-82
+203            <meta-data
+203-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\user\.gradle\caches\transforms-3\74f92321eeb8fc6cd3def359c18ccc43\transformed\jetified-play-services-measurement-api-21.5.0\AndroidManifest.xml:37:13-39:85
+204                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+204-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\user\.gradle\caches\transforms-3\74f92321eeb8fc6cd3def359c18ccc43\transformed\jetified-play-services-measurement-api-21.5.0\AndroidManifest.xml:38:17-139
+205                android:value="com.google.firebase.components.ComponentRegistrar" />
+205-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\user\.gradle\caches\transforms-3\74f92321eeb8fc6cd3def359c18ccc43\transformed\jetified-play-services-measurement-api-21.5.0\AndroidManifest.xml:39:17-82
+206            <meta-data
+206-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\user\.gradle\caches\transforms-3\de4430dabecce23d8782b99c5950aa4c\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:15:13-17:85
+207                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsKtxRegistrar"
+207-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\user\.gradle\caches\transforms-3\de4430dabecce23d8782b99c5950aa4c\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:16:17-130
+208                android:value="com.google.firebase.components.ComponentRegistrar" />
+208-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\user\.gradle\caches\transforms-3\de4430dabecce23d8782b99c5950aa4c\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:17:17-82
+209            <meta-data
+209-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\user\.gradle\caches\transforms-3\de4430dabecce23d8782b99c5950aa4c\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:18:13-20:85
+210                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+210-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\user\.gradle\caches\transforms-3\de4430dabecce23d8782b99c5950aa4c\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:19:17-127
+211                android:value="com.google.firebase.components.ComponentRegistrar" />
+211-->[com.google.firebase:firebase-installations:17.2.0] C:\Users\user\.gradle\caches\transforms-3\de4430dabecce23d8782b99c5950aa4c\transformed\jetified-firebase-installations-17.2.0\AndroidManifest.xml:20:17-82
+212            <meta-data
+212-->[com.google.firebase:firebase-common-ktx:20.4.2] C:\Users\user\.gradle\caches\transforms-3\5826a8b7200cd473aa6a9a8e706ba943\transformed\jetified-firebase-common-ktx-20.4.2\AndroidManifest.xml:12:13-14:85
+213                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonLegacyRegistrar"
+213-->[com.google.firebase:firebase-common-ktx:20.4.2] C:\Users\user\.gradle\caches\transforms-3\5826a8b7200cd473aa6a9a8e706ba943\transformed\jetified-firebase-common-ktx-20.4.2\AndroidManifest.xml:13:17-116
+214                android:value="com.google.firebase.components.ComponentRegistrar" />
+214-->[com.google.firebase:firebase-common-ktx:20.4.2] C:\Users\user\.gradle\caches\transforms-3\5826a8b7200cd473aa6a9a8e706ba943\transformed\jetified-firebase-common-ktx-20.4.2\AndroidManifest.xml:14:17-82
+215            <meta-data
+215-->[com.google.firebase:firebase-common:20.4.2] C:\Users\user\.gradle\caches\transforms-3\aa46281082145824ae77613fe9da2284\transformed\jetified-firebase-common-20.4.2\AndroidManifest.xml:35:13-37:85
+216                android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
+216-->[com.google.firebase:firebase-common:20.4.2] C:\Users\user\.gradle\caches\transforms-3\aa46281082145824ae77613fe9da2284\transformed\jetified-firebase-common-20.4.2\AndroidManifest.xml:36:17-109
+217                android:value="com.google.firebase.components.ComponentRegistrar" />
+217-->[com.google.firebase:firebase-common:20.4.2] C:\Users\user\.gradle\caches\transforms-3\aa46281082145824ae77613fe9da2284\transformed\jetified-firebase-common-20.4.2\AndroidManifest.xml:37:17-82
+218        </service>
+219
+220        <provider
+220-->[:react-native-firebase_app] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:9-27:38
+221            android:name="io.invertase.firebase.app.ReactNativeFirebaseAppInitProvider"
+221-->[:react-native-firebase_app] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:24:13-88
+222            android:authorities="com.watchagotchamtechub.reactnativefirebaseappinitprovider"
+222-->[:react-native-firebase_app] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:25:13-86
+223            android:exported="false"
+223-->[:react-native-firebase_app] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:26:13-37
+224            android:initOrder="99" />
+224-->[:react-native-firebase_app] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-35
+225        <provider
+225-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:16:9-24:20
+226            android:name="com.reactnative.ivpusic.imagepicker.IvpusicImagePickerFileProvider"
+226-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:17:13-94
+227            android:authorities="com.watchagotchamtechub.provider"
+227-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-60
+228            android:exported="false"
+228-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:19:13-37
+229            android:grantUriPermissions="true" >
+229-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-47
+230            <meta-data
+230-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-23:78
+231                android:name="android.support.FILE_PROVIDER_PATHS"
+231-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:22:17-67
+232                android:resource="@xml/ivpusic_imagepicker_provider_paths" />
+232-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:17-75
+233        </provider>
+234
+235        <activity
+235-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:26:9-28:72
+236            android:name="com.yalantis.ucrop.UCropActivity"
+236-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-60
+237            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+237-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:13-69
+238
+239        <provider
+239-->[:react-native-image-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:9-16:20
+240            android:name="com.imagepicker.ImagePickerProvider"
+240-->[:react-native-image-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:13-63
+241            android:authorities="com.watchagotchamtechub.imagepickerprovider"
+241-->[:react-native-image-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:13-71
+242            android:exported="false"
+242-->[:react-native-image-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-37
+243            android:grantUriPermissions="true" >
+243-->[:react-native-image-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-47
+244            <meta-data
+244-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-23:78
+245                android:name="android.support.FILE_PROVIDER_PATHS"
+245-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:22:17-67
+246                android:resource="@xml/imagepicker_provider_paths" />
+246-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:17-75
+247        </provider>
+248        <provider
+248-->[:react-native-share] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-share\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:9-16:20
+249            android:name="cl.json.RNShareFileProvider"
+249-->[:react-native-share] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-share\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:13-55
+250            android:authorities="com.watchagotchamtechub.rnshare.fileprovider"
+250-->[:react-native-share] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-share\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:13-72
+251            android:exported="false"
+251-->[:react-native-share] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-share\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-37
+252            android:grantUriPermissions="true" >
+252-->[:react-native-share] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-share\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-47
+253            <meta-data
+253-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-23:78
+254                android:name="android.support.FILE_PROVIDER_PATHS"
+254-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:22:17-67
+255                android:resource="@xml/share_download_paths" />
+255-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:17-75
+256        </provider>
+257        <provider
+257-->[:react-native-webview] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:8:9-16:20
+258            android:name="com.reactnativecommunity.webview.RNCWebViewFileProvider"
+258-->[:react-native-webview] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:13-83
+259            android:authorities="com.watchagotchamtechub.fileprovider"
+259-->[:react-native-webview] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:13-64
+260            android:exported="false"
+260-->[:react-native-webview] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:13-37
+261            android:grantUriPermissions="true" >
+261-->[:react-native-webview] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-webview\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:12:13-47
+262            <meta-data
+262-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-23:78
+263                android:name="android.support.FILE_PROVIDER_PATHS"
+263-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:22:17-67
+264                android:resource="@xml/file_provider_paths" />
+264-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:17-75
+265        </provider>
+266        <provider
+266-->[:rn-fetch-blob] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\rn-fetch-blob\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:32:9-40:20
+267            android:name="com.RNFetchBlob.Utils.FileProvider"
+267-->[:rn-fetch-blob] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\rn-fetch-blob\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:33:13-62
+268            android:authorities="com.watchagotchamtechub.provider"
+268-->[:rn-fetch-blob] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\rn-fetch-blob\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:34:13-60
+269            android:exported="false"
+269-->[:rn-fetch-blob] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\rn-fetch-blob\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:35:13-37
+270            android:grantUriPermissions="true" >
+270-->[:rn-fetch-blob] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\rn-fetch-blob\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:36:13-47
+271            <meta-data
+271-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-23:78
+272                android:name="android.support.FILE_PROVIDER_PATHS"
+272-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:22:17-67
+273                android:resource="@xml/provider_paths" />
+273-->[:react-native-image-crop-picker] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:17-75
+274        </provider>
+275
+276        <receiver
+276-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:29:9-40:20
+277            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+277-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:30:13-78
+278            android:exported="true"
+278-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:31:13-36
+279            android:permission="com.google.android.c2dm.permission.SEND" >
+279-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:32:13-73
+280            <intent-filter>
+280-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-29:29
+281                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+281-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:17-81
+281-->[:react-native-firebase_messaging] D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\node_modules\@react-native-firebase\messaging\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:25-78
+282            </intent-filter>
+283
+284            <meta-data
+284-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:37:13-39:40
+285                android:name="com.google.android.gms.cloudmessaging.FINISHED_AFTER_HANDLED"
+285-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:38:17-92
+286                android:value="true" />
+286-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:39:17-37
+287        </receiver>
+288        <!--
+289             FirebaseMessagingService performs security checks at runtime,
+290             but set to not exported to explicitly avoid allowing another app to call it.
+291        -->
+292        <service
+292-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:46:9-53:19
+293            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+293-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:47:13-82
+294            android:directBootAware="true"
+294-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:48:13-43
+295            android:exported="false" >
+295-->[com.google.firebase:firebase-messaging:23.4.0] C:\Users\user\.gradle\caches\transforms-3\ca4317c3859ecdd1aa13889a507fb85b\transformed\jetified-firebase-messaging-23.4.0\AndroidManifest.xml:49:13-37
+296            <intent-filter android:priority="-500" >
+296-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:59:13-61:29
+297                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+297-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:60:17-78
+297-->D:\faisalreactnative\wotch-g-faisal\wotcha-gotcha-app-by-faisal\android\app\src\main\AndroidManifest.xml:60:25-75
+298            </intent-filter>
+299        </service>
+300        <service
+300-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\user\.gradle\caches\transforms-3\4b3a84e4c9cab6acdee4e047e19c05dc\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:28:9-34:19
+301            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+301-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\user\.gradle\caches\transforms-3\4b3a84e4c9cab6acdee4e047e19c05dc\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:29:13-103
+302            android:exported="false" >
+302-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\user\.gradle\caches\transforms-3\4b3a84e4c9cab6acdee4e047e19c05dc\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:30:13-37
+303            <meta-data
+303-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\user\.gradle\caches\transforms-3\4b3a84e4c9cab6acdee4e047e19c05dc\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:31:13-33:39
+304                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+304-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\user\.gradle\caches\transforms-3\4b3a84e4c9cab6acdee4e047e19c05dc\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:32:17-94
+305                android:value="cct" />
+305-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\user\.gradle\caches\transforms-3\4b3a84e4c9cab6acdee4e047e19c05dc\transformed\jetified-transport-backend-cct-3.1.8\AndroidManifest.xml:33:17-36
+306        </service>
+307        <service
+307-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\user\.gradle\caches\transforms-3\e51731b7759d02f6d120e93002151030\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:26:9-30:19
+308            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+308-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\user\.gradle\caches\transforms-3\e51731b7759d02f6d120e93002151030\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:27:13-117
+309            android:exported="false"
+309-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\user\.gradle\caches\transforms-3\e51731b7759d02f6d120e93002151030\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:28:13-37
+310            android:permission="android.permission.BIND_JOB_SERVICE" >
+310-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\user\.gradle\caches\transforms-3\e51731b7759d02f6d120e93002151030\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:29:13-69
+311        </service>
+312
+313        <receiver
+313-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\user\.gradle\caches\transforms-3\e51731b7759d02f6d120e93002151030\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:32:9-34:40
+314            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+314-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\user\.gradle\caches\transforms-3\e51731b7759d02f6d120e93002151030\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:33:13-132
+315            android:exported="false" />
+315-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\user\.gradle\caches\transforms-3\e51731b7759d02f6d120e93002151030\transformed\jetified-transport-runtime-3.1.8\AndroidManifest.xml:34:13-37
+316
+317        <property
+317-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\user\.gradle\caches\transforms-3\74f92321eeb8fc6cd3def359c18ccc43\transformed\jetified-play-services-measurement-api-21.5.0\AndroidManifest.xml:30:9-32:61
+318            android:name="android.adservices.AD_SERVICES_CONFIG"
+318-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\user\.gradle\caches\transforms-3\74f92321eeb8fc6cd3def359c18ccc43\transformed\jetified-play-services-measurement-api-21.5.0\AndroidManifest.xml:31:13-65
+319            android:resource="@xml/ga_ad_services_config" />
+319-->[com.google.android.gms:play-services-measurement-api:21.5.0] C:\Users\user\.gradle\caches\transforms-3\74f92321eeb8fc6cd3def359c18ccc43\transformed\jetified-play-services-measurement-api-21.5.0\AndroidManifest.xml:32:13-58
+320
+321        <provider
+321-->[com.google.firebase:firebase-common:20.4.2] C:\Users\user\.gradle\caches\transforms-3\aa46281082145824ae77613fe9da2284\transformed\jetified-firebase-common-20.4.2\AndroidManifest.xml:23:9-28:39
+322            android:name="com.google.firebase.provider.FirebaseInitProvider"
+322-->[com.google.firebase:firebase-common:20.4.2] C:\Users\user\.gradle\caches\transforms-3\aa46281082145824ae77613fe9da2284\transformed\jetified-firebase-common-20.4.2\AndroidManifest.xml:24:13-77
+323            android:authorities="com.watchagotchamtechub.firebaseinitprovider"
+323-->[com.google.firebase:firebase-common:20.4.2] C:\Users\user\.gradle\caches\transforms-3\aa46281082145824ae77613fe9da2284\transformed\jetified-firebase-common-20.4.2\AndroidManifest.xml:25:13-72
+324            android:directBootAware="true"
+324-->[com.google.firebase:firebase-common:20.4.2] C:\Users\user\.gradle\caches\transforms-3\aa46281082145824ae77613fe9da2284\transformed\jetified-firebase-common-20.4.2\AndroidManifest.xml:26:13-43
+325            android:exported="false"
+325-->[com.google.firebase:firebase-common:20.4.2] C:\Users\user\.gradle\caches\transforms-3\aa46281082145824ae77613fe9da2284\transformed\jetified-firebase-common-20.4.2\AndroidManifest.xml:27:13-37
+326            android:initOrder="100" />
+326-->[com.google.firebase:firebase-common:20.4.2] C:\Users\user\.gradle\caches\transforms-3\aa46281082145824ae77613fe9da2284\transformed\jetified-firebase-common-20.4.2\AndroidManifest.xml:28:13-36
+327
+328        <activity
+328-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:21:9-65:20
+329            android:name="com.stripe.android.financialconnections.FinancialConnectionsSheetRedirectActivity"
+329-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:22:13-109
+330            android:exported="true"
+330-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:23:13-36
+331            android:launchMode="singleTask" >
+331-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:24:13-44
+332            <intent-filter>
+332-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:25:13-64:29
+333                <action android:name="android.intent.action.VIEW" />
+333-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:14:13-65
+333-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:14:21-62
+334
+335                <category android:name="android.intent.category.DEFAULT" />
+335-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:28:17-76
+335-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:28:27-73
+336                <category android:name="android.intent.category.BROWSABLE" />
+336-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:29:17-78
+336-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:29:27-75
+337
+338                <!-- Returning from app2app: return_url is triggered to reopen web AuthFlow and poll accounts. -->
+339                <data
+339-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:13-43
+340                    android:host="link-accounts"
+341                    android:pathPrefix="/com.watchagotchamtechub/authentication_return"
+342                    android:scheme="stripe-auth" />
+342-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:19-40
+343
+344                <!-- Returning from app2app: return_url is triggered to reopen native AuthFlow and poll accounts. -->
+345                <data
+345-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:13-43
+346                    android:host="link-native-accounts"
+347                    android:pathPrefix="/com.watchagotchamtechub/authentication_return"
+348                    android:scheme="stripe-auth" />
+348-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:19-40
+349
+350                <!-- End of web AuthFlow success and cancel URIs that begin with "stripe-auth://link-accounts/{app-id}/...” -->
+351                <data
+351-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:13-43
+352                    android:host="link-accounts"
+353                    android:path="/com.watchagotchamtechub/success"
+354                    android:scheme="stripe-auth" />
+354-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:19-40
+355                <data
+355-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:13-43
+356                    android:host="link-accounts"
+357                    android:path="/com.watchagotchamtechub/cancel"
+358                    android:scheme="stripe-auth" />
+358-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:19-40
+359
+360                <!-- Opening app2app: Web flow triggers stripe-auth://native-redirect/{app-id}/http://web-that-redirects-to-native -->
+361                <data
+361-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:13-43
+362                    android:host="native-redirect"
+363                    android:pathPrefix="/com.watchagotchamtechub"
+364                    android:scheme="stripe-auth" />
+364-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:19-40
+365
+366                <!-- Accepts success/cancel/fail URIs that begin with "stripe://auth-redirect” -->
+367                <data
+367-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:13-43
+368                    android:host="auth-redirect"
+369                    android:pathPrefix="/com.watchagotchamtechub"
+370                    android:scheme="stripe" />
+370-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:19-40
+371            </intent-filter>
+372        </activity>
+373        <activity
+373-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:66:9-69:57
+374            android:name="com.stripe.android.financialconnections.FinancialConnectionsSheetActivity"
+374-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:67:13-101
+375            android:exported="false"
+375-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:68:13-37
+376            android:theme="@style/StripeDefaultTheme" />
+376-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:69:13-54
+377        <activity
+377-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:70:9-74:58
+378            android:name="com.stripe.android.financialconnections.ui.FinancialConnectionsSheetNativeActivity"
+378-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:71:13-110
+379            android:exported="false"
+379-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:72:13-37
+380            android:theme="@style/StripeDefaultTheme"
+380-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:73:13-54
+381            android:windowSoftInputMode="adjustResize" />
+381-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:74:13-55
+382
+383        <provider
+383-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:76:9-80:43
+384            android:name="com.stripe.android.financialconnections.appinitializer.FinancialConnectionsInitializer"
+384-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:77:13-114
+385            android:authorities="com.watchagotchamtechub.financialconnections-init"
+385-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:78:13-77
+386            android:exported="false"
+386-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:79:13-37
+387            android:multiprocess="true" />
+387-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:80:13-40
+388
+389        <activity
+389-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:8:9-12:58
+390            android:name="com.stripe.android.paymentsheet.PaymentSheetActivity"
+390-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:9:13-80
+391            android:exported="false"
+391-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:10:13-37
+392            android:theme="@style/StripePaymentSheetDefaultTheme"
+392-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:11:13-66
+393            android:windowSoftInputMode="adjustResize" />
+393-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:12:13-55
+394        <activity
+394-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:13:9-17:58
+395            android:name="com.stripe.android.paymentsheet.PaymentOptionsActivity"
+395-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:14:13-82
+396            android:exported="false"
+396-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:15:13-37
+397            android:theme="@style/StripePaymentSheetDefaultTheme"
+397-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:16:13-66
+398            android:windowSoftInputMode="adjustResize" />
+398-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:17:13-55
+399        <activity
+399-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:18:9-22:58
+400            android:name="com.stripe.android.customersheet.CustomerSheetActivity"
+400-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:19:13-82
+401            android:exported="false"
+401-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:20:13-37
+402            android:theme="@style/StripePaymentSheetDefaultTheme"
+402-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:21:13-66
+403            android:windowSoftInputMode="adjustResize" />
+403-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:22:13-55
+404        <activity
+404-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:23:9-26:69
+405            android:name="com.stripe.android.paymentsheet.addresselement.AddressElementActivity"
+405-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:24:13-97
+406            android:exported="false"
+406-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:25:13-37
+407            android:theme="@style/StripePaymentSheetDefaultTheme" />
+407-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:26:13-66
+408        <activity
+408-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:27:9-30:69
+409            android:name="com.stripe.android.paymentsheet.paymentdatacollection.bacs.BacsMandateConfirmationActivity"
+409-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:28:13-118
+410            android:exported="false"
+410-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:29:13-37
+411            android:theme="@style/StripePaymentSheetDefaultTheme" />
+411-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:30:13-66
+412        <activity
+412-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:31:9-34:69
+413            android:name="com.stripe.android.paymentsheet.paymentdatacollection.polling.PollingActivity"
+413-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:32:13-105
+414            android:exported="false"
+414-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:33:13-37
+415            android:theme="@style/StripePaymentSheetDefaultTheme" />
+415-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:34:13-66
+416        <activity
+416-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:35:9-38:69
+417            android:name="com.stripe.android.paymentsheet.ui.SepaMandateActivity"
+417-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:36:13-82
+418            android:exported="false"
+418-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:37:13-37
+419            android:theme="@style/StripePaymentSheetDefaultTheme" />
+419-->[com.stripe:paymentsheet:20.34.4] C:\Users\user\.gradle\caches\transforms-3\8b008317eb77fdfb7b64464570c49df8\transformed\jetified-paymentsheet-20.34.4\AndroidManifest.xml:38:13-66
+420        <activity
+420-->[com.stripe:link:20.34.4] C:\Users\user\.gradle\caches\transforms-3\16e9b352494f6c8d869112123c786176\transformed\jetified-link-20.34.4\AndroidManifest.xml:8:9-13:61
+421            android:name="com.stripe.android.link.LinkForegroundActivity"
+421-->[com.stripe:link:20.34.4] C:\Users\user\.gradle\caches\transforms-3\16e9b352494f6c8d869112123c786176\transformed\jetified-link-20.34.4\AndroidManifest.xml:9:13-74
+422            android:autoRemoveFromRecents="true"
+422-->[com.stripe:link:20.34.4] C:\Users\user\.gradle\caches\transforms-3\16e9b352494f6c8d869112123c786176\transformed\jetified-link-20.34.4\AndroidManifest.xml:10:13-49
+423            android:configChanges="orientation|keyboard|keyboardHidden|screenLayout|screenSize|smallestScreenSize"
+423-->[com.stripe:link:20.34.4] C:\Users\user\.gradle\caches\transforms-3\16e9b352494f6c8d869112123c786176\transformed\jetified-link-20.34.4\AndroidManifest.xml:11:13-115
+424            android:launchMode="singleTop"
+424-->[com.stripe:link:20.34.4] C:\Users\user\.gradle\caches\transforms-3\16e9b352494f6c8d869112123c786176\transformed\jetified-link-20.34.4\AndroidManifest.xml:12:13-43
+425            android:theme="@style/StripeTransparentTheme" />
+425-->[com.stripe:link:20.34.4] C:\Users\user\.gradle\caches\transforms-3\16e9b352494f6c8d869112123c786176\transformed\jetified-link-20.34.4\AndroidManifest.xml:13:13-58
+426        <activity
+426-->[com.stripe:link:20.34.4] C:\Users\user\.gradle\caches\transforms-3\16e9b352494f6c8d869112123c786176\transformed\jetified-link-20.34.4\AndroidManifest.xml:14:9-31:20
+427            android:name="com.stripe.android.link.LinkRedirectHandlerActivity"
+427-->[com.stripe:link:20.34.4] C:\Users\user\.gradle\caches\transforms-3\16e9b352494f6c8d869112123c786176\transformed\jetified-link-20.34.4\AndroidManifest.xml:15:13-79
+428            android:autoRemoveFromRecents="true"
+428-->[com.stripe:link:20.34.4] C:\Users\user\.gradle\caches\transforms-3\16e9b352494f6c8d869112123c786176\transformed\jetified-link-20.34.4\AndroidManifest.xml:16:13-49
+429            android:exported="true"
+429-->[com.stripe:link:20.34.4] C:\Users\user\.gradle\caches\transforms-3\16e9b352494f6c8d869112123c786176\transformed\jetified-link-20.34.4\AndroidManifest.xml:17:13-36
+430            android:launchMode="singleInstance"
+430-->[com.stripe:link:20.34.4] C:\Users\user\.gradle\caches\transforms-3\16e9b352494f6c8d869112123c786176\transformed\jetified-link-20.34.4\AndroidManifest.xml:18:13-48
+431            android:theme="@style/StripeTransparentTheme" >
+431-->[com.stripe:link:20.34.4] C:\Users\user\.gradle\caches\transforms-3\16e9b352494f6c8d869112123c786176\transformed\jetified-link-20.34.4\AndroidManifest.xml:19:13-58
+432            <intent-filter>
+432-->[com.stripe:link:20.34.4] C:\Users\user\.gradle\caches\transforms-3\16e9b352494f6c8d869112123c786176\transformed\jetified-link-20.34.4\AndroidManifest.xml:20:13-30:29
+433                <action android:name="android.intent.action.VIEW" />
+433-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:14:13-65
+433-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:14:21-62
+434
+435                <category android:name="android.intent.category.DEFAULT" />
+435-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:28:17-76
+435-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:28:27-73
+436                <category android:name="android.intent.category.BROWSABLE" />
+436-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:29:17-78
+436-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:29:27-75
+437
+438                <data
+438-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:13-43
+439                    android:host="complete"
+440                    android:path="/com.watchagotchamtechub"
+441                    android:scheme="link-popup" />
+441-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:19-40
+442            </intent-filter>
+443        </activity>
+444        <activity
+444-->[com.stripe:payments-ui-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\dc6688fd8602188f34a34bc5d98ae99b\transformed\jetified-payments-ui-core-20.34.4\AndroidManifest.xml:8:9-11:69
+445            android:name="com.stripe.android.ui.core.cardscan.CardScanActivity"
+445-->[com.stripe:payments-ui-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\dc6688fd8602188f34a34bc5d98ae99b\transformed\jetified-payments-ui-core-20.34.4\AndroidManifest.xml:9:13-80
+446            android:exported="false"
+446-->[com.stripe:payments-ui-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\dc6688fd8602188f34a34bc5d98ae99b\transformed\jetified-payments-ui-core-20.34.4\AndroidManifest.xml:10:13-37
+447            android:theme="@style/StripePaymentSheetDefaultTheme" />
+447-->[com.stripe:payments-ui-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\dc6688fd8602188f34a34bc5d98ae99b\transformed\jetified-payments-ui-core-20.34.4\AndroidManifest.xml:11:13-66
+448        <activity
+448-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:15:9-18:57
+449            android:name="com.stripe.android.view.AddPaymentMethodActivity"
+449-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:16:13-76
+450            android:exported="false"
+450-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:17:13-37
+451            android:theme="@style/StripeDefaultTheme" />
+451-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:18:13-54
+452        <activity
+452-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:19:9-22:57
+453            android:name="com.stripe.android.view.PaymentMethodsActivity"
+453-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:20:13-74
+454            android:exported="false"
+454-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:21:13-37
+455            android:theme="@style/StripeDefaultTheme" />
+455-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:22:13-54
+456        <activity
+456-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:23:9-26:57
+457            android:name="com.stripe.android.view.PaymentFlowActivity"
+457-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:24:13-71
+458            android:exported="false"
+458-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:25:13-37
+459            android:theme="@style/StripeDefaultTheme" />
+459-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:26:13-54
+460        <activity
+460-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:27:9-31:58
+461            android:name="com.stripe.android.view.PaymentAuthWebViewActivity"
+461-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:28:13-78
+462            android:exported="false"
+462-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:29:13-37
+463            android:theme="@style/StripeDefaultTheme"
+463-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:30:13-54
+464            android:windowSoftInputMode="adjustResize" />
+464-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:31:13-55
+465        <activity
+465-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:32:9-35:61
+466            android:name="com.stripe.android.view.PaymentRelayActivity"
+466-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:33:13-72
+467            android:exported="false"
+467-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:34:13-37
+468            android:theme="@style/StripeTransparentTheme" />
+468-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:35:13-58
+469        <!--
+470        Set android:launchMode="singleTop" so that the StripeBrowserLauncherActivity instance that
+471        launched the browser Activity will also handle the return URL deep link.
+472        -->
+473        <activity
+473-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:41:9-45:61
+474            android:name="com.stripe.android.payments.StripeBrowserLauncherActivity"
+474-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:42:13-85
+475            android:exported="false"
+475-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:43:13-37
+476            android:launchMode="singleTask"
+476-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:44:13-44
+477            android:theme="@style/StripeTransparentTheme" />
+477-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:45:13-58
+478        <activity
+478-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:46:9-63:20
+479            android:name="com.stripe.android.payments.StripeBrowserProxyReturnActivity"
+479-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:47:13-88
+480            android:exported="true"
+480-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:48:13-36
+481            android:launchMode="singleTask"
+481-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:49:13-44
+482            android:theme="@style/StripeTransparentTheme" >
+482-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:50:13-58
+483            <intent-filter>
+483-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:51:13-62:29
+484                <action android:name="android.intent.action.VIEW" />
+484-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:14:13-65
+484-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:14:21-62
+485
+486                <category android:name="android.intent.category.DEFAULT" />
+486-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:28:17-76
+486-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:28:27-73
+487                <category android:name="android.intent.category.BROWSABLE" />
+487-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:29:17-78
+487-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:29:27-75
+488
+489                <!-- Must match `DefaultReturnUrl#value`. -->
+490                <data
+490-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:13-43
+491                    android:host="payment_return_url"
+492                    android:path="/com.watchagotchamtechub"
+493                    android:scheme="stripesdk" />
+493-->[com.stripe:financial-connections:20.34.4] C:\Users\user\.gradle\caches\transforms-3\495f1e442e308b0c4f1c7fc6cd396541\transformed\jetified-financial-connections-20.34.4\AndroidManifest.xml:16:19-40
+494            </intent-filter>
+495        </activity>
+496        <activity
+496-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:64:9-67:57
+497            android:name="com.stripe.android.payments.core.authentication.threeds2.Stripe3ds2TransactionActivity"
+497-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:65:13-114
+498            android:exported="false"
+498-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:66:13-37
+499            android:theme="@style/StripeDefaultTheme" />
+499-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:67:13-54
+500        <activity
+500-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:68:9-71:66
+501            android:name="com.stripe.android.googlepaylauncher.GooglePayLauncherActivity"
+501-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:69:13-90
+502            android:exported="false"
+502-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:70:13-37
+503            android:theme="@style/StripeGooglePayDefaultTheme" />
+503-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:71:13-63
+504        <activity
+504-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:72:9-75:66
+505            android:name="com.stripe.android.googlepaylauncher.GooglePayPaymentMethodLauncherActivity"
+505-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:73:13-103
+506            android:exported="false"
+506-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:74:13-37
+507            android:theme="@style/StripeGooglePayDefaultTheme" />
+507-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:75:13-63
+508        <activity
+508-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:76:9-79:68
+509            android:name="com.stripe.android.payments.paymentlauncher.PaymentLauncherConfirmationActivity"
+509-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:77:13-107
+510            android:exported="false"
+510-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:78:13-37
+511            android:theme="@style/StripePayLauncherDefaultTheme" />
+511-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:79:13-65
+512        <activity
+512-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:80:9-83:61
+513            android:name="com.stripe.android.payments.bankaccount.ui.CollectBankAccountActivity"
+513-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:81:13-97
+514            android:exported="false"
+514-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:82:13-37
+515            android:theme="@style/StripeTransparentTheme" />
+515-->[com.stripe:payments-core:20.34.4] C:\Users\user\.gradle\caches\transforms-3\19cba4910b87f999897d2d55e60fabac\transformed\jetified-payments-core-20.34.4\AndroidManifest.xml:83:13-58
+516        <activity
+516-->[com.stripe:stripe-3ds2-android:6.1.7] C:\Users\user\.gradle\caches\transforms-3\6cdc12daa97720c2fc626deec5a4ebc0\transformed\jetified-stripe-3ds2-android-6.1.7\AndroidManifest.xml:8:9-11:54
+517            android:name="com.stripe.android.stripe3ds2.views.ChallengeActivity"
+517-->[com.stripe:stripe-3ds2-android:6.1.7] C:\Users\user\.gradle\caches\transforms-3\6cdc12daa97720c2fc626deec5a4ebc0\transformed\jetified-stripe-3ds2-android-6.1.7\AndroidManifest.xml:9:13-81
+518            android:exported="false"
+518-->[com.stripe:stripe-3ds2-android:6.1.7] C:\Users\user\.gradle\caches\transforms-3\6cdc12daa97720c2fc626deec5a4ebc0\transformed\jetified-stripe-3ds2-android-6.1.7\AndroidManifest.xml:10:13-37
+519            android:theme="@style/Stripe3DS2Theme" />
+519-->[com.stripe:stripe-3ds2-android:6.1.7] C:\Users\user\.gradle\caches\transforms-3\6cdc12daa97720c2fc626deec5a4ebc0\transformed\jetified-stripe-3ds2-android-6.1.7\AndroidManifest.xml:11:13-51
+520        <activity
+520-->[com.google.android.gms:play-services-auth:20.7.0] C:\Users\user\.gradle\caches\transforms-3\3f5e581b6c5a7c27d0d6ce7336c036bc\transformed\jetified-play-services-auth-20.7.0\AndroidManifest.xml:23:9-27:75
+521            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+521-->[com.google.android.gms:play-services-auth:20.7.0] C:\Users\user\.gradle\caches\transforms-3\3f5e581b6c5a7c27d0d6ce7336c036bc\transformed\jetified-play-services-auth-20.7.0\AndroidManifest.xml:24:13-93
+522            android:excludeFromRecents="true"
+522-->[com.google.android.gms:play-services-auth:20.7.0] C:\Users\user\.gradle\caches\transforms-3\3f5e581b6c5a7c27d0d6ce7336c036bc\transformed\jetified-play-services-auth-20.7.0\AndroidManifest.xml:25:13-46
+523            android:exported="false"
+523-->[com.google.android.gms:play-services-auth:20.7.0] C:\Users\user\.gradle\caches\transforms-3\3f5e581b6c5a7c27d0d6ce7336c036bc\transformed\jetified-play-services-auth-20.7.0\AndroidManifest.xml:26:13-37
+524            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+524-->[com.google.android.gms:play-services-auth:20.7.0] C:\Users\user\.gradle\caches\transforms-3\3f5e581b6c5a7c27d0d6ce7336c036bc\transformed\jetified-play-services-auth-20.7.0\AndroidManifest.xml:27:13-72
+525        <!--
+526            Service handling Google Sign-In user revocation. For apps that do not integrate with
+527            Google Sign-In, this service will never be started.
+528        -->
+529        <service
+529-->[com.google.android.gms:play-services-auth:20.7.0] C:\Users\user\.gradle\caches\transforms-3\3f5e581b6c5a7c27d0d6ce7336c036bc\transformed\jetified-play-services-auth-20.7.0\AndroidManifest.xml:33:9-37:51
+530            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+530-->[com.google.android.gms:play-services-auth:20.7.0] C:\Users\user\.gradle\caches\transforms-3\3f5e581b6c5a7c27d0d6ce7336c036bc\transformed\jetified-play-services-auth-20.7.0\AndroidManifest.xml:34:13-89
+531            android:exported="true"
+531-->[com.google.android.gms:play-services-auth:20.7.0] C:\Users\user\.gradle\caches\transforms-3\3f5e581b6c5a7c27d0d6ce7336c036bc\transformed\jetified-play-services-auth-20.7.0\AndroidManifest.xml:35:13-36
+532            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+532-->[com.google.android.gms:play-services-auth:20.7.0] C:\Users\user\.gradle\caches\transforms-3\3f5e581b6c5a7c27d0d6ce7336c036bc\transformed\jetified-play-services-auth-20.7.0\AndroidManifest.xml:36:13-107
+533            android:visibleToInstantApps="true" /> <!-- Needs to be explicitly declared on P+ -->
+533-->[com.google.android.gms:play-services-auth:20.7.0] C:\Users\user\.gradle\caches\transforms-3\3f5e581b6c5a7c27d0d6ce7336c036bc\transformed\jetified-play-services-auth-20.7.0\AndroidManifest.xml:37:13-48
+534        <uses-library
+534-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\user\.gradle\caches\transforms-3\a39d5af885abfec723ce2b144fa628e9\transformed\jetified-play-services-maps-18.0.2\AndroidManifest.xml:39:9-41:40
+535            android:name="org.apache.http.legacy"
+535-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\user\.gradle\caches\transforms-3\a39d5af885abfec723ce2b144fa628e9\transformed\jetified-play-services-maps-18.0.2\AndroidManifest.xml:40:13-50
+536            android:required="false" />
+536-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\user\.gradle\caches\transforms-3\a39d5af885abfec723ce2b144fa628e9\transformed\jetified-play-services-maps-18.0.2\AndroidManifest.xml:41:13-37
+537
+538        <activity
+538-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\user\.gradle\caches\transforms-3\daf16fedbbf50ddf396d2a22a1b4f402\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:20:9-22:45
+539            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+539-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\user\.gradle\caches\transforms-3\daf16fedbbf50ddf396d2a22a1b4f402\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:20:19-85
+540            android:exported="false"
+540-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\user\.gradle\caches\transforms-3\daf16fedbbf50ddf396d2a22a1b4f402\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:22:19-43
+541            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+541-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\user\.gradle\caches\transforms-3\daf16fedbbf50ddf396d2a22a1b4f402\transformed\jetified-play-services-base-18.1.0\AndroidManifest.xml:21:19-78
+542
+543        <receiver
+543-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\user\.gradle\caches\transforms-3\07517768c97b3415ba9dd9c9dfcfe5ae\transformed\jetified-play-services-measurement-21.5.0\AndroidManifest.xml:29:9-33:20
+544            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+544-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\user\.gradle\caches\transforms-3\07517768c97b3415ba9dd9c9dfcfe5ae\transformed\jetified-play-services-measurement-21.5.0\AndroidManifest.xml:30:13-85
+545            android:enabled="true"
+545-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\user\.gradle\caches\transforms-3\07517768c97b3415ba9dd9c9dfcfe5ae\transformed\jetified-play-services-measurement-21.5.0\AndroidManifest.xml:31:13-35
+546            android:exported="false" >
+546-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\user\.gradle\caches\transforms-3\07517768c97b3415ba9dd9c9dfcfe5ae\transformed\jetified-play-services-measurement-21.5.0\AndroidManifest.xml:32:13-37
+547        </receiver>
+548
+549        <service
+549-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\user\.gradle\caches\transforms-3\07517768c97b3415ba9dd9c9dfcfe5ae\transformed\jetified-play-services-measurement-21.5.0\AndroidManifest.xml:35:9-38:40
+550            android:name="com.google.android.gms.measurement.AppMeasurementService"
+550-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\user\.gradle\caches\transforms-3\07517768c97b3415ba9dd9c9dfcfe5ae\transformed\jetified-play-services-measurement-21.5.0\AndroidManifest.xml:36:13-84
+551            android:enabled="true"
+551-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\user\.gradle\caches\transforms-3\07517768c97b3415ba9dd9c9dfcfe5ae\transformed\jetified-play-services-measurement-21.5.0\AndroidManifest.xml:37:13-35
+552            android:exported="false" />
+552-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\user\.gradle\caches\transforms-3\07517768c97b3415ba9dd9c9dfcfe5ae\transformed\jetified-play-services-measurement-21.5.0\AndroidManifest.xml:38:13-37
+553        <service
+553-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\user\.gradle\caches\transforms-3\07517768c97b3415ba9dd9c9dfcfe5ae\transformed\jetified-play-services-measurement-21.5.0\AndroidManifest.xml:39:9-43:72
+554            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+554-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\user\.gradle\caches\transforms-3\07517768c97b3415ba9dd9c9dfcfe5ae\transformed\jetified-play-services-measurement-21.5.0\AndroidManifest.xml:40:13-87
+555            android:enabled="true"
+555-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\user\.gradle\caches\transforms-3\07517768c97b3415ba9dd9c9dfcfe5ae\transformed\jetified-play-services-measurement-21.5.0\AndroidManifest.xml:41:13-35
+556            android:exported="false"
+556-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\user\.gradle\caches\transforms-3\07517768c97b3415ba9dd9c9dfcfe5ae\transformed\jetified-play-services-measurement-21.5.0\AndroidManifest.xml:42:13-37
+557            android:permission="android.permission.BIND_JOB_SERVICE" />
+557-->[com.google.android.gms:play-services-measurement:21.5.0] C:\Users\user\.gradle\caches\transforms-3\07517768c97b3415ba9dd9c9dfcfe5ae\transformed\jetified-play-services-measurement-21.5.0\AndroidManifest.xml:43:13-69
+558
+559        <provider
+559-->[androidx.emoji2:emoji2:1.3.0] C:\Users\user\.gradle\caches\transforms-3\9cdf7d72f0e145e314952b56330d28a8\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+560            android:name="androidx.startup.InitializationProvider"
+560-->[androidx.emoji2:emoji2:1.3.0] C:\Users\user\.gradle\caches\transforms-3\9cdf7d72f0e145e314952b56330d28a8\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:25:13-67
+561            android:authorities="com.watchagotchamtechub.androidx-startup"
+561-->[androidx.emoji2:emoji2:1.3.0] C:\Users\user\.gradle\caches\transforms-3\9cdf7d72f0e145e314952b56330d28a8\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:26:13-68
+562            android:exported="false" >
+562-->[androidx.emoji2:emoji2:1.3.0] C:\Users\user\.gradle\caches\transforms-3\9cdf7d72f0e145e314952b56330d28a8\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:27:13-37
+563            <meta-data
+563-->[androidx.emoji2:emoji2:1.3.0] C:\Users\user\.gradle\caches\transforms-3\9cdf7d72f0e145e314952b56330d28a8\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+564                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+564-->[androidx.emoji2:emoji2:1.3.0] C:\Users\user\.gradle\caches\transforms-3\9cdf7d72f0e145e314952b56330d28a8\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:30:17-75
+565                android:value="androidx.startup" />
+565-->[androidx.emoji2:emoji2:1.3.0] C:\Users\user\.gradle\caches\transforms-3\9cdf7d72f0e145e314952b56330d28a8\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:31:17-49
+566            <meta-data
+566-->[androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\user\.gradle\caches\transforms-3\f4faff7c987e2993f551f89d5b982038\transformed\jetified-lifecycle-process-2.6.1\AndroidManifest.xml:29:13-31:52
+567                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+567-->[androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\user\.gradle\caches\transforms-3\f4faff7c987e2993f551f89d5b982038\transformed\jetified-lifecycle-process-2.6.1\AndroidManifest.xml:30:17-78
+568                android:value="androidx.startup" />
+568-->[androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\user\.gradle\caches\transforms-3\f4faff7c987e2993f551f89d5b982038\transformed\jetified-lifecycle-process-2.6.1\AndroidManifest.xml:31:17-49
+569            <meta-data
+569-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
+570                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+570-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
+571                android:value="androidx.startup" />
+571-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
+572        </provider>
+573
+574        <uses-library
+574-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\user\.gradle\caches\transforms-3\afb79cc9f03b843532d5eb066fbe7417\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:23:9-25:40
+575            android:name="android.ext.adservices"
+575-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\user\.gradle\caches\transforms-3\afb79cc9f03b843532d5eb066fbe7417\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:24:13-50
+576            android:required="false" />
+576-->[androidx.privacysandbox.ads:ads-adservices:1.0.0-beta05] C:\Users\user\.gradle\caches\transforms-3\afb79cc9f03b843532d5eb066fbe7417\transformed\jetified-ads-adservices-1.0.0-beta05\AndroidManifest.xml:25:13-37
+577
+578        <meta-data
+578-->[com.google.android.gms:play-services-basement:18.2.0] C:\Users\user\.gradle\caches\transforms-3\4c98ac1678e91268ed33f9d3ff7f04ab\transformed\jetified-play-services-basement-18.2.0\AndroidManifest.xml:21:9-23:69
+579            android:name="com.google.android.gms.version"
+579-->[com.google.android.gms:play-services-basement:18.2.0] C:\Users\user\.gradle\caches\transforms-3\4c98ac1678e91268ed33f9d3ff7f04ab\transformed\jetified-play-services-basement-18.2.0\AndroidManifest.xml:22:13-58
+580            android:value="@integer/google_play_services_version" />
+580-->[com.google.android.gms:play-services-basement:18.2.0] C:\Users\user\.gradle\caches\transforms-3\4c98ac1678e91268ed33f9d3ff7f04ab\transformed\jetified-play-services-basement-18.2.0\AndroidManifest.xml:23:13-66
+581
+582        <receiver
+582-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:34:9-52:20
+583            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+583-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:35:13-76
+584            android:directBootAware="false"
+584-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:36:13-44
+585            android:enabled="true"
+585-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:37:13-35
+586            android:exported="true"
+586-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:38:13-36
+587            android:permission="android.permission.DUMP" >
+587-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:39:13-57
+588            <intent-filter>
+588-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:40:13-42:29
+589                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+589-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:17-91
+589-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:25-88
+590            </intent-filter>
+591            <intent-filter>
+591-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:43:13-45:29
+592                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+592-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:17-85
+592-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:25-82
+593            </intent-filter>
+594            <intent-filter>
+594-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:46:13-48:29
+595                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+595-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:17-88
+595-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:25-85
+596            </intent-filter>
+597            <intent-filter>
+597-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:49:13-51:29
+598                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+598-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:17-95
+598-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\user\.gradle\caches\transforms-3\68a4974e169c7191354edea1d87d8e71\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:25-92
+599            </intent-filter>
+600        </receiver>
+601
+602        <meta-data
+602-->[com.facebook.soloader:soloader:0.10.5] C:\Users\user\.gradle\caches\transforms-3\3019da999cc2320dc750092c570bfcb2\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:12:9-14:37
+603            android:name="com.facebook.soloader.enabled"
+603-->[com.facebook.soloader:soloader:0.10.5] C:\Users\user\.gradle\caches\transforms-3\3019da999cc2320dc750092c570bfcb2\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:13:13-57
+604            android:value="false" />
+604-->[com.facebook.soloader:soloader:0.10.5] C:\Users\user\.gradle\caches\transforms-3\3019da999cc2320dc750092c570bfcb2\transformed\jetified-soloader-0.10.5\AndroidManifest.xml:14:13-34
+605        <meta-data
+605-->[com.google.android.instantapps:instantapps:1.1.0] C:\Users\user\.gradle\caches\transforms-3\88e152fdf5ee32c513985f16e2a11b4e\transformed\jetified-instantapps-1.1.0\AndroidManifest.xml:10:9-12:33
+606            android:name="aia-compat-api-min-version"
+606-->[com.google.android.instantapps:instantapps:1.1.0] C:\Users\user\.gradle\caches\transforms-3\88e152fdf5ee32c513985f16e2a11b4e\transformed\jetified-instantapps-1.1.0\AndroidManifest.xml:11:13-54
+607            android:value="1" />
+607-->[com.google.android.instantapps:instantapps:1.1.0] C:\Users\user\.gradle\caches\transforms-3\88e152fdf5ee32c513985f16e2a11b4e\transformed\jetified-instantapps-1.1.0\AndroidManifest.xml:12:13-30
+608    </application>
+609
+610</manifest>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "692375670021",
+    "project_id": "watcha-gotcha-app",
+    "storage_bucket": "watcha-gotcha-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:692375670021:android:20bc76477073088defbb6c",
+        "android_client_info": {
+          "package_name": "com.watchagotchamtechub"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3dk_bceimPVChzB8_76oMistSNaEhw1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
