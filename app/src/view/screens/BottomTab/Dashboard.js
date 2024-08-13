@@ -1051,14 +1051,14 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
   useEffect(() => {
     if (authToken && isFocused) {
       // fetchAllCinematicsCategory();
-      fetchTopForPics();
+      fetchTopForPics(selectedPicItemId);
       fetchSubCategorySport(selectedPicItemId);
     }
   }, [authToken, selectedPicItemId, isFocused]);
 
 
 
-    const fetchTopForPics = async () => {
+    const fetchTopForPics = async (selectedPicItemId) => {
     const token = authToken;
     try {
       const response = await fetch(
@@ -1075,7 +1075,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
       // Check if result and result.topTour are defined and not null
       if (result && result.topTour && result.topTour.length > 0) {
         console.log("Response result:", result.topTour[0]);
-        setDataTopVideos(result.topTour[0]); // Update the state with the fetched data
+        setDataTopPicData(result.topTour[0]); // Update the state with the fetched data
       } else {
         // console.error('No topTour data available');
         setDataTopPicData([]);

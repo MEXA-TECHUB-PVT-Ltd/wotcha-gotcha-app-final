@@ -1055,6 +1055,7 @@ export default function UpdateContent({navigation, route}) {
       setImageInfo({uri: receivedData?.thumbnail});
       setThumbnailImageUri(receivedData?.thumbnail);
       setCategoryId(receivedData?.video_category)
+      setSubCategory(receivedData?.sub_category)
       isDataFetched(true);
     };
 
@@ -1083,7 +1084,8 @@ export default function UpdateContent({navigation, route}) {
 
       if (response.ok) {
         const result = await response.json();
-        setSubCate(result.AllCategories);
+        const reverseData =  result.AllCategories.reverse();
+        setSubCate(reverseData);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
       }
@@ -1093,10 +1095,6 @@ export default function UpdateContent({navigation, route}) {
   };
   console.log('Sub category id comes bellow function', subcategory)
 ////////////////////////////////////////////////////////////////////////
-
-
-
-
 
 
 
