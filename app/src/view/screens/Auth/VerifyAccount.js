@@ -32,26 +32,8 @@ import {
 
 import Back from '../../../assets/svg/back.svg';
 
-/* import {
-  CodeField,
-  Cursor,
-  useBlurOnFulfill,
-  useClearByFocusCell,
-} from 'react-native-confirmation-code-field'; */
-
-import Gemail from '../../../assets/svg/gemail.svg';
-import Oemail from '../../../assets/svg/oemail.svg';
-
-import Glock from '../../../assets/svg/glock.svg';
-import Olock from '../../../assets/svg/olock.svg';
-
-import Ouser from '../../../assets/svg/ouser.svg';
-import Guser from '../../../assets/svg/guser.svg';
-
 import CustomButton from '../../../assets/Custom/Custom_Button';
-import {useIsFocused} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import SwitchSelector from 'react-native-switch-selector';
+import { useTranslation } from 'react-i18next';
 import { base_url } from '../../../../../baseUrl';
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
 LogBox.ignoreAllLogs();
@@ -59,7 +41,7 @@ LogBox.ignoreAllLogs();
 export default function VerifyAccount({navigation, route}) {
   const [value, setValue] = useState('');
   const [otpCode, setOtpCode] = useState('');
-
+  const { t } = useTranslation(); 
   const ref_RBSendOffer = useRef(null);
   const [loading, setLoading] = useState(false);
 
@@ -217,7 +199,9 @@ export default function VerifyAccount({navigation, route}) {
             fontFamily: 'Inter',
             fontWeight: '800',
           }}>
-          Verify Your Account
+             {t('ForgotP.VerifyYourAccount')}
+          
+          {/* Verify Your Account */}
         </Text>
 
         <Text
@@ -228,7 +212,9 @@ export default function VerifyAccount({navigation, route}) {
             fontSize: hp(2.1),
             fontFamily: 'Inter',
           }}>
-          We have sent a verification code on your{'\n'} email address
+              {t('ForgotP.verificationcodesent')}
+          
+          {/* We have sent a verification code on your{'\n'} email address */}
         </Text>
 
         <View style={{marginHorizontal: wp(8), paddingTop: 1}}>
@@ -260,7 +246,8 @@ export default function VerifyAccount({navigation, route}) {
                 marginTop: hp(1.8),
                 fontSize: hp(1.8),
               }}>
-              Please Enter Your Otp First
+                          {t('ForgotP.EnterOTP')}
+              {/* Please Enter Your Otp First */}
             </Text>
           ) : null}
         </View>
@@ -300,7 +287,9 @@ export default function VerifyAccount({navigation, route}) {
               fontSize: hp(2.1),
               fontFamily: 'Inter',
             }}>
-            Didn’t received the code?
+              {t('ForgotP.DidnotReceive')}
+              
+            {/* Didn’t received the code? */}
           </Text>
 
           <TouchableOpacity onPress={() => handleResend()}>
@@ -318,7 +307,7 @@ export default function VerifyAccount({navigation, route}) {
 
         <View style={{marginTop: '15%', alignSelf: 'center'}}>
           <CustomButton
-            title="Verify"
+            title={t('ForgotP.Verify')}
             //load={loading}
             // checkdisable={inn == '' && cm == '' ? true : false}
             customClick={() => {
@@ -374,7 +363,9 @@ export default function VerifyAccount({navigation, route}) {
                 fontWeight: 'bold',
                 fontFamily: 'Inter',
               }}>
-              Account Verified!
+                {t('ForgotP.AccountVerified')}
+                
+              {/* Account Verified! */}
             </Text>
 
             <Text
@@ -387,13 +378,15 @@ export default function VerifyAccount({navigation, route}) {
                 //fontWeight:'bold',
                 fontFamily: 'Inter',
               }}>
-              Your account has been successfully verified
+                  {t('ForgotP.successfullyverified')}
+                
+              {/* Your account has been successfully verified */}
             </Text>
           </View>
-
+          
           <View style={{marginHorizontal: wp(10)}}>
             <CustomButton
-              title="Reset Password"
+              title={t('ForgotP.ResetPassword')}
               customClick={() => {
                 //ref_RBSendOffer.current.open();
                 navigation.navigate('ResetPassword',{
@@ -417,10 +410,10 @@ export default function VerifyAccount({navigation, route}) {
           alignItems: 'center',
         }}>
         {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
+      </View> 
       <CustomSnackbar
-        message={'Alert'}
-        messageDescription={'invalid or expired OTP'}
+        message={t('ForgotP.Alert')}
+        messageDescription={t('ForgotP.invalidOTP')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />

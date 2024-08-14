@@ -100,7 +100,22 @@ const STYLES = StyleSheet.create({
     },
     DropMani:{
         marginHorizontal: '10%',
-    }
+    },
+    itemContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+      },
+      flagImage: {
+        width: 24,
+        height: 16,
+        marginLeft: 'auto', // Position the flag to the right
+      },
+      itemLabel: {
+        fontSize: 16,
+        color: '#000',
+        flex: 1, // Ensures the label takes up available space
+      },
 })
 
 export default STYLES; 

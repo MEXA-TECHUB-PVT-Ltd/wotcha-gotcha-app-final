@@ -383,7 +383,7 @@ export default function PostLetterInfo({navigation}) {
   const checkOnPublicAndAuthorities = () => {
     console.log('Letter Type', categoryPublicType);
     if (categoryPublicType === 'general') {
-      navigation.navigate('PostLetter', {
+      navigation.replace('PostLetter', {
         name: name,
         address: address,
         contactNumber: contact,
@@ -392,7 +392,7 @@ export default function PostLetterInfo({navigation}) {
         letterType: 'general',
       });
     } else {
-      navigation.navigate('PostLetter', {
+      navigation.replace('PostLetter', {
         name: name,
         address: address,
         contactNumber: contact,

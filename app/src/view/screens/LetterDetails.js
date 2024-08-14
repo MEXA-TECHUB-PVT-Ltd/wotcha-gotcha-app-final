@@ -45,6 +45,7 @@ import { SelectCountry, Dropdown } from "react-native-element-dropdown";
 import CPaperInput from "../../assets/Custom/CPaperInput";
 import Headers from "../../assets/Custom/Headers";
 import { base_url } from "../../../../baseUrl";
+import CustomSnackbar from "../../assets/Custom/CustomSnackBar";
 
 const Category = [
   { label: "Item 1", value: "1" },
@@ -327,17 +328,15 @@ export default function LetterDetails({ navigation, route }) {
       // Handle other errors such as network issues
     }
   };
+
+  const dismissDeleteSnackbar = () => {
+    setsnackbarDeleteVisible(false);
+  };
   const handleUpdateDeletePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setsnackbarDeleteVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarDeleteVisible(false);
-      navigation.navigate('Dashboards');
+      navigation.replace('ViewProfile');
       //navigation.goBack();
     }, 3000);
   };
@@ -727,7 +726,12 @@ export default function LetterDetails({ navigation, route }) {
         </View>
       </RBSheet>
      
-
+      <CustomSnackbar
+        message={'success'}
+        messageDescription={'Letter deleted successfully'}
+        onDismiss={dismissDeleteSnackbar} // Make sure this function is defined
+        visible={snackbarDeleteVisible}
+      />
       <Modal
         visible={modalVisible}
         transparent={true}

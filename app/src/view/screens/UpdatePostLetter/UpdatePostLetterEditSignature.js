@@ -359,7 +359,7 @@ export default function UpdatePostLetterEditSignature({navigation, route}) {
         console.log('API Response for signature:', data);
 
         setLoading(false);
-        navigation.navigate('UpdatePostLetterEditSignaturePics', {
+        navigation.replace('UpdatePostLetterEditSignaturePics', {
           greetingsTitle: receivedDataGreetingsTitle,
           subjectOfLetter: receivedDataSubjectOfLetter,
           introductionOfLetter: receivedDataintroductionOfLetter,

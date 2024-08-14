@@ -41,14 +41,14 @@ import User from '../../../assets/svg/User.svg';
 
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
 import { base_url } from '../../../../../baseUrl';
-
+import { useTranslation } from 'react-i18next';
 LogBox.ignoreAllLogs();
 
 const ResetPassword = ({navigation, route}) => {
   const {user_Id} = route.params;
   console.log('user_Id from params', user_Id)
   const [userId, setUserId] = useState('');
-
+  const { t } = useTranslation(); 
   const [passwordError, setPasswordError] = useState(false);
 
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
@@ -305,14 +305,14 @@ const ResetPassword = ({navigation, route}) => {
           />
         </View>
 
-        <Text style={styles.resetPasswordHeadingTxt}>Reset Password</Text>
+        <Text style={styles.resetPasswordHeadingTxt}>{t('ForgotP.ResetPassword')}</Text>
+        
+        <Text style={styles.resetPasswordTxt}>{t('ForgotP.Createstrongpassword')}</Text>
 
-        <Text style={styles.resetPasswordTxt}>Create a strong password</Text>
-
-        <View>
-          <TextInput
+        <View> 
+          <TextInput 
             mode="outlined"
-            label="Password"
+            label={t('password')}
             onChangeText={text => setsignin_pass(text)}
             style={styles.ti}
             placeholderTextColor={'#646464'}
@@ -349,7 +349,7 @@ const ResetPassword = ({navigation, route}) => {
                 styles.txt,
                 {color: signin_ShowPassword ? '#646464' : '#FACA4E'},
               ]}>
-              {signin_ShowPassword ? 'Show' : 'Hide'}
+              {signin_ShowPassword ?  t('signin.Show') : t('signin.Hide')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -362,14 +362,16 @@ const ResetPassword = ({navigation, route}) => {
               marginTop: hp(1.8),
               fontSize: hp(1.8),
             }}>
-            Please Enter Your Password
+              {t('ForgotP.PleaseEnterPassword')}
+              
+            {/* Please Enter Your Password */}
           </Text>
         ) : null}
 
         <View>
           <TextInput
             mode="outlined"
-            label="Confirm Password"
+            label= {t('confirmPassword')}
             onChangeText={text => setconfirm_pass(text)}
             style={styles.ti}
             placeholderTextColor={'#646464'}
@@ -406,7 +408,8 @@ const ResetPassword = ({navigation, route}) => {
                 styles.txt,
                 {color: signin_ConfirmShowPassword ? '#646464' : '#FACA4E'},
               ]}>
-              {signin_ConfirmShowPassword ? 'Show' : 'Hide'}
+              {signin_ConfirmShowPassword ?  t('signin.Show') : t('signin.Hide')}
+              {/* {signin_ConfirmShowPassword ? 'Show' : 'Hide'} */}
             </Text>
           </TouchableOpacity>
         </View>
@@ -419,13 +422,14 @@ const ResetPassword = ({navigation, route}) => {
               marginTop: hp(1.8),
               fontSize: hp(1.8),
             }}>
-            Please Enter Your Confirm Password
+            {t('ForgotP.PleaseConfirmPassword')}
+            {/* Please Enter Your Confirm Password */}
           </Text>
         ) : null}
 
         <View style={{marginTop: '25%', alignSelf: 'center'}}>
           <CustomButton
-            title="Reset"
+            title={t('ForgotP.Reset')}
             //load={loading}
             // checkdisable={inn == '' && cm == '' ? true : false}
             customClick={() => {
@@ -434,10 +438,10 @@ const ResetPassword = ({navigation, route}) => {
           />
         </View>
       </View>
-
+      
       <CustomSnackbar
-        message={'success'}
-        messageDescription={'Password reset successfully'}
+        message={t('ForgotP.success')}
+        messageDescription={t('ForgotP.Passwordresetsuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />

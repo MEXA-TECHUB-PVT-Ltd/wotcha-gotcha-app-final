@@ -495,7 +495,7 @@ export default function UpdatePtLetter({navigation, route}) {
                 introductionOfLetter !== '' &&
                 postLetter !== ''
               ) {
-                navigation.navigate('UpdatePostLetterEditSignature', {
+                navigation.replace('UpdatePostLetterEditSignature', {
                   greetingsTitle: greetings,
                   subjectOfLetter: subjectOfLetter,
                   introductionOfLetter: introductionOfLetter,

@@ -29,7 +29,9 @@ import {appImages} from '../../../assets/utilities';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { base_url } from '../../../../../baseUrl';
-
+import { Dropdown } from 'react-native-element-dropdown';
+import useCustomTranslation from "../../../assets/Localization/useCustomTranslation";
+import { useTranslation } from 'react-i18next';
 export default function ProfileSettings({navigation}) {
   const ref_RBSheetLogout = useRef(null);
 
@@ -39,6 +41,51 @@ export default function ProfileSettings({navigation}) {
 
   const [authToken, setAuthToken] = useState('');
   const [loading, setIsLoading] = useState(false);
+
+  const { t } = useTranslation(); 
+
+const { changeLanguage } = useCustomTranslation();
+const [selectedLanguage, setSelectedLanguage] = useState(null); 
+
+const languageOptions = [
+  { label: 'English', value: 'en', flag: require('../../../assets/english_flag.png') },
+  { label: 'Français', value: 'fr', flag: require('../../../assets/Flag_of_France.png') }
+];
+const handleLanguageChange = (value) => {
+    if (value) {
+        setSelectedLanguage(value);
+        console.log('langugae select', value)
+        changeLanguage(value);
+    }
+};
+
+
+useEffect(() => {
+  const fetchLanguage = async () => {
+    try {
+      const storedLanguage = await AsyncStorage.getItem('language');
+      if (storedLanguage) {
+        setSelectedLanguage(storedLanguage);
+      } else {
+        // If no language is stored, set to default
+        setSelectedLanguage('en');
+      }
+    } catch (error) {
+      console.error('Error fetching language:', error);
+      setSelectedLanguage('en'); // Fallback to default if there's an error
+    }
+  };
+
+  fetchLanguage();
+}, []);
+
+
+
+
+
+
+
+
   useEffect(() => {
     fetchVideos();
   }, []);
@@ -176,6 +223,8 @@ export default function ProfileSettings({navigation}) {
           text={'Settings'}
         />
       </View>
+<ScrollView>
+
 
       <TouchableOpacity
         onPress={() => navigation.navigate('UpdateProfile')}
@@ -366,11 +415,32 @@ export default function ProfileSettings({navigation}) {
         </Text>
       </TouchableOpacity>
 
+      <View style={styles.DropMani}>
+      <Dropdown
+        style={styles.dropdown}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        containerStyle={styles.containerStyle}
+        data={languageOptions}
+        labelField="label"
+        valueField="value"
+        placeholder="Select Language"
+        value={selectedLanguage}
+        onChange={(item) => handleLanguageChange(item.value)}
+        renderItem={(item) => (
+          <View style={styles.itemContainer}>
+            <Text style={styles.itemLabel}>{item.label}</Text>
+            <Image source={item.flag} style={styles.flagImage} />
+          </View>
+        )}
+      />
+    </View>
+
       <View
         style={{
           flex: 1,
           //borderWidth: 3,
-          marginBottom: wp(12),
+          marginBottom: wp(6),
           justifyContent: 'flex-end',
         }}>
         <TouchableOpacity
@@ -407,7 +477,7 @@ export default function ProfileSettings({navigation}) {
           </View>
         </TouchableOpacity>
       </View>
-
+      </ScrollView>
       <RBSheet
         ref={ref_RBSheetLogout}
         height={330}
@@ -541,5 +611,61 @@ const styles = StyleSheet.create({
     marginLeft: wp(5),
     fontSize: hp(2.3),
     color: '#0B0B0B',
+  },
+
+
+
+
+  dropdown: {
+
+  
+    borderColor: '#ccc',
+
+    paddingHorizontal: 8,
+
+    height: hp(7),
+    marginTop: hp(3),
+
+    borderWidth: 1,
+    borderRadius: wp(3),
+
+    borderColor: '#00000017',
+},
+placeholderStyle: {
+    fontSize: 16,
+    color: '#999',
+    
+},
+selectedTextStyle: {
+    fontSize: 16,
+    
+},
+iconStyle: {
+    width: 20,
+    height: 20,
+},
+inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+    
+},
+DropMani:{
+    marginHorizontal: wp(8),
+    marginBottom:40
+},
+itemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+  },
+  flagImage: {
+    width: 24,
+    height: 16,
+    marginLeft: 'auto', // Position the flag to the right
+  },
+  itemLabel: {
+    fontSize: 16,
+    color: '#000',
+    flex: 1, // Ensures the label takes up available space
   },
 });

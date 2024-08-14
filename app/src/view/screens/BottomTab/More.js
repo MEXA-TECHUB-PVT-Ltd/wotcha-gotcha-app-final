@@ -248,6 +248,7 @@ import QafiIcon from "react-native-vector-icons/FontAwesome5";
 import EBC from "react-native-vector-icons/MaterialCommunityIcons";
 import { useIsFocused } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 // ///////// for defult 27.5.2024
 const defaultCategories = [
   { key: 'one', name: 'Mass App', activeIcon: <CategoryActive width={23} height={23} />, inactiveIcon: <CategoryInactive width={23} height={23} />, dropped: false },
@@ -268,6 +269,7 @@ const defaultCategories = [
 ];
 
 export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynamicCategories, route }) {
+  const { t } = useTranslation(); 
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [categories, setCategories] = useState(defaultCategories);
@@ -395,7 +397,7 @@ export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynam
        
       </View>
       <View style={styles.dragTextContainer}>
-        <Text style={styles.dragText}>Press & Drag to adjust sequence</Text>
+        <Text style={styles.dragText}>{t('More.PresstoAdjust')}</Text>
       </View>
     </View>
   );
@@ -434,6 +436,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+    position: 'relative',
 },
 wrapper:{
   flex: 8,
@@ -482,12 +485,18 @@ width: wp('70%'), // Adjust width as needed
 height: hp('20%'), // Adjust height as needed
 },
 dragTextContainer: {
-  alignItems: 'center',
-  paddingTop:hp(57)
+  position: 'absolute', // Absolute positioning to stick it to the bottom
+  bottom: 0, // Align to the bottom of the container
+  alignItems: 'center', // Center text horizontally
+  paddingVertical: 10, // Optional: Add padding for better visual spacing
+  width:'100%'
+
 },
 dragText: {
   color: '#C4C4C4',
-  fontSize:16,
+  fontSize: 16,
   fontFamily: 'Inter',
+  textAlign: 'center',
+  paddingHorizontal: 10, // Optional: Add padding to match width percentage
 },
 });

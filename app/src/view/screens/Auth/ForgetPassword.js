@@ -37,11 +37,12 @@ import SwitchSelector from 'react-native-switch-selector';
 import User from '../../../assets/svg/User.svg';
 import CustomSnackbar from './../../../assets/Custom/CustomSnackBar';
 import { base_url } from '../../../../../baseUrl';
+import { useTranslation } from 'react-i18next';
 LogBox.ignoreAllLogs();
 
 const ForgetPassword = ({navigation}) => {
   const isFocused = useIsFocused();
-
+  const { t } = useTranslation(); 
   useEffect(() => {}, [isFocused]);
 
   const [email, setEmail] = useState('');
@@ -237,16 +238,15 @@ const ForgetPassword = ({navigation}) => {
           />
         </View>
 
-        <Text style={styles.resetPasswordHeadingTxt}>Forgot Password</Text>
-
+        <Text style={styles.resetPasswordHeadingTxt}>{t('signin.ForgetPassword')}</Text>
+        
         <Text style={styles.resetPasswordTxt}>
-          Enter email address below, and well send you {'\n'} 4-digit code to
-          reset the password
+        {t('ForgotP.resetPasswordText')}
         </Text>
 
         <TextInput
           mode="outlined"
-          label="Email Address"
+          label= {t('signin.EmailAddress')}
           value={email}
           onChangeText={text => setEmail(text)}
           style={styles.ti}
@@ -284,7 +284,7 @@ const ForgetPassword = ({navigation}) => {
 
         <View style={{marginTop: '25%', alignSelf: 'center'}}>
           <CustomButton
-            title="Send Code"
+            title= {t('ForgotP.SendCode')}
             //load={loading}
             // checkdisable={inn == '' && cm == '' ? true : false}
             customClick={() => {
@@ -309,13 +309,13 @@ const ForgetPassword = ({navigation}) => {
 
       <CustomSnackbar
         message={'Alert'}
-        messageDescription={'something went wrong, unable to send OTP'}
+        messageDescription={t('ForgotP.SomethingWrong')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
          <CustomSnackbar
         message={'Success'}
-        messageDescription={'OTP sent Successfully'}
+        messageDescription={t('ForgotP.OTPSent')}
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackbarVisibleAlert}
       />
@@ -358,6 +358,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#9597A6',
     fontSize: wp(3.5),
+    width:wp('90%')
   },
   ti: {
     marginHorizontal: '7%',

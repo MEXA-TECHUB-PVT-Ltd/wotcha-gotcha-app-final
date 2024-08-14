@@ -1068,7 +1068,8 @@ const fetchSubCategorySport = async (selectedItemId) => {
                   borderRadius: wp(3),
                   resizeMode: "cover",
                 }}
-                source={{ uri: dataTopVideos?.video }}
+                // source={{ uri: dataTopVideos?.video }}
+                source={appImages.galleryPlaceHolder}
               />
        
                 </TouchableOpacity>

@@ -42,12 +42,12 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import { useIsFocused } from "@react-navigation/native";
-
+import { useTranslation } from 'react-i18next';
 const Drawer = createDrawerNavigator();
 const DrawerNavigation = ({ navigation }) => {
   const [authToken, setAuthToken] = useState(null);
   const [userId, setUserId] = useState("");
-
+  const { t } = useTranslation(); 
   const [name, setName] = useState("");
 
   const [image, setImage] = useState("");
@@ -268,7 +268,7 @@ const DrawerNavigation = ({ navigation }) => {
           <View style={{ flex: 1 }}>
             <View style={{ marginLeft: 18, marginTop: hp(-5) }}>
               <DrawerItem
-                label="Home"
+                label={t('Drawer.Home')}
                 labelStyle={{
                   color: "#333333",
                   marginLeft: wp(-2.3),
@@ -278,7 +278,7 @@ const DrawerNavigation = ({ navigation }) => {
                 icon={(focused) => <HomeActive />}
               />
               <DrawerItem
-                label="Mass Apps"
+                label={t('More.MassApp')}
                 labelStyle={{
                   color: "#333333",
                   marginLeft: wp(-4.3),
@@ -290,7 +290,7 @@ const DrawerNavigation = ({ navigation }) => {
               />
 
               <DrawerItem
-                label="Video Mania"
+                label={t('Drawer.VideoMania')}
                 // onPress={() => navigation.navigate('Videos')}
                 onPress={() => navigation.navigate("Video")}
                 labelStyle={{
@@ -312,8 +312,8 @@ const DrawerNavigation = ({ navigation }) => {
                 icon={(focused) => <MailActive />}
               /> */}
 
-              <DrawerItem
-                label="Pic Tours"
+              <DrawerItem 
+                label={t('Drawer.PicTours')}
                 labelStyle={{
                   color: "#333333",
                   marginLeft: wp(-2),
@@ -324,8 +324,8 @@ const DrawerNavigation = ({ navigation }) => {
                 icon={(focused) => <ProfileActive />}
               />
 
-<DrawerItem
-                label="News"
+              <DrawerItem
+                label={t('Drawer.News')}
                 labelStyle={{
                   color: "#333333",
                   marginLeft: wp(-5),
@@ -335,7 +335,7 @@ const DrawerNavigation = ({ navigation }) => {
                 icon={(focused) => <News name="news"  size={26} color="#FACA4E"/>}
               />
               <DrawerItem
-                label="Open Letter"
+                label={t('Drawer.OpenLetter')}
                 labelStyle={{
                   color: "#333333",
                   marginLeft: wp(-5),
@@ -345,7 +345,7 @@ const DrawerNavigation = ({ navigation }) => {
                 icon={(focused) => <LetterIcon name="newsletter"  size={26} color="#FACA4E"/>}
               />
               <DrawerItem
-                label="QAFI"
+                label={t('Drawer.QAFI')}
                 labelStyle={{
                   color: "#333333",
                   marginLeft: wp(-5),
@@ -366,7 +366,7 @@ const DrawerNavigation = ({ navigation }) => {
               />
 
              <DrawerItem
-                label="Sports"
+                label={t('Drawer.Sports')}
                 labelStyle={{
                   color: "#333333",
                   marginLeft: wp(-5),
@@ -377,7 +377,7 @@ const DrawerNavigation = ({ navigation }) => {
               />
 
               <DrawerItem
-                label="Cinematics"
+                label={t('Drawer.Cinematics')} 
                 labelStyle={{
                   color: "#333333",
                   marginLeft: wp(-5),
@@ -387,7 +387,7 @@ const DrawerNavigation = ({ navigation }) => {
                 icon={(focused) => <Cinematiceactive />}
               />
               <DrawerItem
-                label="Fans_star Zone"
+                label={t('Drawer.Fans_star')}  
                 labelStyle={{
                   color: "#333333",
                   marginLeft: wp(-5),
@@ -397,7 +397,7 @@ const DrawerNavigation = ({ navigation }) => {
                 icon={(focused) => <FansActive />}
               />
               <DrawerItem
-                label="Kid-Vids"
+                label={t('Drawer.Kid-Vids')} 
                 labelStyle={{
                   color: "#333333",
                   marginLeft: wp(-5),
@@ -408,8 +408,8 @@ const DrawerNavigation = ({ navigation }) => {
                 icon={(focused) => <KidsActive />}
               />
               <DrawerItem
-                label="TV ProgMax"
-                labelStyle={{
+                label={t('Drawer.TVProgMax')}
+                labelStyle={{ 
                   color: "#333333",
                   marginLeft: wp(-5),
                   fontFamily: "Inter-Medium",
@@ -418,7 +418,7 @@ const DrawerNavigation = ({ navigation }) => {
                 icon={(focused) => <TVpromaxActive />}
               />
               <DrawerItem
-                label="Learning & Hobbies"
+                label={t('Drawer.LearningHobbies')} 
                 labelStyle={{
                   color: "#333333",
                   marginLeft: wp(-5),
@@ -431,8 +431,8 @@ const DrawerNavigation = ({ navigation }) => {
 
 
               <DrawerItem
-                label="Market Zone"
-                labelStyle={{
+                label={t('Drawer.MarketZone')} 
+                labelStyle={{ 
                   color: "#333333",
                   marginLeft: wp(-5),
                   fontFamily: "Inter-Medium",
@@ -443,9 +443,9 @@ const DrawerNavigation = ({ navigation }) => {
               />
 
               <DrawerItem
-                label="Banner Advertisement"
+                label={t('Drawer.BannerAdvertisement')}
                 labelStyle={{
-                  color: "#333333",
+                  color: "#333333", 
                   marginLeft: wp(-4.3),
                   fontFamily: "Inter-Medium",
                 }}
@@ -454,7 +454,7 @@ const DrawerNavigation = ({ navigation }) => {
               />
 
               <DrawerItem
-                label="Privacy policy"
+                label={t('Drawer.Privacypolicy')} 
                 labelStyle={{
                   color: "#333333",
                   marginLeft: wp(-4.1),
@@ -465,7 +465,7 @@ const DrawerNavigation = ({ navigation }) => {
               />
 
               <DrawerItem
-                label="Terms & Condition"
+                label={t('Drawer.TermsCondition')} 
                 labelStyle={{
                   color: "#333333",
                   marginLeft: wp(-4.1),
@@ -492,7 +492,7 @@ const DrawerNavigation = ({ navigation }) => {
               /> */}
 
               <DrawerItem
-                label="Contact Us"
+                label={t('Drawer.ContactUs')} 
                 labelStyle={{
                   color: "#333333",
                   marginLeft: wp(-4.1),
@@ -530,7 +530,8 @@ const DrawerNavigation = ({ navigation }) => {
                     marginLeft: 10,
                   }}
                 >
-                  Logout
+                  {t('Drawer.Logout')}
+                  {/* Logout */}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -578,17 +579,18 @@ const DrawerNavigation = ({ navigation }) => {
             { marginTop: 1, fontSize: hp(2.5), fontWeight: "500" },
           ]}
         >
-          Confirmation
-        </Text>
+          {/* Confirmation */}
+          {t('Drawer.Confirmation')}
+        </Text> 
 
-        <Text style={{ marginTop: hp(2) }}>Do You Really Want To Logout?</Text>
+        <Text style={{ marginTop: hp(2) }}>{t('Drawer.SureLogout')}</Text>
 
         <View style={styles.buttonDirections}>
           <TouchableOpacity
             style={styles.button}
             onPress={() => ref_RBSheetLogout.current.close()}
-          >
-            <Text style={styles.textButton}>Cancel</Text>
+          > 
+            <Text style={styles.textButton}>{t('Drawer.Cancel')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -596,7 +598,8 @@ const DrawerNavigation = ({ navigation }) => {
             style={[styles.button, { backgroundColor: "#FACA4E" }]}
           >
             <Text style={[styles.textButton, { color: "#232323" }]}>
-              Logout
+              {/* Logout */}
+              {t('Drawer.Logout')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -645,7 +648,7 @@ const styles = StyleSheet.create({
   txtNotification: {
     fontWeight: "500",
     marginTop: hp(10),
-    marginLeft: wp(5),
+    // marginLeft: wp(5),
     fontSize: hp(2.3),
     color: "#0B0B0B",
   },

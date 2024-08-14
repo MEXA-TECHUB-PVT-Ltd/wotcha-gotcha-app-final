@@ -86,6 +86,45 @@ export default function UpdatePostLetterEditSignaturePics({
 //     setImageUris(initialImages);
 //   }
 // }, [receivedData]);
+const [LetterData, setLetterData] = useState([]);
+useEffect(() => {
+  if (receivedData) {
+    const getAuthToken = async () => {
+      const token = authToken;
+      try {
+        const response = await fetch(base_url + `letter/getSpecificLetter/${receivedData.post_id}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("get post letter data ", data.postLetter);
+
+          // Use the data from the API to set the letter data
+          setLetterData(data.postLetter);
+          setImagesWithId(data.postLetter.images); 
+          setImageUris(data.postLetter.images);
+       
+        } else {
+          console.error(
+            "Failed to fetch letter data:",
+            response.status,
+            response.statusText
+          );
+        }
+      } catch (error) {
+        console.error("Errors:", error);
+      }
+    };
+
+    // Call the async function
+    getAuthToken();
+  }
+}, [receivedData, authToken]); // Include dependencies if needed
+
 
 useEffect(() => {
   const fetchFileDetails = async () => {
@@ -101,8 +140,8 @@ useEffect(() => {
           };
         })
       );
-      setImagesWithId(initialImages); 
-      setImageUris(initialImages);
+      // setImagesWithId(initialImages); 
+      // setImageUris(initialImages);
     }
   };
 
@@ -367,16 +406,31 @@ const getFileDetails = (imageUrl) => {
   const checkUpload = () => {
     if (imageUris.length < 3 && videoInfo === null && removedImageIds.length > 0) {
       removeExistingImages(removedImageIds);
+    } else if (imageUris.length < 3 && videoInfo === null) {
+      handleUploadImages(imageUris);
     } else if (imageUris.length === 0 && videoInfo === null) {
       handleUpdatePasswordAlert();
     } else if (imageUris.length !== 0 && videoInfo !== null) {
-      handleUpdatePasswordLimitAlert();
-    } else if (imageUris.length > 0) {
-      handleUploadImages(imageUris);
+      handleUpdatePasswordLimitAlert(); 
     } else if ( imageUris.length === 0 && videoInfo !== null) {
       handleUploadVideo();
     }
   };
+  // const checkUpload = () => {
+  //   if (imageUris.length < 3 && videoInfo === null && removedImageIds.length > 0) {
+  //     removeExistingImages(removedImageIds);
+  //   } else if (imageUris.length < 3 && videoInfo === null) {
+  //     handleUploadImages(imageUris);
+  //   } else if (imageUris.length === 0 && videoInfo === null) {
+  //     handleUpdatePasswordAlert();
+  //   } else if (imageUris.length !== 0 && videoInfo !== null) {
+  //     handleUpdatePasswordLimitAlert(); 
+  //   } else if (imageUris.length > 0) {
+  //     handleUploadImages(imageUris);
+  //   } else if ( imageUris.length === 0 && videoInfo !== null) {
+  //     handleUploadVideo();
+  //   }
+  // };
 
 
   const handleUploadImages = async (imageArray) => {
@@ -509,15 +563,15 @@ const getFileDetails = (imageUrl) => {
   //     // Handle the error
   //   }
   // };
-  const createLetterImage = async (imageUrls, oldImageIds) => {
+  const createLetterImage = async (imageUrls, removedImageIds) => {
     const token = authToken;
     const apiUrl = base_url + "letter/updatePostLetterImages";
   
     const requestData = {
       letterId: letterId,
-      oldImageIds: oldImageIds,  // This includes the IDs of removed images
+      oldImageIds: removedImageIds,  // This includes the IDs of removed images
       image: imageUrls,  // This includes the URLs of newly uploaded images
-      video: "",  // You can send one video maximum
+     
     };
   
 
@@ -553,7 +607,7 @@ const getFileDetails = (imageUrl) => {
     const requestData = {
       letterId: letterId,
       image: imageUrls,  // This includes the URLs of newly uploaded images
-      video: "",  // You can send one video maximum
+     
     };
   
     console.log("Request data is---", requestData);
@@ -582,13 +636,14 @@ const getFileDetails = (imageUrl) => {
   };
   
 
-  const removeExistingImages = async (oldImageIds) => {
+  const removeExistingImages = async (removedImageIds) => {
     const token = authToken;
     const apiUrl = base_url + "letter/updatePostLetterImages";
-  console.log('remove in re', oldImageIds)
+  console.log('remove in re', removedImageIds)
     const requestData = {
       letterId: letterId,
-      oldImageIds: oldImageIds,  // Only send oldImageIds
+      oldImageIds: removedImageIds,  // Only send oldImageIds
+   
     };
   
     console.log("Request data is---", requestData);
@@ -1092,7 +1147,7 @@ const getFileDetails = (imageUrl) => {
 
   const renderImageItem = ({ item, index }) => (
     <View style={styles.imageContainer}>
-      <Image source={{ uri: item.uri }} style={styles.image} />
+      <Image source={{ uri: item.uri ||  item.image}} style={styles.image} />
       <TouchableOpacity
         style={styles.changePicContainer}
         onPress={() => handleImageChange(index)}
@@ -1137,11 +1192,11 @@ const getFileDetails = (imageUrl) => {
         <Headers
           showBackIcon={true}
           showText={true}
-          text={"Post Letter"}
+          text={"Update Letter"}
           onPress={() => navigation.goBack()}
         />
       </View>
-
+ 
       <View
         style={{
           flexDirection: "row",
@@ -1317,7 +1372,7 @@ const getFileDetails = (imageUrl) => {
         />
       </View> */}
 
-      {imageUris.length === 0 ? (
+      {imageUris === null || imageUris === undefined? (
         <TouchableOpacity
           onPress={() => ref_RBSheetVideo.current.open()}
           style={{
