@@ -46,6 +46,7 @@ import {SelectCountry, Dropdown} from 'react-native-element-dropdown';
 import CustomDialog from '../../../assets/Custom/CustomDialog';
 import { base_url } from '../../../../../baseUrl';
 import { CLOUD_NAME, CLOUDINARY_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
+import CustomLoaderButton from '../../../assets/Custom/CustomLoaderButton';
 
 const Category = [
   {label: 'Item 1', value: '1'},
@@ -105,7 +106,8 @@ export default function GEBC({navigation}) {
   const [subcategoryError, setSubcategoryError] = useState("");
   const [subCate, setSubCate] = useState([]);
   const [subcategory, setSubCategory] = useState("");
-
+  
+    const [profileNameError, setProfileNameError] = useState("");
 
 
 
@@ -175,8 +177,8 @@ export default function GEBC({navigation}) {
           label: category.name,
           value: category.id.toString()
         }));
-
-        setCategorySelect(categories);
+        const reverseData = categories.reverse();
+        setCategorySelect(reverseData);
       } else {
         console.error('Failed to fetch categories:', response.status, response.statusText);
       }
@@ -202,7 +204,8 @@ export default function GEBC({navigation}) {
 
       if (response.ok) {
         const result = await response.json();
-        setSubCate(result.AllCategories);
+        const reverseData = result.AllCategories.reverse();
+        setSubCate(reverseData);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
       }
@@ -621,7 +624,9 @@ export default function GEBC({navigation}) {
             height={hp(14)}
           />
         </View>
-
+        <View style={{marginHorizontal:hp('4%'), marginTop:hp('-2%')}}>
+{profileNameError ? <Text style={styles.errorText}>{profileNameError}</Text> : null}
+        </View>
         {/*   <TouchableOpacity
           onPress={() => ref_RBSheetCamera.current.open()}
           style={{
@@ -740,6 +745,9 @@ export default function GEBC({navigation}) {
               />
             )}
           />
+              <View style={{ marginTop:hp(-3), marginBottom:hp(3)}}>
+                    {categoryError ? <Text style={styles.errorText}>{categoryError}</Text> : null}
+                    </View>
         </View>
 
         <View style={{ marginHorizontal: wp(7), marginBottom:10 }}>
@@ -796,9 +804,8 @@ export default function GEBC({navigation}) {
               />
             )}
           />
-          <View>
-
-           {subcategoryError ? <Text style={styles.errorText}>{subcategoryError}</Text> : null}
+           <View style={{ marginTop:hp(-3), marginBottom:hp(3)}}>
+          {subcategoryError ? <Text style={styles.errorText}>{subcategoryError}</Text> : null}
           </View>
         </View>
 
@@ -840,11 +847,52 @@ export default function GEBC({navigation}) {
       <View
         style={{
           height: hp(12),
-          marginBottom: hp(3),
+          marginBottom: hp(2),
           justifyContent: 'flex-end',
           alignSelf: 'center',
         }}>
-        <CustomButton
+
+<CustomLoaderButton
+              title={"Post"}
+              load={loading}
+              customClick={() => {
+                let hasError = false;
+
+        
+                if (!comment) {
+                  setProfileNameError("Title is required");
+                  hasError = true;
+                } else {
+                  setProfileNameError("");
+                }
+
+                if (!categoryId) {
+                  setCategoryError("Category is required");
+                  hasError = true;
+                } else {
+                  setCategoryError("");
+                }
+
+                if (!subcategory) {
+                  setSubcategoryError("Subcategory is required");
+                  hasError = true;
+                } else {
+                  setSubcategoryError("");
+                }
+
+
+
+                if (!hasError) {
+                  if (!loading) {
+                    setLoading(true);
+                    upload();
+                  }  else {
+                    ref_RBSendOffer.current.open();
+                  }
+                }
+              }}
+            />
+        {/* <CustomButton
           title="Post"
           load={false}
           // checkdisable={inn == '' && cm == '' ? true : false}
@@ -855,7 +903,7 @@ export default function GEBC({navigation}) {
               ref_RBSendOffer.current.open();
             }
           }}
-        />
+        /> */}
       </View>
 
       <RBSheet
@@ -1190,5 +1238,10 @@ const styles = StyleSheet.create({
   emojiSelectorContainer: {
     width: 300, // Set your desired width
     height: 300, // Set your desired height
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 4,
   },
 });

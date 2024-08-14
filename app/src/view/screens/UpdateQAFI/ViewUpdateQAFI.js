@@ -273,7 +273,7 @@ export default function ViewUpdateQAFI({navigation, route}) {
         // Render specific content if identifier is true
         <TouchableOpacity
               onPress={() => ref_RBSheetCamera.current.open()}
-              style={{marginLeft: wp(1), marginTop: hp(1)}}>
+              style={{justifyContent:'center', alignItems:'center', height:hp(4), width:wp(8)}}>
               <Entypo name={'dots-three-vertical'} size={18} color={'white'} />
             </TouchableOpacity>
       ) : (

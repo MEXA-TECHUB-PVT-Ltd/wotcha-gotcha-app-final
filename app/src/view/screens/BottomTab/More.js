@@ -395,7 +395,7 @@ export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynam
        
       </View>
       <View style={styles.dragTextContainer}>
-        <Text style={styles.dragText}>Drag to Adjust</Text>
+        <Text style={styles.dragText}>Press & Drag to adjust sequence</Text>
       </View>
     </View>
   );

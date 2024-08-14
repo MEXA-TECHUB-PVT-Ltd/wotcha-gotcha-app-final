@@ -211,7 +211,7 @@ export default function ViewUpdateNews({navigation, route}) {
         barStyle="dark-content" // You can set the StatusBar text color to dark or light
       />
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{justifyContent:'center',  height:hp(4), width:wp(8),}}>
           <IonIcons name={'chevron-back'} color={'white'} size={25} />
         </TouchableOpacity>
 
@@ -268,7 +268,7 @@ export default function ViewUpdateNews({navigation, route}) {
         // Render specific content if identifier is true
         <TouchableOpacity
               onPress={() => ref_RBSheetCamera.current.open()}
-              style={{marginLeft: wp(1), marginTop: hp(1)}}>
+              style={{justifyContent:'center', alignItems:'center', height:hp(4), width:wp(8)}}>
               <Entypo name={'dots-three-vertical'} size={18} color={'white'} />
             </TouchableOpacity>
       ) : (
@@ -444,7 +444,7 @@ const styles = StyleSheet.create({
     height: hp(6.2),
     marginTop: hp(8),
     alignItems: 'center',
-    marginHorizontal: wp(8),
+    marginHorizontal: wp(7),
   },
   bottomView: {
     flex: 1,

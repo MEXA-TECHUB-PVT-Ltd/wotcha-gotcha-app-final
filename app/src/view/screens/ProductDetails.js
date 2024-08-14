@@ -1571,7 +1571,7 @@ export default function ProductDetails({ navigation, route }) {
   const [offerId, setOfferId] = useState("");
   const receivedData = route.params?.ProductDetails;
 
-  // console.log("Recieved Data", receivedData);
+  console.log("Recieved Data", receivedData);
 
 
   const [reset, setReset] = useState(false); // State to trigger reset
@@ -2324,7 +2324,7 @@ export default function ProductDetails({ navigation, route }) {
                 fontSize: hp(2),
               }}
             >
-              {receivedData.item_category_name}
+              {receivedData.item_category_name || receivedData.item_name}
             </Text>
 
             <Text

@@ -1182,21 +1182,65 @@ export default function MarketZone({  }) {
 
   const RegionArea = ["Africa", "Europe", "Americas", "Asia", "Middle East"];
 
+
+
   useEffect(() => {
-    // Make the API request and update the 'data' state
-    if (selectedItemId === null) {
-      setSelectedItemId("Africa");
-    } else {
-      fetchVideos();
+    const getAuthToken = async () => {
+      try {
+        const token = await AsyncStorage.getItem("authToken ");
+        if (token) {
+          setAuthToken(token);
+          await fetchCategory(token);
+        } else {
+          throw new Error("No auth token found");
+        }
+      } catch (err) {
+        console.error("Error retrieving auth token:", err);
+      }
+    };
+
+    getAuthToken();
+  }, []);
+
+
+
+  useEffect(() => {
+    if (authToken && isFocused) {
+      // Ensure selectedItemId has a value
+      if (selectedItemId === null || selectedItemId === undefined) {
+        setSelectedItemId("Africa");
+      }
+
+      setLoading(true);
+
+      fetchAll(selectedItemId);
+      fetchTopVideos();
+      fetchElectronics(selectedItemId);
+      fetchVehicles(selectedItemId);
+      fetchClothing(selectedItemId);
+
+      setLoading(false);
     }
-  }, [selectedItemId, isFocused]);
+  }, [authToken, selectedItemId ,isFocused]);
+
+
+
+
+  // useEffect(() => {
+  //   // Make the API request and update the 'data' state
+  //   if (selectedItemId === null) {
+  //     setSelectedItemId("Africa");
+  //   } else {
+  //     fetchVideos();
+  //   }
+  // }, [selectedItemId, isFocused]);
 
   const fetchVideos = async () => {
     // Simulate loading
     setLoading(true);
     // Fetch data one by one
 
-    await getUserID();
+    // await getUserID();
 
     await fetchAll();
 
@@ -1211,20 +1255,20 @@ export default function MarketZone({  }) {
     setLoading(false);
   };
 
-  const getUserID = async () => {
-    try {
-      const result = await AsyncStorage.getItem("authToken ");
-      if (result !== null) {
-        setAuthToken(result);
-        //await fetchRegion(result);
-        await fetchCategory(result);
-        // console.log("user id retrieved:", result);
-      }
-    } catch (error) {
-      // Handle errors here
-      console.error("Error retrieving user ID:", error);
-    }
-  };
+  // const getUserID = async () => {
+  //   try {
+  //     const result = await AsyncStorage.getItem("authToken ");
+  //     if (result !== null) {
+  //       setAuthToken(result);
+  //       //await fetchRegion(result);
+  //       await fetchCategory(result);
+  //       // console.log("user id retrieved:", result);
+  //     }
+  //   } catch (error) {
+  //     // Handle errors here
+  //     console.error("Error retrieving user ID:", error);
+  //   }
+  // };
 
   const [adsData, setAdsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -1355,7 +1399,7 @@ export default function MarketZone({  }) {
     }
   };
 
-  const fetchElectronics = async () => {
+  const fetchElectronics = async (selectedItemId) => {
     // console.log("Categry in id", selectedItemId);
     const token = authToken;
 
@@ -1379,7 +1423,7 @@ export default function MarketZone({  }) {
     }
   };
 
-  const fetchVehicles = async () => {
+  const fetchVehicles = async (selectedItemId) => {
     //console.log("Categry in id", selectedItemId)
     const token = authToken;
 
@@ -1403,7 +1447,7 @@ export default function MarketZone({  }) {
     }
   };
 
-  const fetchClothing = async () => {
+  const fetchClothing = async (selectedItemId) => {
     //console.log("Categry in id", selectedItemId)
     const token = authToken;
 
@@ -1426,7 +1470,7 @@ export default function MarketZone({  }) {
       console.error("Error Trending:", error);
     }
   };
-  const fetchAll = async () => {
+  const fetchAll = async (selectedItemId) => {
     //console.log("Categry in id", selectedItemId)
     const token = authToken;
 
@@ -1450,6 +1494,10 @@ export default function MarketZone({  }) {
     }
   };
 
+  const firstImageUrl = Array.isArray(dataTopVideos.images) && dataTopVideos.images.length > 0
+    ? dataTopVideos.images[0]?.image
+    : null;
+    
   // const fetchAll = async () => {
   //   //console.log("Categry in id", selectedItemId)
   //   const token = authToken;
@@ -1680,7 +1728,7 @@ export default function MarketZone({  }) {
         ]}
         onPress={() => {
           setSelectedItemId(item);
-          // console.log("Selected item:", item);
+          console.log("Selected item:", item);
         }}
       >
         <Text
@@ -1845,8 +1893,12 @@ export default function MarketZone({  }) {
         <View
           style={{ marginTop: hp(2), flexDirection: "row", height: hp(16) }}
         >
+           <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("ProductDetails", { ProductDetails: dataTopVideos })
+        }>
           <View style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
-            {dataTopVideos === 0 ? (
+            {firstImageUrl === 0 ? (
               <Image
                 style={{
                   position: "absolute",
@@ -1874,7 +1926,7 @@ export default function MarketZone({  }) {
                   borderRadius: wp(3),
                   resizeMode: "cover",
                 }}
-                source={{ uri: dataTopVideos?.images?.image }}
+                source={{ uri: firstImageUrl }}
               />
             )}
             {/* <View
@@ -1905,7 +1957,7 @@ export default function MarketZone({  }) {
               </Text>
             </View> */}
           </View>
-
+          </TouchableOpacity>
           <View style={{  width: "50%",}}>
             <Text  
                 ellipsizeMode="tail"

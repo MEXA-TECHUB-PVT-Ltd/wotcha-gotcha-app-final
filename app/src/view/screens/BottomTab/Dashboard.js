@@ -749,7 +749,7 @@ export default function Dashboard({ route }) {
   //////////////////////////////2.6.2025
 
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(new Array(5).fill(false));
+  const [loading, setLoading] = useState(new Array(4).fill(false));
   // const [loading, setLoading] = useState([
   //   true,
   //   false,
@@ -783,7 +783,7 @@ export default function Dashboard({ route }) {
   const [selectedItemVideoId, setSelectedItemVideoId] = useState(17); // Set selectedItemVideoId to 17 initially
   const [selectedItemDiscId, setSelectedItemDiscId] = useState(1);
   const [selectedItemPicsId, setSelectedItemPicsId] = useState(34);
-  const [selectedItemIdMarket, setSelectedItemIdMarket] = useState('Africa');
+  // const [selectedItemIdMarket, setSelectedItemIdMarket] = useState('Africa');
   const [categoriesSelectMarket, setCategorySelectMarket] = useState([]);
   const RegionArea = ["Africa", "Europe", "Americas", "Asia", "Middle East"];
   const MassApp = [
@@ -884,7 +884,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
         data: category.video_result.Videos,
       }));
       setXpiSections(formattedSections);
-      console.log('fooor mate', formattedSections)
+
       setNoXpiData(formattedSections.every(section => section.data.length === 0));
     } else {
       setXpiSections([]);
@@ -1442,7 +1442,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
           // fetchLatestPics, // 11    9
           // fetchMostViewedPics, // 12  10
           // fetchMostCommentedPics, // 13    11
-          fetchTopMarket, // 14   12   0
+          // fetchTopMarket, // 14   12   0
           // fetchCategoryMarket, // 15     
           fetchElectronicsMarket, // 16   13   1
           fetchVehiclesMarket, // 17   14   2
@@ -1459,7 +1459,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
         let newData = [];
         setLoading((prevload) => {
           if (!Array.isArray(prevload)) {
-            prevload = new Array(5).fill(false);
+            prevload = new Array(4).fill(false);
           }
           return prevload.map((item, index) => (index === 0 ? true : item));
         });
@@ -1474,7 +1474,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
             setData(newData);
             setLoading((prevload) => {
               if (!Array.isArray(prevload)) {
-                prevload = new Array(5).fill(false);
+                prevload = new Array(4).fill(false);
               }
               return prevload.map((item, index) =>
                 index === i ? false : index === i + 1 ? true : item
@@ -1484,7 +1484,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
             setError(err);
             setLoading((prevload) => {
               if (!Array.isArray(prevload)) {
-                prevload = new Array(5).fill(false);
+                prevload = new Array(4).fill(false);
               }
               return prevload.map((item, index) => (index === i ? false : item));
             });
@@ -1505,6 +1505,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
     if (authToken) {
       // fetchBannerConfig();
       // fetchBannerInActive();
+      fetchTopMarket();
       fetchBanners();
       // fetchTopDiscNews();
       fetchCategoryMarket();
@@ -3485,7 +3486,34 @@ right:10
 
   // fetch Market start
   // console.log('market ki id aaaii-----------', selectedItemIdMarket)
-  const fetchTopMarket = async (token) => {
+
+  const [selectedItemIdMarket, setSelectedItemIdMarket] = useState(null);
+  const [dataElectronics, setDataElectronics] = useState([]);
+  const [allMarket , setAllmarket] = useState([]);
+  const [dataVehicles, setDataVehicles] = useState([]);
+  const [dataClothing, setDataClothing] = useState([]);
+  const [marketLoding, setMarketLoading] = useState([]);
+  useEffect(() => {
+    if (authToken && isFocused) {
+      // Ensure selectedItemId has a value
+      if (selectedItemIdMarket === null) {
+        setSelectedItemIdMarket("Africa");
+      }
+
+      setMarketLoading(true);
+
+      fetchAll(selectedItemIdMarket);
+      fetchElectronics(selectedItemIdMarket);
+      fetchVehicles(selectedItemIdMarket);
+      fetchClothing(selectedItemIdMarket);
+
+      setMarketLoading(false);
+    }
+  }, [authToken, selectedItemIdMarket ,isFocused]);
+
+  const [DataTopVideosMarket, setDataTopVideosMarket] = useState([]);
+  const fetchTopMarket = async () => {
+    const token = authToken;
     try {
       const response = await fetch(base_url + "top/app/top_item", {
         method: "GET",
@@ -3499,13 +3527,17 @@ right:10
       }
 
       const result = await response.json();
-      // console.log('top market hai--', result.topitem[0])
-      return result.topitem;
-      // setDataTopVideosMarket(result.topitem[0]);
+      console.log('top market hai--', result.topitem[0])
+      // return result.topitem[0];
+      setDataTopVideosMarket(result.topitem[0]);
     } catch (error) {
       console.error("Error in fetchTopMarket:", error);
     }
   };
+  const firstImageUrl = Array.isArray(DataTopVideosMarket.images) && DataTopVideosMarket.images.length > 0
+    ? DataTopVideosMarket.images[0].image
+    : null;
+
 
   const fetchCategoryMarket = async () => {
     //   console.log(' Categories Result', result);
@@ -3545,6 +3577,106 @@ right:10
       console.error("Error in fetchCategoryMarket:", error);
     }
   };
+
+
+  const fetchElectronics = async (selectedItemIdMarket) => {
+    // console.log("Categry in id", selectedItemId);
+    const token = authToken;
+
+    try {
+      const response = await fetch(
+        base_url +
+          `item/getAllItemByCategory/13?page=1&limit=5&region=${selectedItemIdMarket}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
+      // console.log("Phones and electronic", result.AllItems);
+      setDataElectronics(result.AllItems); // Update the state with the fetched data
+    } catch (error) {
+      console.error("Error Trending:", error);
+    }
+  };
+
+  const fetchVehicles = async (selectedItemIdMarket) => {
+    //console.log("Categry in id", selectedItemId)
+    const token = authToken;
+
+    try {
+      const response = await fetch(
+        base_url +
+          `item/getAllItemByCategory/12?page=1&limit=5&region=${selectedItemIdMarket}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
+      // console.log("AllItems fetch vehicle", result.AllItems);
+      setDataVehicles(result.AllItems); // Update the state with the fetched data
+    } catch (error) {
+      console.error("Error Trending:", error);
+    }
+  };
+
+  const fetchClothing = async (selectedItemIdMarket) => {
+    //console.log("Categry in id", selectedItemId)
+    const token = authToken;
+
+    try {
+      const response = await fetch(
+        base_url +
+          `item/getAllItemByCategory/6?page=1&limit=5&region=${selectedItemIdMarket}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
+      // console.log("AllItems fetch cloth", result.AllItems);
+      setDataClothing(result.AllItems); // Update the state with the fetched data
+    } catch (error) {
+      console.error("Error Trending:", error);
+    }
+  };
+  const fetchAll = async (selectedItemIdMarket) => {
+    //console.log("Categry in id", selectedItemId)
+    const token = authToken;
+
+    try {
+      const response = await fetch(
+        base_url +
+          `item/getAllItemByCategory/5?page=1&limit=5&region=${selectedItemIdMarket}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
+      // console.log("AllItems fetch other item", result.AllItems);
+      setAllmarket(result.AllItems);
+    } catch (error) {
+      console.error("Error Trending:", error);
+    }
+  };
+
+
+
+
 
   const fetchElectronicsMarket = async (token, id, picId, marketId) => {
     try {
@@ -8029,7 +8161,21 @@ right:10
                 <View
                   style={{ width: wp(35), height: "100%", borderRadius: wp(5) }}
                 >
-                  <Image
+                                   <View
+              style={{
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+                height: hp(10),
+                borderRadius: wp(1),
+                resizeMode: "stretch",
+                borderWidth: 1, // Border width
+                borderColor: "grey", // Border color
+              }}
+            >
+              <Text style={{ fontSize: hp(5) }}>{TopEBCData.image}</Text>
+            </View>
+                  {/* <Image
                     style={{
                       position: "absolute",
                       top: 0,
@@ -8043,7 +8189,7 @@ right:10
                       resizeMode: "cover",
                     }}
                     source={{ uri: TopEBCData.image }}
-                  />
+                  /> */}
                 </View>
               )}
             </TouchableOpacity>
@@ -8752,7 +8898,7 @@ right:10
           />
         </View>
         {/* top marcket start */}
-        {loading[0] && <ActivityIndicator size="large" color="#FACA4E" />}
+        {/* {loading[0] && <ActivityIndicator size="large" color="#FACA4E" />}
         {!loading[0] && data[0] && (
           <View>
             <FlatList
@@ -8778,9 +8924,14 @@ right:10
                         borderRadius: wp(5),
                       }}
                     >
+                         <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate("ProductDetails", { ProductDetails: item })
+                        }>
                       {!item?.image ||
                       item?.image === "undefined" ||
                       item?.image.startsWith("/") ? (
+                     
                         <Image
                           style={{
                             position: "absolute",
@@ -8811,53 +8962,10 @@ right:10
                           source={{ uri: item?.image }}
                         />
                       )}
-                      {/* <View
-                        style={{
-                          position: "absolute",
-                          top: hp(14),
-                          left: 7,
-                          justifyContent: "center",
-                          alignItems: "center",
-                          zIndex: 2, // Ensure it's on top
-                        }}
-                      >
-                        <Text
-                          style={{
-                            fontSize: hp(1.6),
-                            fontFamily: "Inter",
-                            // color: 'red',
-                            fontWeight: "700",
-                          }}
-                        >
-                          {item?.username}
-                        </Text>
-                      </View> */}
+                    
+                  </TouchableOpacity>
                     </View>
-
-                    {/* <View
-                      style={{
-                        marginTop: hp(0.8),
-                        marginLeft: wp(3),
-                        width: "35%",
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: hp(1.6),
-                          marginLeft: wp(1),
-                          lineHeight: 15.5,
-                          marginTop: hp(5),
-                          fontFamily: "Inter-Regular",
-                          color: "#000000",
-                          //fontWeight: '700',
-                        }}
-                      >
-                        {item.length === 0
-                          ? "No Top Pic Shown"
-                          : item?.description}
-                      </Text>
-                    </View> */}
-
+                  
                     <View style={{  width: "50%",}}>
             <Text  
                 ellipsizeMode="tail"
@@ -8872,7 +8980,7 @@ right:10
               }}
             >
              {item.length === 0
-                          ? "No Top Pic Shown"
+                          ? "No Top Market Shown"
                           : item?.description}
             </Text>
           </View>
@@ -8881,10 +8989,329 @@ right:10
               }}
             />
           </View>
-        )}
+        )} */}
+
+
+
+<View
+          style={{ marginTop: hp(2), flexDirection: "row", height: hp(16) }}
+        >
+           <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("ProductDetails", { ProductDetails: DataTopVideosMarket })
+        }>
+          <View style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
+            {firstImageUrl === 0 ? (
+              <Image
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  zIndex: 1, // Ensure it's on top of other elements
+                  //flex: 1,
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: wp(3),
+                  resizeMode: "cover",
+                }}
+                source={appImages.galleryPlaceHolder}
+              />
+            ) : (
+              <Image
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  zIndex: 1, // Ensure it's on top of other elements
+                  //flex: 1,
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: wp(3),
+                  resizeMode: "cover",
+                }}
+                source={{ uri: firstImageUrl }}
+              />
+            )}
+          </View>
+          </TouchableOpacity>
+          <View style={{  width: "50%",}}>
+            <Text  
+                ellipsizeMode="tail"
+                numberOfLines={7}
+              style={{
+                fontSize: hp(1.5),
+                marginLeft: wp(1),
+                lineHeight: hp(2),
+                fontFamily: "Inter-Regular",
+                color: "#000000",
+                //fontWeight: '700',
+              }}
+            >
+              {dataTopVideos === undefined || dataTopVideos === 0
+                ? "No Top Pic Shown"
+                : dataTopVideos?.description}
+            </Text>
+          </View>
+        </View>
+
+
+
+
+
+        <View style={{ marginTop: hp(4), height: hp(23) }}>
+          <Text
+            style={{
+              fontSize: hp(2.3),
+              //marginLeft: wp(3),
+              fontFamily: "Inter-SemiBold",
+              color: "#4A4A4A",
+            }}
+          >
+            {categoriesSelectMarket[0]?.label}
+          </Text>
+
+          <View style={{ marginTop: hp(1), height: "100%" }}>
+            {marketLoding === true ? (
+              <View
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <ActivityIndicator size="large" color="#FACA4E" />
+              </View>
+            ) : (
+              <>
+                {dataElectronics?.length === 0 ? (
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                      No data available
+                    </Text>
+                  </View>
+                ) : (
+                  <FlatList
+                    style={{ flex: 1 }}
+                    showsHorizontalScrollIndicator={false}
+                    data={dataElectronics}
+                    horizontal
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => renderAvailableAppsMarket(item)}
+                  />
+                )}
+              </>
+            )}
+          </View>
+        </View>
+
+        <View style={{ marginTop: hp(4), height: hp(23) }}>
+          <Text
+            style={{
+              fontSize: hp(2.3),
+              fontFamily: "Inter-SemiBold",
+              color: "#4A4A4A",
+            }}
+          >
+            {categoriesSelectMarket[1]?.label}
+          </Text>
+
+          <View style={{ marginTop: hp(1), height: "100%" }}>
+            {marketLoding === true ? (
+              <View
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <ActivityIndicator size="large" color="#FACA4E" />
+              </View>
+            ) : (
+              <>
+                {/* {dummydataVehicles?.length === 0 ? ( */}
+                {dataVehicles?.length === 0 ? (
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                      No data available
+                    </Text>
+                  </View>
+                ) : (
+                  <FlatList
+                    style={{ flex: 1 }}
+                    showsHorizontalScrollIndicator={false}
+                    data={dataVehicles}
+                    // data={dummydataVehicles}
+                    horizontal
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => renderAvailableAppsMarket(item)}
+                  />
+                )}
+              </>
+            )}
+          </View>
+        </View>
+
+        <View style={{ marginTop: hp(4), height: hp(23) }}>
+          <Text
+            style={{
+              fontSize: hp(2.3),
+              // marginLeft: wp(3),
+              fontFamily: "Inter-SemiBold",
+              color: "#4A4A4A",
+            }}
+          >
+            {categoriesSelectMarket[2]?.label}
+          </Text>
+
+          <View style={{ marginTop: hp(1), height: "100%" }}>
+            {marketLoding === true ? (
+              <View
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <ActivityIndicator size="large" color="#FACA4E" />
+              </View>
+            ) : (
+              <>
+                {dataClothing?.length === 0 ? (
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                      No data available
+                    </Text>
+                  </View>
+                ) : (
+                  <FlatList
+                    style={{ flex: 1 }}
+                    showsHorizontalScrollIndicator={false}
+                    data={dataClothing}
+                    horizontal
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => renderAvailableAppsMarket(item)}
+                  />
+                )}
+              </>
+            )}
+          </View>
+        </View>
+
+        <View style={{ marginTop: hp(4), height: hp(23) }}>
+          <Text
+            style={{
+              fontSize: hp(2.3),
+              fontFamily: "Inter-SemiBold",
+              color: "#4A4A4A",
+
+            }}
+          >
+            {categoriesSelectMarket[3]?.label}
+          </Text>
+
+          <View style={{ marginTop: hp(1), height: "100%" }}>
+            {marketLoding === true ? (
+              <View
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <ActivityIndicator size="large" color="#FACA4E" />
+              </View>
+            ) : (
+              <>
+                {allMarket?.length === 0 ? (
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                      No data available
+                    </Text>
+                  </View>
+                ) : (
+                  <FlatList
+                    style={{ flex: 1 }}
+                    showsHorizontalScrollIndicator={false}
+                    data={allMarket}
+                    horizontal
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => renderAvailableAppsMarket(item)}
+                  />
+                )}
+              </>
+            )}
+          </View>
+        </View>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         {/* Market Lable start */}
-        <View style={{ marginTop: hp(2), height: hp(23) }}>
+        {/* <View style={{ marginTop: hp(2), height: hp(23) }}>
           <Text
             style={{
               fontSize: hp(2.3),
@@ -8922,9 +9349,9 @@ right:10
               />
             )}
           </View>
-        </View>
+        </View> */}
         {/* market lable two */}
-        <View style={{ marginTop: hp(2), height: hp(23) }}>
+        {/* <View style={{ marginTop: hp(2), height: hp(23) }}>
           <Text
             style={{
               fontSize: hp(2.3),
@@ -8962,9 +9389,9 @@ right:10
               />
             )}
           </View>
-        </View>
+        </View> */}
         {/*  Market lable three */}
-        <View style={{ marginTop: hp(2), height: hp(23) }}>
+        {/* <View style={{ marginTop: hp(2), height: hp(23) }}>
           <Text
             style={{
               fontSize: hp(2.3),
@@ -9002,9 +9429,9 @@ right:10
               />
             )}
           </View>
-        </View>
+        </View> */}
         {/*  market lable four start */}
-        <View style={{ marginTop: hp(2), height: hp(23) }}>
+        {/* <View style={{ marginTop: hp(2), height: hp(23) }}>
           <Text
             style={{
               fontSize: hp(2.3),
@@ -9042,7 +9469,7 @@ right:10
               />
             )}
           </View>
-        </View>
+        </View> */}
 
 {/* market zone end */}
 

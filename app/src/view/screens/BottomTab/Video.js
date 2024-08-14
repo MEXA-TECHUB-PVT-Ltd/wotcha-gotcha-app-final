@@ -168,7 +168,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
         data: category.video_result.Videos,
       }));
       setSections(formattedSections);
-      // console.log('fooor mate', formattedSections)
+  
       setNoData(formattedSections.every(section => section.data.length === 0));
     } else {
       setSections([]);
