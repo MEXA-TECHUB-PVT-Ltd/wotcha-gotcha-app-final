@@ -54,6 +54,7 @@ import CPaperInput from '../../../assets/Custom/CPaperInput';
 import CustomDialog from '../../../assets/Custom/CustomDialog';
 import { base_url } from '../../../../../baseUrl';
 import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
+import CustomLoaderButton from '../../../assets/Custom/CustomLoaderButton';
 
 const Category = [
   {label: 'Item 1', value: '1'},
@@ -106,9 +107,9 @@ export default function UploadUpdateScreen({navigation, route}) {
 
   const ref_RBSheetCamera = useRef(null);
 
+  const [snackbarVisibleAlert, setsnackbarVisibleAlert] = useState(false);
   const ref_RBSheetThumbnail = useRef(null);
-  const [categoryError, setCategoryError] = useState("");
-  const [subcategoryError, setSubcategoryError] = useState("");
+
   const [subCate, setSubCate] = useState([]);
   const [subcategory, setSubCategory] = useState("");
   
@@ -117,6 +118,11 @@ export default function UploadUpdateScreen({navigation, route}) {
   console.log('Recieved Data', receivedData);
 
 
+
+  const [subcategoryError, setSubcategoryError] = useState("");
+  const [profileNameError, setProfileNameError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+  const [thumbnailError, setthumbnailImageUritwoError] = useState("");
 
 
 
@@ -198,7 +204,7 @@ export default function UploadUpdateScreen({navigation, route}) {
       convertDurationAndStoreWithVideoAndThumnailChange(source);
       //uploadVideoCloudinary(imageInfo.uri)
     } else {
-      setModalVisible(true);
+      handleUpdatePasswordAlert();
     }
   };
 
@@ -298,7 +304,8 @@ console.log('category id comes from video', categoryId)
 
       if (response.ok) {
         const result = await response.json();
-        setSubCate(result.AllCategories);
+        const receivedData = result.AllCategories.reverse();
+        setSubCate(receivedData);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
       }
@@ -742,6 +749,16 @@ console.log('category id comes from video', categoryId)
     setsnackbarVisible(false);
   };
 
+  const handleUpdatePasswordAlert = async () => {
+    setsnackbarVisibleAlert(true);
+    setTimeout(() => {
+      setsnackbarVisibleAlert(false);
+    }, 3000);
+  };
+  const dismissSnackbarAlert = () => {
+    setsnackbarVisibleAlert(false);
+  };
+
   const fetchCategory = async userToken => {
     const token = userToken;
 
@@ -942,6 +959,9 @@ console.log('category id comes from video', categoryId)
             // left={isTextInputActive ? <Oemail /> : <Gemail />}
           />
         </View>
+        <View style={{marginHorizontal:hp('4%'),}}>
+{profileNameError ? <Text style={styles.errorText}>{profileNameError}</Text> : null}
+        </View>
 
           <View style={{marginHorizontal: wp(7)}}>
           <Dropdown
@@ -994,6 +1014,9 @@ console.log('category id comes from video', categoryId)
               />
             )}
           />
+             <View style={{ marginTop:hp(-3), marginBottom:hp(3), marginHorizontal:hp('.5%')}}>
+          {subcategoryError ? <Text style={styles.errorText}>{subcategoryError}</Text> : null}
+          </View>
         </View>
 
         <View
@@ -1011,6 +1034,9 @@ console.log('category id comes from video', categoryId)
             height={hp(20)}
           />
         </View>
+           <View style={{ marginTop:hp(-1), marginBottom:hp(3), marginHorizontal:hp('4%')}}>
+          {descriptionError ? <Text style={styles.errorText}>{descriptionError}</Text> : null}
+          </View>
         <View
           style={{
             marginTop: hp(5),
@@ -1018,7 +1044,42 @@ console.log('category id comes from video', categoryId)
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <CustomButton
+              <CustomLoaderButton
+              title={"Upload"}
+              load={loading}
+              customClick={() => {
+                let hasError = false;
+
+        
+                if (!profileName) {
+                  setProfileNameError("Title is required");
+                  hasError = true;
+                } else {
+                  setProfileNameError("");
+                }
+
+                if (!subcategory) {
+                  setSubcategoryError("Subcategory is required");
+                  hasError = true;
+                } else {
+                  setSubcategoryError("");
+                }
+                if (!description) {
+                  setDescriptionError("description is required");
+                  hasError = true;
+                } else {
+                  setDescriptionError("");
+                }
+
+                if (!hasError) {
+                  if (!loading) {
+                    setLoading(true);
+                    upload();
+                  } 
+                }
+              }}
+            />
+          {/* <CustomButton
             title={'Upload'}
             load={false}
             // checkdisable={inn == '' && cm == '' ? true : false}
@@ -1027,7 +1088,7 @@ console.log('category id comes from video', categoryId)
               //handleUpdatePassword();
               //navigation.navigate('Profile_image');
             }}
-          />
+          /> */}
         </View>
       </ScrollView>
 
@@ -1189,7 +1250,12 @@ console.log('category id comes from video', categoryId)
           </TouchableOpacity>
         </View>
       </RBSheet>
-
+      <CustomSnackbar
+        message={'Alert!'}
+        messageDescription={'Kindly Fill All Fields'}
+        onDismiss={dismissSnackbarAlert} // Make sure this function is defined
+        visible={snackbarVisibleAlert}
+      />
       <CustomSnackbar
         message={'success'}
         messageDescription={'Upload Video successfully'}
@@ -1316,5 +1382,11 @@ const styles = StyleSheet.create({
     borderRadius: wp(1.8),
     borderWidth: 1,
     borderColor: '#FACA4E',
+  },
+
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 4,
   },
 });

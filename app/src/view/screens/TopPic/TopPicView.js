@@ -30,11 +30,13 @@ import {
   
   
     return (
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <ImageBackground
-          source={{ uri: receivedData?.image }}
-          style={{ flex: 1 }}
-        >
+      <GestureHandlerRootView style={{ flex: 1, backgroundColor:'gray' }}>
+         <ImageBackground
+      source={{ uri: receivedData?.image }}
+      resizeMode="contain" // Use 'contain' to show the full image without cutting off
+      style={{ flex: 1,
+        justifyContent: 'center',}}
+    >
           <StatusBar
             translucent={true}
             backgroundColor="transparent"

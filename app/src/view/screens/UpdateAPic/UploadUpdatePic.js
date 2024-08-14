@@ -66,7 +66,7 @@ export default function UploadUpdatePic({navigation, route}) {
             load={false}
             // checkdisable={inn == '' && cm == '' ? true : false}
             customClick={() => {
-              navigation.navigate("UploadScreenPic", { Video: receivedData })
+              navigation.replace("UploadScreenPic", { Video: receivedData })
               //navigation.navigate('Profile_image');
             }}
           />

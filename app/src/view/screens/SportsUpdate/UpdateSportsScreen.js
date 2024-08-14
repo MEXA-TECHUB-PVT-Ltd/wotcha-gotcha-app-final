@@ -376,10 +376,11 @@ import {
       console.log('Image Info', imageInfo?.uri);
       console.log('Data Fetched', dataFetched);
       if (
-        dataFetched && // Check if data has been fetched
-        imageInfo &&
-        imageInfo.uri &&
-        imageInfo.uri.startsWith(cloudinaryUrl)
+        imageUri == null && description !== '' && categoryId !== ''
+        // dataFetched && // Check if data has been fetched
+        // imageInfo &&
+        // imageInfo.uri &&
+        // imageInfo.uri.startsWith(cloudinaryUrl)
       ) {
         uploadXpiVideoWithOutAnyVideoChange();
       } else {
@@ -430,8 +431,8 @@ import {
         const requestData = {
           // id: receivedData?.video_id,
           id:receivedData?.sport_id,
-          category_id: receivedData?.category_id,
-          sub_category_id: receivedData?.sub_category_id,
+          category_id: category,
+          sub_category_id: subcategory,
           user_id: receivedData?.user_id,
           name: profileName,
           description: description,
@@ -479,12 +480,12 @@ import {
       const token = authToken;
       const apiUrl = base_url + 'sports/update';
   
-
+ 
       const requestData = {
         // id: receivedData?.video_id,
         id:receivedData?.sport_id,
-        category_id: receivedData?.category_id,
-        sub_category_id: receivedData?.sub_category_id,
+        category_id: category,
+        sub_category_id: subcategory,
         user_id: receivedData?.user_id,
         name: profileName,
         description: description,

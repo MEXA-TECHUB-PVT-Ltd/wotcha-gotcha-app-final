@@ -110,6 +110,10 @@ export default function UploadUpdatePicScreen({navigation, route}) {
       setDescription(receivedData?.description);
       setCategory(receivedData?.pic_category);
       setImageInfo({uri: receivedData?.image});
+
+      setCategoryId(receivedData?.pic_category);
+      setSubCategory(receivedData?.sub_category);
+
       isDataFetched(true);
     };
 
@@ -180,8 +184,9 @@ export default function UploadUpdatePicScreen({navigation, route}) {
           label: category.name, // Use the "name" property as the label
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
-
-        setCategorySelect(categories); // Update the state with the formatted category data
+        console.log('categooooooooooooooooooooo', data.AllCategories)
+        setCategorySelect(data.AllCategories);
+        // setCategorySelect(categories); // Update the state with the formatted category data
 
         // console.log('Data Categories', categoriesSelect);
       } else {
@@ -609,12 +614,14 @@ export default function UploadUpdatePicScreen({navigation, route}) {
             selectedTextStyle={{fontSize: 16, color: '#000000'}}
             // inputSearchStyle={styles.inputSearchStyle}
             // iconStyle={styles.iconStyle}
-            value={category}
+            value={categoryId}
             data={categoriesSelect}
             search={false}
             maxHeight={200}
-            labelField="label"
-            valueField="value"
+            labelField="name"
+            valueField="id"
+            // labelField="label"
+            // valueField="value"
             placeholder={'Select Category'}
             searchPlaceholder="Search..."
             onFocus={handleCategoryFocus}
@@ -622,7 +629,7 @@ export default function UploadUpdatePicScreen({navigation, route}) {
             // onFocus={() => setIsFocus(true)}
             // onBlur={() => setIsFocus(false)}
             onChange={item => {
-              setCategoryId(item.value);
+              setCategoryId(item.id);
               setIsFocus(false);
             }}
             renderRightIcon={() => (

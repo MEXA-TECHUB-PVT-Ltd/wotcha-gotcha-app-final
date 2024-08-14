@@ -51,6 +51,7 @@ import {SelectCountry, Dropdown} from 'react-native-element-dropdown';
 import CPaperInput from '../../../assets/Custom/CPaperInput';
 import { base_url } from '../../../../../baseUrl';
 import { CLOUD_NAME, CLOUDINARY_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
+import CustomLoaderButton from '../../../assets/Custom/CustomLoaderButton';
 
 const Category = [
   {label: 'Item 1', value: '1'},
@@ -95,6 +96,10 @@ export default function UploadScreenPic({navigation, route}) {
   const ref_RBSendOffer = useRef(null);
   const [categoryError, setCategoryError] = useState("");
   const [subcategoryError, setSubcategoryError] = useState("");
+  const [profileNameError, setProfileNameError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+  const [thumbnailError, setthumbnailImageUritwoError] = useState("");
+
   const [subCate, setSubCate] = useState([]);
   const [subcategory, setSubCategory] = useState("");
   const receivedData = route.params?.Video;
@@ -208,7 +213,8 @@ export default function UploadScreenPic({navigation, route}) {
         label: category.name, // Use the "name" property as the label
         value: category.id.toString(), // Convert "id" to a string for the value
       }));
-        setSubCate(subcategories);
+        const reverseData = subcategories.reverse();
+        setSubCate(reverseData);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
       }
@@ -714,7 +720,9 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
             // left={isTextInputActive ? <Oemail /> : <Gemail />}
           />
         </View>
-
+        <View style={{marginHorizontal:hp('4%'),}}>
+{profileNameError ? <Text style={styles.errorText}>{profileNameError}</Text> : null}
+        </View>
         <View style={{marginHorizontal: wp(7)}}>
           <Dropdown
             style={
@@ -767,6 +775,9 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
               />
             )}
           />
+            <View style={{ marginTop:hp(-3), marginBottom:hp(3), marginHorizontal:hp('.5%')}}>
+          {categoryError ? <Text style={styles.errorText}>{categoryError}</Text> : null}
+          </View>
         </View>
         {/* for sub category */}
         <View style={{marginHorizontal: wp(7), marginTop:hp(-2)}}>
@@ -821,6 +832,9 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
               />
             )}
           />
+           <View style={{ marginTop:hp(-3), marginBottom:hp(3), marginHorizontal:hp('.5%')}}>
+          {subcategoryError ? <Text style={styles.errorText}>{subcategoryError}</Text> : null}
+          </View>
         </View>
 
         <View
@@ -838,6 +852,9 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
             height={hp(20)}
           />
         </View>
+        <View style={{ marginTop:hp(-1), marginBottom:hp(3), marginHorizontal:hp('4%')}}>
+          {descriptionError ? <Text style={styles.errorText}>{descriptionError}</Text> : null}
+          </View>
         <View
           style={{
             marginTop: hp(5),
@@ -845,7 +862,48 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <CustomButton
+              <CustomLoaderButton
+              title={"Upload"}
+              load={loading}
+              customClick={() => {
+                let hasError = false;
+
+        
+                if (!profileName) {
+                  setProfileNameError("Title is required");
+                  hasError = true;
+                } else {
+                  setProfileNameError("");
+                }
+                if (!categoryId) {
+                  setCategoryError("Category is required");
+                  hasError = true;
+                } else {
+                  setCategoryError("");
+                }
+
+                if (!subcategory) {
+                  setSubcategoryError("Subcategory is required");
+                  hasError = true;
+                } else {
+                  setSubcategoryError("");
+                }
+                if (!description) {
+                  setDescriptionError("description is required");
+                  hasError = true;
+                } else {
+                  setDescriptionError("");
+                }
+
+                if (!hasError) {
+                  if (!loading) {
+                    setLoading(true);
+                    upload();
+                  } 
+                }
+              }}
+            />
+          {/* <CustomButton
             title={'Upload'}
             load={false}
             // checkdisable={inn == '' && cm == '' ? true : false}
@@ -860,7 +918,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
               }
               //navigation.navigate('Profile_image');
             }}
-          />
+          /> */}
         </View>
       </ScrollView>
 
@@ -949,7 +1007,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
         visible={snackbarVisible}
       />
 
-      <View
+      {/* <View
         style={{
           position: 'absolute',
           top: 0,
@@ -960,7 +1018,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
           alignItems: 'center',
         }}>
         {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
+      </View> */}
 
       <RBSheet
         ref={ref_RBSendOffer}
@@ -1178,5 +1236,10 @@ const styles = StyleSheet.create({
     borderRadius: wp(1.8),
     borderWidth: 1,
     borderColor: '#FACA4E',
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 4,
   },
 });

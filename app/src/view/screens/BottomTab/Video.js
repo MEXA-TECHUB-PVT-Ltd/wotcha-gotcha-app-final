@@ -168,7 +168,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
         data: category.video_result.Videos,
       }));
       setSections(formattedSections);
-      console.log('fooor mate', formattedSections)
+      // console.log('fooor mate', formattedSections)
       setNoData(formattedSections.every(section => section.data.length === 0));
     } else {
       setSections([]);
@@ -378,7 +378,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
         );
   
         const result = await response.json();
-        // console.log('Resultings of Top Videossss????????', result.AllVideos[0]);
+        console.log('Resultings of Top Videossss????????', result.AllVideos[0]);
         setDataTopVideos(result.AllVideos[0]); // Update the state with the fetched data
   
         // await fetchTrendingVideos();
@@ -1068,8 +1068,9 @@ const fetchSubCategorySport = async (selectedItemId) => {
                   borderRadius: wp(3),
                   resizeMode: "cover",
                 }}
-                source={{ uri: dataTopVideos?.thumbnail }}
+                source={{ uri: dataTopVideos?.video }}
               />
+       
                 </TouchableOpacity>
             )}
             <View
@@ -1191,6 +1192,20 @@ const fetchSubCategorySport = async (selectedItemId) => {
           </View>
         </View> */}
 
+{/* <View style={{  width: '100%',
+    height: '100%',
+    borderRadius: 10,
+    overflow: 'hidden',
+    position: 'relative',}}>
+      <Video
+        source={{ uri: dataTopVideos?.video }}
+        style={{ flex: 1,
+          width: '100%',
+          height: '100%',}}
+        controls={true} // Show video controls
+        resizeMode="contain"
+      />
+    </View> */}
 
 <View style={{  flex: 1, marginTop:hp(2),
     marginBottom: hp(5)}}>

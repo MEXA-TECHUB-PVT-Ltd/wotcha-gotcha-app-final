@@ -247,7 +247,7 @@ export default function ViewVideoPicProfile({ navigation, route }) {
 
   const changeModals = () => {
     ref_RBSheetCamera.current.close();
-    navigation.navigate("UploadUpdatePicScreen", { item: receivedData });
+    navigation.replace("UploadUpdatePicScreen", { item: receivedData });
   };
 
   const changeDelete = () => {
