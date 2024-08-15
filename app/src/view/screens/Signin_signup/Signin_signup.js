@@ -137,7 +137,24 @@ const App = ({ navigation }) => {
       }
   };
 
-
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem('language');
+        if (storedLanguage) {
+          setSelectedLanguage(storedLanguage);
+        } else {
+          // If no language is stored, set to default
+          setSelectedLanguage('en');
+        }
+      } catch (error) {
+        console.error('Error fetching language:', error);
+        setSelectedLanguage('en'); // Fallback to default if there's an error
+      }
+    };
+  
+    fetchLanguage();
+  }, []);
 
 
 
