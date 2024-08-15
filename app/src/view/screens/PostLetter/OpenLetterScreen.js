@@ -39,7 +39,8 @@ export default function OpenLetterScreen({ route }) {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const isFocused = useIsFocused();
-  const [topNewsData, setTopNewsData] = useState([]);
+  const [topNewsData, setTopNewsData] = useState('');
+  const [TopSignature, setTopSignature] = useState('');
 
   const [authToken, setAuthToken] = useState("");
   const [carouselIndex, setCarouselIndex] = useState(0);
@@ -73,7 +74,7 @@ export default function OpenLetterScreen({ route }) {
       if (result !== null) {
         setAuthToken(result);
         // fetchData();
-        // console.log("user id retrieved:", result);
+        console.log("user id retrieved:", result);
       }
     } catch (error) {
       // Handle errors here
@@ -155,7 +156,7 @@ export default function OpenLetterScreen({ route }) {
     try {
       const response = await fetch(
         // base_url + `top/getAllTopQAFIByCategory/${categoryIdNews}`,
-        base_url + "top/getAllTopQAFIByCategory/3",
+        base_url + "top/app/top_letter",
         {
           method: "GET",
           headers: {
@@ -165,10 +166,40 @@ export default function OpenLetterScreen({ route }) {
       );
 
       const result = await response.json();
-      // console.log('Resultings of TopNews', result.AllQAFI[0]);
+      // console.log('Resultings of TopNews', result.topitem);
       //Alert.alert(result)
+      const formattedLetters = result.topitem.map((letter) => ({
+        ...letter,
+        post_date: convertTimeAndDate(letter.post_date), 
+      }));
+      console.log('Resultings of TopNews', result.topitem);
+      setTopNewsData(formattedLetters[0]); // Update the state with the fetched data
+      fetchSpecificSig(formattedLetters[0].signature_id)
+    } catch (error) {
+      setLoading(false);
+      console.error("Error Trending:", error);
+    }
+  };
+  const fetchSpecificSig = async (signature_id) => {
+    setLoading(true);
+    const token = authToken;
 
-      setTopNewsData(result.AllQAFI[0]); // Update the state with the fetched data
+    try {
+      const response = await fetch(
+        base_url + `signature/getSpecificSignature/${signature_id}`,
+    
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
+      console.log('Signatire---------', result.Signature);
+      setTopSignature(result.Signature)
+      // setTopNewsData(formattedLetters[0]); // Update the state with the fetched data
     } catch (error) {
       setLoading(false);
       console.error("Error Trending:", error);
@@ -630,7 +661,153 @@ export default function OpenLetterScreen({ route }) {
             height: hp(18),
           }}
         >
-          <TouchableOpacity
+            <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("LetterDetails", {
+            Letters: topNewsData,
+            identifier: false,
+          })
+        }
+        style={{
+          width: wp(45),
+          marginHorizontal: wp(2),
+        }} // Add margin here
+      >
+        <View
+          style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
+        ></View>
+        <View>
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 2,
+              alignItems: "center",
+              height: hp(4),
+            }}
+          >
+            {topNewsData?.userimage !== null ||
+            topNewsData?.userimage !== undefined ? (
+              <View
+                style={{
+                  height: hp(2),
+                  width: wp(4),
+                  borderRadius: wp(3),
+                }}
+              >
+                <Image
+                  source={{ uri: topNewsData?.userimage}}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: wp(3),
+                    resizeMode: "cover",
+                  }}
+                />
+              </View>
+            ) : (
+              <MaterialCommunityIcons
+                style={{ marginTop: hp(0.5) }}
+                name={"account-circle"}
+                size={35}
+                color={"#FACA4E"}
+              />
+            )}
+
+            <View style={{ marginLeft: wp(2.5) }}>
+              <Approved width={10} height={10} />
+            </View>
+          </View>
+
+          <View
+            style={{
+              alignItems: "flex-end",
+              height: 10,
+              // marginRight: wp(1),
+            }}
+          >
+            <Text
+              style={{
+                color: "#282828",
+                // marginLeft: wp(3),
+                width: "25%",
+                fontSize: 6,
+                fontFamily: "Inter-Bold",
+              }}
+            >
+              {topNewsData.post_date}
+            </Text>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              height: hp(5),
+              paddingTop: 6,
+              // backgroundColor:'red', width:'60%'
+            }}
+          >
+            <Text
+              style={{
+                color: "#282828",
+                fontSize: 8,
+                textDecorationLine: "underline",
+                fontFamily: "Inter-Bold",
+              }}
+            >
+              Subject:
+            </Text>
+            <View style={{ height: "100%", width: "75%" }}>
+              <Text
+                numberOfLines={3}
+                ellipsizeMode="tail"
+                style={{
+                  color: "#595959",
+                  marginLeft: wp(1),
+                  fontSize: 8,
+                  fontFamily: "Inter-Regular",
+                }}
+              >
+                {topNewsData.subject_place}
+              </Text>
+            </View>
+          </View>
+          {/* <View
+            style={{
+              justifyContent: "center",
+              alignItems: "flex-end",
+              height: hp(6),
+              right: 10,
+            }}
+          >
+            {imageUrl !== null ||
+            imageUrl !== undefined ||
+            item.signature_image !== undefined ||
+            item.signature_image !== null ? (
+              <View
+                style={{
+                  height: hp(5),
+                  width: wp(9),
+                  borderRadius: wp(3),
+                }}
+              >
+                <Image
+                  source={{ uri: imageUrl || item.signature_image }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+
+                    resizeMode: "contain",
+                  }}
+                />
+              </View>
+            ) : null}
+          </View> */}
+          <View
+            style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
+          ></View>
+        </View>
+      </TouchableOpacity>
+          {/* <TouchableOpacity
             onPress={() =>
               navigation.navigate("ViewNews", {
                 News: topNewsData,
@@ -706,7 +883,7 @@ export default function OpenLetterScreen({ route }) {
                   : topNewsData?.description}
               </Text>
             </View>
-          </View>
+          </View> */}
         </View>
 
         <View style={{ flex: 1 }}>

@@ -817,6 +817,31 @@ export default function PostLetterSignature({navigation, route}) {
     );
   };
 
+
+  const handleImageChange = (index) => {
+    // setSelectedIndex(index);
+    ref_RBSheetCameraCanvas.current.open();
+  };
+  const renderImageItem = ({ item, index }) => (
+    <View style={styles.imageContainer}>
+      <Image source={{ uri: item.uri }} style={styles.image} />
+      <TouchableOpacity
+        style={styles.changePicContainer}
+        onPress={() => handleImageChange(index)}
+      >
+        <Text style={{ fontFamily: "Inter-Medium", fontSize: 10 }}>
+          Change Pic
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.iconContainer}
+        onPress={() => handleRemoveImage(index)}
+      >
+        <MaterialCommunityIcons name="close-circle" size={24} color="gray" />
+      </TouchableOpacity>
+     
+    </View>
+  );
   return (
     <ScrollView style={styles.container}>
       <StatusBar
@@ -969,6 +994,14 @@ export default function PostLetterSignature({navigation, route}) {
       ) : null}
 
       {/* //-------------------\\ */}
+      {/* <View style={{ marginHorizontal: wp(15), marginTop: hp(3) }}>
+        <FlatList
+          data={imageUris}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={2} // Set the number of columns to 3
+          renderItem={renderImageItem}
+        />
+      </View> */}
 
       <View style={{marginHorizontal: wp(15), marginTop: hp(3)}}>
         <FlatList
@@ -1564,4 +1597,27 @@ const styles = StyleSheet.create({
     height: 100,
     aspectRatio: 1, // Maintain the aspect ratio of the image
   },
+
+
+
+
+  imageContainer: {
+    position: 'relative',
+    margin: 5,
+  },
+
+  iconContainer: {
+    position: 'absolute',
+    top: 5,
+    right: 1,
+  },
+  changePicContainer: {
+    position: 'absolute',
+    top: 5,
+    left: 2,
+    backgroundColor: '#FACA4E',
+    padding: 2,
+    borderRadius: 5,
+  },
+
 });

@@ -57,7 +57,7 @@ import LetterIcon from "react-native-vector-icons/Entypo";
 import QafiIcon from "react-native-vector-icons/FontAwesome5";
 import EBC from "react-native-vector-icons/MaterialCommunityIcons";
 import { fetchBannerConfig, fetchBannerInActive } from '../../../../../API';
-
+import { useTranslation } from 'react-i18next';
 import { fetchAllCinematicsCategory, fetchCinematicTopVideos, fetchSubCategory } from '../../../../../API';
 import BannerCarousel from "../../../assets/Custom/BannerCarousel";
 const screenHeight = Dimensions.get("window").height;
@@ -89,7 +89,7 @@ export default function Dashboard({ route }) {
   const [isLoading, setIsLoading] = useState(true);
   const [aLoader, setAloader] = useState(true);
   const scrollViewRef = useRef();
-
+  const { t } = useTranslation(); 
   const [isSelectedActive, setIsSelectedActive] = useState(true);
   const [categoryActive, setcategoryActive] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -995,7 +995,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>No Data available</Text>
+        <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
       ) : (
       <FlatList
         data={item.data}
@@ -1235,7 +1235,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>No Data available</Text>
+        <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
       ) : (
       <FlatList
         data={item.data}
@@ -2265,7 +2265,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>No Data available</Text>
+        <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
       ) : (
       <FlatList
         data={item.data}
@@ -2581,7 +2581,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionHeader}>{item.title}</Text>
         {item.data.length === 0 ? (
-          <Text style={styles.noDataText}>No Data available</Text>
+          <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
         ) : (
         <FlatList
           data={item.data}
@@ -2790,7 +2790,7 @@ const renderQAFISection = ({ item }) => (
   <View style={styles.sectionContainer}>
     <Text style={styles.sectionHeader}>{item.title}</Text>
     {item.data.length === 0 ? (
-      <Text style={styles.noDataText}>No Data available</Text>
+      <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
     ) : (
     <FlatList
       data={item.data}
@@ -2987,7 +2987,7 @@ const renderEBCSection = ({ item }) => (
   <View style={styles.sectionContainer}>
     <Text style={styles.sectionHeader}>{item.title}</Text>
     {item.data.length === 0 ? (
-      <Text style={styles.noDataText}>No Data available</Text>
+      <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
     ) : (
     <FlatList
       data={item.data}
@@ -3281,7 +3281,8 @@ paddingTop:6,
               fontFamily: "Inter-Bold",
             }}
           >
-            Subject:
+            {t('Dashboard.Subject')}
+            {/* Subject: */}
           </Text>
           <View style={{height:'100%',width:'75%' }}>
             <Text
@@ -4786,7 +4787,7 @@ right:10
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>No Data available</Text>
+        <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
       ) : (
       <FlatList
         data={item.data}
@@ -4819,7 +4820,7 @@ right:10
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>No Data available</Text>
+        <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
       ) : (
       <FlatList
         data={item.data}
@@ -4943,7 +4944,7 @@ right:10
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>No Data available</Text>
+        <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
       ) : (
         <FlatList
           data={item.data}
@@ -5004,7 +5005,7 @@ right:10
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>No Data available</Text>
+        <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
       ) : (
       <FlatList
         data={item.data}
@@ -5108,7 +5109,7 @@ right:10
                 }}
                 style={styles.overlayButton}
               >
-                <Text style={{ color: "white" }}>Add to Favorites</Text>
+                <Text style={{ color: "white" }}>{t('Dashboard.AddtoFavorites')}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => {
@@ -5124,7 +5125,9 @@ right:10
                 style={styles.overlayButton}
               >
                 <Text style={{ color: "white" }}>
-                  Remove From Wotcha Gotcha App
+                {t('Dashboard.RemoveFromWotchaGotchaApp')}
+                
+                  {/* Remove From Wotcha Gotcha App */}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -5178,7 +5181,7 @@ right:10
                 }}
                 style={styles.overlayButton}
               >
-                <Text style={{ color: "white" }}>Remove Favorites</Text>
+                <Text style={{ color: "white" }}>{t('Dashboard.RemoveFavorites')}</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -5198,7 +5201,8 @@ right:10
                 style={styles.overlayButton}
               >
                 <Text style={{ color: "white" }}>
-                  Remove From Wotcha Gotcha App
+                {t('Dashboard.RemoveFromWotchaGotchaApp')}
+                  {/* Remove From Wotcha Gotcha App */}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -5225,7 +5229,7 @@ right:10
         <BannerCarousel
         isLoading={isLoading}
         adsData={adsData}
-        noDataMessage="No Top Banner"
+        noDataMessage={t('Dashboard.NoTopBanner')}
         onBannerPress={handleBannerPress}
       />
     {/* <View
@@ -5331,7 +5335,8 @@ right:10
                       }}
                     >
                       <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                        No Top Apps
+                        {/* No Top Apps */}
+                        {t('Dashboard.NoTopApps')}
                       </Text>
                     </View>
                   ) : (
@@ -5358,8 +5363,9 @@ right:10
                   color: "#4A4A4A",
                   fontWeight: "bold",
                 }}
-              >
-                Phone Based Apps
+              > 
+               {t('Dashboard.PhoneBasedApps')}
+                {/* Phone Based Apps */}
               </Text>
 
               {isLoading ? (
@@ -5434,7 +5440,8 @@ right:10
                   fontWeight: "bold",
                 }}
               >
-                Favourite Apps
+                {t('Dashboard.FavouriteApps')}
+                {/* Favourite Apps */}
               </Text>
               {isLoading ? (
                 <View
@@ -5467,7 +5474,8 @@ right:10
                           justifyContent: "center",
                         }}
                       >
-                        No Favourite Apps
+                        {t('Dashboard.NoFavouriteApps')}
+                        {/* No Favourite Apps */}
                       </Text>
                     </View>
                   ) : (
@@ -5521,7 +5529,8 @@ right:10
                   fontWeight: "bold",
                 }}
               >
-                Unused Apps
+                {t('Dashboard.UnusedApps')}
+                {/* Unused Apps */}
               </Text>
 
               {isLoading ? (
@@ -5661,7 +5670,9 @@ right:10
                             top: "40%",
                           }}
                         >
-                          Your can add E-commernce apps here
+                           {t('Dashboard.addEcommernceapps')}
+                          
+                          {/* Your can add E-commernce apps here */}
                         </Text>
                       </View>
                     </>
@@ -5757,7 +5768,8 @@ right:10
                             top: "40%",
                           }}
                         >
-                          Your can add Bussiness apps here
+                         {t('Dashboard.addBussinessapps')}
+                          {/* Your can add Bussiness apps here */}
                         </Text>
                       </View>
                     </>
@@ -5852,7 +5864,8 @@ right:10
                             top: "40%",
                           }}
                         >
-                          Your can add Sports apps here
+                          {t('Dashboard.addSportsapps')}
+                          {/* Your can add Sports apps here */}
                         </Text>
                       </View>
                     </>
@@ -5947,7 +5960,8 @@ right:10
                             top: "40%",
                           }}
                         >
-                          Your can add Education apps here
+                          {t('Dashboard.addEducationapps')}
+                          {/* Your can add Education apps here */}
                         </Text>
                       </View>
                     </>
@@ -6042,7 +6056,8 @@ right:10
                             top: "40%",
                           }}
                         >
-                          Your can add Dating apps here
+                          {t('Dashboard.addDatingapps')}
+                          {/* Your can add Dating apps here */}
                         </Text>
                       </View>
                     </>
@@ -6137,7 +6152,8 @@ right:10
                             top: "40%",
                           }}
                         >
-                          Your can add Food Delivery apps here
+                          {t('Dashboard.addFoodDeliveryapps')}
+                          {/* Your can add Food Delivery apps here */}
                         </Text>
                       </View>
                     </>
@@ -6232,7 +6248,8 @@ right:10
                             top: "40%",
                           }}
                         >
-                          you can add Social Media app here
+                          {t('Dashboard.addSocialMediaapp')}
+                          {/* you can add Social Media app here */}
                         </Text>
                       </View>
                     </>
@@ -6327,7 +6344,8 @@ right:10
                             top: "40%",
                           }}
                         >
-                          You can Medical wallness app here
+                          {t('Dashboard.addMedicalwallnessapp')}
+                          {/* You can Medical wallness app here */}
                         </Text>
                       </View>
                     </>
@@ -6422,7 +6440,8 @@ right:10
                             top: "40%",
                           }}
                         >
-                          You can add Grocery apps here
+                            {t('Dashboard.addGroceryapps')}
+                          {/* You can add Grocery apps here */}
                         </Text>
                       </View>
                     </>
@@ -6517,7 +6536,8 @@ right:10
                             top: "40%",
                           }}
                         >
-                          Your can add Employment apps here
+                           {t('Dashboard.addEmploymentapps')}
+                          {/* Your can add Employment apps here */}
                         </Text>
                       </View>
                     </>
@@ -6766,8 +6786,8 @@ right:10
         {/* // start of banner slider */}
         <BannerCarousel
         isLoading={isLoading}
-        adsData={adsInActiveData}
-        noDataMessage="No Banner"
+        adsData={adsInActiveData} 
+        noDataMessage={t('Dashboard.NoBanner')}
         onBannerPress={handleBannerPress}
       />
         {/* ////slider end */}
@@ -6885,7 +6905,7 @@ right:10
           alignItems: "center",
         }}
       >
-         <Text style={{ fontFamily: "Inter-Medium",}}>No data for this category</Text>
+         <Text style={{ fontFamily: "Inter-Regular",}}>{t('Dashboard.NoDataavailable')}</Text>
       </View>
        
       ) : (
@@ -7011,7 +7031,7 @@ right:10
         <BannerCarousel
         isLoading={isLoading}
         adsData={adsInActiveData}
-        noDataMessage="No Banner"
+        noDataMessage={t('Dashboard.NoBanner')}
         onBannerPress={handleBannerPress}
       />
         {/* <View
@@ -7310,7 +7330,7 @@ right:10
           alignItems: "center",
         }}
       >
-         <Text style={{ fontFamily: "Inter-Medium",}}>No data for this category</Text>
+         <Text style={{ fontFamily: "Inter-Regular",}}>{t('Dashboard.NoDataavailable')}</Text>
       </View>
        
       ) : (
@@ -7672,7 +7692,7 @@ right:10
         <BannerCarousel
         isLoading={isLoading}
         adsData={adsInActiveData}
-        noDataMessage="No Banner"
+        noDataMessage={t('Dashboard.NoBanner')}
         onBannerPress={handleBannerPress}
       />
         {/* ////slider end */}
@@ -7784,7 +7804,7 @@ right:10
           alignItems: "center",
         }}
       >
-         <Text style={{ fontFamily: "Inter-Medium",}}>No data for this category</Text>
+         <Text style={{ fontFamily: "Inter-Regular",}}>{t('Dashboard.NoDataavailable')}</Text>
       </View>
        
       ) : (
@@ -7802,7 +7822,7 @@ right:10
               <BannerCarousel
         isLoading={isLoading}
         adsData={adsInActiveData}
-        noDataMessage="No Banner"
+        noDataMessage={t('Dashboard.NoBanner')}
         onBannerPress={handleBannerPress}
       />
               {/* ////slider end */}
@@ -7834,7 +7854,8 @@ right:10
                 paddingBottom: 5,
               }}
             >
-              Public (general)
+              {t('Dashboard.Publicgeneral')}
+              {/* Public (general) */}
             </Text>
             {newLoader ? (
                   <View style={styles.NoDataView}>
@@ -7845,7 +7866,8 @@ right:10
                 style={styles.NoDataView}
               >
                 <Text style={styles.NoDataText}>
-                  No data available
+                {t('Dashboard.NoDataavailable')}
+                  {/* No data available */}
                 </Text>
               </View>
             ) : (
@@ -7869,7 +7891,8 @@ right:10
                 fontSize: hp(2),
               }}
             >
-              Public (to authorities, celebrities, leaders)
+               {t('Dashboard.Publiccelebrities')}
+              {/* Public (to authorities, celebrities, leaders) */}
             </Text>
 
             {newLoader ? (
@@ -7883,7 +7906,7 @@ right:10
                 style={styles.NoDataView}
               >
                 <Text style={styles.NoDataText}>
-                  No data available
+                {t('Dashboard.NoDataavailable')}
                 </Text>
               </View>
             ) : (
@@ -7907,13 +7930,15 @@ right:10
                 fontSize: hp(2),
               }}
             >
-              Private (to friends, peers, followers)
+              {t('Dashboard.Privatefriends')}
+              {/* Private (to friends, peers, followers) */}
             </Text>
             <View
                 style={styles.NoDataView}
               >
                 <Text style={styles.NoDataText}>
-                  No data available
+                {t('Dashboard.NoDataavailable')}
+
                 </Text>
               </View>
             {/* <FlatList
@@ -7935,7 +7960,8 @@ right:10
                 fontSize: hp(2),
               }}
             >
-              Private (to authorities, celebrities, leaders){" "}
+              {t('Dashboard.Privatecelebrities')}
+              {/* Private (to authorities, celebrities, leaders) */}
             </Text>
 
             <View
@@ -7946,7 +7972,7 @@ right:10
               }}
             >
               <Text style={{ fontWeight: "500", fontSize: hp(2.1) }}>
-                No data available
+              {t('Dashboard.NoDataavailable')}
               </Text>
             </View>
             {/*  <FlatList
@@ -7965,7 +7991,7 @@ right:10
           <BannerCarousel
         isLoading={isLoading}
         adsData={adsInActiveData}
-        noDataMessage="No Banner"
+        noDataMessage={t('Dashboard.NoBanner')}
         onBannerPress={handleBannerPress}
       />
         {/* ////slider end */}
@@ -8080,7 +8106,7 @@ right:10
           alignItems: "center",
         }}
       >
-         <Text style={{ fontFamily: "Inter-Medium",}}>No data for this category</Text>
+         <Text style={{ fontFamily: "Inter-Medium",}}>{t('Dashboard.NoDataavailable')}</Text>
       </View>
        
       ) : (
@@ -8098,7 +8124,7 @@ right:10
           <BannerCarousel
         isLoading={isLoading}
         adsData={adsInActiveData}
-        noDataMessage="No Banner"
+        noDataMessage={t('Dashboard.NoBanner')}
         onBannerPress={handleBannerPress}
       />
         {/* ////slider end */}
@@ -8225,7 +8251,7 @@ right:10
           alignItems: "center",
         }}
       >
-         <Text style={{ fontFamily: "Inter-Medium",}}>No data for this category</Text>
+         <Text style={{ fontFamily: "Inter-Medium",}}>{t('Dashboard.NoDataavailable')}</Text>
       </View>
        
       ) : (
@@ -8243,7 +8269,7 @@ right:10
             <BannerCarousel
         isLoading={isLoading}
         adsData={adsInActiveData}
-        noDataMessage="No Banner"
+        noDataMessage={t('Dashboard.NoBanner')}
         onBannerPress={handleBannerPress}
       />
         {/* ////slider end */}
@@ -8368,7 +8394,7 @@ right:10
   <BannerCarousel
         isLoading={isLoading}
         adsData={adsInActiveData}
-        noDataMessage="No Banner"
+        noDataMessage={t('Dashboard.NoBanner')}
         onBannerPress={handleBannerPress}
       />
         {/* ////slider end */}
@@ -8489,7 +8515,7 @@ right:10
   <BannerCarousel
         isLoading={isLoading}
         adsData={adsInActiveData}
-        noDataMessage="No Banner"
+        noDataMessage={t('Dashboard.NoBanner')}
         onBannerPress={handleBannerPress}
       />
         {/* ////slider end */}
@@ -8633,7 +8659,7 @@ right:10
   <BannerCarousel
         isLoading={isLoading}
         adsData={adsInActiveData}
-        noDataMessage="No Banner"
+        noDataMessage={t('Dashboard.NoBanner')}
         onBannerPress={handleBannerPress}
       />
         {/* ////slider end */}
@@ -8752,7 +8778,7 @@ right:10
               <BannerCarousel
         isLoading={isLoading}
         adsData={adsInActiveData}
-        noDataMessage="No Banner"
+        noDataMessage={t('Dashboard.NoBanner')}
         onBannerPress={handleBannerPress}
       />
         {/* ////slider end */}
@@ -8874,7 +8900,7 @@ right:10
    <BannerCarousel
         isLoading={isLoading}
         adsData={adsInActiveData}
-        noDataMessage="No Banner"
+        noDataMessage={t('Dashboard.NoBanner')}
         onBannerPress={handleBannerPress}
       />
         {/* ////slider end */}
@@ -9096,7 +9122,7 @@ right:10
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                    {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -9152,7 +9178,7 @@ right:10
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                    {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -9209,7 +9235,7 @@ right:10
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                    {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -9265,7 +9291,7 @@ right:10
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                    {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -9477,7 +9503,7 @@ right:10
               <BannerCarousel
         isLoading={isLoading}
         adsData={adsInActiveData}
-        noDataMessage="No Banner"
+        noDataMessage={t('Dashboard.NoBanner')}
         onBannerPress={handleBannerPress}
       />
         {/* ////slider end */}
@@ -9512,7 +9538,7 @@ right:10
             alignItems: "center",
           }}
         >
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Dashboard.Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -9545,7 +9571,7 @@ right:10
               size={25}
             />
 
-            <Text style={{ color: "#333333" }}>From camera</Text>
+            <Text style={{ color: "#333333" }}>{t('Dashboard.Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -9562,7 +9588,7 @@ right:10
               size={25}
             />
 
-            <Text style={{ color: "#333333" }}>From gallery</Text>
+            <Text style={{ color: "#333333" }}>{t('Dashboard.Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
@@ -9627,8 +9653,8 @@ right:10
                 </View>
               ) : (
                 <>
-                  <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                  <View style={styles.leftContent1}> 
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity
                         onPress={handleSave}
@@ -9708,7 +9734,7 @@ right:10
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity
                         onPress={handleSave_b}
@@ -9788,7 +9814,7 @@ right:10
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity
                         onPress={handleSave_sp}
@@ -9868,7 +9894,7 @@ right:10
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity
                         onPress={handleSave_e}
@@ -9948,7 +9974,7 @@ right:10
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity
                         onPress={handleSave_d}
@@ -10028,7 +10054,7 @@ right:10
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity
                         onPress={handleSave_fd}
@@ -10108,7 +10134,7 @@ right:10
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity
                         onPress={handleSave_sm}
@@ -10188,7 +10214,7 @@ right:10
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity
                         onPress={handleSave_mw}
@@ -10268,7 +10294,7 @@ right:10
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity
                         onPress={handleSave_g}
@@ -10348,7 +10374,7 @@ right:10
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity
                         onPress={handleSave_em}

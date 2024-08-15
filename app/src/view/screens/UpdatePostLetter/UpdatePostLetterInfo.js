@@ -354,7 +354,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
   const checkOnPublicAndAuthorities = () => {
     // console.log('Letter Type', categoryPublicType);
     if (categoryPublicType === 'general') {
-      navigation.navigate('UpdatePtLetter', {
+      navigation.replace('UpdatePtLetter', {
         name: name,
         address: address,
         contactNumber: contact,
@@ -364,7 +364,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
         receivedData:receivedData
       });
     } else {
-      navigation.navigate('UpdatePtLetter', {
+      navigation.replace('UpdatePtLetter', {
         name: name,
         address: address,
         contactNumber: contact,

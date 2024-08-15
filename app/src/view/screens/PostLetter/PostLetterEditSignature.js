@@ -358,7 +358,7 @@ export default function PostLetterEditSignature({navigation, route}) {
         console.log('API Response:', data.data?.signature_created_at);
 
         setLoading(false);
-        navigation.navigate('PostLetterEditSignaturePics', {
+        navigation.replace('PostLetterEditSignaturePics', {
           greetingsTitle: receivedDataGreetingsTitle,
           subjectOfLetter: receivedDataSubjectOfLetter,
           introductionOfLetter: receivedDataintroductionOfLetter,

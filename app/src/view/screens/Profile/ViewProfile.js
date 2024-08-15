@@ -24,10 +24,10 @@ import {
 } from "react-native-responsive-screen";
 import Headers from "../../../assets/Custom/Headers";
 import { base_url } from "../../../../../baseUrl";
-
+import { useTranslation } from 'react-i18next';
 export default function ViewProfile({ navigation }) {
   const [authToken, setAuthToken] = useState('');
-
+  const { t } = useTranslation(); 
   const [selectedItemId, setSelectedItemId] = useState(1);
 
   const [userId, setUserId] = useState("");
@@ -1834,24 +1834,24 @@ paddingTop:6,
   //---------------------------\\
 
   const data = [
-    { id: "1", total: totalVideos, label: "Videos Mania" },
-    { id: "2", total: totalPics, label: "Pic Tour" },
-    { id: "3", total: totalNews, label: "News" },
-    { id: "4", total: totalLetter, label: "Open Letters" },
-    { id: "5", total: totalQAFI, label: "QAFI" },
+    { id: "1", total: totalVideos, label: t('MyProfile.VideosMania') },
+    { id: "2", total: totalPics, label: t('Drawer.PicTours') },
+    { id: "3", total: totalNews, label: t('Drawer.News') },
+    { id: "4", total: totalLetter, label: t('Drawer.OpenLetter') },
+    { id: "5", total: totalQAFI, label: t('Drawer.QAFI') },
     { id: "6", total: totalGEBC, label: "EBC" },
-    { id: "7", total: totalsports, label: "Sports" },
+    { id: "7", total: totalsports, label: t('Drawer.Sports') },
     // {
     //   id: "3",
     //   total: totalNews + totalGEBC + totalQAFI + totalLetter,
     //   label: "DISC",
     // },
-    { id: "8", total: cinematictotalVideos, label: "Cinematics" },
-    { id: "9", total: kidstotalVideos, label: "Kids-Vids" },
-    { id: "10", total: tvtotalVideos, label: "TV ProgMax" },
-    { id: "11", total: learningtotalVideos, label: "Learning & Hobbies" },
-    { id: "12", total: fanStartotalVideos, label: "Fan Star Zone" },
-    { id: "13", total: totalMarketZone, label: "Market Zone" },
+    { id: "8", total: cinematictotalVideos, label: t('Drawer.Cinematics') },
+    { id: "9", total: kidstotalVideos, label: t('Drawer.Kid-Vids') },
+    { id: "10", total: tvtotalVideos, label: t('Drawer.TVProgMax') },
+    { id: "11", total: learningtotalVideos, label: t('Drawer.LearningHobbies') },
+    { id: "12", total: fanStartotalVideos, label: t('Drawer.Fans_star') },
+    { id: "13", total: totalMarketZone, label: t('Drawer.MarketZone') },
     // Add more items as needed
   ];
   const renderItemforHeading = ({ item }) => (
@@ -1875,7 +1875,7 @@ paddingTop:6,
           showSettings={true}
           onPressSettings={() => navigation.navigate("ProfileSettings")}
           showText={true}
-          text={"My Profile"}
+          text={t('MyProfile.MyProfile')}
         />
       </View>
 
@@ -2094,7 +2094,8 @@ paddingTop:6,
               fontFamily: "Inter-Bold",
             }}
           >
-            My Video Mania
+            {t('MyProfile.myVideosMania')}
+            {/* My Video Mania */}
           </Text>
 
           <View style={{ marginTop: hp(1), height: "100%" }}>
@@ -2152,7 +2153,8 @@ paddingTop:6,
               fontFamily: "Inter-Bold",
             }}
           >
-            My Pic Tour
+            {t('MyProfile.MyPicTours')}
+            {/* My Pic Tour */}
           </Text>
 
           <View style={{ marginTop: hp(1), height: "100%" }}>
@@ -2249,7 +2251,8 @@ paddingTop:6,
               fontFamily: "Inter-Bold",
             }}
           >
-           My News
+            {t('MyProfile.myNews')}
+           {/* My News */}
           </Text>
 
           <View style={{ flex: 1 }}>
@@ -2312,7 +2315,8 @@ paddingTop:6,
               fontFamily: "Inter-Bold",
             }}
           >
-           My Open Letters
+             {t('MyProfile.myOpenLetter')}
+           {/* My Open Letters */}
           </Text>
 
           <View style={{ flex: 1 }}>
@@ -2375,7 +2379,8 @@ paddingTop:6,
               fontFamily: "Inter-Bold",
             }}
           >
-           My QAFI
+            {t('MyProfile.myQAFI')}
+           {/* My QAFI */}
           </Text>
 
           <View style={{ flex: 1 }}>
@@ -2438,7 +2443,8 @@ paddingTop:6,
               fontFamily: "Inter-Bold",
             }}
           >
-           My EBC
+            {t('MyProfile.myEBC')}
+           {/* My EBC */}
           </Text>
 
           <View style={{ flex: 1 }}>
@@ -2501,7 +2507,8 @@ paddingTop:6,
               fontFamily: "Inter-Bold",
             }}
           >
-            My Sports
+            {t('MyProfile.mySports')}
+            {/* My Sports */}
           </Text>
 
           <View style={{ marginTop: hp(1), height: "100%" }}>
@@ -2560,7 +2567,8 @@ paddingTop:6,
               fontFamily: "Inter-Bold",
             }}
           >
-            My Cinematics
+            {t('MyProfile.myCinematics')}
+            {/* My Cinematics */}
           </Text>
 
           <View style={{ marginTop: hp(1), height: "100%" }}>
@@ -2618,7 +2626,8 @@ paddingTop:6,
               fontFamily: "Inter-Bold",
             }}
           >
-           My Kids Vids
+            {t('MyProfile.myKid-Vids')}
+           {/* My Kids Vids */}
           </Text>
 
           <View style={{ marginTop: hp(1), height: "100%" }}>
@@ -2676,7 +2685,8 @@ paddingTop:6,
               fontFamily: "Inter-Bold",
             }}
           >
-          My TV ProgMax
+            {t('MyProfile.myTVProgMax')}
+          {/* My TV ProgMax */}
           </Text>
 
           <View style={{ marginTop: hp(1), height: "100%" }}>
@@ -2734,7 +2744,8 @@ paddingTop:6,
               fontFamily: "Inter-Bold",
             }}
           >
-          My Learning and Hobbies
+            {t('MyProfile.myLearningHobbies')}
+          {/* My Learning and Hobbies */}
           </Text>
 
           <View style={{ marginTop: hp(1), height: "100%" }}>
@@ -2792,7 +2803,8 @@ paddingTop:6,
               fontFamily: "Inter-Bold",
             }}
           >
-          My Fan Star Zone
+            {t('MyProfile.myFans_star')}
+          {/* My Fan Star Zone */}
           </Text>
 
           <View style={{ marginTop: hp(1), height: "100%" }}>
@@ -2854,7 +2866,8 @@ paddingTop:6,
               fontFamily: "Inter-Bold",
             }}
           >
-            My Market Zone
+            {t('MyProfile.myMarketZone')}
+            {/* My Market Zone */}
           </Text>
 
           {loading ? (

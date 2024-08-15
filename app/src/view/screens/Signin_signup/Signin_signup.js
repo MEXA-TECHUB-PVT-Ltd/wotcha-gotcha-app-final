@@ -120,10 +120,14 @@ const App = ({ navigation }) => {
   const { changeLanguage } = useCustomTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState(null); // State for selected language
 
-  const languageOptions = [
+  // const languageOptions = [
    
-      { label: 'English', value: 'en' },
-      { label: 'Français', value: 'fr' }
+  //     { label: 'English', value: 'en' },
+  //     { label: 'Français', value: 'fr' }
+  // ];
+  const languageOptions = [
+    { label: 'English', value: 'en', flag: require('../../../assets/english_flag.png') },
+    { label: 'Français', value: 'fr', flag: require('../../../assets/Flag_of_France.png') }
   ];
   const handleLanguageChange = (value) => {
       if (value) {
@@ -814,6 +818,26 @@ const App = ({ navigation }) => {
               </Text>
             )}
  </View>
+ <View style={styles.DropMani}>
+      <Dropdown
+        style={styles.dropdown}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        containerStyle={styles.containerStyle}
+        data={languageOptions}
+        labelField="label"
+        valueField="value"
+        placeholder="Select Language"
+        value={selectedLanguage}
+        onChange={(item) => handleLanguageChange(item.value)}
+        renderItem={(item) => (
+          <View style={styles.itemContainer}>
+            <Text style={styles.itemLabel}>{item.label}</Text>
+            <Image source={item.flag} style={styles.flagImage} />
+          </View>
+        )}
+      />
+    </View>
             {check == 0 ? (
               <View style={styles.v1}>
                 <TextInput
@@ -916,7 +940,8 @@ const App = ({ navigation }) => {
                         { color: signin_ShowPassword ? "#646464" : "#FACA4E" },
                       ]}
                     >
-                      {signin_ShowPassword ? "Show" : "Hide"}
+                      {signin_ShowPassword ? t('signin.Show') : t('signin.Hide')}
+                      {/* {signin_ShowPassword ? "Show" : "Hide"} */}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -953,8 +978,7 @@ const App = ({ navigation }) => {
                 </TouchableOpacity>
 
              {/* Language selector dropdown */}
-             <View style={styles.DropMani}>
-             
+             {/* <View style={styles.DropMani}>    
              <Dropdown
     style={styles.dropdown}
     placeholderStyle={styles.placeholderStyle}
@@ -970,7 +994,9 @@ const App = ({ navigation }) => {
     value={selectedLanguage} // Add this line
     onChange={(item) => handleLanguageChange(item.value)}
 />
-</View>
+</View> */}
+
+
                 {/*   <TouchableOpacity onPress={() => handleSignInSkipForNow()}>
               <Text
                 style={{
@@ -1159,7 +1185,8 @@ const App = ({ navigation }) => {
                         { color: signin_ShowPassword1 ? "#646464" : "#FACA4E" },
                       ]}
                     >
-                      {signin_ShowPassword1 ? "Show" : "Hide"}
+                      {signin_ShowPassword1 ? t('signin.Show') : t('signin.Hide')}
+                      {/* {signin_ShowPassword1 ? "Show" : "Hide"} */}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -1213,7 +1240,8 @@ const App = ({ navigation }) => {
                         { color: signin_ShowPassword2 ? "#646464" : "#FACA4E" },
                       ]}
                     >
-                      {signin_ShowPassword2 ? "Show" : "Hide"}
+                      {signin_ShowPassword2 ? t('signin.Show') : t('signin.Hide')}
+                      {/* {signin_ShowPassword2 ? "Show" : "Hide"} */}
                     </Text>
                   </TouchableOpacity>
 
@@ -1231,24 +1259,7 @@ const App = ({ navigation }) => {
                   ) : null}
                 </View>
 
-                <View style={styles.DropMani}>
-             
-             <Dropdown
-    style={styles.dropdown}
-    placeholderStyle={styles.placeholderStyle}
-    selectedTextStyle={styles.selectedTextStyle}
-    inputSearchStyle={styles.inputSearchStyle}
-    iconStyle={styles.iconStyle}
-    data={languageOptions}
-    // search
-    maxHeight={300}
-    labelField="label"
-    valueField="value"
-    placeholder="Select Language"
-    value={selectedLanguage} // Add this line
-    onChange={(item) => handleLanguageChange(item.value)}
-/>
-</View>
+
                 <View></View>
 
                 <View
