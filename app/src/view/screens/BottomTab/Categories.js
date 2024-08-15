@@ -46,7 +46,7 @@ import SwiperFlatList from "react-native-swiper-flatlist";
 import { fetchBannerConfig, fetchBannerInActive } from '../../../../../API';
 import BannerCarousel from "../../../assets/Custom/BannerCarousel";
 //------------------------\\
-
+import { useTranslation } from 'react-i18next';
 const screenHeight = Dimensions.get("window").height;
 const itemHeight = 450;
 
@@ -63,7 +63,7 @@ export default function Categories(identifier) {
   const [isLongPress, setIsLongPress] = useState(false);
   const [categoryActive, setcategoryActive] = useState(true);
   const [banner, setBanners] = useState([]);
-
+  const { t } = useTranslation(); 
   const [authToken, setAuthToken] = useState("");
 
   const [unUsedLocal, setUnUsedLocal] = useState([]);
@@ -1731,7 +1731,7 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
               }}
               style={styles.overlayButton}
             >
-              <Text style={{ color: "white" }}>Add to Favorites</Text>
+              <Text style={{ color: "white" }}>{t('Dashboard.AddtoFavorites')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
@@ -1742,10 +1742,11 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
               style={styles.overlayButton}
             >
               <Text style={{ color: "white" }}>
-                Remove From Wotcha Gotcha App
+              {t('Dashboard.RemoveFromWotchaGotchaApp')}
+                {/* Remove From Wotcha Gotcha App */}
               </Text>
             </TouchableOpacity>
-          </View>
+          </View> 
         </View>
         {isCancelModalVisible && (
           <TouchableOpacity
@@ -1778,7 +1779,7 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
               }}
               style={styles.overlayButton}
             >
-              <Text style={{ color: "white" }}>Remove Favorites</Text>
+              <Text style={{ color: "white" }}>{t('Dashboard.RemoveFavorites')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -1790,7 +1791,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
               style={styles.overlayButton}
             >
               <Text style={{ color: "white" }}>
-                Remove From Wotcha Gotcha App
+              {t('Dashboard.RemoveFromWotchaGotchaApp')}
+                {/* Remove From Wotcha Gotcha App */}
               </Text>
             </TouchableOpacity>
           </View>
@@ -2023,7 +2025,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
                       }}
                     >
                       <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                        No Top Apps
+                      {t('Dashboard.NoTopApps')}
+                        {/* No Top Apps */}
                       </Text>
                     </View>
                   ) : (
@@ -2051,7 +2054,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
                   fontWeight: "bold",
                 }}
               >
-                Phone Based Apps
+                {t('Dashboard.PhoneBasedApps')}
+                {/* Phone Based Apps */}
               </Text>
 
               {isLoading ? (
@@ -2126,7 +2130,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
                   fontWeight: "bold",
                 }}
               >
-                Favourite Apps
+                {t('Dashboard.FavouriteApps')}
+                {/* Favourite Apps */}
               </Text>
               {isLoading ? (
                 <View
@@ -2159,7 +2164,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
                           justifyContent: "center",
                         }}
                       >
-                        No Favourite Apps
+                        {t('Dashboard.NoFavouriteApps')}
+                        {/* No Favourite Apps */}
                       </Text>
                     </View>
                   ) : (
@@ -2213,7 +2219,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
                   fontWeight: "bold",
                 }}
               >
-                Unused Apps
+                {t('Dashboard.UnusedApps')}
+                {/* Unused Apps */}
               </Text>
 
               {isLoading ? (
@@ -2353,7 +2360,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
                             top: "40%",
                           }}
                         >
-                          Your can add E-commernce apps here
+                          {t('Dashboard.addEcommernceapps')}
+                          {/* Your can add E-commernce apps here */}
                         </Text>
                       </View>
                     </>
@@ -2449,7 +2457,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
                             top: "40%",
                           }}
                         >
-                          Your can add Bussiness apps here
+                           {t('Dashboard.addBussinessapps')}
+                          {/* Your can add Bussiness apps here */}
                         </Text>
                       </View>
                     </>
@@ -2544,7 +2553,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
                             top: "40%",
                           }}
                         >
-                          Your can add Sports apps here
+                          {t('Dashboard.addSportsapps')}
+                          {/* Your can add Sports apps here */}
                         </Text>
                       </View>
                     </>
@@ -2639,7 +2649,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
                             top: "40%",
                           }}
                         >
-                          Your can add Education apps here
+                          {t('Dashboard.addEducationapps')}
+                          {/* Your can add Education apps here */}
                         </Text>
                       </View>
                     </>
@@ -2734,7 +2745,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
                             top: "40%",
                           }}
                         >
-                          Your can add Dating apps here
+                          {t('Dashboard.addDatingapps')}
+                          {/* Your can add Dating apps here */}
                         </Text>
                       </View>
                     </>
@@ -2829,7 +2841,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
                             top: "40%",
                           }}
                         >
-                          Your can add Food Delivery apps here
+                          {t('Dashboard.addFoodDeliveryapps')}
+                          {/* Your can add Food Delivery apps here */}
                         </Text>
                       </View>
                     </>
@@ -2924,7 +2937,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
                             top: "40%",
                           }}
                         >
-                          you can add Social Media app here
+                          {t('Dashboard.addSocialMediaapp')}
+                          {/* you can add Social Media app here */}
                         </Text>
                       </View>
                     </>
@@ -3019,7 +3033,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
                             top: "40%",
                           }}
                         >
-                          You can Medical wallness app here
+                          {t('Dashboard.addMedicalwallnessapp')}
+                          {/* You can add Medical wallness app here */}
                         </Text>
                       </View>
                     </>
@@ -3114,7 +3129,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
                             top: "40%",
                           }}
                         >
-                          You can add Grocery apps here
+                          {t('Dashboard.addGroceryapps')}
+                          {/* You can add Grocery apps here */}
                         </Text>
                       </View>
                     </>
@@ -3209,7 +3225,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
                             top: "40%",
                           }}
                         >
-                          Your can add Employment apps here
+                          {t('Dashboard.addEmploymentapps')}
+                          {/* Your can add Employment apps here */}
                         </Text>
                       </View>
                     </>
@@ -3238,10 +3255,10 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
       <CustomModal
         visible={modalDeleteApps}
         onClose={() => setModalDeleteApps(false)}
-        headerText="Alert?"
-        bodyText="Are You Sure You Want To Remove The App"
-        cancelText={"Cancel"}
-        doneText={"Yes, Delete"}
+        headerText={t('Alert!')} 
+        bodyText={t('SureToRemoveTheApp')}
+        cancelText={t('Drawer.Cancel')}
+        doneText={t('YesDelete')} 
         onCancel={() => handleCancel()}
         onConfirm={() => handleConfirm()}
       />
@@ -3249,10 +3266,10 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
       <CustomModal
         visible={modalDeleteFavouriteApps}
         onClose={() => setModalDeleteFavouriteApps(false)}
-        headerText="Alert!"
-        bodyText="Are You Sure You Want To Remove From Favourites?"
-        cancelText={"Cancel"}
-        doneText={"Yes, Remove"}
+        headerText={t('Alert!')}
+        bodyText={t('SureToRemoveFromFavourites')}
+        cancelText={t('Drawer.Cancel')}
+        doneText={t('YesDelete')}
         onCancel={() => handleCancelFavourite()}
         onConfirm={() => handleConfirmFavourite()}
       />
@@ -3282,7 +3299,7 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity onPress={handleSave} style={{height:30, width:30, paddingLeft:4}}>
                         <Ionicons
@@ -3359,7 +3376,7 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity onPress={handleSave_b} style={{height:30, width:30, paddingLeft:4}}>
                         <Ionicons
@@ -3436,7 +3453,7 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity onPress={handleSave_sp} style={{height:30, width:30, paddingLeft:4}}>
                         <Ionicons
@@ -3513,7 +3530,7 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity onPress={handleSave_e} style={{height:30, width:30, paddingLeft:4}}>
                         <Ionicons
@@ -3590,7 +3607,7 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity onPress={handleSave_d} style={{height:30, width:30, paddingLeft:4}}>
                         <Ionicons
@@ -3667,7 +3684,7 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity onPress={handleSave_fd} style={{height:30, width:30, paddingLeft:4}}>
                         <Ionicons
@@ -3744,7 +3761,7 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity onPress={handleSave_sm} style={{height:30, width:30, paddingLeft:4}}>
                         <Ionicons
@@ -3821,7 +3838,7 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity onPress={handleSave_mw} style={{height:30, width:30, paddingLeft:4}}>
                         <Ionicons
@@ -3898,7 +3915,7 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity onPress={handleSave_g} style={{height:30, width:30, paddingLeft:4}}>
                         <Ionicons
@@ -3975,7 +3992,7 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
               ) : (
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>Your Apps</Text>
+                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity onPress={handleSave_em} style={{height:30, width:30, paddingLeft:4}}>
                         <Ionicons
@@ -4028,7 +4045,7 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
       </Modal>
       <CustomSnackbar
         message={"Success"}
-        messageDescription={"Apps added in category"}
+        messageDescription={t('Dashboard.Appsaddedincategory')} 
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />

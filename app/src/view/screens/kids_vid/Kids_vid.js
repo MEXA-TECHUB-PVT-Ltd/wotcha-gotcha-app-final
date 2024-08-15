@@ -771,7 +771,7 @@ export default function Kids_vid({ route }) {
               landscape of international diplomacy...... */}
 
               {dataTopVideos === undefined || dataTopVideos === 0
-                ? "No Top Pic Shown"
+                ? "No Top Kid-Vids Shown"
                 : dataTopVideos?.description}
             </Text>
           </View>

@@ -1090,7 +1090,7 @@ import {
                 }}
               >
                 {dataTopVideos === 0
-                  ? "No Top Pic Shown"
+                  ? "No Top Sports Shown"
                   : dataTopVideos?.description}
               </Text>
             </View>

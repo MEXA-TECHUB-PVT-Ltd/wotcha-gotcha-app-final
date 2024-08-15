@@ -60,6 +60,7 @@ import { fetchBannerConfig, fetchBannerInActive } from '../../../../../API';
 import { useTranslation } from 'react-i18next';
 import { fetchAllCinematicsCategory, fetchCinematicTopVideos, fetchSubCategory } from '../../../../../API';
 import BannerCarousel from "../../../assets/Custom/BannerCarousel";
+import CustomSnackbar from "../../../assets/Custom/CustomSnackBar";
 const screenHeight = Dimensions.get("window").height;
 const itemHeight = 450;
 
@@ -1282,7 +1283,38 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
   const lettersearches = [
     { id: 1, title: "Open Letter" },
   ];
+  const [topLetterData, setTopLetterData] = useState('');
+  const [letterLoading, setLetterLoading] = useState('');
+  const fetchTopLetter = async () => {
+    setLetterLoading(true);
+    const token = authToken;
 
+    try {
+      const response = await fetch(
+        base_url + "top/app/top_letter",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
+      // console.log('Resultings of TopNews', result.topitem);
+      //Alert.alert(result)
+      const formattedLetters = result.topitem.map((letter) => ({
+        ...letter,
+        post_date: convertTimeAndDate(letter.post_date), 
+      }));
+      // console.log('Resultings of setLetterLoading', result.topitem);
+      setTopLetterData(formattedLetters[0]); // Update the state with the fetched data
+      // fetchSpecificSig(formattedLetters[0].signature_id)
+    } catch (error) {
+      setLetterLoading(false);
+      console.error("Error Trending:", error);
+    }
+  };
 
   const renderLetterSearches = (item) => {
     // console.log('Items', item);
@@ -1509,6 +1541,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
       fetchBanners();
       // fetchTopDiscNews();
       fetchCategoryMarket();
+      fetchTopLetter()
       fetchLetterPublicGeneralLetter();
     }
   }, [authToken]);
@@ -2130,7 +2163,9 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
   };
 
 
-
+  const dismissSnackbar = () => {
+    setSnackbarVisible(false);
+  };
 
   useEffect(() => {
     if (authToken && isFocused) {
@@ -6843,7 +6878,8 @@ right:10
                   borderRadius: wp(3),
                   resizeMode: "cover",
                 }}
-                source={{ uri: DataTopXpiData?.thumbnail }}
+                source={appImages.videoPlaceHolder}
+                // source={{ uri: DataTopXpiData?.thumbnail }}
               />
                 </TouchableOpacity>
             )}
@@ -7843,6 +7879,134 @@ right:10
             renderItem={({ item }) => renderLetterSearches(item)}
           />
         </View>
+
+        <View
+          style={{
+            marginTop: hp(1.5),
+            marginBottom: hp(1),
+            flexDirection: "row",
+            height: hp(18),
+          }}
+        >
+            <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("LetterDetails", {
+            Letters: topLetterData,
+            identifier: false,
+          })
+        }
+        style={{
+          width: wp(45),
+          marginHorizontal: wp(2),
+        }} // Add margin here
+      >
+        <View
+          style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
+        ></View>
+        <View>
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 2,
+              alignItems: "center",
+              height: hp(4),
+            }}
+          >
+            {topLetterData?.userimage !== null ||
+            topLetterData?.userimage !== undefined ? (
+              <View
+                style={{
+                  height: hp(2),
+                  width: wp(4),
+                  borderRadius: wp(3),
+                }}
+              >
+                <Image
+                  source={{ uri: topLetterData?.userimage}}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: wp(3),
+                    resizeMode: "cover",
+                  }}
+                />
+              </View>
+            ) : (
+              <MaterialCommunityIcons
+                style={{ marginTop: hp(0.5) }}
+                name={"account-circle"}
+                size={35}
+                color={"#FACA4E"}
+              />
+            )}
+
+            <View style={{ marginLeft: wp(2.5) }}>
+              <Approved width={10} height={10} />
+            </View>
+          </View>
+
+          <View
+            style={{
+              alignItems: "flex-end",
+              height: 10,
+              // marginRight: wp(1),
+            }}
+          >
+            <Text
+              style={{
+                color: "#282828",
+                // marginLeft: wp(3),
+                width: "25%",
+                fontSize: 6,
+                fontFamily: "Inter-Bold",
+              }}
+            >
+              {topLetterData.post_date}
+            </Text>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              height: hp(5),
+              paddingTop: 6,
+              // backgroundColor:'red', width:'60%'
+            }}
+          >
+            <Text
+              style={{
+                color: "#282828",
+                fontSize: 8,
+                textDecorationLine: "underline",
+                fontFamily: "Inter-Bold",
+              }}
+            >
+              Subject:
+            </Text>
+            <View style={{ height: "100%", width: "75%" }}>
+              <Text
+                numberOfLines={3}
+                ellipsizeMode="tail"
+                style={{
+                  color: "#595959",
+                  marginLeft: wp(1),
+                  fontSize: 8,
+                  fontFamily: "Inter-Regular",
+                }}
+              >
+                {topLetterData.subject_place}
+              </Text>
+            </View>
+          </View>
+          <View
+            style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
+          ></View>
+        </View>
+      </TouchableOpacity>
+        </View>
+
+
+
 
           <View style={{ flex: 1 }}>
           <View style={{ marginTop: hp(5), height: hp(21) }}>
@@ -10428,6 +10592,12 @@ right:10
           </View>
         </View>
       </Modal>
+       <CustomSnackbar
+        message={"Success"}
+        messageDescription={"Apps added in category"}
+        onDismiss={dismissSnackbar} // Make sure this function is defined
+        visible={snackbarVisible}
+      />
     </View>
   );
 }

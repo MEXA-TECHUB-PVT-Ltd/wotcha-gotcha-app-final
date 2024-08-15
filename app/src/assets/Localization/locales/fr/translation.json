@@ -75,7 +75,8 @@
         "YourApps": "Vos applications",
         "NoTopBanner": "Pas de bannière supérieure",
         "NoBanner": "Pas de bannière",
-        "Ecommerce": "Commerce électronique"
+        "Ecommerce": "Commerce électronique",
+        "Appsaddedincategory": "Applications ajoutées à la catégorie"
 
       },
       "More": {
@@ -133,7 +134,10 @@
         "ShareApp": "Partager l'application",
         "ContactUs": "Contactez-nous",
         "DeleteAccount": "Supprimer le compte",
-        "Delete": "Supprimer"
+        "Delete": "Supprimer",
+        "ChangeImage": "Changer l'image",
+        "UserName": "Nom d'utilisateur",
+        "cannotdityouremailaddress": "Vous ne pouvez pas modifier votre adresse e-mail"
       },
       "UpdatePassword": {
         "OldPassword": "Ancien mot de passe",

@@ -526,7 +526,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
                 color: '#232323',
                 fontWeight: '700',
               }}>
-              Change Pic
+              Change Sports
             </Text>
           </TouchableOpacity>
           {imageInfo == null && (

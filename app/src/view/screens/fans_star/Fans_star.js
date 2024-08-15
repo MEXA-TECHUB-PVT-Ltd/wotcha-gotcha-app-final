@@ -829,7 +829,7 @@ export default function Fans_star({  route }) {
               }}
             >
               {dataTopVideos === undefined || dataTopVideos === 0
-                ? "No Top Pic Shown"
+                ? "No Top Fan_star Zone Shown"
                 : dataTopVideos?.description}
             </Text>
           </View>

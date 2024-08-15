@@ -567,7 +567,7 @@ export default function Tv_Promax({  route }) {
               }}
             >
               {dataTopVideos === undefined || dataTopVideos === 0
-                ? "No Top Pic Shown"
+                ? "No Top Tv ProgMax Shown"
                 : dataTopVideos?.description}
             </Text>
           </View>

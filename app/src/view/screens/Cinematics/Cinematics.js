@@ -891,7 +891,7 @@ export default function Cinematics({  route }) {
               landscape of international diplomacy...... */}
 
               {dataTopVideos === undefined || dataTopVideos === 0
-                ? "No Top Pic Shown"
+                ? "No Top Cinematics Shown"
                 : dataTopVideos?.description}
             </Text>
           </View>

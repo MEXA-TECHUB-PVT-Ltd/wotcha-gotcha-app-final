@@ -1976,7 +1976,7 @@ export default function MarketZone({  }) {
               landscape of international diplomacy...... */}
 
               {dataTopVideos === undefined || dataTopVideos === 0
-                ? "No Top Pic Shown"
+                ? "No Top Market Shown"
                 : dataTopVideos?.description}
             </Text>
           </View>
