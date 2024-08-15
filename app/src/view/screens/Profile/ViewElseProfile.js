@@ -3626,7 +3626,7 @@ paddingTop:6,
               fontFamily: "Inter-Bold",
             }}
           >
-             Pic Tour
+             Pic Tours
           </Text>
 
           <View style={{ marginTop: hp(1), height: "100%" }}>

@@ -1069,7 +1069,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
                   resizeMode: "cover",
                 }}
                 // source={{ uri: dataTopVideos?.video }}
-                source={appImages.galleryPlaceHolder}
+                source={appImages.videoPlaceHolder}
               />
        
                 </TouchableOpacity>
@@ -1114,7 +1114,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
               }}
             >
               {dataTopVideos === undefined || dataTopVideos === 0
-                ? "No Top Pic Shown"
+                ? "No Top Video Shown"
                 : dataTopVideos?.description}
             </Text>
           </View>

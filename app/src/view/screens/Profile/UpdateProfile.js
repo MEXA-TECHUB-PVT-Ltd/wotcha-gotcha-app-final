@@ -36,10 +36,11 @@ import CPaperInput from './../../../assets/Custom/CPaperInput';
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
 import { base_url } from '../../../../../baseUrl';
 import { CLOUD_NAME, CLOUDINARY_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
+import { useTranslation } from 'react-i18next';
 
 export default function UpdateProfile({navigation}) {
   const [selectedItem, setSelectedItem] = useState('');
-
+  const { t } = useTranslation();
   const [imageInfo, setImageInfo] = useState(null);
 
   const [userName, setUserName] = useState('');
@@ -464,7 +465,7 @@ export default function UpdateProfile({navigation}) {
         <Headers
           onPress={() => navigation.goBack()}
           showBackIcon={true}
-          text={'Update Profile'}
+          text={t('Settings.UpdateProfile')}
           showText={true}
         />
       </View>
@@ -530,14 +531,15 @@ export default function UpdateProfile({navigation}) {
               fontFamily: 'Inter-Medium',
               color: '#232323',
             }}>
-            Change Image
+              {t('Settings.ChangeImage')}
+            {/* Change Image */}
           </Button>
         </TouchableOpacity>
 
         <CPaperInput
           //multiline={true}
           //placeholder={'Description'}
-          heading={'User Name'}
+          heading={t('Settings.UserName')}
           placeholderTextColor="#121420"
           value={userName}
           onChangeText={text => setUserName(text)}
@@ -548,7 +550,7 @@ export default function UpdateProfile({navigation}) {
           //multiline={true}
           //placeholder={'Description'}
           editable={false}
-          heading={'Email Address'}
+          heading={t('signin.EmailAddress')}
           placeholderTextColor="#121420"
           value={email}
           onChangeText={text => setEmail(text)}
@@ -561,13 +563,14 @@ export default function UpdateProfile({navigation}) {
             marginLeft: wp(1),
             fontFamily: 'Inter-Regular',
             //fontWeight: 'bold',
-          }}>
-          You can't edit your email address
+          }}> 
+          {t('Settings.cannotdityouremailaddress')}
+          {/* You can't edit your email address */}
         </Text>
 
         <View style={{marginTop: hp(18),alignItems:'center'}}>
           <CustomButton
-            title="Update"
+            title={t('UpdatePassword.Update')}
             customClick={() => {
               handleUpdateUser(); // Call your password update function here
 

@@ -934,7 +934,7 @@ export default function PicTours() {
           onPressListings={() => navigation.openDrawer()}
           // showListings={true}
           showHome={true}
-          text={"Pic Tour"}
+          text={"Pic Tours"}
         />
       </View>
 
@@ -1088,7 +1088,7 @@ export default function PicTours() {
                   resizeMode: "cover",
                 }}
                 source={appImages?.galleryPlaceHolder}
-              />
+              /> 
             ) : (
               <TouchableOpacity   style={{ width: "100%", height: "100%", borderRadius: wp(3) }}
               onPress={() => navigation.navigate("TopPicView", { picData: dataTopVideos })}>

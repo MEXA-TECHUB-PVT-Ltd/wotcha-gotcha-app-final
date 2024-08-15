@@ -528,7 +528,7 @@ const isSelected = selectedItemId === item.id;
               }}
             >
               {topNewsData === undefined || topNewsData === 0
-                ? "No Top Pic Shown"
+                ? "No Top EBC Shown"
                 : topNewsData?.description}
             </Text>
           </View>

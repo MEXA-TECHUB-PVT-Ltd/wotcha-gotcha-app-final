@@ -587,7 +587,7 @@ export default function Learning({  route }) {
               }}
             >
               {dataTopVideos === undefined || dataTopVideos === 0
-                ? "No Top Pic Shown"
+                ? "No Top Learning Shown"
                 : dataTopVideos?.description}
             </Text>
           </View>

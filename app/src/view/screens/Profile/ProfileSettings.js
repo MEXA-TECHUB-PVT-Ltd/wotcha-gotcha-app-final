@@ -281,7 +281,7 @@ useEffect(() => {
             {t('Settings.UpdatePassword')}
           {/* Update Password */}
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> 
 
       <TouchableOpacity
         onPress={() => navigation.navigate('SavedItems')}

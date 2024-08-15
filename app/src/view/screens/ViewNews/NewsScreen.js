@@ -988,7 +988,7 @@ import { tr } from "rn-emoji-keyboard";
               landscape of international diplomacy...... */}
 
               {topNewsData === undefined || topNewsData === 0
-                ? "No Top Pic Shown"
+                ? "No Top News Shown"
                 : topNewsData?.description}
             </Text>
           </View>
