@@ -220,7 +220,7 @@ useEffect(() => {
           onPress={() => navigation.goBack()}
           showBackIcon={true}
           showText={true}
-          text={'Settings'}
+          text={t('Settings.Settings')}
         />
       </View>
 <ScrollView>
@@ -249,7 +249,9 @@ useEffect(() => {
             fontFamily: 'Inter-Regular',
             //fontWeight: 'bold',
           }}>
-          Update Profile
+            {t('Settings.UpdateProfile')}
+            
+          {/* Update Profile */}
         </Text>
       </TouchableOpacity>
 
@@ -276,7 +278,8 @@ useEffect(() => {
             fontFamily: 'Inter-Regular',
             //fontWeight: 'bold',
           }}>
-          Update Password
+            {t('Settings.UpdatePassword')}
+          {/* Update Password */}
         </Text>
       </TouchableOpacity>
 
@@ -303,7 +306,8 @@ useEffect(() => {
             fontFamily: 'Inter-Regular',
             //fontWeight: 'bold',
           }}>
-          Saved Items
+            {t('Settings.SavedItems')}
+          {/* Saved Items */}
         </Text>
       </TouchableOpacity>
 
@@ -330,7 +334,8 @@ useEffect(() => {
             fontFamily: 'Inter-Regular',
             //fontWeight: 'bold',
           }}>
-          Rate App
+            {t('Settings.RateApp')}
+          {/* Rate App */}
         </Text>
       </TouchableOpacity>
 
@@ -357,7 +362,8 @@ useEffect(() => {
             fontFamily: 'Inter-Regular',
             //fontWeight: 'bold',
           }}>
-          Share App
+            {t('Settings.ShareApp')}
+          {/* Share App */}
         </Text>
       </TouchableOpacity>
 
@@ -384,7 +390,8 @@ useEffect(() => {
             fontFamily: 'Inter-Regular',
             //fontWeight: 'bold',
           }}>
-         Contact Us
+            {t('Settings.ContactUs')}
+         {/* Contact Us */}
         </Text>
       </TouchableOpacity>
 
@@ -411,7 +418,8 @@ useEffect(() => {
             fontFamily: 'Inter-Regular',
             //fontWeight: 'bold',
           }}>
-          Delete Account
+             {t('Settings.DeleteAccount')}
+          {/* Delete Account */}
         </Text>
       </TouchableOpacity>
 
@@ -472,7 +480,8 @@ useEffect(() => {
                 fontFamily: 'Inter-Medium',
                 //fontWeight: 'bold',
               }}>
-              Logout
+                {t('Drawer.Logout')}
+              {/* Logout */}
             </Text>
           </View>
         </TouchableOpacity>
@@ -506,22 +515,23 @@ useEffect(() => {
             styles.txtNotification,
             {marginTop: 1, fontSize: hp(2.5), fontWeight: '500'},
           ]}>
-          Confirmation
+          {/* Confirmation */}
+          {t('Drawer.Confirmation')}
         </Text>
 
-        <Text style={{marginTop: hp(2)}}>Do You Really Want To Logout?</Text>
+        <Text style={{marginTop: hp(2)}}>{t('Drawer.SureLogout')}</Text>
 
         <View style={styles.buttonDirections}>
           <TouchableOpacity
             style={styles.button}
             onPress={() => ref_RBSheetLogout.current.close()}>
-            <Text style={styles.textButton}>Cancel</Text>
+            <Text style={styles.textButton}>{t('Drawer.Cancel')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => goBack()}
             style={[styles.button, {backgroundColor: '#FACA4E'}]}>
-            <Text style={[styles.textButton, {color: '#232323'}]}>Logout</Text>
+            <Text style={[styles.textButton, {color: '#232323'}]}>{t('Drawer.Logout')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
@@ -554,24 +564,26 @@ useEffect(() => {
             styles.txtNotification,
             {marginTop: 1, fontSize: hp(2.5), fontWeight: '500'},
           ]}>
-          Confirmation
+            {t('Drawer.Confirmation')}
+          {/* Confirmation */}
         </Text>
 
         <Text style={{marginTop: hp(2)}}>
-          Do You Really Want To Delete Your Account?
+        {t('Drawer.SureDelete')}
+          {/* Do You Really Want To Delete Your Account? */}
         </Text>
 
         <View style={styles.buttonDirections}>
           <TouchableOpacity
             style={styles.button}
             onPress={() => ref_RBSheetDelete.current.close()}>
-            <Text style={styles.textButton}>Cancel</Text>
+            <Text style={styles.textButton}>{t('Drawer.Cancel')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => deleteAccount()}
             style={[styles.button, {backgroundColor: '#FACA4E'}]}>
-            <Text style={[styles.textButton, {color: '#232323'}]}>Delete</Text>
+            <Text style={[styles.textButton, {color: '#232323'}]}>{t('Settings.Delete')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>

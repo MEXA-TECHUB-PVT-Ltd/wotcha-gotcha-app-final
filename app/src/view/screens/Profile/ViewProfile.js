@@ -1173,217 +1173,6 @@ export default function ViewProfile({ navigation }) {
 
   //------------------------\\
 
-  // GEBC COMP
-  const GEBCCOMP = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        <View style={{ height: hp(15) }}>
-          <View style={{ height: "100%" }}>
-            {loading === true ? (
-              <View
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <ActivityIndicator size="large" color="#FACA4E" />
-              </View>
-            ) : (
-              <>
-                {GEBC?.length === 0 ? (
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
-                    </Text>
-                  </View>
-                ) : (
-                  <FlatList
-                    style={{ flex: 1 }}
-                    showsHorizontalScrollIndicator={false}
-                    data={GEBC}
-                    horizontal
-                    //keyExtractor={item => item.id.toString()}
-                    renderItem={({ item }) => renderAvailableAppsGEBC(item)}
-                  />
-                )}
-              </>
-            )}
-          </View>
-        </View>
-      </View>
-    );
-  };
-
-  //--------------\\
-
-  // QAFI COMP
-
-  const QAFICOMP = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        <View style={{ height: hp(15) }}>
-          <View style={{ height: "100%" }}>
-            {loading === true ? (
-              <View
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <ActivityIndicator size="large" color="#FACA4E" />
-              </View>
-            ) : (
-              <>
-                {QAFI?.length === 0 ? (
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
-                    </Text>
-                  </View>
-                ) : (
-                  <FlatList
-                    style={{ flex: 1 }}
-                    showsHorizontalScrollIndicator={false}
-                    data={QAFI}
-                    horizontal
-                    //keyExtractor={item => item.id.toString()}
-                    renderItem={({ item }) => renderAvailableAppsQAFI(item)}
-                  />
-                )}
-              </>
-            )}
-          </View>
-        </View>
-      </View>
-    );
-  };
-  //------------------\\
-
-  // NEWS COMP
-
-  const NEWSCOMP = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        <View style={{ height: hp(15) }}>
-          <View style={{ height: "100%" }}>
-            {loading === true ? (
-              <View
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <ActivityIndicator size="large" color="#FACA4E" />
-              </View>
-            ) : (
-              <>
-                {news?.length === 0 ? (
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
-                    </Text>
-                  </View>
-                ) : (
-                  <FlatList
-                    style={{ flex: 1 }}
-                    showsHorizontalScrollIndicator={false}
-                    data={news}
-                    horizontal
-                    //keyExtractor={item => item.id.toString()}
-                    renderItem={({ item }) => renderAvailableAppsNEWS(item)}
-                  />
-                )}
-              </>
-            )}
-          </View>
-        </View>
-      </View>
-    );
-  };
-  const LETTERC0MP = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        <View style={{ height: hp('18%') }}>
-          <View style={{ height: "100%" }}>
-            {loading === true ? (
-              <View
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <ActivityIndicator size="large" color="#FACA4E" />
-              </View>
-            ) : (
-              <>
-                {letter?.length === 0 ? (
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
-                    </Text>
-                  </View>
-                ) : (
-                  <FlatList
-                    style={{ flex: 1 }}
-                    showsHorizontalScrollIndicator={false}
-                    data={letter}
-                    horizontal
-                    //keyExtractor={item => item.id.toString()}
-                    renderItem={({ item }) => renderAvailableLetter(item)}
-                  />
-                )}
-              </>
-            )}
-          </View>
-        </View>
-      </View>
-    );
-  };
-
   //----------------\\
   //RENDER GEBC
 
@@ -1764,7 +1553,8 @@ paddingTop:6,
                 fontFamily: "Inter-Bold",
               }}
             >
-              Subject:
+             {t('Dashboard.Subject')}
+              {/* Subject: */}
             </Text>
             <View style={{height:'90%',}}>
               <Text
@@ -2124,7 +1914,8 @@ paddingTop:6,
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                      {/* No data available */}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -2183,7 +1974,8 @@ paddingTop:6,
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                      {/* No data available */}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -2283,7 +2075,8 @@ paddingTop:6,
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                      {/* No data available */}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -2347,7 +2140,8 @@ paddingTop:6,
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                      {/* No data available */}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -2411,7 +2205,8 @@ paddingTop:6,
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                      {/* No data available */}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -2475,7 +2270,8 @@ paddingTop:6,
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                      {/* No data available */}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -2537,7 +2333,8 @@ paddingTop:6,
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                      {/* No data available */}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -2597,7 +2394,8 @@ paddingTop:6,
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                      {/* No data available */}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -2656,7 +2454,8 @@ paddingTop:6,
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                      {/* No data available */}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -2715,7 +2514,8 @@ paddingTop:6,
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                      {/* No data available */}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -2774,7 +2574,8 @@ paddingTop:6,
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                      {/* No data available */}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -2833,7 +2634,8 @@ paddingTop:6,
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      No data available
+                      {/* No data available */}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -2895,7 +2697,8 @@ paddingTop:6,
                   }}
                 >
                   <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                    No data available
+                    {/* No data available */}
+                    {t('Dashboard.NoDataavailable')}
                   </Text>
                 </View>
               ) : (

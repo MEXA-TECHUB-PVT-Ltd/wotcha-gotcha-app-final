@@ -65,7 +65,7 @@ export default function UpdatePostLetterEditSignaturePics({
   const [userImage, setUserImage] = useState();
   const [imageUris, setImageUris] = useState([]);
   
-
+  const [imageInfoThumbnail, setimageInfoThumbnail] = useState(null);
   
   const receivedData = route.params?.receivedData;
   console.log("receivedData-----", receivedData.images);
@@ -74,7 +74,7 @@ export default function UpdatePostLetterEditSignaturePics({
   const [imagesWithId, setImagesWithId] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [removedImageIds, setRemovedImageIds] = useState([]);
-  console.log('idddddd oooo bellow', removedImageIds)
+  console.log('iimageInfoThumbnail', imageInfoThumbnail)
 //  useEffect(() => {
 //   if (receivedData?.images) {
 //     // Take only the first three images
@@ -432,6 +432,62 @@ const getFileDetails = (imageUrl) => {
   //   }
   // };
 
+ 
+
+
+
+
+
+
+
+
+
+
+
+// Cinematic se liya test
+  // const handleUploadImages = () => {
+  //   setLoading(true);
+  //   const uri = imageInfoThumbnail.uri;
+  //   const type = imageInfoThumbnail.type;
+  //   const name = imageInfoThumbnail.fileName;
+  //   const sourceImage = {uri, type, name};
+  //   console.log('Source Image', sourceImage);
+  //   const dataImage = new FormData();
+  //   dataImage.append('file', sourceImage);
+  //   dataImage.append('upload_preset', UPLOAD_PRESET); // Use your Cloudinary upload preset
+  //   dataImage.append('cloud_name', CLOUD_NAME); // Use your Cloudinary cloud name
+ 
+  //   fetch(CLOUDINARY_URL, {
+  //     method: 'POST',
+  //     body: dataImage,
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'multipart/form-data',
+  //     },
+  //   })
+  //     .then(res => res.json())
+  //     .then(data => {
+      
+  //       //uploadVideo(data.url)
+  //       //uploadXpiVideo(data.url);
+      
+       
+  //         createLetterImageone(data.url);
+       
+  //       console.log('Image Url imageInfoThumbnail', data);
+        
+  //     })
+  //     .catch(err => {
+  //       setLoading(false);
+  //       console.log('Error While Uploading Video', err);
+  //     });
+  // };
+
+
+
+
+
+
 
   const handleUploadImages = async (imageArray) => {
     console.log("ImageArray", imageArray);
@@ -485,17 +541,20 @@ const getFileDetails = (imageUrl) => {
 //  const oldImageIds = removedImageIds.length > 0 ? removedImageIds : undefined;
 
 //  // Call the appropriate function based on conditions
-//  if (oldImageIds) {
-//    createLetterImage(imageUrls, oldImageIds);
-//  } else if (removedImageIds.length === 0) {
-//    createLetterImageone(imageUrls);
-//  }
+ if (oldImageIds) {
+   createLetterImage(imageUrls, oldImageIds);
+ } else if (removedImageIds.length === 0) {
+   createLetterImageone(imageUrls);
+ }
+
+
+
   // Call the appropriate function based on conditions
-  if (removedImageIds.length > 0) {
-    createLetterImage(imageUrls, removedImageIds);
-  } else {
-    createLetterImageone(imageUrls);
-  }
+  // if (removedImageIds.length > 0) {
+  //   createLetterImage(imageUrls, removedImageIds);
+  // } else {
+  //   createLetterImageone(imageUrls);
+  // }
 
 
 
@@ -1083,11 +1142,13 @@ const getFileDetails = (imageUrl) => {
       response => {
         // console.log('image here', response);
         if (!response.didCancel && response.assets && response.assets.length > 0) {
-          const newImageUri = response.assets[0].uri;
+          const newImageUri = response.assets[0];
+          // setimageInfoThumbnail(newImageUri)
           console.log('image here', newImageUri);
           if (selectedIndex !== null) {
             updateImageUris(newImageUri, selectedIndex);
           } else if (imageUris.length < 3) {
+            setimageInfoThumbnail(newImageUri)
             addImageUri(newImageUri);
           } else {
             handleUpdatePasswordExceedsAlert();

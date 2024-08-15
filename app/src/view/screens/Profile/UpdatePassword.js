@@ -42,13 +42,14 @@ import User from '../../../assets/svg/User.svg';
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
 import Headers from '../../../assets/Custom/Headers';
 import { base_url } from '../../../../../baseUrl';
+import { useTranslation } from 'react-i18next';
 LogBox.ignoreAllLogs();
 
 const UpdatePassword = ({navigation}) => {
   const [oldPasswordAccount, setPasswordAccount] = useState('');
   const [userId, setUserId] = useState('');
   const [authToken, setAuthToken] = useState('');
-
+  const { t } = useTranslation(); 
   const isFocused = useIsFocused();
 
  
@@ -400,13 +401,13 @@ const UpdatePassword = ({navigation}) => {
           showBackIcon={true}
           onPress={() => navigation.goBack()}
           showText={true}
-          text={'Update Password'}
+          text={t('Settings.UpdatePassword')}
         />
       </View>
       <View style={{marginTop: hp(5),  alignItems:'center'}}>
         <TextInput
           mode="outlined"
-          label="Old Password"
+          label={t('UpdatePassword.OldPassword')}
           value={OldPassword}
           onChangeText={text => setOldPassword(text)}
           style={styles.ti}
@@ -444,7 +445,7 @@ const UpdatePassword = ({navigation}) => {
               styles.txt,
               {color: oldPassword_ShowPassword ? '#646464' : '#FACA4E'},
             ]}>
-            {oldPassword_ShowPassword ? 'Show' : 'Hide'}
+            {oldPassword_ShowPassword ? t('signin.Show') : t('signin.Hide')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -452,7 +453,7 @@ const UpdatePassword = ({navigation}) => {
       <View style={{ alignItems:'center'}}>
         <TextInput
           mode="outlined"
-          label="New Password"
+          label={t('UpdatePassword.NewPassword')}
           value={signin_pass}
           onChangeText={text => setsignin_pass(text)}
           style={styles.ti}
@@ -488,7 +489,7 @@ const UpdatePassword = ({navigation}) => {
               styles.txt,
               {color: signin_ShowPassword ? '#646464' : '#FACA4E'},
             ]}>
-            {signin_ShowPassword ? 'Show' : 'Hide'}
+            {signin_ShowPassword ? t('signin.Show') : t('signin.Hide')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -496,7 +497,7 @@ const UpdatePassword = ({navigation}) => {
       <View style={{ alignItems:'center'}}>
         <TextInput
           mode="outlined"
-          label="Confirm Password"
+          label={t('UpdatePassword.ConfirmPassword')}
           value={confirm}
           onChangeText={text => setconfirm_pass(text)}
           style={styles.ti}
@@ -538,14 +539,14 @@ const UpdatePassword = ({navigation}) => {
               styles.txt,
               {color: signin_ConfirmShowPassword ? '#646464' : '#FACA4E'},
             ]}>
-            {signin_ConfirmShowPassword ? 'Show' : 'Hide'}
+            {signin_ConfirmShowPassword ? t('signin.Show') : t('signin.Hide')}
           </Text>
         </TouchableOpacity>
       </View>
 
       <View style={{marginTop: '90%', alignSelf: 'center'}}>
         <CustomButton
-          title="Update"
+          title={t('UpdatePassword.Update')}
           // load={loading}
           // checkdisable={inn == '' && cm == '' ? true : false}
           customClick={() => {
@@ -687,7 +688,7 @@ const styles = StyleSheet.create({
     width: '86%',
     backgroundColor: 'white',
     fontSize: wp(4),
-    paddingLeft: '2%',
+    paddingLeft: '.5%',
     borderRadius: 10,
   },
   v1: {
