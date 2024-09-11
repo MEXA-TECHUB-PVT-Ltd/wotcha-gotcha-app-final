@@ -13,58 +13,32 @@ import {
 } from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import Entypo from 'react-native-vector-icons/Entypo';
-
-import {Button, Divider, TextInput} from 'react-native-paper';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import PlusPost from '../../../assets/svg/PlusPost.svg';
-import Approved from '../../../assets/svg/Approved.svg';
-
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-
-import Back from '../../../assets/svg/back.svg';
 import {appImages} from '../../../assets/utilities/index';
-import Slider from '@react-native-community/slider';
-import VolumeUp from '../../../assets/svg/VolumeUp.svg';
-import Like from '../../../assets/svg/Like.svg';
-import UnLike from '../../../assets/svg/Unlike.svg';
-import Comment from '../../../assets/svg/Comment.svg';
-import Send from '../../../assets/svg/Send.svg';
-import Download from '../../../assets/svg/Download.svg';
 import CustomButton from '../../../assets/Custom/Custom_Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PublicLetter from '../../../assets/svg/PublicLetter.svg';
 import PrivateLetter from '../../../assets/svg/PrivateLetter.svg';
-import Share from 'react-native-share';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-
-import Fontiso from 'react-native-vector-icons/Fontisto';
-
-import IonIcons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import {SelectCountry, Dropdown} from 'react-native-element-dropdown';
-import CPaperInput from '../../../assets/Custom/CPaperInput';
 import Headers from '../../../assets/Custom/Headers';
-import SignatureCapture from 'react-native-signature-capture';
 import CustomSnackbar from './../../../assets/Custom/CustomSnackBar';
 import { base_url } from '../../../../../baseUrl';
 import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
+import { useTranslation } from 'react-i18next';
+
 
 export default function PostLetterSignature({navigation, route}) {
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
+
   const [selectedItem, setSelectedItem] = useState('');
-  const [contact, setContact] = useState('');
-  const [email, setEmail] = useState('');
   const [authToken, setAuthToken] = useState('');
   const [userId, setUserId] = useState('');
-
+  const { t } = useTranslation();
   const [imageInfo, setImageInfo] = useState(null);
 
   const [videoInfo, setVideoInfo] = useState(null);
@@ -73,7 +47,6 @@ export default function PostLetterSignature({navigation, route}) {
 
   const [videoUrl, setVideoUrl] = useState(false);
 
-  const [colorSelect, setColorSelect] = useState('');
 
   const [snackbarVisible, setsnackbarVisible] = useState(false);
 
@@ -102,120 +75,61 @@ export default function PostLetterSignature({navigation, route}) {
 
   const ref_RBSheetCameraCanvas = useRef(null);
 
-  const [postLetter, setPostLetter] = useState('');
   const [letterType, setLetterTypes] = useState('Public');
 
   const [imageUri, setImageUri] = useState(null);
   const [videoUri, setVideoUri] = useState(null);
   const [userImage, setUserImage] = useState();
   const [imageUris, setImageUris] = useState([]);
+  const [Username, setUserName] = useState('');
 
   useEffect(() => {
-    // Make the API request and update the 'data' state
     fetchVideos();
   }, []);
 
   const fetchVideos = async () => {
-    // Simulate loading
     setLoading(true);
 
     await getUserID();
-    // Fetch data one by one
-    // Once all data is fetched, set loading to false
     setLoading(false);
   };
 
-  /* const getUserID = async () => {
-
-    console.log("Id's");
-    try {
-      const result = await AsyncStorage.getItem('userId ');
-      if (result !== null) {
-        setUserId(result);
-        console.log('user id retrieved:', result);
-      }
-      const result3 = await AsyncStorage.getItem('authToken ');
-      if (result3 !== null) {
-        setAuthToken(result3);
-        console.log('user token retrieved:', result3);
-      }
-    } catch (error) {
-      // Handle errors here
-      console.error('Error retrieving user ID:', error);
-    }
-
-    try {
-      const result = await AsyncStorage.getItem('userName');
-      if (result !== null) {
-        setName(result);
-        console.log('user id retrieved:', result);
-      }
-    } catch (error) {
-      // Handle errors here
-      console.error('Error retrieving user ID:', error);
-    }
-  }; */
-
-  //---------------------------------------------------\\
 
   const getUserID = async () => {
-    console.log("Id's");
+
     try {
       const result = await AsyncStorage.getItem('userId ');
       if (result !== null) {
         setUserId(result);
-        console.log('user id retrieved:', result);
-
         userToken(result);
+        userUserName();
       }
-
-      /*  const result3 = await AsyncStorage.getItem('authToken ');
-      if (result3 !== null) {
-        setAuthToken(result3);
-        await fetchCategory(result3);
-
-        console.log('user id retrieved:', result);
-      } */
-
-      /* const  userImage = await AsyncStorage.getItem('userImage');
-      if (result3 !== null) {
-        setAuthToken(result3);
-        await fetchCategory(result3);
-
-        console.log('user id retrieved:', result);
-      } */
     } catch (error) {
       // Handle errors here
       console.error('Error retrieving user ID:', error);
     }
 
-    /*  try {
-      const result = await AsyncStorage.getItem('userName');
-      if (result !== null) {
-        setName(result);
-        console.log('user id retrieved:', result);
-      }
-    } catch (error) {
-      // Handle errors here
-      console.error('Error retrieving user ID:', error);
-    } */
-
-    //await authTokenAndId()
   };
-
-  //--------------------------------\\
 
   const userToken = async id => {
     try {
       const result3 = await AsyncStorage.getItem('authToken ');
       if (result3 !== null) {
         setAuthToken(result3);
-        //await fetchCategory(result3, id);
         authTokenAndId(id, result3);
       }
     } catch (error) {
-      // Handle errors here
       console.error('Error retrieving user ID:', error);
+    }
+  };
+
+  const userUserName = async id => {
+    try {
+      const result3 = await AsyncStorage.getItem('userName');
+      if (result3 !== null) {
+        setUserName(result3);  
+      }
+    } catch (error) {
     }
   };
 
@@ -224,8 +138,6 @@ export default function PostLetterSignature({navigation, route}) {
   };
 
   const fetchUser = async (id, tokens) => {
-    console.log('USER', id);
-    console.log('TOKEN', tokens);
     const token = tokens;
 
     try {
@@ -241,9 +153,6 @@ export default function PostLetterSignature({navigation, route}) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('IMAGE', data.user.image);
-
-        // Use the data from the API to set the categories
         setUserImage(data.user.image);
       } else {
         console.error(
@@ -275,39 +184,6 @@ export default function PostLetterSignature({navigation, route}) {
   const receivedDataSignatureId = route.params?.signatureId;
   const receivedDataSignatureCreatedAt = route.params?.signatureCreatedAt;
 
-  console.log('Signature created received', receivedDataLetterType);
-  const handleFocus = () => {
-    setIsTextInputActive(true);
-  };
-
-  const handleBlur = () => {
-    setIsTextInputActive(false);
-  };
-
-  const handleFocusAddress = () => {
-    setIsTextInputActiveAddress(true);
-  };
-
-  const handleBlurAddress = () => {
-    setIsTextInputActiveAddress(false);
-  };
-
-  const handleFocusContact = () => {
-    setIsTextInputActiveContact(true);
-  };
-
-  const handleBlurContact = () => {
-    setIsTextInputActiveContact(false);
-  };
-
-  const handleFocusEmail = () => {
-    setIsTextInputActiveEmail(true);
-  };
-
-  const handleBlurEmail = () => {
-    setIsTextInputActiveEmail(false);
-  };
-
   const takePhotoFromCamera = async value => {
     ref_RBSheetCameraCanvas.current.close();
     setSelectedItem(value);
@@ -317,7 +193,6 @@ export default function PostLetterSignature({navigation, route}) {
         // videoQuality: 'medium',
       },
       response => {
-        console.log('image here', response);
         if (
           !response.didCancel &&
           response.assets &&
@@ -345,16 +220,7 @@ export default function PostLetterSignature({navigation, route}) {
       }
     });
 
-    /* setSelectedItem(value);
-    launchImageLibrary({mediaType: 'photo'}, response => {
-      console.log('image here', response);
-      if (!response.didCancel && response.assets.length > 0) {
-        setImageUri(response.assets[0].uri);
-      }
-      console.log('response', imageUri);
-
-      //ref_RBSheetCamera.current.close();
-    }); */
+ 
   };
 
   const updateImageUris = newImageUri => {
@@ -376,17 +242,17 @@ export default function PostLetterSignature({navigation, route}) {
         videoQuality: 'medium',
       },
       response => {
-        console.log('image here', response);
+
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setVideoUri(response.assets[0].uri);
-            console.log('response', response.assets[0].uri);
+         
             setVideoInfo(response.assets[0]);
             ref_RBSheetVideo.current.close();
           } else if (response.uri) {
             // Handle the case when no assets are present (e.g., for videos)
             setVideoUri(response.uri);
-            console.log('response', response.uri);
+        
             ref_RBSheetVideo.current.close();
           }
         }
@@ -399,20 +265,18 @@ export default function PostLetterSignature({navigation, route}) {
 
     setSelectedItem(value);
     launchImageLibrary({mediaType: 'Video'}, response => {
-      console.log('image here', response);
+
       if (!response.didCancel && response.assets.length > 0) {
-        console.log('Response', response.assets[0]);
+    
         setVideoUri(response.assets[0].uri);
         setVideoInfo(response.assets[0]);
       }
 
-      console.log('response', imageInfo);
 
       ref_RBSheetVideo.current.close();
     });
   };
 
-  // upload multiple images
 
   const checkUpload = () => {
     if (imageUris.length === 0 && videoInfo === null) {
@@ -427,7 +291,7 @@ export default function PostLetterSignature({navigation, route}) {
   };
 
   const handleUploadImages = async imageArray => {
-    console.log('ImageArray', imageArray);
+
     setLoading(true);
 
     const uploadPromises = imageArray.map(async imageInfo => {
@@ -459,29 +323,18 @@ export default function PostLetterSignature({navigation, route}) {
 
         const data = await response.json();
         console.log('Image Url', data.url);
-
-        // Assuming you have a function like uploadXpiVideo, you can call it here
-        //uploadXpiVideo(data.url, data);
-
         return data.url;
       } catch (error) {
         setLoading(false);
-        console.log('Error While Uploading Image', error);
         throw error; // Rethrow the error so that the Promise.all catches it
       }
     });
 
     try {
       const imageUrls = await Promise.all(uploadPromises);
-      console.log('All images uploaded successfully:', imageUrls);
 
       createLetterImage(imageUrls);
 
-      //sellItem(imageUrls);
-
-      //handleUploadVideo(imageUrls);
-
-      // Do something with the imageUrls array, e.g., store it in state or send it to the server
     } catch (error) {
       console.log('Error uploading images:', error);
     } finally {
@@ -513,11 +366,7 @@ export default function PostLetterSignature({navigation, route}) {
       .then(res => res.json())
       .then(data => {
         setVideoUrl(data.url); // Store the Cloudinary video URL in your state
-        //uploadVideo(data.url)
-
         createLetterVideo(data.url);
-        //uploadXpiVideo(data.url);
-        console.log(data);
       })
       .catch(err => {
         //Alert.alert('Error While Uploading Video');
@@ -527,28 +376,7 @@ export default function PostLetterSignature({navigation, route}) {
   };
 
   const createLetterImage = async image => {
-    // console.log('Image Uri of encoded', data);
-    // console.log('image', image);
-    // console.log('video', video);
-    // console.log('user_id', userId);
-    // console.log('post_type', 'public');
-    // console.log('receiver_type', 'leader');
-    // console.log('disc_category', receivedDataName);
-    // console.log('name', receivedDataName);
-    // console.log('address', receivedDatAddress);
-    // console.log('contact_no', receivedDataContactNumber);
-    // console.log('subject_place', receivedDatasubjectOfLetter);
-    // console.log('post_date', receivedDataSignatureCreatedAt);
-    // console.log('greetings', receivedDataGreetingsTitle);
-    // console.log('introduction', receivedDataEmail);
-    // console.log('body', receivedDatapostLetter);
-    // console.log('form_of_appeal', receivedDataAppealOfLetter);
-    // console.log('signature_id', receivedDataSignatureId);
-    // console.log('paid_status', false);
-
     const token = authToken;
-    console.log('AUTH TOKEN', token);
-
     const apiUrl = base_url + 'letter/createLetter';
 
     const requestData = {
@@ -587,18 +415,12 @@ export default function PostLetterSignature({navigation, route}) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('API Response:', data);
-
         setLoading(false);
-
         handleUpdatePassword();
 
-        // Handle the response data as needed
       } else {
         setLoading(false);
 
-        console.error('Failed call api:', response);
-        // Handle the error
       }
     } catch (error) {
       console.error('API Request Error:', error);
@@ -609,27 +431,8 @@ export default function PostLetterSignature({navigation, route}) {
   };
 
   const createLetterVideo = async video => {
-    // console.log('Image Uri of encoded', data);
-    // console.log('image', image);
-    // console.log('video', video);
-    // console.log('user_id', userId);
-    // console.log('post_type', 'public');
-    // console.log('receiver_type', 'leader');
-    // console.log('disc_category', receivedDataName);
-    // console.log('name', receivedDataName);
-    // console.log('address', receivedDatAddress);
-    // console.log('contact_no', receivedDataContactNumber);
-    // console.log('subject_place', receivedDatasubjectOfLetter);
-    // console.log('post_date', receivedDataSignatureCreatedAt);
-    // console.log('greetings', receivedDataGreetingsTitle);
-    // console.log('introduction', receivedDataEmail);
-    // console.log('body', receivedDatapostLetter);
-    // console.log('form_of_appeal', receivedDataAppealOfLetter);
-    // console.log('signature_id', receivedDataSignatureId);
-    // console.log('paid_status', false);
-
+   
     const token = authToken;
-    console.log('AUTH TOKEN', token);
 
     const apiUrl = base_url + 'letter/createLetter';
 
@@ -669,7 +472,6 @@ export default function PostLetterSignature({navigation, route}) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('API Response:', data);
 
         setLoading(false);
 
@@ -678,26 +480,15 @@ export default function PostLetterSignature({navigation, route}) {
         // Handle the response data as needed
       } else {
         setLoading(false);
-
-        console.error('Failed call api:', response);
-        // Handle the error
       }
     } catch (error) {
       console.error('API Request Error:', error);
       setLoading(false);
-
-      // Handle the error
     }
   };
 
   const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setsnackbarVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisible(false);
       navigation.replace('OpenLetterScreen');
@@ -709,13 +500,7 @@ export default function PostLetterSignature({navigation, route}) {
   };
 
   const handleUpdatePasswordAlert = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setsnackbarVisibleALert(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisibleALert(false);
     }, 3000);
@@ -726,13 +511,7 @@ export default function PostLetterSignature({navigation, route}) {
   };
 
   const handleUpdatePasswordExceedsAlert = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setsnackbarVisibleExceedsALert(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisibleExceedsALert(false);
     }, 3000);
@@ -743,13 +522,7 @@ export default function PostLetterSignature({navigation, route}) {
   };
 
   const handleUpdatePasswordLimitAlert = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setsnackbarVisibleLimitALert(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisibleLimitALert(false);
       limitAlert();
@@ -769,14 +542,6 @@ export default function PostLetterSignature({navigation, route}) {
     setVideoInfo(null);
   };
 
-  const searches = [
-    {id: 1, title: 'Subject'},
-    {id: 2, title: 'Subject'},
-    {id: 3, title: 'Greetings'},
-    {id: 4, title: 'Introduction'},
-    {id: 5, title: 'Greetings'},
-  ];
-
   const setLetterType = value => {
     setLetterTypes(value);
     ref_RBSheetCamera.current.close();
@@ -788,33 +553,6 @@ export default function PostLetterSignature({navigation, route}) {
     setLetterType('Private Letter');
 
     ref_RBSendOffer.current.open();
-  };
-
-  const renderSearches = item => {
-    console.log('Items', item);
-    const isSelected = selectedItemId === item.id;
-
-    return (
-      <TouchableOpacity
-        style={[
-          styles.searchesDetails,
-          {
-            // backgroundColor: isSelected ? '#FACA4E' : null,
-          },
-        ]}
-        onPress={() => {
-          setSelectedItemId(item.id);
-          console.log('Selected item:', item.title);
-        }}>
-        <Text
-          style={[
-            styles.textSearchDetails,
-            {color: isSelected ? '#FACA4E' : '#939393'},
-          ]}>
-          {item.title}
-        </Text>
-      </TouchableOpacity>
-    );
   };
 
 
@@ -830,7 +568,8 @@ export default function PostLetterSignature({navigation, route}) {
         onPress={() => handleImageChange(index)}
       >
         <Text style={{ fontFamily: "Inter-Medium", fontSize: 10 }}>
-          Change Pic
+        {t('ChangePic')}
+          {/* Change Pic */}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -854,7 +593,7 @@ export default function PostLetterSignature({navigation, route}) {
         <Headers
           showBackIcon={true}
           showText={true}
-          text={'Post Letter'}
+          text={t('PostLetter')}
           onPress={() => navigation.goBack()}
         />
       </View>
@@ -903,7 +642,16 @@ export default function PostLetterSignature({navigation, route}) {
           </View>
         )}
 
-        <TouchableOpacity
+<Text
+            style={{
+              color: '#333333',
+              marginLeft: wp(3),
+              fontFamily: 'Inter',
+              fontWeight: 'bold',
+            }}>
+            {Username}
+          </Text>
+        {/* <TouchableOpacity
           onPress={() => ref_RBSheetCamera.current.open()}
           style={{
             flexDirection: 'row',
@@ -921,7 +669,7 @@ export default function PostLetterSignature({navigation, route}) {
           </Text>
 
           <Ionicons name="chevron-down" size={21} color="#FACA4E" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       {videoInfo == null ? (
@@ -948,7 +696,8 @@ export default function PostLetterSignature({navigation, route}) {
               fontSize: hp(1.5),
               color: '#939393',
             }}>
-            You can maximum 3 images or videos
+              {t('maximum3imagesorvideos')}
+            {/* You can maximum 3 images or videos */}
           </Text>
         </TouchableOpacity>
       ) : null}
@@ -1040,7 +789,9 @@ export default function PostLetterSignature({navigation, route}) {
               fontSize: hp(1.5),
               color: '#939393',
             }}>
-            You can maximum upload 1 video
+              {t('maximumupload1video')}
+              
+            {/* You can maximum upload 1 video */}
           </Text>
         </TouchableOpacity>
       ) : null}
@@ -1058,58 +809,15 @@ export default function PostLetterSignature({navigation, route}) {
         </View>
       )}
 
-      {/* {imageUri !== null ? (
-        <View
-          style={{
-            marginTop: hp(5),
-            height: hp(35),
-            borderRadius: wp(3),
-            marginHorizontal: wp(20),
-          }}>
-          {imageUri !== null && (
-            <Image
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                zIndex: 1, // Ensure it's on top of other elements
-                flex: 1,
-                width: '100%',
-                height: '100%',
-                borderRadius: wp(3),
-                resizeMode: 'contain',
-              }}
-              source={{uri: imageUri}}
-            />
-          )}
-          {imageUri == null && (
-            <Image
-              style={{
-                flex: 1,
-                width: '100%',
-                height: '100%',
-                borderRadius: wp(3),
-                resizeMode: 'stretch',
-                zIndex: 0, // Ensure it's below other elements when no image
-              }}
-              source={appImages.updatePics}
-            />
-          )}
-        </View>
-      ) : null}  */}
+
 
       <View style={{flex: 1, justifyContent: 'flex-end'}}>
         <View style={{marginTop: '25%', alignSelf: 'center'}}>
           <CustomButton
-            title="Upload"
-            // load={loading}
-            // checkdisable={inn == '' && cm == '' ? true : false}
+            title={t('Upload')}
             customClick={() => {
-              //handleUpdatePassword();
               checkUpload();
-              //handleUpdatePassword()
-              //navigation.navigate('PostLetterEditSignature');
-              //navigation.navigate('Profile_image');
+  
             }}
           />
         </View>
@@ -1147,7 +855,8 @@ export default function PostLetterSignature({navigation, route}) {
               color: '#303030',
               fontSize: hp(2.3),
             }}>
-            Select Letter Type
+              {t('SelectLetterType')}
+            
           </Text>
           <TouchableOpacity>
             <Ionicons
@@ -1179,7 +888,8 @@ export default function PostLetterSignature({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Public letter
+                {t('PublicLetter')}
+              
             </Text>
           </TouchableOpacity>
 
@@ -1207,7 +917,8 @@ export default function PostLetterSignature({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Private Letter
+                {t('PrivateLetter')}
+              
             </Text>
           </TouchableOpacity>
         </View>
@@ -1239,7 +950,7 @@ export default function PostLetterSignature({navigation, route}) {
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -1270,7 +981,7 @@ export default function PostLetterSignature({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -1286,7 +997,7 @@ export default function PostLetterSignature({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
@@ -1328,7 +1039,8 @@ export default function PostLetterSignature({navigation, route}) {
               fontFamily: 'Inter-Bold',
               //fontWeight: 'bold',
             }}>
-            Unable To Post!
+              {t('UnableToPost')}
+            {/* Unable To Post! */}
           </Text>
 
           <Text
@@ -1342,7 +1054,8 @@ export default function PostLetterSignature({navigation, route}) {
               fontFamily: 'Inter-Regular',
               //fontWeight: 'bold',
             }}>
-            Upgrade for private letter posting and a{'\n'}seamless experience
+               {t('Upgradeforprivateletter')}
+            {/* Upgrade for private letter posting and a{'\n'}seamless experience */}
           </Text>
 
           <View style={{marginHorizontal: wp(10)}}>
@@ -1369,7 +1082,8 @@ export default function PostLetterSignature({navigation, route}) {
                 fontFamily: 'Inter-Regular',
                 //fontWeight: 'bold',
               }}>
-              Maybe later
+                {t('MaybeLater')}
+              {/* Maybe later */}
             </Text>
           </TouchableOpacity>
         </View>
@@ -1401,7 +1115,7 @@ export default function PostLetterSignature({navigation, route}) {
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetVideo.current.close()}>
             <Ionicons
               name="close"
@@ -1432,7 +1146,7 @@ export default function PostLetterSignature({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -1447,35 +1161,35 @@ export default function PostLetterSignature({navigation, route}) {
               name="image"
               size={25}
             />
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
       <CustomSnackbar
-        message={'success'}
-        messageDescription={'Letter Posted Successfully'}
+        message={t('Success')}
+        messageDescription={t('LetterPostedSuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
 
       <CustomSnackbar
-        message={'Alert!'}
-        messageDescription={'You can maximum upload 3 images or a video'}
+        message={t('Alert!')}
+        messageDescription={t('maximumupload3imagesorvideo')}
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackbarVisibleALert}
       />
 
       <CustomSnackbar
-        message={'Alert!'}
-        messageDescription={'Image Limit Exceeds'}
+        message={t('Alert!')}
+        messageDescription={t('ImageLimitExceeds')} 
         onDismiss={dismissSnackbarExceedsAlert} // Make sure this function is defined
         visible={snackbarVisibleExceedsALert}
       />
 
       <CustomSnackbar
-        message={'Alert!'}
-        messageDescription={'You can either upload three images or one video!'}
+        message={t('Alert!')} 
+        messageDescription={t('eitheruploadthreeimagesoronevideo')}
         onDismiss={dismissSnackbarLimitAlert} // Make sure this function is defined
         visible={snackbarVisibleLimitALert}
       />

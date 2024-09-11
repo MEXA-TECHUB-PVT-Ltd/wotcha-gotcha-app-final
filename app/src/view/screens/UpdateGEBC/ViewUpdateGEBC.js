@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 import {appImages} from '../../../assets/utilities/index';
-
+import { useTranslation } from 'react-i18next';
 import EditItem from '../../../assets/svg/UpdateItem.svg';
 
 import Delete from '../../../assets/svg/Delete.svg';
@@ -68,7 +68,7 @@ export default function ViewUpdateGEBC({navigation, route}) {
   const [showReply, setShowReply] = useState(false);
 
   const [loading, setLoading] = useState(false);
-
+  const { t } = useTranslation();
   const [userId, setUserId] = useState('');
 
   const [progress, setProgress] = useState(0);
@@ -361,7 +361,8 @@ export default function ViewUpdateGEBC({navigation, route}) {
               color: '#303030',
               fontSize: hp(2.3),
             }}>
-            Select an option
+              {t('SelectAnOption')} 
+            {/* Select an option */}
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <IonIcons
@@ -393,7 +394,8 @@ export default function ViewUpdateGEBC({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Update EBC
+                {t('UpdateEBC')} 
+              {/* Update EBC */}
             </Text>
           </TouchableOpacity>
 
@@ -421,15 +423,16 @@ export default function ViewUpdateGEBC({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Delete EBC
+                {t('DeleteEBC')}
+              
             </Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
       <CustomSnackbar
-        message={'success'}
-        messageDescription={'EBC deleted successfully'}
+        message={t('Success')}
+        messageDescription={t('EBCdeletedsuccessfully')}
         onDismiss={dismissDeleteSnackbar} // Make sure this function is defined
         visible={snackbarDeleteVisible}
       />

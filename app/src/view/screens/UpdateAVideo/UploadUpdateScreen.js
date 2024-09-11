@@ -35,7 +35,7 @@ import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
 import axios from 'axios';
 import cloudinary from 'cloudinary-core';
 import Share from 'react-native-share';
-
+import { useTranslation } from 'react-i18next';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP,
@@ -64,7 +64,7 @@ const Category = [
 
 export default function UploadUpdateScreen({navigation, route}) {
   const [selectedItem, setSelectedItem] = useState('');
-
+  const { t } = useTranslation();
   const [selectedItemThumbnial, setSelectedItemThumbnial] = useState('');
 
   const [profileName, setProfileName] = useState('');
@@ -811,7 +811,7 @@ console.log('category id comes from video', categoryId)
           <IonIcons name={'chevron-back'} color={'#282828'} size={25} />
         </TouchableOpacity>
 
-        <Text style={styles.headerText}>Upload Video</Text>
+        <Text style={styles.headerText}>{t('UploadVideo')}</Text>
       </View>
 
       <ScrollView
@@ -870,7 +870,8 @@ console.log('category id comes from video', categoryId)
                   color: '#232323',
                   fontWeight: '700',
                 }}>
-                Change Video
+                  {t('ChangeVideo')}
+                {/* Change Video */}
               </Text>
             </TouchableOpacity>
             {imageInfo == null && (
@@ -936,7 +937,8 @@ console.log('category id comes from video', categoryId)
                   color: '#232323',
                   fontWeight: '700',
                 }}>
-                Upload Thumbnail
+                  {t('UploadThumbnail')}
+                {/* Upload Thumbnail */}
               </Text>
             </TouchableOpacity>
             {thumbnailImageUri == null && null}
@@ -946,7 +948,7 @@ console.log('category id comes from video', categoryId)
         <View style={{marginRight: wp(1)}}>
           <TextInput
             mode="outlined"
-            label="Video"
+            label={t('Video')}
             outlineStyle={{borderRadius: wp(3)}}
             onChangeText={text => setProfileName(text)}
             style={[styles.ti, {borderRadius: wp(10)}]}
@@ -996,7 +998,7 @@ console.log('category id comes from video', categoryId)
             maxHeight={200}
             labelField="name"
             valueField="id"
-            placeholder={"Select Sub Category"}
+            placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
@@ -1027,7 +1029,7 @@ console.log('category id comes from video', categoryId)
           }}>
           <CPaperInput
             multiline={true}
-            placeholder={'Description'}
+            placeholder={t('Description')}
             placeholderTextColor="#121420"
             value={description}
             onChangeText={text => setDescription(text)}
@@ -1045,27 +1047,27 @@ console.log('category id comes from video', categoryId)
             alignItems: 'center',
           }}>
               <CustomLoaderButton
-              title={"Upload"}
+              title={t('Upload')}
               load={loading}
               customClick={() => {
                 let hasError = false;
 
         
                 if (!profileName) {
-                  setProfileNameError("Title is required");
+                  setProfileNameError(t('Titleisrequired'));
                   hasError = true;
                 } else {
                   setProfileNameError("");
                 }
 
                 if (!subcategory) {
-                  setSubcategoryError("Subcategory is required");
+                  setSubcategoryError(t('Subcategoryisrequired'));
                   hasError = true;
                 } else {
                   setSubcategoryError("");
                 }
                 if (!description) {
-                  setDescriptionError("description is required");
+                  setDescriptionError(t('Descriptionisrequired'));
                   hasError = true;
                 } else {
                   setDescriptionError("");
@@ -1118,7 +1120,7 @@ console.log('category id comes from video', categoryId)
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -1149,7 +1151,7 @@ console.log('category id comes from video', categoryId)
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -1165,7 +1167,7 @@ console.log('category id comes from video', categoryId)
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
@@ -1196,7 +1198,7 @@ console.log('category id comes from video', categoryId)
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity
             onPress={() => ref_RBSheetThumbnail.current.close()}>
             <Ionicons
@@ -1228,7 +1230,7 @@ console.log('category id comes from video', categoryId)
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -1246,19 +1248,19 @@ console.log('category id comes from video', categoryId)
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
       <CustomSnackbar
-        message={'Alert!'}
-        messageDescription={'Kindly Fill All Fields'}
+        message={t('Alert!')}
+        messageDescription={t('Kindly Fill All Fields')}
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackbarVisibleAlert}
       />
       <CustomSnackbar
-        message={'success'}
-        messageDescription={'Upload Video successfully'}
+        message={t('Success')}
+        messageDescription={t('UploadVideosuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />

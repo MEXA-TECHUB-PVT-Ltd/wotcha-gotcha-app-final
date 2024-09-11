@@ -914,7 +914,7 @@ import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
 import axios from 'axios';
 import cloudinary from 'cloudinary-core';
 import Share from 'react-native-share';
-
+import { useTranslation } from 'react-i18next';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP,
@@ -949,7 +949,7 @@ export default function UpdateContent({navigation, route}) {
   const [selectedItem, setSelectedItem] = useState('');
 
   const [selectedItemThumbnial, setSelectedItemThumbnial] = useState('');
-
+  const { t } = useTranslation();
   const [profileName, setProfileName] = useState('');
 
   const [loading, setLoading] = useState(false);
@@ -1736,7 +1736,7 @@ export default function UpdateContent({navigation, route}) {
           <IonIcons name={'chevron-back'} color={'#282828'} size={25} />
         </TouchableOpacity>
 
-        <Text style={styles.headerText}>Update Video</Text>
+        <Text style={styles.headerText}>{t('UpdateVideo')}</Text>
       </View>
 
       <ScrollView
@@ -1795,7 +1795,8 @@ export default function UpdateContent({navigation, route}) {
                   color: '#232323',
                   fontWeight: '700',
                 }}>
-                Change Video
+                  {t('ChangeVideo')}
+                
               </Text>
             </TouchableOpacity>
             {imageInfo == null && (
@@ -1861,7 +1862,8 @@ export default function UpdateContent({navigation, route}) {
                   color: '#232323',
                   fontWeight: '700',
                 }}>
-                Upload Thumbnail
+                  {t('UploadThumbnail')}
+                
               </Text>
             </TouchableOpacity>
             {thumbnailImageUri == null && null}
@@ -1871,7 +1873,7 @@ export default function UpdateContent({navigation, route}) {
         <View style={{marginRight: wp(2)}}>
           <TextInput
             mode="outlined"
-            label="Video"
+            label={t('Video')}
             value={profileName}
             outlineStyle={{borderRadius: wp(3)}}
             onChangeText={text => setProfileName(text)}
@@ -1920,7 +1922,7 @@ export default function UpdateContent({navigation, route}) {
             maxHeight={200}
             labelField="name"
             valueField="id"
-            placeholder={"Select Sub Category"}
+            placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
@@ -1949,7 +1951,7 @@ export default function UpdateContent({navigation, route}) {
           }}>
           <CPaperInput
             multiline={true}
-            placeholder={'Description'}
+            placeholder={t('Description')}
             placeholderTextColor="#121420"
             value={description}
             onChangeText={text => setDescription(text)}
@@ -1964,7 +1966,7 @@ export default function UpdateContent({navigation, route}) {
             alignItems: 'center',
           }}>
           <CustomButton
-            title={'Update'}
+            title={t('Update')}
             load={false}
             // checkdisable={inn == '' && cm == '' ? true : false}
             customClick={() => {
@@ -2003,7 +2005,7 @@ export default function UpdateContent({navigation, route}) {
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -2034,7 +2036,7 @@ export default function UpdateContent({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -2050,7 +2052,7 @@ export default function UpdateContent({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
@@ -2081,7 +2083,7 @@ export default function UpdateContent({navigation, route}) {
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity
             onPress={() => ref_RBSheetThumbnail.current.close()}>
             <Ionicons
@@ -2113,7 +2115,7 @@ export default function UpdateContent({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -2131,14 +2133,14 @@ export default function UpdateContent({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
       <CustomSnackbar
-        message={'success'}
-        messageDescription={'Update Video successfully'}
+        message={t('Success')}
+        messageDescription={t('UpdateVideoSuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />

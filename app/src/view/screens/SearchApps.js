@@ -67,7 +67,7 @@ export default function SearchApps({navigation}) {
       }));
 
       setData(packageDataArray);
-      setFilteredData(packageDataArray); // Initialize filteredData with all data
+      setFilteredData(packageDataArray);
 
       setLoading(false);
     };

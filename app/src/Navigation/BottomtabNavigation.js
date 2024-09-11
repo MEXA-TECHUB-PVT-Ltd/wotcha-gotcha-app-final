@@ -42,7 +42,7 @@ import FansActive from '../assets/svg/FansActive.svg';
 import TVpromaxActive from '../assets/svg/TVpromaxActive.svg';
 import KidsActive from '../assets/svg/KidsActive.svg';
 import Cinematics from '../view/screens/Cinematics/Cinematics';
-import DashboardTwo from '../view/screens/BottomTab/DashboardTwo';
+// import DashboardTwo from '../view/screens/BottomTab/DashboardTwo';
 import {StripeProvider} from '@stripe/stripe-react-native'
 import Sport from "react-native-vector-icons/MaterialIcons";
 import Sports from '../view/screens/Sports/Sports';
@@ -139,7 +139,7 @@ const BottomtabNavigation = () => {
                   // case 'Home':
                   //   iconComponent = focused ? <HomeActive size={size} color={color} /> : <HomeInActive size={size} color={color} />;
                   //   break;
-                  case 'Mass App':
+                  case 'Mass Apps':
                     iconComponent = focused ? <CategoryActive size={size} color={color} /> : <CategoryInActive size={size} color={color} />;
                     break;
                   case 'Videos Mania':
@@ -148,34 +148,34 @@ const BottomtabNavigation = () => {
                   // case 'DISC':
                   //   iconComponent = focused ? <MailActive size={size} color={color} /> : <MailInActive size={size} color={color} />;
                   //   break;
-                  case 'Pic Tour':
+                  case 'Pic Tours':
                     iconComponent = focused ? <ProfileActive size={size} color={color} /> : <ProfileInActive size={size} color={color} />;
                     break;
-                  case 'Market Zone':
+                  case 'Mondo Market':
                     iconComponent = focused ? <MarketZoneActive size={size} color={color} /> : <MarketZoneInActive size={size} color={color} />;
                     break;
-                  case 'Cinematics':
+                  case 'Cinematix':
                     iconComponent = focused ? <Cinematiceactive size={size} color={color} /> : <Cinematics_svg size={size} color={color} />;
                     break;
-                  case 'Fans-Stars Area':
+                  case 'Fans Stars Zone':
                     iconComponent = focused ? <FansActive size={size} color={color} /> : <Fans size={size} color={color} />;
                     break;
-                  case 'Kids-Vids':
+                  case 'Kid-Vids':
                     iconComponent = focused ? <KidsActive size={size} color={color} /> : <Kids size={size} color={color} />;
                     break;
                   case 'TV ProgMax':
                     iconComponent = focused ? <TVpromaxActive size={size} color={color} /> : <Television size={size} color={color} />;
                     break;
-                  case 'Learning & Hobbies':
+                  case 'Learnings and Hobbies':
                     iconComponent = focused ? <PuzzleActive size={size} color={color} /> : <Puzzle size={size} color={color} />;
                     break;
-                  case 'Sports':
+                  case 'Sports & Sports':
                     iconComponent = focused ? <Sport name="sports-handball" size={size} color='#FACA4E' /> : <Sport name="sports-handball"  size={size} color={color} />;
                     break;
-                  case 'News':
+                  case 'On-News':
                     iconComponent = focused ? <News name="news"  size={size} color='#FACA4E' /> : <News name="news"  size={size} color={color} />;
                     break;
-                  case 'Open Letter':
+                  case 'Open Letters':
                     iconComponent = focused ? <LetterIcon name="newsletter" size={size} color='#FACA4E' /> : <LetterIcon name="newsletter"  size={size} color={color} />;
                     break;
                   case 'QAFI':
@@ -195,31 +195,31 @@ const BottomtabNavigation = () => {
               switch (screen.name) {
                 // case 'Home':
                 //   return <Dashboard />;
-                case 'Mass App':
+                case 'Mass Apps':
                   return <Categories />;
                 case 'Videos Mania':
                   return <Video />;
                 // case 'DISC':
                 //   return <Disc />;
-                case 'Pic Tour':
+                case 'Pic Tours':
                   return <PicTours />;
-                case 'Market Zone':
+                case 'Mondo Market':
                   return <MarketZone />;
-                case 'Cinematics':
+                case 'Cinematix':
                   return <Cinematics />;
-                case 'Fans-Stars Area':
+                case 'Fans Stars Zone':
                   return <Fans_star/>;
-                case 'Kids-Vids':
+                case 'Kid-Vids':
                   return <Kids_vid />;
                 case 'TV ProgMax':
                   return <Tv_Promax />;
-                case 'Learning & Hobbies':
+                case 'Learnings and Hobbies':
                   return <Learning />;
-                case 'Sports':
+                case 'Sports & Sports':
                   return <Sports />;
-                case 'News':
+                case 'On-News':
                   return <NewsScreen />;
-                case 'Open Letter':
+                case 'Open Letters':
                   return <OpenLetterScreen />;
                 case 'QAFI':
                   return <QAFIScreen/>;

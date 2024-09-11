@@ -18,11 +18,7 @@ import {
   Pressable,
   StatusBar,
 } from "react-native";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import Entypo from "react-native-vector-icons/Entypo";
-
 import { appImages } from "../../../assets/utilities/index";
 import { Button, Divider, TextInput } from "react-native-paper";
 import {
@@ -30,16 +26,6 @@ import {
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-
-import Gemail from "../../../assets/svg/gemail.svg";
-import Oemail from "../../../assets/svg/oemail.svg";
-
-import Glock from "../../../assets/svg/glock.svg";
-import Olock from "../../../assets/svg/olock.svg";
-
-import Ouser from "../../../assets/svg/ouser.svg";
-import Guser from "../../../assets/svg/guser.svg";
-
 import CustomButton from "../../../assets/Custom/Custom_Button";
 import { useIsFocused } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -63,10 +49,6 @@ const App = ({ navigation }) => {
     { label: t('switch.signIn'), value: 0 },
     { label: t('switch.signUp'), value: 1 },
 ];
-  // const options = [
-  //   { label: "Sign In", value: 0 },
-  //   { label: "Sign Up", value: 1 },
-  // ];
 
   const [signin_email, setsignin_email] = useState("");
   const [signin_pass, setsignin_pass] = useState("");
@@ -120,11 +102,6 @@ const App = ({ navigation }) => {
   const { changeLanguage } = useCustomTranslation();
   const [selectedLanguage, setSelectedLanguage] = useState(null); // State for selected language
 
-  // const languageOptions = [
-   
-  //     { label: 'English', value: 'en' },
-  //     { label: 'Français', value: 'fr' }
-  // ];
   const languageOptions = [
     { label: 'English', value: 'en', flag: require('../../../assets/english_flag.png') },
     { label: 'Français', value: 'fr', flag: require('../../../assets/Flag_of_France.png') }
@@ -156,8 +133,6 @@ const App = ({ navigation }) => {
     fetchLanguage();
   }, []);
 
-
-
   useEffect(() => {
     getUserID();
   }, []);
@@ -167,9 +142,6 @@ const App = ({ navigation }) => {
       const result = await AsyncStorage.getItem("UserToken");
       if (result !== null) {
         setToken(result);
-        console.log("Token", result);
-
-        console.log("user id retrieved:", result);
       }
     } catch (error) {
       // Handle errors here
@@ -194,10 +166,6 @@ const App = ({ navigation }) => {
   };
 
   const handleUpdatePasswordChecked = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setSnackbarVisibleChecked(true);
 
     // Automatically hide the Snackbar after 3 seconds
@@ -207,10 +175,6 @@ const App = ({ navigation }) => {
   };
 
   const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setSnackbarVisible(true);
 
     // Automatically hide the Snackbar after 3 seconds
@@ -220,13 +184,7 @@ const App = ({ navigation }) => {
   };
 
   const handleUpdateCorrectPassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setSnackbarCorrectVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setSnackbarCorrectVisible(false);
     }, 3000);
@@ -319,36 +277,11 @@ const App = ({ navigation }) => {
     } else if (!emailRegex.test(signup_email)) {
       //setEmailSnackBarVisible(true);
       setemailNotCorrectSignUp(true);
-      //console.log("Email Not Correct", emailNotCorrect)
     }
-    // else if (username !== '' && signup_email === '' &&
-    // signup_pass === '' &&
-    // signup_cpass === '') {
-    //    setSignUpEmailError(true);
-    // } else if (signup_pass==='') {
-    //   setSignUpPasswordError(true);
-    // } else if (signup_cpass === '') {
-    //   setSignUpConfirmPasswordError(true);
-    // }
+
     else {
       handleSignup();
-      //navigation.navigate('Profile_image');
-      //   setIsLoading(true);
-      //   setTimeout(() => {
-
-      //     // setIsLoading(false);
-
-      //     // Replace 'YourTargetScreen' with the screen you want to navigate to
-      //   }, 2000);
     }
-
-    /* setTimeout(() => {
-      navigation.navigate('BottomTabNavigation');
-
-      setIsLoading(false);
-
-      // Replace 'YourTargetScreen' with the screen you want to navigate to
-    }, 2000); // Adjust the loading duration as needed */
   };
 
   const resetFields = () => {
@@ -379,26 +312,15 @@ const App = ({ navigation }) => {
     } else if (signin_pass === "") {
       setPasswordSignInError(true);
     } else if (!emailRegex.test(signin_email)) {
-      //setEmailSnackBarVisible(true);
+
       setemailNotCorrect(true);
-      //console.log("Email Not Correct", emailNotCorrect)
     } else {
       setIsLoading(true);
       setTimeout(() => {
         handleSignIn();
-        //setIsLoading(false);
-
-        // Replace 'YourTargetScreen' with the screen you want to navigate to
+    
       }, 2000);
     }
-
-    /* setTimeout(() => {
-      navigation.navigate('BottomTabNavigation');
-
-      setIsLoading(false);
-
-      // Replace 'YourTargetScreen' with the screen you want to navigate to
-    }, 2000); // Adjust the loading duration as needed */
   };
 
   const handleBlur = () => {
@@ -490,19 +412,10 @@ const App = ({ navigation }) => {
       });
 
       const data = await response.json();
-
-      console.log("error data", data.newUser.role);
-
       if (data.newUser.role === "user") {
         setIsLoading(false);
         // Assuming there's at least one result
         const firstResult = data.newUser;
-        console.log("id", firstResult.id);
-        console.log("email", firstResult.email);
-        console.log("username", firstResult.username);
-
-        console.log("Auth Token", firstResult.token);
-
         AsyncStorage.setItem("email", firstResult.email.toString(), () => {
           console.log("user email saved successfully");
         });
@@ -511,29 +424,27 @@ const App = ({ navigation }) => {
           "userName",
           firstResult.username.toString(),
           () => {
-            console.log("user name saved successfully");
+         
           }
         );
 
         AsyncStorage.setItem("userId ", firstResult.id.toString(), () => {
-          console.log("user id saved successfully of signup");
+
         });
 
         AsyncStorage.setItem("authToken ", firstResult.token.toString(), () => {
-          console.log("authToken successfully of sign in");
+        
         });
 
         AsyncStorage.setItem("Password", signup_pass, () => {
-          console.log("user password saved successfully");
+      
         });
       } else {
         setIsLoading(false);
-        console.error("No results found.", data.response.result);
+        
       }
 
       setIsLoading(false);
-
-      // Reset the input fields
       resetFields();
       setsignup_email("");
       setsignup_pass("");
@@ -541,10 +452,6 @@ const App = ({ navigation }) => {
       setusername("");
 
       navigation.navigate("Profile_image");
-
-      //navigation.navigate('BottomTabNavigation');
-
-      // navigation.navigate('SelectGender');
     } catch (error) {
       console.error("Error is on sign up:", error);
       handleUpdatePassword();
@@ -558,8 +465,6 @@ const App = ({ navigation }) => {
 
   const handleSignIn = async () => {
     setIsLoading(true);
-    console.log("Email", signin_email);
-    console.log("Password", signin_pass);
 
     try {
       const response = await fetch(signInEndpoint, {
@@ -588,42 +493,35 @@ const App = ({ navigation }) => {
 
       const data = await response.json();
 
-      console.log("error data sign in", data);
-
       if (data.statusCode === 200) {
         setIsLoading(false);
         // Assuming there's at least one result
         const firstResult = data.user;
-        console.log("id", firstResult.id);
-        console.log("email", firstResult.email);
-        console.log("username", firstResult.username);
-        console.log("Auth Token", firstResult.token);
-
         AsyncStorage.setItem("email", firstResult.email.toString(), () => {
-          console.log("user email saved successfully");
+     
         });
 
         AsyncStorage.setItem(
           "userName",
           firstResult.username.toString(),
           () => {
-            console.log("user name saved successfully");
+      
           }
         );
 
         AsyncStorage.setItem("userId ", firstResult.id.toString(), () => {
-          console.log("user id saved successfully of sign in");
+     
         });
 
         AsyncStorage.setItem("email ", firstResult.email.toString(), () => {
-          console.log("user email saved successfully of sign in");
+      
         });
 
         AsyncStorage.setItem("authToken ", firstResult.token.toString(), () => {
-          console.log("authToken successfully of sign in");
+       
 
           AsyncStorage.setItem("Password", signin_pass, () => {
-            console.log("user password saved successfully");
+       
           });
         });
 
@@ -635,7 +533,6 @@ const App = ({ navigation }) => {
             routes: [{ name: 'BottomTabNavigation' }],
           })
         );
-        // navigation.navigate("BottomTabNavigation");
       } else {
         setIsLoading(false);
         handleUpdateCorrectPassword();
@@ -643,109 +540,15 @@ const App = ({ navigation }) => {
       }
 
       setIsLoading(false);
-
-      // Reset the input fields
       setsignin_email("");
       setsignin_pass("");
-
-      // navigation.navigate('SelectGender');
     } catch (error) {
       console.log("Error", error);
-      //handleUpdateCorrectPassword()
-
-      //console.error('Error:');
-      //showAlert();
       setIsLoading(false);
     }
   };
 
-  const handleSignInSkipForNow = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(signInEndpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          // Specify TLS version explicitly
-          Connection: "Keep-Alive",
-          "Upgrade-Insecure-Requests": "1",
-          "X-Requested-With": "XMLHttpRequest",
-          "X-Forwarded-Proto": "https",
-          "Accept-Encoding": "gzip, deflate, br",
-          "Accept-Language": "en-US,en;q=0.9",
-          "Cache-Control": "no-cache",
-          Pragma: "no-cache",
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36",
-        },
-        body: JSON.stringify({
-          email: "usama12345678@gmail.com",
-          password: "Qwerty",
-          role: "user",
-        }),
-      });
-
-      const data = await response.json();
-
-      console.log("error data sign in", data);
-
-      if (data.statusCode === 200) {
-        setIsLoading(false);
-        // Assuming there's at least one result
-        const firstResult = data.user;
-        console.log("id", firstResult.id);
-        console.log("email", firstResult.email);
-        console.log("username", firstResult.username);
-        console.log("Auth Token", firstResult.token);
-
-        /* AsyncStorage.setItem('email', firstResult.email.toString(), () => {
-          console.log('user email saved successfully');
-        });
-
-        AsyncStorage.setItem(
-          'userName',
-          firstResult.username.toString(),
-          () => {
-            console.log('user name saved successfully');
-          },
-        );
-
-        AsyncStorage.setItem('userId ', firstResult.id.toString(), () => {
-          console.log('user id saved successfully of sign in');
-        });
-
-        AsyncStorage.setItem('email ', firstResult.email.toString(), () => {
-          console.log('user email saved successfully of sign in');
-        });
- */
-        AsyncStorage.setItem("authToken ", firstResult.token.toString(), () => {
-          console.log("authToken successfully of sign in");
-        });
-
-        navigation.navigate("BottomTabNavigation");
-      } else {
-        setIsLoading(false);
-        handleUpdateCorrectPassword();
-        console.error("No results found.", data.response.result);
-      }
-
-      setIsLoading(false);
-
-      // Reset the input fields
-      setsignin_email("");
-      setsignin_pass("");
-
-      // navigation.navigate('SelectGender');
-    } catch (error) {
-      handleUpdateCorrectPassword();
-
-      //console.error('Error:');
-      //showAlert();
-      setIsLoading(false);
-    }
-  };
-
+ 
   const skipforNow = () => {
     setIsLoading(true);
 
@@ -994,40 +797,6 @@ const App = ({ navigation }) => {
                   </Text>
                 </TouchableOpacity>
 
-             {/* Language selector dropdown */}
-             {/* <View style={styles.DropMani}>    
-             <Dropdown
-    style={styles.dropdown}
-    placeholderStyle={styles.placeholderStyle}
-    selectedTextStyle={styles.selectedTextStyle}
-    inputSearchStyle={styles.inputSearchStyle}
-    iconStyle={styles.iconStyle}
-    data={languageOptions}
-    // search
-    maxHeight={300}
-    labelField="label"
-    valueField="value"
-    placeholder="Select Language"
-    value={selectedLanguage} // Add this line
-    onChange={(item) => handleLanguageChange(item.value)}
-/>
-</View> */}
-
-
-                {/*   <TouchableOpacity onPress={() => handleSignInSkipForNow()}>
-              <Text
-                style={{
-                  color: '#FACA4E',
-                  fontSize: wp(4),
-                  textDecorationLine: 'underline',
-                  fontFamily: 'Inter-Bold',
-                  marginRight: '5%',
-                  alignSelf: 'center',
-                  marginTop: '3%',
-                }}>
-                Skip For Now
-              </Text>
-            </TouchableOpacity> */}
 
                 <View style={{ marginTop: "25%", alignSelf: "center" }}>
                   <CustomButton
@@ -1036,8 +805,6 @@ const App = ({ navigation }) => {
                     // checkdisable={inn == '' && cm == '' ? true : false}
                     customClick={() => {
                       goTOScreen();
-
-                      //navigation.navigate('BottomTabNavigation')
                     }}
                   />
                 </View>
@@ -1110,7 +877,6 @@ const App = ({ navigation }) => {
                       )}
                     />
                   }
-                  // left={isTextInputActive ? <Oemail /> : <Gemail />}
                 />
 
                 {signUpEmailError === true ? (
@@ -1301,16 +1067,7 @@ const App = ({ navigation }) => {
                     marginHorizontal: widthPercentageToDP(8),
                   }}
                 >
-                  {/*   <ScrollView
-                nestedScrollEnabled={true}
-                scrollToOverflowEnabled={true}
-                scrollEnabled={true}
-                showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
-                style={{flexGrow: 1}}
-                contentContainerStyle={{
-                  verticalLine: false,
-                  marginHorizontal: widthPercentageToDP(8),
-                }}> */}
+              
                   <Text
                     style={{
                       marginTop: heightPercentageToDP(1),
@@ -1329,32 +1086,6 @@ const App = ({ navigation }) => {
                     4.  {t('signup.point4')}
                     {"\n\n"}
                     5.  {t('signup.point5')}
-                    {/* 1. "Wotcha Gotcha" is a cutting-edge and highly integrated
-                    network attracting millions of users worldwide. Users,
-                    referred to as WotchaGotchers, hereby gain access to a range
-                    of features designed to enhance their mobile experience.{" "}
-                    {"\n\n"}
-                    2. WotchaGotchers can optimize their phone screen space by
-                    consolidating all other apps into the "Mass Apps" category
-                    within the Wotcha Gotcha app.
-                    {"\n\n"}
-                    3. Users have the flexibility to position the Wotcha Gotcha
-                    icon/app on the right or left upper corner, right or left
-                    lower corner, or at the center of their phone screen,
-                    providing a customizable and user-centric experience.
-                    {"\n\n"}
-            
-                    4. Users can explore captivating content across various
-                    categories such as Mass Apps, Video Mania, On News,
-                    Pic-Tour, Market Zone, Cinematics, Fan-Star Zone, Kid-Vids, 
-                    Learning & Hobbies, and Tv ProgMax to come
-                    engaging and ensuring a diverse experience.
-                    {"\n\n"}
-                    5. Wotcha Gotchers have the ability to rearrange the
-                    positions of Wotcha Gotcha categories, moving them top/down
-                    or vice-versa, allowing for personalized and intuitive
-                    navigation.
-                    {"\n\n"} */}
              
                   </Text>
                   {/* </ScrollView> */}

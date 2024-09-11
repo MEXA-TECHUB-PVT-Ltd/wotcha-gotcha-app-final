@@ -13,16 +13,12 @@ import {
     TouchableOpacity,
   } from "react-native";
   import React, { useState, useRef, useMemo, useEffect } from "react";
-  import Back from "../../../assets/svg/back.svg";
   import { appImages } from "../../../assets/utilities/index";
-  import Slider from "@react-native-community/slider";
-  import VolumeUp from "../../../assets/svg/VolumeUp.svg";
   import Like from "../../../assets/svg/Like.svg";
   import UnLike from "../../../assets/svg/Unlike.svg";
   import Comment from "../../../assets/svg/Comment.svg";
   import Send from "../../../assets/svg/Send.svg";
   import Download from "../../../assets/svg/Download.svg";
-  import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
   import ButtonSend from "../../../assets/svg/ButtonSend.svg";
   import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
   import EmojiPicker from "rn-emoji-keyboard";
@@ -30,7 +26,7 @@ import {
   import UpArrowComments from "../../../assets/svg/UpArrowComments.svg";
   import EditItem from "../../../assets/svg/UpdateItem.svg";
   import SmileEmoji from "../../../assets/svg/SmileEmoji.svg";
-   
+  import { useTranslation } from 'react-i18next';
   import Delete from "../../../assets/svg/Delete.svg";
   import Share from "react-native-share";
   
@@ -59,7 +55,7 @@ import {
     const [pastedURL, setPastedURL] = useState(
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
     );
-  
+    const { t } = useTranslation();
     const [comments, setComments] = useState([]);
   
     const [likes, setLikes] = useState(null);
@@ -72,19 +68,10 @@ import {
   
     const [userId, setUserId] = useState("");
   
-    const [showMenu, setShowMenu] = useState(false);
-  
-    const [progress, setProgress] = useState(0);
-  
     const [isBottomSheetExpanded, setIsBottomSheetExpanded] = useState(false);
-  
-    const ref_Comments = useRef(null);
   
     const [authToken, setAuthToken] = useState([]);
   
-    const refSlide = useRef();
-  
-    const bottomSheetRef = useRef(null);
     // variables
     const snapPoints = useMemo(() => ["25%", "50%"], []);
   
@@ -98,21 +85,12 @@ import {
     const [snackbarDeleteVisible, setsnackbarDeleteVisible] = useState(false);
     const ref_RBSheetCamera = useRef(null);
     useEffect(() => {
-      // Make the API request and update the 'data' state
       fetchAll();
     }, []);
   
     const fetchAll = async () => {
-      // Simulate loading
       setLoading(true);
-      // Fetch data one by one
-  
       await getUserID();
-  
-      //await fetchLikes()
-      //await fetchCommentsCounts()
-  
-      // Once all data is fetched, set loading to false
       setLoading(false);
     };
   
@@ -121,7 +99,6 @@ import {
         const result = await AsyncStorage.getItem("userId ");
         if (result !== null) {
           setUserId(result);
-          // console.log('user id retrieved:', result);
         } else {
           console.log("user id null:", result);
         }
@@ -129,11 +106,8 @@ import {
         const result1 = await AsyncStorage.getItem("authToken ");
         if (result1 !== null) {
           setAuthToken(result1);
-          // console.log('user token retrieved:', result1);
           await fetchComments(result1);
-          // await fetchCommentsCounts(result1)
         } else {
-          console.log("result is null", result);
         }
       } catch (error) {
         // Handle errors here
@@ -158,10 +132,7 @@ import {
   
         if (response.ok) {
           const data = await response.json();
-          // console.log("All Comments of usersssss", data.comments)
           setComments(data.comments);
-       
-          // await fetchLikes(value);
         } else {
           console.error(
             "Failed to fetch comments:",
@@ -174,81 +145,12 @@ import {
       }
     };
   
-    const fetchLikes = async (values) => {
-      const token = values;
-  
-      try {
-        const response = await fetch(
-          base_url + `picTour/getAllLikesByPicTour/${receivedData.pic_tour_id}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        if (response.ok) {
-          const data = await response.json();
-          // console.log("All Likes", data.totalLikes);
-          setLikes(data.totalLikes);
-          // fetchCommentsCounts(values);
-          //setLikes(data.totalLikes);
-        } else {
-          console.error(
-            "Failed to fetch categories:",
-            response.status,
-            response.statusText
-          );
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-  
-    const fetchCommentsCounts = async (result) => {
-      const token = result;
-  
-      try {
-        const response = await fetch(
-          base_url +
-            `picTour/getAllCommentsByPicTour/${receivedData.sport_id}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        if (response.ok) {
-          const data = await response.json();
-          // console.log("All Comments", data.totalComments);
-          setCommentsCount(data.totalComments);
-        } else {
-          console.error(
-            "Failed to fetch categories:",
-            response.status,
-            response.statusText
-          );
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
   
     const dismissSnackbar = () => {
       setsnackbarVisible(false);
     };
   
     const handleUpdatePassword = async () => {
-      // Perform the password update logic here
-      // For example, you can make an API request to update the password
-  
-      // Assuming the update was successful
-      // setsnackbarVisible(true);
-  
-      // Automatically hide the Snackbar after 3 seconds
       setTimeout(() => {
         setsnackbarVisible(false);
   
@@ -257,21 +159,17 @@ import {
         } else {
           console.log("Please Add Video Url");
         }
-  
-        //navigation.goBack();
+
       }, 3000);
     };
   
     const clearTextInput = () => {
-      // console.log("came to logssssss", commentText);
-      // Clear the text in the TextInput
       setCommentText(null);
       sendComment();
     };
   
     const sendComment = async () => {
       setLoading(true);
-      console.log("Set Loading ", loading);
       const token = authToken; // Replace with your actual token
   
       try {
@@ -293,12 +191,8 @@ import {
           commentData,
           axiosConfig
         );
-  
-        console.log("Response", response);
-  
         if (response.status === 200) {
           setLoading(false);
-          console.log("Comment sent successfully");
           fetchAll();
         } else {
           setLoading(false);
@@ -316,8 +210,6 @@ import {
     };
   
     const sendLikes = async () => {
-      // console.log("likes Token", authToken);
-      // console.log("User Id", userId);
       setLoading(true);
       const token = authToken; // Replace with your actual token
   
@@ -340,11 +232,8 @@ import {
           axiosConfig
         );
   
-        // console.log("Response", response);
-  
         if (response.status === 200) {
           setLoading(false);
-          console.log("Sports Liked  successfully");
           fetchAll();
         } else {
           setLoading(false);
@@ -366,7 +255,6 @@ import {
       refCommentsSheet.current.open();
     };
     const renderComments = (item) => {
-      console.log("Items of comments", item);
       return (
         <View>
           <TouchableOpacity
@@ -375,7 +263,6 @@ import {
             }
             style={{
               height: hp(10),
-              //borderWidth:3,
               paddingHorizontal: wp(5),
               alignItems: "center",
               flexDirection: "row",
@@ -418,8 +305,6 @@ import {
                 //flex: 1,
                 marginLeft: wp(3),
                 height: hp(5),
-                //marginTop: hp(1),
-                //borderWidth:3,
                 justifyContent: "space-around",
               }}
             >
@@ -634,8 +519,6 @@ import {
       const date = new Date();
       const fileDir = fs.dirs.DownloadDir;
       config({
-        // add this option that makes response data to be stored as a file,
-        // this is much more performant.
         fileCache: true,
         addAndroidDownloads: {
           useDownloadManager: true,
@@ -697,28 +580,18 @@ import {
       console.log("Emoji Object", emojiObject);
       //setIsOpen(false)
       setCommentText(emojiObject.emoji);
-  
-      /* example emojiObject = {
-          "emoji": "❤️",
-          "name": "red heart",
-          "slug": "red_heart",
-          "unicode_version": "0.6",
-        }
-      */
+
     };
 
-    /////for delete and Update the Sports
     const changeModal = () => {
       ref_RBSheetCamera.current.close();
-      // navigation.replace('UpdateVideoProfile', {Video: receivedData});
       navigation.navigate("UpdateSportsScreen", { item: receivedData });
-      // navigation.replace('UpdateSportsScreen', {Video: receivedData, apiEndpoint: 'cinematics/update'});
+
     };
   
     const changeDelete = () => {
       ref_RBSheetCamera.current.close();
       handleUpdateDelete();
-      //navigation.goBack()
     };
   
     const handleUpdateDelete = async () => {
@@ -731,26 +604,22 @@ import {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
-              // Include any additional headers as needed
             },
-            // You may include a request body if required by the server
-            // body: JSON.stringify({}),
+
           },
         );
   
         if (response.ok) {
           handleUpdateDeletePassword();
-          // Optionally handle the response data here
         } else {
           console.error(
             `Error deleting video with ID ${receivedData?.sport_id}:`,
             response.status,
           );
-          // Optionally handle the error response here
         }
       } catch (error) {
         console.error('Error:', error);
-        // Handle other errors such as network issues
+
       }
     };
   
@@ -759,12 +628,11 @@ import {
     };
     const handleUpdateDeletePassword = async () => {
       setsnackbarDeleteVisible(true);
-  
-      // Automatically hide the Snackbar after 3 seconds
+
       setTimeout(() => {
         setsnackbarDeleteVisible(false);
         navigation.navigate('ViewProfile');
-        //navigation.goBack();
+
       }, 3000);
     };
     return (
@@ -945,9 +813,6 @@ import {
                   }}
                 >
                   <TouchableOpacity
-                    // onPress={() =>
-                    //   setIsBottomSheetExpanded(!isBottomSheetExpanded)
-                    // }
                     onPress={() => openComments()}
                   >
                     <Comment height={21} width={21} />
@@ -1028,7 +893,8 @@ import {
                 fontSize: hp(2.3),
               }}
             >
-              Comments
+              {t('Comments')} 
+              
             </Text>
           </View>
   
@@ -1041,7 +907,7 @@ import {
                   alignItems: "center",
                 }}
               >
-                <Text>No Comments Yet</Text>
+                <Text>{t('NoCommentsYet')}</Text>
               </View>
             ) : (
               <FlatList
@@ -1173,8 +1039,8 @@ import {
           {loading && <ActivityIndicator size="large" color="#FACA4E" />}
         </View>
         <CustomSnackbar
-          message={"success"}
-          messageDescription={"Sports deleted successfully"}
+          message={t('Success')}
+          messageDescription={t('SportsDeletedSuccessfully')}
           onDismiss={dismissDeleteSnackbar} // Make sure this function is defined
           visible={snackbarDeleteVisible}
         />
@@ -1214,7 +1080,8 @@ import {
                 fontSize: hp(2.3),
               }}
             >
-              Select an option
+              {t('Selectanoption')}
+              
             </Text>
             <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
               <IonIcons
@@ -1249,7 +1116,8 @@ import {
                   fontSize: hp(2.1),
                 }}
               >
-                Update Sports
+                {t('UpdateSports')}
+                {/* Update Sports */}
               </Text>
             </TouchableOpacity>
   
@@ -1280,14 +1148,15 @@ import {
                   fontSize: hp(2.1),
                 }}
               >
-                Delete Sports
+                 {t('DeleteSports')}
+                {/* Delete Sports */}
               </Text>
             </TouchableOpacity>
           </View>
         </RBSheet>
         <CustomSnackbar
-          message={"success"}
-          messageDescription={"Sports downloaded successfully"}
+          message={t('Success')}
+          messageDescription={t('SportsDownloadedSuccessfully')}
           onDismiss={dismissSnackbar} // Make sure this function is defined
           visible={snackbarVisible}
         />

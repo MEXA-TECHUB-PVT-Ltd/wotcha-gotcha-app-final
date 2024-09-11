@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
-
+import { useTranslation } from 'react-i18next';
 import { Divider, TextInput } from "react-native-paper";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
@@ -49,7 +49,7 @@ export default function AddBanner({ navigation }) {
   const [selectedItem, setSelectedItem] = useState("");
   const { createPaymentMethod } = useStripe();
   const [snackBarVisible, setSnackbarVisible] = useState(false);
-
+  const { t } = useTranslation();
   const [snackBarVisibleAlert, setSnackbarVisibleAlert] = useState(false);
   const [snackBarVisibleErrorAlert, setSnackbarVisibleErrorAlert] = useState(false);
 
@@ -143,22 +143,20 @@ export default function AddBanner({ navigation }) {
       );
 
       const result = await response.json();
-      console.log("banner cost---", result.result);
+
       const cleanedDescription = stripHtmlTags(result.result.description);
       // Update the state with the cleaned description
       setData({
         ...result.result,
         description: cleanedDescription,
       });
-      console.log("banner cost---", data);
+
       // setData(result.result);
     } catch (error) {
       console.error("Error Trending:", error);
     }
     setALoading(false);
   };
-  // console.log("data.cost for state----", data.cost)
-  // console.log("Categry in id", data.top_banner_cost)
   //-----------------------------\\
 
   const takePhotoFromCamera = async (value) => {
@@ -169,19 +167,15 @@ export default function AddBanner({ navigation }) {
         //videoQuality: 'medium',
       },
       (response) => {
-        console.log("image here", response);
-
         if (!response.didCancel) {
           ref_RBSheetCamera.current.close();
           if (response.assets && response.assets.length > 0) {
             setImageUri(response.assets[0].uri);
-            console.log("response is ", response.assets[0].uri);
             setImageInfo(response.assets[0]);
             ref_RBSheetCamera.current.close();
           } else if (response.uri) {
             // Handle the case when no assets are present (e.g., for videos)
             setImageUri(response.uri);
-            console.log("response null", response.uri);
             ref_RBSheetCamera.current.close();
           }
         }
@@ -192,16 +186,12 @@ export default function AddBanner({ navigation }) {
   const choosePhotoFromLibrary = (value) => {
     setSelectedItem(value);
     launchImageLibrary({ mediaType: "photo" }, (response) => {
-      console.log("image here", response);
       if (!response.didCancel && response.assets.length > 0) {
-        console.log("Response", response.assets[0]);
         setImageUri(response.assets[0].uri);
         setImageInfo(response.assets[0]);
         ref_RBSheetCamera.current.close();
       }
       ref_RBSheetCamera.current.close();
-
-      console.log("response", imageInfo);
     });
   };
 
@@ -283,7 +273,6 @@ export default function AddBanner({ navigation }) {
     const type = imageInfo.type;
     const name = imageInfo.fileName;
     const sourceImage = { uri, type, name };
-    console.log("Source Image", sourceImage);
     const dataImage = new FormData();
     dataImage.append("file", sourceImage);
     dataImage.append("upload_preset", UPLOAD_PRESET); // Use your Cloudinary upload preset
@@ -299,10 +288,6 @@ export default function AddBanner({ navigation }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        //setImageUrl(data.url); // Store the Cloudinary video URL in your state
-        //uploadVideo(data.url)
-        //uploadXpiVideo(data.url);
-        console.log("Image Url", data);
         // uploadXpiVideo(data.url,data)
         handleSendCode(data.url);
       })
@@ -314,13 +299,6 @@ export default function AddBanner({ navigation }) {
 
   const forgetPasswordEndpoint = base_url + "banner/createBanner"; // Replace with your actual API endpoint
   const handleSendCode = async (datas) => {
-    console.log("DATA IMAGE", datas);
-    console.log("addBannerLink IMAGE", addBannerLink);
-    console.log("userId IMAGE", userId);
-    console.log("startDate IMAGE", startDate);
-    console.log("endDate IMAGE", endDate);
-    console.log("totalamount ------", totalAmount);
-    console.log("totalCostTopBanner", totalCostTopBanner);
 
     setIsLoading(true);
 
@@ -349,9 +327,7 @@ export default function AddBanner({ navigation }) {
 
       if (data.statusCode === 201) {
         setIsLoading(false);
-        console.log("data for response", data);
         const bannerId = data.data.id; // Capture the banner ID
-        console.log("Banner ID", bannerId);
         // setBannerId(bannerId);
         navigation.navigate("PaymentScreen", {
           authToken: authToken,
@@ -366,7 +342,6 @@ export default function AddBanner({ navigation }) {
           top_banner: isChecked,
           paid_status: false,
         });
-
         // handleUpdatePassword();
         // Assuming there's at least one result
       } else {
@@ -375,8 +350,6 @@ export default function AddBanner({ navigation }) {
         console.log("ERROR", data);
         //console.error('No results found.', data.response.result);
       }
-
-      // Reset the input fields
       // navigation.navigate('SelectGender');
     } catch (error) {
       console.error("Error:", error);
@@ -385,8 +358,6 @@ export default function AddBanner({ navigation }) {
     }
   };
   // ////17.5.2024 for open datapicker  ok///////////////////////////////////////////////////////////////////////////////////////////////////
-  // const [startDate, setStartDate] = useState('');
-  // const [endDate, setEndDate] = useState('');
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(new Date());
@@ -400,8 +371,6 @@ export default function AddBanner({ navigation }) {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // Adding 1 to include both start and end dates
     return diffDays * dailyCost;
   };
-  // console.log('totalCost-----------', totalCost)
-  // console.log('totalCostTopBanner-----------', totalCostTopBanner)
 
   const handleStartDateChange = (event, selectedDate) => {
     setShowStartPicker(false);
@@ -485,14 +454,6 @@ export default function AddBanner({ navigation }) {
       setTotalAmount(totalCost);
     }
   };
-  // const toggleCheckbox = () => {
-  //   setIsChecked(!isChecked);
-  //   if (!isChecked) {
-  //     setTotalAmount(totalCost + totalCost_top_banner_cost);
-  //   } else {
-  //     setTotalAmount(totalCost - totalCost_top_banner_cost);
-  //   }
-  // };
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   return (
@@ -508,20 +469,9 @@ export default function AddBanner({ navigation }) {
           showBackIcon={true}
           onPress={() => navigation.goBack()}
           showText={true}
-          text={"Add Banner"}
+          text={t('AddBanner')}
         />
       </View>
-      {/* <TouchableOpacity onPress={()=>navigation.navigate('PaymentScreen')}><Text>Helloe</Text></TouchableOpacity> */}
-      {/* <Button
-        title="Pay Now"
-        onPress={() =>
-          navigation.navigate("PaymentScreen", {
-            authToken: authToken,
-            totalAmount: totalAmount,
-            bannerId: bannerId,
-          })
-        }
-      /> */}
       <ScrollView style={styles.container}>
         <View>
           {imageUri == null ? (
@@ -552,7 +502,8 @@ export default function AddBanner({ navigation }) {
                   color: "#939393",
                 }}
               >
-                Upload Image
+                {t('UploadImage')}
+                
               </Text>
             </TouchableOpacity>
           ) : null}
@@ -621,7 +572,8 @@ export default function AddBanner({ navigation }) {
                       fontFamily: "Inter-SemiBold",
                     }}
                   >
-                    Change
+                    {t('Change')}
+                    
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -637,7 +589,7 @@ export default function AddBanner({ navigation }) {
         <View style={{ alignSelf: "center" }}>
           <TextInput
             mode="outlined"
-            label="Add Banner link"
+            label={t('AddBannerLink')}
             value={addBannerLink}
             onChangeText={(text) => setAddBannerLink(text)}
             //multiline={true} // Enable multiline input
@@ -663,14 +615,11 @@ export default function AddBanner({ navigation }) {
         >
           <TextInput
             mode="outlined"
-            label="Start Date"
+            label={t('StartDate')}
             value={startDate}
-            // onChangeText={(text) => setStartDate(text)}
-            //multiline={true} // Enable multiline input
-            //numberOfLines={3} // Set the initial number of lines
             style={{ ...styles.ti }} // Adjust the height as needed
             outlineColor="#0000001F"
-            placeholder="Start Date"
+            placeholder={t('StartDate')}
             placeholderTextColor="#646464"
             activeOutlineColor="#FACA4E"
             autoCapitalize="none"
@@ -702,11 +651,8 @@ export default function AddBanner({ navigation }) {
         <View style={{ alignSelf: "center" }}>
           <TextInput
             mode="outlined"
-            label="End Date"
+            label={t('End Date')}
             value={endDate}
-            // onChangeText={(text) => setEndDate(text)}
-            //multiline={true} // Enable multiline input
-            //numberOfLines={3} // Set the initial number of lines
             style={{ ...styles.ti }} // Adjust the height as needed
             outlineColor="#0000001F"
             placeholderTextColor="#646464"
@@ -714,8 +660,6 @@ export default function AddBanner({ navigation }) {
             autoCapitalize="none"
             onFocus={openEndDatePicker}
             editable={false}
-            // onFocus={handleFocusEndDate}
-            // onBlur={handleBlurEndDate}
           />
           <TouchableOpacity
             style={styles.iconContainer}
@@ -749,14 +693,14 @@ export default function AddBanner({ navigation }) {
               <View style={[styles.checkbox, isChecked && styles.checked]}>
                 {isChecked && <View style={styles.innerCheckbox} />}
               </View>
-              <Text style={styles.heading}>Add a banner on top.</Text>
+              <Text style={styles.heading}>{t('AddABannerOnTop')}</Text>
             </TouchableOpacity>
           </View>
 
           {/* Second Row: Text */}
           <View style={styles.row}>
             <Text style={styles.checkboxtext}>
-              There will be an additional cost of ${totalCostTopBanner}.
+            {t('ThereWillBeAnAdditionalCostOf')}${totalCostTopBanner}.
             </Text>
           </View>
         </View>
@@ -769,7 +713,7 @@ export default function AddBanner({ navigation }) {
           }}
         ></View>
         <View style={styles.Totalamountcontainer}>
-          <Text style={styles.Totalamountheading}>Total Amount:</Text>
+          <Text style={styles.Totalamountheading}>{t('TotalAmount')}</Text>
           {/* <Text style={styles.Totalamount}>$ 50</Text> */}
           <Text style={styles.Totalamount}>${totalAmount}</Text>
         </View>
@@ -785,28 +729,28 @@ export default function AddBanner({ navigation }) {
                 let hasError = false;
 
                 if (!imageInfo) {
-                  setBannerImageError("Banner is required");
+                  setBannerImageError(t('Bannerisrequired'));
                   hasError = true;
                 } else {
                   setBannerImageError("");
                 }
 
                 if (!addBannerLink) {
-                  setBannerURLError("Banner URL is required");
+                  setBannerURLError(t('BannerURLisrequired'));
                   hasError = true;
                 } else {
                   setBannerURLError("");
-                }
+                } 
 
                 if (!startDate) {
-                  setStartDateError("Start Date is required");
+                  setStartDateError(t('StartDateisrequired'));
                   hasError = true;
                 } else {
                   setStartDateError("");
                 }
 
                 if (!endDate) {
-                  setEndDateError("End Date is required");
+                  setEndDateError(t('EndDateisrequired'));
                   hasError = true;
                 } else {
                   setEndDateError("");
@@ -830,51 +774,30 @@ export default function AddBanner({ navigation }) {
           ) : (
             data && (
               <View style={styles.bannerContainer}>
-                <Text style={styles.heading}>Why Advertise?</Text>
+                <Text style={styles.heading}>{t('WhyAdvertise')}</Text> 
                 <Text style={[styles.checkboxtext, styles.extrastyle]}>
                   {data.description}
                 </Text>
 
                 <Text style={[styles.heading, { marginTop: "5%" }]}>
-                  Better to upload image of size:
+                {t('BetterToUploadImageOfSize')}
                 </Text>
                 <Text style={[styles.checkboxtext, styles.extrastyle]}>
                   {data.length} * {data.width}
                 </Text>
 
                 <Text style={[styles.heading, { marginTop: "5%" }]}>
-                  Advertising cost perday:
+                {t('Advertisingcostperday')}
+              
                 </Text>
                 <Text style={[styles.checkboxtext, styles.extrastyle]}>
-                  $ {data.cost} perday
+                  $ {data.cost} {t('perday')}
                 </Text>
               </View>
             )
           )}
           {/* // */}
         </View>
-
-        {/* <View
-          style={{
-            flex: 1,
-            marginTop: hp(2),
-            alignSelf: "center",
-            justifyContent: "flex-end",
-          }}
-        >
-          <CustomButton
-            title={"Add"}
-            load={false}
-            // checkdisable={inn == '' && cm == '' ? true : false}
-            customClick={() => {
-              setIsLoading(true);
-              upload();
-              setIsLoading(false);
-              //handleUpdatePassword();
-              //navigation.navigate('Profile_image');
-            }}
-          />
-        </View> */}
 
         <RBSheet
           ref={ref_RBSheetCamera}
@@ -904,7 +827,7 @@ export default function AddBanner({ navigation }) {
               alignItems: "center",
             }}
           >
-            <Text style={styles.maintext}>Select an option</Text>
+            <Text style={styles.maintext}>{t('Selectanoption')}</Text>
             <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
               <Ionicons
                 name="close"
@@ -937,7 +860,7 @@ export default function AddBanner({ navigation }) {
                 size={25}
               />
 
-              <Text style={{ color: "#333333" }}>From camera</Text>
+              <Text style={{ color: "#333333" }}>{t('Fromcamera')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -954,41 +877,28 @@ export default function AddBanner({ navigation }) {
                 size={25}
               />
 
-              <Text style={{ color: "#333333" }}>From gallery</Text>
+              <Text style={{ color: "#333333" }}>{t('Fromgallery')}</Text>
             </TouchableOpacity>
           </View>
         </RBSheet>
 
-        {/* <View
-          style={{
-            position: "absolute",
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-        </View> */}
       </ScrollView>
       <CustomSnackbar
-        message={"Success"}
-        messageDescription={"Banner Posted SuccessFully"}
+        message={t('Success')}
+        messageDescription={t('BannerPostedSuccessFully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackBarVisible}
       />
 
       <CustomSnackbar
-        message={"Alert!"}
-        messageDescription={"Kindly Fill All Fields"}
+        message={t('Alert!')}
+        messageDescription={t('KindlyFillAllFields')}
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackBarVisibleAlert}
-      />
+      /> 
       <CustomSnackbar
-        message={"Alert!"}
-        messageDescription={"Something Went Wrong"}
+        message={t('Alert!')} 
+        messageDescription={t('SomethingWentWrong')}
         onDismiss={setSnackbarVisibleErrorAlert} // Make sure this function is defined
         visible={snackBarVisibleErrorAlert}
       />

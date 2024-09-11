@@ -15,12 +15,6 @@ import {
 } from 'react-native';
 import React, {useState, useRef, useMemo, useEffect} from 'react';
 import {appImages} from '../../../assets/utilities/index';
-import Like from '../../../assets/svg/Like.svg';
-import UnLike from '../../../assets/svg/Unlike.svg';
-import Comment from '../../../assets/svg/Comment.svg';
-import Send from '../../../assets/svg/Send.svg';
-import Download from '../../../assets/svg/Download.svg';
-import BottomSheet, {BottomSheetFlatList} from '@gorhom/bottom-sheet';
 import ButtonSend from '../../../assets/svg/ButtonSend.svg';
 import EmojiPicker from 'rn-emoji-keyboard';
 import DownArrowComments from '../../../assets/svg/DownArrowComments.svg';
@@ -39,25 +33,22 @@ import {
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import Fontiso from 'react-native-vector-icons/Fontisto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import IonIcons from 'react-native-vector-icons/Ionicons';
-
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import Headers from '../../../assets/Custom/Headers';
 import { base_url } from '../../../../../baseUrl';
 import RBSheet from "react-native-raw-bottom-sheet";
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
-
+import Loader from '../../../assets/Custom/Loader';
+import { useTranslation } from 'react-i18next';
 export default function ViewQAFI({navigation, route}) {
   const [showFullContent, setShowFullContent] = useState(false);
 
   const [pastedURL, setPastedURL] = useState(
     'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
   );
-
+  const { t } = useTranslation();
   const [comments, setComments] = useState([]);
 
   const [likes, setLikes] = useState(null);
@@ -70,15 +61,9 @@ export default function ViewQAFI({navigation, route}) {
 
   const [userId, setUserId] = useState('');
 
-  const [showMenu, setShowMenu] = useState(false);
-
-  const [progress, setProgress] = useState(0);
-
   const [isBottomSheetExpanded, setIsBottomSheetExpanded] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
-
-  const ref_Comments = useRef(null);
 
   const [authToken, setAuthToken] = useState([]);
 
@@ -95,52 +80,34 @@ export default function ViewQAFI({navigation, route}) {
   const [showLikes, setShowLikes] = useState(false);
 
   useEffect(() => {
-    // Make the API request and update the 'data' state
     fetchAll();
   }, []);
 
   const fetchAll = async () => {
-    // Simulate loading
     setLoading(true);
-    // Fetch data one by one
-
     await getUserID();
-
-    //await fetchLikes()
-    //await fetchCommentsCounts()
-
-    // Once all data is fetched, set loading to false
     setLoading(false);
   };
 
   const openEmoji = () => {
-    console.log('Is Open');
     setIsOpen(true);
-    console.log('Is Open', isOpen);
   };
 
   const getUserID = async () => {
-    console.log("Id's");
     try {
       const result = await AsyncStorage.getItem('userId ');
       if (result !== null) {
         setUserId(result);
-        console.log('user id retrieved:', result);
       } else {
-        console.log('user id null:', result);
       }
 
       const result1 = await AsyncStorage.getItem('authToken ');
       if (result1 !== null) {
         setAuthToken(result1);
-        console.log('user token retrieved:', result1);
         await fetchComments(result1);
       } else {
-        console.log('result is null', result);
       }
     } catch (error) {
-      // Handle errors here
-      console.error('Error retrieving user ID:', error);
     }
   };
 
@@ -160,7 +127,6 @@ export default function ViewQAFI({navigation, route}) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("All Comments of usersssss", data.AllComments)
         setComments(data.AllComments || []);
 
         await fetchLikes(value);
@@ -192,10 +158,9 @@ export default function ViewQAFI({navigation, route}) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('All Likes', data.totalLikes);
         setLikes(data.totalLikes);
         fetchCommentsCounts(values);
-        //setLikes(data.totalLikes);
+
       } else {
         console.error(
           'Failed to fetch categories:',
@@ -224,7 +189,7 @@ export default function ViewQAFI({navigation, route}) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('All Comments', data.totalComments);
+   
         setCommentsCount(data.totalComments);
       } else {
         console.error(
@@ -243,20 +208,14 @@ export default function ViewQAFI({navigation, route}) {
   };
 
   const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setsnackbarVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisible(false);
 
       if (pastedURL !== '') {
         requestStoragePermission();
       } else {
-        console.log('Please Add Video Url');
+
       }
 
       //navigation.goBack();
@@ -264,50 +223,13 @@ export default function ViewQAFI({navigation, route}) {
   };
 
   const clearTextInput = () => {
-    console.log('came to logssssss', commentText);
-    // Clear the text in the TextInput
     setCommentText(null);
     sendComment();
   };
 
-  const chats = [
-    {
-      id: 1,
-      name: 'John Doe',
-      message: 'The laughter in this video is contagious!',
-      reply: false,
-    },
-    {
-      id: 2,
-      name: 'Olivia Bennett',
-      message: 'I wish I had a friend group like this. You all are incredible!',
-      reply: false,
-    },
-    {
-      id: 3,
-      name: 'Ethan Rodriguez',
-      message:
-        'This video just made my day! Thanks for sharing your awesome moments.',
-      reply: false,
-    },
-    {
-      id: 4,
-      name: 'Mia Bennett',
-      message: 'Friendship goals right there! Love how close you all are',
-      reply: false,
-    },
-    {
-      id: 5,
-      name: 'Liam Sullivan',
-      message:
-        'Looks like you guys are having an absolute blast! Wish I could join in on the fun',
-      reply: false,
-    },
-  ];
-
   const sendComment = async () => {
     setLoading(true);
-    console.log('Set Loading ', loading);
+
     const token = authToken; // Replace with your actual token
 
     try {
@@ -330,11 +252,8 @@ export default function ViewQAFI({navigation, route}) {
         axiosConfig,
       );
 
-      console.log('Response', response);
-
       if (response.status === 200) {
         setLoading(false);
-        console.log('Comment sent successfully');
         fetchAll();
       } else {
         setLoading(false);
@@ -352,22 +271,10 @@ export default function ViewQAFI({navigation, route}) {
   };
 
   const handlePick = emojiObject => {
-    console.log('Emoji Object', emojiObject);
-    //setIsOpen(false)
     setCommentText(emojiObject.emoji);
-
-    /* example emojiObject = {
-          "emoji": "❤️",
-          "name": "red heart",
-          "slug": "red_heart",
-          "unicode_version": "0.6",
-        }
-      */
   };
 
   const sendLikes = async () => {
-    console.log('likes Token', authToken);
-    console.log('User Id', userId);
     setLoading(true);
     const token = authToken; // Replace with your actual token
 
@@ -389,12 +296,8 @@ export default function ViewQAFI({navigation, route}) {
         commentData,
         axiosConfig,
       );
-
-      console.log('Response', response);
-
       if (response.status === 200) {
         setLoading(false);
-        console.log('QAFI Liked  successfully');
         fetchAll();
       } else {
         setLoading(false);
@@ -412,7 +315,6 @@ export default function ViewQAFI({navigation, route}) {
   };
 
   const renderComments = item => {
-    console.log('Items of comments', item);
     return (
       <View>
         <TouchableOpacity
@@ -657,8 +559,6 @@ export default function ViewQAFI({navigation, route}) {
     const date = new Date();
     const fileDir = fs.dirs.DownloadDir;
     config({
-      // add this option that makes response data to be stored as a file,
-      // this is much more performant.
       fileCache: true,
       addAndroidDownloads: {
         useDownloadManager: true,
@@ -672,11 +572,9 @@ export default function ViewQAFI({navigation, route}) {
       },
     })
       .fetch('GET', receivedData?.image, {
-        //some headers ..
       })
       .then(res => {
         setsnackbarVisible(true);
-        // the temp file path
         console.log('The file saved to ', res.path());
       });
   };
@@ -692,8 +590,6 @@ export default function ViewQAFI({navigation, route}) {
 
   const receivedData = route.params?.picData;
 
-  console.log('Data Recieved on news', receivedData);
-  //news_id
   var details = receivedData?.description;
 
   const shareViaWhatsApp = async () => {
@@ -733,6 +629,7 @@ export default function ViewQAFI({navigation, route}) {
   };
   return (
     <GestureHandlerRootView style={{flex: 1}}>
+      {loading && <Loader />}
       <View style={{flex: 1, backgroundColor: backgroundColor}}>
         <StatusBar
           translucent={true}
@@ -744,7 +641,7 @@ export default function ViewQAFI({navigation, route}) {
           <Headers
             showBackIcon={true}
             showText={true}
-            text={'QAFI Details'}
+            text={t('QAFIDetails')}
             onPress={() => navigation.goBack()}
           />
         </View>
@@ -777,14 +674,7 @@ export default function ViewQAFI({navigation, route}) {
                 color={'#FACA4E'}
               />
             ) : (
-              // <Image
-              //   style={{
-              //     width: '100%',
-              //     borderRadius: wp(10) / 2,
-              //     height: '100%',
-              //   }}
-              //   source={{uri: receivedData?.userimage}}
-              // />
+            
               <View style={{ position: 'relative' }}>
               <Image
                 style={{
@@ -861,8 +751,7 @@ export default function ViewQAFI({navigation, route}) {
             marginTop: hp(3),
             flex: 1,
             borderRadius: wp(5),
-            // borderWidth: 3,
-            //borderColor: 'blue',
+  
           }}>
           <Image
             source={{uri: receivedData?.image}}
@@ -872,7 +761,6 @@ export default function ViewQAFI({navigation, route}) {
 
         <View style={styles.bottomView}>
           <View style={{height: hp(20)}}>
-            {/* <View style={{height: 1, backgroundColor: '#FFFFFF52'}}></View> */}
 
             <View
               style={{
@@ -925,12 +813,9 @@ export default function ViewQAFI({navigation, route}) {
                   height: hp(5),
                 }}>
                 <TouchableOpacity
-                  // onPress={toggleBottomSheet}>
+         
                      onPress={() => openComments()}>
-                {/* <TouchableOpacity
-                  onPress={() =>
-                    setIsBottomSheetExpanded(!isBottomSheetExpanded)
-                  }> */}
+      
                   <MaterialCommunityIcons
                     color={'#FACA4E'}
                     name={'comment-processing-outline'}
@@ -986,128 +871,7 @@ export default function ViewQAFI({navigation, route}) {
         </View>
       </View>
 
-      {/* <BottomSheet
-        ref={ref_Comments}
-        index={isBottomSheetExpanded ? 0 : -1} // Set to -1 to start with collapsed state
-        snapPoints={['65%', '90%']} // Adjust snap points as needed
-        onScroll={event => {
-          console.log('Event', event);
-          const offsetY = event.nativeEvent.contentOffset.y;
-          if (isBottomSheetExpanded && offsetY === 0) {
-            setIsBottomSheetExpanded(false);
-          } else if (!isBottomSheetExpanded && offsetY > 0) {
-            setIsBottomSheetExpanded(true);
-          }
-        }}
-        //snapPoints={snapPoints}
-        //onChange={handleSheetChange}
-        height={210}
-        openDuration={250}
-        closeOnDragDown={true}
-        draggableIcon={false}
-        closeOnPressMask={true}
-        customStyles={{
-          container: {
-            borderTopLeftRadius: 100,
-            borderTopRightRadius: 100,
-            paddingTop: 0,
-            padding: 20,
-            zIndex: 999,
-            backgroundColor: 'white',
-          },
-          draggableIcon: {
-            backgroundColor: 'white',
-          },
-        }}>
-        <View
-          style={{
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: hp(5),
-          }}>
-          <Text
-            style={{
-              color: '#000000',
-              fontFamily: 'Inter-Bold',
-              fontSize: hp(2.3),
-            }}>
-            Comments
-          </Text>
-        </View>
-
-        <View style={{marginTop: hp(1), flex: 1}}>
-          <BottomSheetFlatList
-            data={comments}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({item}) => renderComments(item)}
-            extraData={loading}
-          />
-        </View>
-
-        {showReply === false ? (
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              height: hp(8),
-            }}>
-            <TouchableOpacity
-              style={{
-                height: hp(8),
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: wp(14),
-              }}>
-              <SmileEmoji />
-            </TouchableOpacity>
-
-            <TextInput
-              value={commentText} // Bind the value to the state variable
-              onChangeText={text => setCommentText(text)} // Update state on text change
-              placeholderTextColor={'#848484'}
-              placeholder="Write Comment Heressssss"
-              style={{flex: 1, marginLeft: wp(1)}}
-            />
-
-            <TouchableOpacity onPress={() => clearTextInput}>
-              <ButtonSend />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View
-            style={{
-              width: '100%',
-              flexDirection: 'row',
-              alignItems: 'center',
-              height: hp(8),
-            }}>
-            <TouchableOpacity
-              onPress={() => openEmoji()}
-              style={{
-                height: hp(8),
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: wp(14),
-              }}>
-              <SmileEmoji />
-            </TouchableOpacity>
-
-            <TextInput
-              value={commentText} // Bind the value to the state variable
-              onChangeText={text => setCommentText(text)} // Update state on text change
-              placeholderTextColor={'#848484'}
-              placeholder="Add a reply"
-              style={{flex: 1, marginLeft: wp(1)}}
-            />
-
-            <TouchableOpacity onPress={() => clearTextInput()}>
-              <ButtonSend />
-            </TouchableOpacity>
-          </View>
-        )}
-      </BottomSheet> */}
+     
        <Modal
         visible={modalVisible}
         transparent={true}
@@ -1154,7 +918,8 @@ export default function ViewQAFI({navigation, route}) {
                 fontSize: hp(2.3),
               }}
             >
-              Comments
+              {t('Comments')}
+              
             </Text>
           </View>
 
@@ -1167,7 +932,7 @@ export default function ViewQAFI({navigation, route}) {
                   alignItems: "center",
                 }}
               >
-                <Text>No Comments Yet</Text>
+                <Text>{t('NoCommentsYet')}</Text>
               </View>
             ) : (
               <FlatList
@@ -1178,19 +943,6 @@ export default function ViewQAFI({navigation, route}) {
               />
             )}
           </View>
-
-          {loading && (
-            <View
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: [{ translateX: -25 }, { translateY: -25 }],
-              }}
-            >
-              <ActivityIndicator size="large" color="#FACA4E" />
-            </View>
-          )}
 
           {isBottomSheetExpanded === false ? (
             <View
@@ -1221,7 +973,7 @@ export default function ViewQAFI({navigation, route}) {
                 value={commentText} // Bind the value to the state variable
                 onChangeText={(text) => setCommentText(text)} // Update state on text change
                 placeholderTextColor={"#848484"}
-                placeholder="Write Comment Here"
+                placeholder={t('WriteCommentHere')}
                 style={{ flex: 1, marginLeft: wp(1) }}
               />
 
@@ -1260,7 +1012,7 @@ export default function ViewQAFI({navigation, route}) {
                   onChangeText={(text) => setCommentText(text)} // Update state on text change
                   placeholderTextColor={"#848484"}
                   // placeholder="Add a reply"
-                  placeholder="Write Comment Here"
+                  placeholder={t('WriteCommentHere')}
                   style={{ flex: 1, marginLeft: wp(1) }}
                 />
                 <TouchableOpacity
@@ -1285,21 +1037,10 @@ export default function ViewQAFI({navigation, route}) {
 
    
 
-      <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
+      {loading && <Loader />}
       <CustomSnackbar
-          message={'success'}
-          messageDescription={'QAFI downloaded successfully'}
+          message={t('Success')}
+          messageDescription={t('QAFIdownloadedsuccessfully')}
           onDismiss={dismissSnackbar} // Make sure this function is defined
           visible={snackbarVisible}
         />
@@ -1323,8 +1064,6 @@ const styles = StyleSheet.create({
   bottomView: {
     flex: 1,
     marginTop: hp(3),
-    //justifyContent: 'flex-end',
-    // You can add padding or content to this view as needed.
   },
   textProfileName: {
     color: 'black',

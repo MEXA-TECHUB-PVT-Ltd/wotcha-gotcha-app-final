@@ -25,14 +25,12 @@ import Add from "../../../assets/svg/AddMainScreen.svg";
 import Approved from "../../../assets/svg/Approved";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Carousel from "react-native-snap-carousel";
-import Toast from "react-native-toast-message";
-import MailActive from "../../../assets/svg/MailActive";
-import NonVerified from "../../../assets/svg/NonVerified.svg";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import { useIsFocused } from "@react-navigation/native";
 import { base_url } from "../../../../../baseUrl";
 import LetterIcon from "react-native-vector-icons/Entypo";
+import { useTranslation } from 'react-i18next';
 
 export default function OpenLetterScreen({ route }) {
   const [selectedItemId, setSelectedItemId] = useState(1);
@@ -41,7 +39,7 @@ export default function OpenLetterScreen({ route }) {
   const isFocused = useIsFocused();
   const [topNewsData, setTopNewsData] = useState('');
   const [TopSignature, setTopSignature] = useState('');
-
+  const { t } = useTranslation();
   const [authToken, setAuthToken] = useState("");
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [adsinActiveData, setAdsInActiveData] = useState([]);
@@ -73,8 +71,6 @@ export default function OpenLetterScreen({ route }) {
       const result = await AsyncStorage.getItem("authToken ");
       if (result !== null) {
         setAuthToken(result);
-        // fetchData();
-        console.log("user id retrieved:", result);
       }
     } catch (error) {
       // Handle errors here
@@ -97,7 +93,6 @@ export default function OpenLetterScreen({ route }) {
     try {
       const response = await fetch(
         base_url + "banner/getAllActiveBanners?topBanner=true",
-        // base_url + "banner/getAllBannersByUser/97",
         {
           method: "GET",
           headers: {
@@ -107,7 +102,6 @@ export default function OpenLetterScreen({ route }) {
       );
 
       const result = await response.json();
-      // console.log("AllBanners---", result.AllBanners);
       setAdsData(result.AllBanners);
     } catch (error) {
       console.error("Error AllBanners:", error);
@@ -121,7 +115,6 @@ export default function OpenLetterScreen({ route }) {
     try {
       const response = await fetch(
         base_url + "banner/getAllActiveBanners?topBanner=false",
-        // base_url + "banner/getAllBannersByUser/97",
         {
           method: "GET",
           headers: {
@@ -131,15 +124,12 @@ export default function OpenLetterScreen({ route }) {
       );
 
       const result = await response.json();
-      // console.log("AllBanners AdsInActiveData---", result.AllBanners);
-      // setAdsInActiveData(result.AllBanners);
       const updatedBanners = result.AllBanners.map((banner) => {
         if (banner.image.startsWith("/fileUpload")) {
           banner.image = `https://watch-gotcha-be.mtechub.com${banner.image}`;
         }
         return banner;
       });
-      // console.log("AllBanners AdsInActiveData---", updatedBanners);
       setAdsInActiveData(updatedBanners);
     } catch (error) {
       console.error("Error AllBanners AdsInActiveData---", error);
@@ -148,8 +138,6 @@ export default function OpenLetterScreen({ route }) {
   };
 
   const fetchTopNews = async () => {
-    // console.log('Categry in id', categoryIdNews);
-    // console.log('News Called');
     setLoading(true);
     const token = authToken;
 
@@ -166,13 +154,11 @@ export default function OpenLetterScreen({ route }) {
       );
 
       const result = await response.json();
-      // console.log('Resultings of TopNews', result.topitem);
-      //Alert.alert(result)
+
       const formattedLetters = result.topitem.map((letter) => ({
         ...letter,
         post_date: convertTimeAndDate(letter.post_date), 
       }));
-      console.log('Resultings of TopNews', result.topitem);
       setTopNewsData(formattedLetters[0]); // Update the state with the fetched data
       fetchSpecificSig(formattedLetters[0].signature_id)
     } catch (error) {
@@ -197,9 +183,8 @@ export default function OpenLetterScreen({ route }) {
       );
 
       const result = await response.json();
-      console.log('Signatire---------', result.Signature);
+      // console.log('Signatire---------', result.Signature);
       setTopSignature(result.Signature)
-      // setTopNewsData(formattedLetters[0]); // Update the state with the fetched data
     } catch (error) {
       setLoading(false);
       console.error("Error Trending:", error);
@@ -210,14 +195,7 @@ export default function OpenLetterScreen({ route }) {
     { id: 1, title: "Open Letters" },
  
   ];
-  // const searches = [
-  //     { id: 1, title: "On News" },
-  //     { id: 2, title: "Open Letters" },
-  //     { id: 3, title: "QAFI" },
-  //     { id: 4, title: "EBC" },
-  //   ];
   const renderSearches = (item) => {
-    // console.log('Items', item);
     const isSelected = selectedItemId === item.id;
 
     return (
@@ -246,7 +224,6 @@ export default function OpenLetterScreen({ route }) {
 
   const fetchLetterPublicGeneral = async () => {
     setLoading(true);
-    // console.log('Categry in id', categoryIdNews);
     const token = authToken;
 
     try {
@@ -265,7 +242,6 @@ export default function OpenLetterScreen({ route }) {
         ...letter,
         post_date: convertTimeAndDate(letter.post_date),
       })).reverse();
-      // console.log('Resultings of formattedLetters', formattedLetters);
       setOpensLettersPublicGeneralData(formattedLetters); // Update the state with the fetched data
       await fetchLetterPublicCelebrity();
     } catch (error) {
@@ -282,8 +258,6 @@ export default function OpenLetterScreen({ route }) {
       year: "numeric",
       month: "long",
       day: "numeric",
-      // hour: '2-digit',
-      // minute: '2-digit',
     });
   };
   const fetchLetterPublicCelebrity = async () => {
@@ -301,16 +275,13 @@ export default function OpenLetterScreen({ route }) {
       );
 
       const result = await response.json();
-      // console.log('Resultings of News Celebrity Data', result.AllLetter);
-      //Alert.alert(result)
+
       const formattedLetters = result.AllLetter.map((letter) => ({
         ...letter,
         post_date: convertTimeAndDate(letter.post_date),
       })).reverse();
-      // const reversedData = result.AllLetter.reverse();
-      // console.log('Resultings of News Celebrity Data', formattedLetters);
+
       setOpensLettersPublicCelebrityData(formattedLetters); // Update the state with the fetched data
-      // setOpensLettersPublicCelebrityData(result.AllLetter); // Update the state with the fetched data
       await fetchLetterPrivateFriends();
     } catch (error) {
       setLoading(false);
@@ -336,9 +307,6 @@ export default function OpenLetterScreen({ route }) {
       );
 
       const result = await response.json();
-      // console.log('Resultings of News', result.AllLetter);
-      //Alert.alert(result)
-
       setOpensLettersPrivateFriendsData(result.AllLetter); // Update the state with the fetched data
       await fetchLetterPrivateCelebrity();
     } catch (error) {
@@ -362,9 +330,6 @@ export default function OpenLetterScreen({ route }) {
       );
 
       const result = await response.json();
-      // console.log('Resultings of News', result.AllLetter);
-      //Alert.alert(result)
-
       setOpensLettersPrivateCelebrityData(result.AllLetter); // Update the state with the fetched data
       // fetchTopNews();
 
@@ -485,7 +450,8 @@ export default function OpenLetterScreen({ route }) {
                 fontFamily: "Inter-Bold",
               }}
             >
-              Subject:
+              {t('Subject')}
+              {/* Subject: */}
             </Text>
             <View style={{ height: "100%", width: "75%" }}>
               <Text
@@ -533,17 +499,6 @@ export default function OpenLetterScreen({ route }) {
                 />
               </View>
             ) : null}
-            {/* <Text
-                numberOfLines={3}
-                ellipsizeMode="tail"
-                style={{
-                  color: "#595959",
-                  fontSize: 8,
-                  fontFamily: "Inter-Regular",
-                }}
-              >
-                {item.body}
-              </Text> */}
           </View>
           <View
             style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
@@ -575,13 +530,11 @@ export default function OpenLetterScreen({ route }) {
           onPressSearch={() => navigation.navigate("SearchPostLetter")}
           //   onPressSearch={handleSearchPress}
           showText={true}
-          text={"Open Letter"}
+          text={t('OpenLetter')}
           showSearch={true}
         />
       </View>
 
-      {/* {renderItemText()} */}
-      {/* {renderItemText()} */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{
@@ -604,7 +557,8 @@ export default function OpenLetterScreen({ route }) {
           ) : adsData.length === 0 ? (
             <View style={styles.TopBannerView}>
               <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                No Top Banner
+              {t('NoTopBanner')}
+                {/* No Top Banner */}
               </Text>
             </View>
           ) : (
@@ -722,13 +676,13 @@ export default function OpenLetterScreen({ route }) {
             style={{
               alignItems: "flex-end",
               height: 10,
-              // marginRight: wp(1),
+ 
             }}
           >
             <Text
               style={{
                 color: "#282828",
-                // marginLeft: wp(3),
+             
                 width: "25%",
                 fontSize: 6,
                 fontFamily: "Inter-Bold",
@@ -743,7 +697,7 @@ export default function OpenLetterScreen({ route }) {
               flexDirection: "row",
               height: hp(5),
               paddingTop: 6,
-              // backgroundColor:'red', width:'60%'
+         
             }}
           >
             <Text
@@ -754,7 +708,8 @@ export default function OpenLetterScreen({ route }) {
                 fontFamily: "Inter-Bold",
               }}
             >
-              Subject:
+              {t('Subject')}
+              {/* Subject: */}
             </Text>
             <View style={{ height: "100%", width: "75%" }}>
               <Text
@@ -771,119 +726,13 @@ export default function OpenLetterScreen({ route }) {
               </Text>
             </View>
           </View>
-          {/* <View
-            style={{
-              justifyContent: "center",
-              alignItems: "flex-end",
-              height: hp(6),
-              right: 10,
-            }}
-          >
-            {imageUrl !== null ||
-            imageUrl !== undefined ||
-            item.signature_image !== undefined ||
-            item.signature_image !== null ? (
-              <View
-                style={{
-                  height: hp(5),
-                  width: wp(9),
-                  borderRadius: wp(3),
-                }}
-              >
-                <Image
-                  source={{ uri: imageUrl || item.signature_image }}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-
-                    resizeMode: "contain",
-                  }}
-                />
-              </View>
-            ) : null}
-          </View> */}
+        
           <View
             style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
           ></View>
         </View>
       </TouchableOpacity>
-          {/* <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("ViewNews", {
-                News: topNewsData,
-              })
-            }
-          >
-            {topNewsData === undefined ||
-            topNewsData.length === 0 ||
-            topNewsData.image === undefined ||
-            topNewsData.image === null ||
-            topNewsData.image === "" ||
-            topNewsData.image === "0" ? (
-              <View
-                //onPress={() => navigation.navigate('News')}
-                style={{ width: wp(35), height: "100%", borderRadius: wp(5) }}
-              >
-                <Image
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    zIndex: 1, // Ensure it's on top of other elements
-                    //flex: 1,
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: wp(3),
-                    resizeMode: "cover",
-                  }}
-                  source={appImages.galleryPlaceHolder}
-                />
-              </View>
-            ) : (
-              <View
-                style={{ width: wp(35), height: "100%", borderRadius: wp(5) }}
-              >
-                <Image
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-
-                    zIndex: 1, // Ensure it's on top of other elements
-                    //flex: 1,
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: wp(3),
-                    resizeMode: "cover",
-                  }}
-                  source={{ uri: topNewsData.image }}
-                />
-              </View>
-            )}
-          </TouchableOpacity>
-          <View style={{ justifyContent: "center", flex: 1 }}>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                height: hp(7),
-                width: wp(35),
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: hp(1.5),
-                  marginLeft: wp(2.5),
-                  fontFamily: "Inter-Regular",
-                  color: "#000000",
-                }}
-              >
-                {topNewsData === undefined || topNewsData.length === 0
-                  ? "Does not contain any top news"
-                  : topNewsData?.description}
-              </Text>
-            </View>
-          </View> */}
+        
         </View>
 
         <View style={{ flex: 1 }}>
@@ -896,7 +745,8 @@ export default function OpenLetterScreen({ route }) {
                 paddingBottom: 5,
               }}
             >
-              Public (general)
+              {t('PublicGeneral')}
+              {/* Public (general) */}
             </Text>
             {loading ? (
                   <View style={styles.NoDataView}>
@@ -907,7 +757,8 @@ export default function OpenLetterScreen({ route }) {
                 style={styles.NoDataView}
               >
                 <Text style={styles.NoDataText}>
-                  No data available
+                {t('NoDataAvailable')}
+                  {/* No data available */}
                 </Text>
               </View>
             ) : (
@@ -931,7 +782,8 @@ export default function OpenLetterScreen({ route }) {
                 fontSize: hp(2),
               }}
             >
-              Public (to authorities, celebrities, leaders)
+              {t('PublicToAuthoritiesCelebritiesLeaders')}
+              {/* Public (to authorities, celebrities, leaders) */}
             </Text>
 
             {loading ? (
@@ -945,7 +797,8 @@ export default function OpenLetterScreen({ route }) {
                 style={styles.NoDataView}
               >
                 <Text style={styles.NoDataText}>
-                  No data available
+                {t('NoDataAvailable')}
+                  {/* No data available */}
                 </Text>
               </View>
             ) : (
@@ -969,13 +822,14 @@ export default function OpenLetterScreen({ route }) {
                 fontSize: hp(2),
               }}
             >
-              Private (to friends, peers, followers)
+              {t('PrivateToFriendsPeersFollowers')}
+              {/* Private (to friends, peers, followers) */}
             </Text>
             <View
                 style={styles.NoDataView}
               >
                 <Text style={styles.NoDataText}>
-                  No data available
+                {t('NoDataAvailable')}
                 </Text>
               </View>
             {/* <FlatList
@@ -997,7 +851,8 @@ export default function OpenLetterScreen({ route }) {
                 fontSize: hp(2),
               }}
             >
-              Private (to authorities, celebrities, leaders){" "}
+              {t('PrivateToAuthoritiesCelebritiesLeaders')}
+              {/* Private (to authorities, celebrities, leaders) */}
             </Text>
 
             <View
@@ -1008,7 +863,8 @@ export default function OpenLetterScreen({ route }) {
               }}
             >
               <Text style={{ fontWeight: "Medium", fontSize: hp(2.1) }}>
-                No data available
+              {t('NoDataAvailable')}
+                {/* No data available */}
               </Text>
             </View>
             {/*  <FlatList
@@ -1037,7 +893,8 @@ export default function OpenLetterScreen({ route }) {
           ) : adsinActiveData.length === 0 ? (
             <View style={styles.TopBannerView}>
               <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                No Banner
+              {t('NoBanner')}
+                {/* No Banner */}
               </Text>
             </View>
           ) : (
@@ -1072,8 +929,6 @@ export default function OpenLetterScreen({ route }) {
         </View>
       </ScrollView>
 
-      {/* ///////////////////////////////////////// */}
-
       {/* //////////////////////////////////////// */}
       <TouchableOpacity
         onPress={() => goToScreen()}
@@ -1082,7 +937,6 @@ export default function OpenLetterScreen({ route }) {
         <Add />
       </TouchableOpacity>
 
-      {/* <Toast ref={(ref) => Toast.setRef(ref)} /> */}
     </View>
   );
 }
@@ -1108,7 +962,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2F2F2",
     flexDirection: "row",
     alignItems: "center",
-    //marginLeft: wp(3.8),
     borderRadius: wp(5),
     borderWidth: 0.5,
     borderColor: "#00000017",
@@ -1118,9 +971,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: hp(2.1),
     height: hp(7),
-    // marginHorizontal: wp(6),
     marginLeft: wp(2),
-    //borderWidth: 3,
   },
   searchHeader: {
     flexDirection: "row",
@@ -1129,7 +980,6 @@ const styles = StyleSheet.create({
     marginTop: hp(5),
     marginHorizontal: wp(8),
     height: hp(8),
-    //borderWidth: 3,
   },
   latestSearch: {
     fontFamily: "Inter",
@@ -1170,11 +1020,9 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#4A4A4A",
     fontSize: hp(2),
-    // textAlign: 'left',
     fontFamily: "Inter",
     marginTop: 5,
     fontSize: hp(1.9),
-    // right: "20%",
   },
   TopBannerView: {
     height: "100%",

@@ -54,7 +54,8 @@ import {
   import { GestureHandlerRootView } from "react-native-gesture-handler";
   import CustomSnackbar from "../../../assets/Custom/CustomSnackBar";
   import { base_url } from "../../../../../baseUrl";
-  
+  import { useTranslation } from 'react-i18next';
+
   export default function ViewSportsProfile({ navigation, route }) {
     const [showFullContent, setShowFullContent] = useState(false);
     const identifier = route.params?.identifier;
@@ -62,7 +63,7 @@ import {
     const [pastedURL, setPastedURL] = useState(
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
     );
-  
+  const { t } = useTranslation();
     const [comments, setComments] = useState([]);
   
     const [snackbarDeleteVisible, setsnackbarDeleteVisible] = useState(false);
@@ -1066,7 +1067,8 @@ import {
                   fontSize: hp(2.3),
                 }}
               >
-                Comments
+                {t('Comments')} 
+                
               </Text>
             </View>
   
@@ -1079,7 +1081,7 @@ import {
                     alignItems: "center",
                   }}
                 >
-                  <Text>No Comments Yet</Text>
+                  <Text>{t('NoCommentsYet')}</Text>
                 </View>
               ) : (
                 <FlatList
@@ -1134,7 +1136,7 @@ import {
                   value={commentText} // Bind the value to the state variable
                   onChangeText={(text) => setCommentText(text)} // Update state on text change
                   placeholderTextColor={"#848484"}
-                  placeholder="Write Comment Here"
+                  placeholder={t('WriteCommentHere')}
                   style={{ flex: 1, marginLeft: wp(1) }}
                 />
   
@@ -1173,7 +1175,7 @@ import {
                     onChangeText={(text) => setCommentText(text)} // Update state on text change
                     placeholderTextColor={"#848484"}
                     // placeholder="Add a reply"
-                    placeholder="Write Comment Here"
+                    placeholder={t('WriteCommentHere')}
                     style={{ flex: 1, marginLeft: wp(1) }}
                   />
                   <TouchableOpacity style={{ marginRight: wp(3) }} onPress={() => clearTextInput()}>
@@ -1206,8 +1208,8 @@ import {
         </View>
   
         <CustomSnackbar
-          message={"success"}
-          messageDescription={"Pic deleted successfully"}
+          message={t('Success')}
+          messageDescription={t('Sportsdeletedsuccessfully')}
           onDismiss={dismissDeleteSnackbar} // Make sure this function is defined
           visible={snackbarDeleteVisible}
         />
@@ -1247,7 +1249,8 @@ import {
                 fontSize: hp(2.3),
               }}
             >
-              Select an option
+              {t('Selectanoption')}
+              {/* Select an option */}
             </Text>
             <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
               <IonIcons
@@ -1282,7 +1285,9 @@ import {
                   fontSize: hp(2.1),
                 }}
               >
-                Update Sports
+                {t('UpdateSports')}
+        
+      
               </Text>
             </TouchableOpacity>
   
@@ -1313,14 +1318,15 @@ import {
                   fontSize: hp(2.1),
                 }}
               >
-                Delete Sports
+                {t('DeleteSports')}
+               
               </Text>
             </TouchableOpacity>
           </View>
         </RBSheet>
         <CustomSnackbar
-            message={'success'}
-            messageDescription={'Video downloaded successfully'}
+            message={t('Success')}
+            messageDescription={t('SportsDownloadedSuccessfully')}
             onDismiss={dismissSnackbar} // Make sure this function is defined
             visible={snackbarVisible}
           />

@@ -32,6 +32,8 @@ import Headers from "../../../assets/Custom/Headers";
 import CustomSnackbar from "../../../assets/Custom/CustomSnackBar";
 import { base_url } from "../../../../../baseUrl";
 import { useNavigation } from "@react-navigation/native";
+
+import { useTranslation } from 'react-i18next';
 import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from "../../../../../cloudinaryConfig";
 export default function UpdatePostLetterEditSignaturePics({
   route,
@@ -54,7 +56,7 @@ export default function UpdatePostLetterEditSignaturePics({
   const [selectedItemId, setSelectedItemId] = useState(null);
   const ref_RBSheetCamera = useRef(null);
   const ref_RBSheetVideo = useRef(null);
-
+  const { t } = useTranslation();
   const ref_RBSheetCameraCanvas = useRef(null);
 
   const [postLetter, setPostLetter] = useState("");
@@ -66,7 +68,7 @@ export default function UpdatePostLetterEditSignaturePics({
   const [imageUris, setImageUris] = useState([]);
   
   const [imageInfoThumbnail, setimageInfoThumbnail] = useState(null);
-  
+  const [Username, setUserName] = useState('');
   const receivedData = route.params?.receivedData;
   console.log("receivedData-----", receivedData.images);
   console.log("imageUris--------??????", imageUris);
@@ -200,6 +202,7 @@ const getFileDetails = (imageUrl) => {
         setAuthToken(result3);
         //await fetchCategory(result3, id);
         authTokenAndId(id, result3);
+        userUserName();
       }
     } catch (error) {
       // Handle errors here
@@ -207,6 +210,15 @@ const getFileDetails = (imageUrl) => {
     }
   };
 
+  const userUserName = async id => {
+    try {
+      const result3 = await AsyncStorage.getItem('userName');
+      if (result3 !== null) {
+        setUserName(result3);  
+      }
+    } catch (error) {
+    }
+  };
   const authTokenAndId = async (id, token) => {
     fetchUser(id, token);
   };
@@ -1214,7 +1226,7 @@ const getFileDetails = (imageUrl) => {
         onPress={() => handleImageChange(index)}
       >
         <Text style={{ fontFamily: "Inter-Medium", fontSize: 10 }}>
-          Change Pic
+          {t('ChangePic')}
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
@@ -1253,7 +1265,7 @@ const getFileDetails = (imageUrl) => {
         <Headers
           showBackIcon={true}
           showText={true}
-          text={"Update Letter"}
+          text={t('UpdateLetter')}
           onPress={() => navigation.goBack()}
         />
       </View>
@@ -1304,8 +1316,17 @@ const getFileDetails = (imageUrl) => {
             />
           </View>
         )}
+<Text
+            style={{
+              color: '#333333',
+              marginLeft: wp(3),
+              fontFamily: 'Inter',
+              fontWeight: 'bold',
+            }}>
+            {Username}
+          </Text>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => ref_RBSheetCamera.current.open()}
           style={{
             flexDirection: "row",
@@ -1324,7 +1345,7 @@ const getFileDetails = (imageUrl) => {
           </Text>
 
           <Ionicons name="chevron-down" size={21} color="#FACA4E" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       {videoInfo == null  ? (
@@ -1354,7 +1375,8 @@ const getFileDetails = (imageUrl) => {
               color: "#939393",
             }}
           >
-            You can maximum 3 images or videos
+            {t('maximum3imagesorvideos')}
+            {/* You can maximum 3 images or videos */}
           </Text>
         </TouchableOpacity>
       ) : null}
@@ -1459,7 +1481,8 @@ const getFileDetails = (imageUrl) => {
               color: "#939393",
             }}
           >
-            You can maximum upload 1 video
+            {t('maximumupload1video')}
+            {/* You can maximum upload 1 video */}
           </Text>
         </TouchableOpacity>
       ) : null}
@@ -1583,7 +1606,8 @@ const getFileDetails = (imageUrl) => {
               fontSize: hp(2.3),
             }}
           >
-            Select Letter Type
+            {t('SelectLetterType')}
+            
           </Text>
           <TouchableOpacity>
             <Ionicons
@@ -1618,7 +1642,8 @@ const getFileDetails = (imageUrl) => {
                 fontSize: hp(2.1),
               }}
             >
-              Public letter
+              {t('PublicLetter')}
+              
             </Text>
           </TouchableOpacity>
 
@@ -1649,7 +1674,8 @@ const getFileDetails = (imageUrl) => {
                 fontSize: hp(2.1),
               }}
             >
-              Private Letter
+              {t('PrivateLetter')}
+              
             </Text>
           </TouchableOpacity>
         </View>
@@ -1683,7 +1709,7 @@ const getFileDetails = (imageUrl) => {
             alignItems: "center",
           }}
         >
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -1716,7 +1742,7 @@ const getFileDetails = (imageUrl) => {
               size={25}
             />
 
-            <Text style={{ color: "#333333" }}>From camera</Text>
+            <Text style={{ color: "#333333" }}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -1733,7 +1759,7 @@ const getFileDetails = (imageUrl) => {
               size={25}
             />
 
-            <Text style={{ color: "#333333" }}>From gallery</Text>
+            <Text style={{ color: "#333333" }}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
@@ -1778,7 +1804,8 @@ const getFileDetails = (imageUrl) => {
               //fontWeight: 'bold',
             }}
           >
-            Unable To Post!
+            {t('UnableToPost')}
+            
           </Text>
 
           <Text
@@ -1793,12 +1820,13 @@ const getFileDetails = (imageUrl) => {
               //fontWeight: 'bold',
             }}
           >
-            Upgrade for private letter posting and a{"\n"}seamless experience
+            {t('Upgradeforprivateletter')}
+            {/* Upgrade for private letter posting and a{"\n"}seamless experience */}
           </Text>
 
           <View style={{ marginHorizontal: wp(10) }}>
             <CustomButton
-              title="Buy Subscription"
+              title={t('BuySubscription')}
               customClick={() => {
                 ref_RBSendOffer.current.close();
                 navigation.navigate("SubscriptionPayment");
@@ -1821,7 +1849,8 @@ const getFileDetails = (imageUrl) => {
                 //fontWeight: 'bold',
               }}
             >
-              Maybe later
+              {t('Maybelater')}
+              {/* Maybe later */}
             </Text>
           </TouchableOpacity>
         </View>
@@ -1855,7 +1884,7 @@ const getFileDetails = (imageUrl) => {
             alignItems: "center",
           }}
         >
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetVideo.current.close()}>
             <Ionicons
               name="close"
@@ -1888,7 +1917,7 @@ const getFileDetails = (imageUrl) => {
               size={25}
             />
 
-            <Text style={{ color: "#333333" }}>From camera</Text>
+            <Text style={{ color: "#333333" }}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -1904,35 +1933,35 @@ const getFileDetails = (imageUrl) => {
               name="image"
               size={25}
             />
-            <Text style={{ color: "#333333" }}>From gallery</Text>
+            <Text style={{ color: "#333333" }}>{t('>Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
       <CustomSnackbar
-        message={"success"}
-        messageDescription={"Letter Updated Successfully"}
+        message={t('Success')} 
+        messageDescription={t('LetterUpdatedSuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
 
       <CustomSnackbar
-        message={"Alert!"}
-        messageDescription={"You can maximum upload 3 images or a video"}
+        message={t('Alert!')}
+        messageDescription={t('maximumupload3imagesorvideo')}
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackbarVisibleALert}
       />
 
       <CustomSnackbar
-        message={"Alert!"}
-        messageDescription={"Image Limit Exceeds"}
+        message={t('Alert!')}
+        messageDescription={t('ImageLimitExceeds')}
         onDismiss={dismissSnackbarExceedsAlert} // Make sure this function is defined
         visible={snackbarVisibleExceedsALert}
       />
 
       <CustomSnackbar
-        message={"Alert!"}
-        messageDescription={"You can either upload three images or one video!"}
+        message={t('Alert!')}
+        messageDescription={t('eitheruploadthreeimagesoronevideo!')}
         onDismiss={dismissSnackbarLimitAlert} // Make sure this function is defined
         visible={snackbarVisibleLimitALert}
       />

@@ -15,34 +15,23 @@ import {
   ImageBackground,
   Pressable,
   StatusBar,
+  Platform,
 } from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-
-import ForgetPasswordImg from '../../../assets/images/forget.png';
-
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-
-import {appImages} from '../../../assets/utilities/index';
 import {Button, Divider, TextInput} from 'react-native-paper';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 
-import Back from '../../../assets/svg/back.svg';
-
 import CustomButton from '../../../assets/Custom/Custom_Button';
 import {useIsFocused} from '@react-navigation/native';
-import SwitchSelector from 'react-native-switch-selector';
-import User from '../../../assets/svg/User.svg';
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
 import Headers from '../../../assets/Custom/Headers';
 import { base_url } from '../../../../../baseUrl';
 import { useTranslation } from 'react-i18next';
+import Loader from '../../../assets/Custom/Loader';
 LogBox.ignoreAllLogs();
 
 const UpdatePassword = ({navigation}) => {
@@ -51,23 +40,10 @@ const UpdatePassword = ({navigation}) => {
   const [authToken, setAuthToken] = useState('');
   const { t } = useTranslation(); 
   const isFocused = useIsFocused();
-
- 
-  const [newPassword, setNewPassword] = useState('');
   const [snackbarVisible, setSnackbarVisible] = useState(false);
-
   const [isTextInputActive, setIsTextInputActive] = useState(false);
   const [isConfirmActive, setIsConfirmPasswordActive] = useState(false);
-
   const [loading, setIsLoading] = useState(false);
-  const [openModel, setOpenModel] = useState(false);
-  const [openGallery, setOpenGallery] = useState(false);
-  const [userName, setUserName] = useState('');
-  const [imageUri, setImageUri] = useState(null);
-  const ref_RBSheet = useRef(null);
-  const ref_RBSheetCamera = useRef(null);
-
-  const [signin_email, setsignin_email] = useState();
   const [signin_pass, setsignin_pass] = useState();
   const [confirm, setconfirm_pass] = useState();
 
@@ -78,13 +54,7 @@ const UpdatePassword = ({navigation}) => {
   const [signin_ShowPassword1, setsignin_ShowPassword1] = useState(true);
   const [signin_ShowPassword2, setsignin_ShowPassword2] = useState(true);
 
-  const [username, setusername] = useState();
-  const [signup_email, setsignup_email] = useState();
-  const [signup_pass, setsignup_pass] = useState();
-  const [signup_cpass, setsignup_cpass] = useState();
-
   const [isTextInputActive1, setIsTextInputActive1] = useState(false);
-  const [isTextInputActive2, setIsTextInputActive2] = useState(false);
   const [isTextInputActive3, setIsTextInputActive3] = useState(false);
   const [isTextInputActive4, setIsTextInputActive4] = useState(false);
   const [isTextInputActive5, setIsTextInputActive5] = useState(false);
@@ -108,50 +78,31 @@ const UpdatePassword = ({navigation}) => {
     const fetchVideos = async () => {
       // Simulate loading
       setIsLoading(true);
-  
       await getUserID();
-      // Fetch data one by one
-      // Once all data is fetched, set loading to false
       setIsLoading(false);
     };
   
     const getUserID = async () => {
-      console.log("Id's");
       try {
         const result1 = await AsyncStorage.getItem('authToken ');
         if (result1 !== null) {
           setAuthToken(result1);
-          console.log('user token retrieved:', result1);
         }
   
         const result3 = await AsyncStorage.getItem('userId ');
         if (result3 !== null) {
           setUserId(result3);
-  
-          console.log('user id retrieved:', result3);
         }
         const passwordResult = await AsyncStorage.getItem('Password');
         if (passwordResult !== null) {
           setPasswordAccount(passwordResult);
-          console.log('password recieved', passwordResult);
         } else {
-          console.log('no password recieved');
         }
       } catch (error) {
         // Handle errors here
         console.error('Error retrieving user ID:', error);
       }
     };
-  
-  //--------------\\
-
-  const handleFocus = () => {
-    setIsTextInputActive(true);
-  };
-
-  const handleBlur = () => {
-    setIsTextInputActive(false);
-  };
 
   const handleFocus1 = () => {
     setIsTextInputActive1(true);
@@ -169,35 +120,6 @@ const UpdatePassword = ({navigation}) => {
     setIsTextInputActiveConfirmPass(false);
   };
   // Old Pass
-
-  const handleFocusOldPass = () => {
-    setIsTextInputActiveConfirmPassOld(true);
-  };
-
-  const handleBlurOldPass = () => {
-    setIsTextInputActiveConfirmPassOld(false);
-  };
-  const handleFocus3 = () => {
-    setIsTextInputActive3(true);
-  };
-
-  const handleBlur3 = () => {
-    setIsTextInputActive3(false);
-  };
-  const handleFocus4 = () => {
-    setIsTextInputActive4(true);
-  };
-
-  const handleBlur4 = () => {
-    setIsTextInputActive4(false);
-  };
-  const handleFocus5 = () => {
-    setIsTextInputActive5(true);
-  };
-
-  const handleBlur5 = () => {
-    setIsTextInputActive5(false);
-  };
 
   const handleTogglePasswordVisibility = () => {
     setsignin_ShowPassword(!signin_ShowPassword);
@@ -239,21 +161,12 @@ const UpdatePassword = ({navigation}) => {
   //--------------------------\\
 
   const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setSnackbarVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setSnackbarVisible(false);
       navigation.goBack();
     }, 3000);
   };
-
-  //----------------------------\\
-
   const dismissSnackbar = () => {
     setSnackbarVisible(false);
   };
@@ -269,16 +182,9 @@ const UpdatePassword = ({navigation}) => {
   };
 
   const handleUpdateConfirmPassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setSnackbarVisibleConfirmPassword(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setSnackbarVisibleConfirmPassword(false);
-      //navigation.navigate('SignIn');
     }, 3000);
   };
 
@@ -287,13 +193,7 @@ const UpdatePassword = ({navigation}) => {
   };
 
   const handleUpdateConfirmPasswordOld = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setSnackbarVisibleConfirmPasswordOld(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setSnackbarVisibleConfirmPassword(false);
       //navigation.navigate('SignIn');
@@ -307,23 +207,15 @@ const UpdatePassword = ({navigation}) => {
   };
 
   const handleUpdateConfirmPasswordAlert = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setSnackbarVisibleConfirmPasswordAlert(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setSnackbarVisibleConfirmPasswordAlert(false);
-      //navigation.navigate('SignIn');
     }, 3000);
   };
 
   //--------------------------\\
 
   const checkPassword = () => {
-    console.log('Came to confirm password');
     setIsLoading(true);
     if (signin_pass !== confirm) {
       setIsLoading(false);
@@ -367,11 +259,8 @@ const UpdatePassword = ({navigation}) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('API Response:', data);
         setIsLoading(false);
         handleUpdatePassword();
-
-        // Handle the response data as needed
       } else {
         setIsLoading(false);
 
@@ -385,8 +274,6 @@ const UpdatePassword = ({navigation}) => {
     } catch (error) {
       console.error('API Request Error:', error);
       setIsLoading(false);
-
-      // Handle the error
     }
   };
 
@@ -396,7 +283,7 @@ const UpdatePassword = ({navigation}) => {
       contentContainerStyle={{flexGrow: 1}}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'transparent'} />
 
-      <View style={{marginTop: hp(5)}}>
+      <View style={{marginTop:Platform.OS =="ios" ? 0: hp(5)}}>
         <Headers
           showBackIcon={true}
           onPress={() => navigation.goBack()}
@@ -547,10 +434,7 @@ const UpdatePassword = ({navigation}) => {
       <View style={{marginTop: '90%', alignSelf: 'center'}}>
         <CustomButton
           title={t('UpdatePassword.Update')}
-          // load={loading}
-          // checkdisable={inn == '' && cm == '' ? true : false}
           customClick={() => {
-            // setIsLoading(true);
             checkPassword();
           }}
         />
@@ -563,35 +447,7 @@ const UpdatePassword = ({navigation}) => {
         visible={snackbarVisible}
       />
 
-      {/* {loading && (
-        <View
-          style={{
-            position: 'absolute',
-            // top: 0,
-            bottom: 56,
-            left: 0,
-            right: 0,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <ActivityIndicator size="large" color="#fff" />
-        </View>
-      )} */}
-      {loading && (
-          <View
-            style={{
-              position: 'absolute',
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: 'rgba(255, 255, 255, 0.5)', // Semi-transparent white
-            }}>
-            <ActivityIndicator size="large" color="#FACA4E" />
-          </View>
-        )}
+        {loading && <Loader />}
 
       <CustomSnackbar
         message={'Alert!'}
@@ -636,8 +492,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   bg: {
-    // height:800,
-    //backgroundColor: '#FACA4E',
   },
   passwordImg: {
     justifyContent: 'center',
@@ -660,16 +514,6 @@ const styles = StyleSheet.create({
     color: '#9597A6',
     fontSize: wp(3.5),
   },
-  // ti: {
-  //   marginHorizontal: '7%',
-  //   marginTop: '10%',
-  //   width: 300,
-  //   backgroundColor: 'white',
-  //   fontSize: wp(4),
-  //   paddingLeft: '2%',
-  //   borderRadius: 10,
-  // },
-
   bg: {
     // height:800,
     backgroundColor: '#FACA4E',

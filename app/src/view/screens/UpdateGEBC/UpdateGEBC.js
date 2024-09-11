@@ -1008,7 +1008,7 @@ import {appImages} from '../../../assets/utilities/index';
 import CustomButton from '../../../assets/Custom/Custom_Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import { useTranslation } from 'react-i18next';
 import Share from 'react-native-share';
 
 import {
@@ -1032,7 +1032,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, UPLOAD_PRESET } from '../../../../../cloudi
 
 export default function UpdateGEBC({navigation, route}) {
   const [selectedItem, setSelectedItem] = useState('');
-
+  const { t } = useTranslation();
   const [snackbarVisible, setsnackbarVisible] = useState(false);
 
   const [snackbarVisibleAlert, setsnackbarVisibleAlert] = useState(false);
@@ -2038,7 +2038,8 @@ useEffect(() => {
             //borderWidth: 3,
           }}>
           <Text style={{color: '#FACA4E', fontWeight: 'bold'}}>
-            Click on this emoji to select your emoji's
+          {t('ClickOnThisEmojiToSelectYourEmojis')}
+            {/* Click on this emoji to select your emoji's */}
           </Text>
           <TouchableOpacity
             style={{marginTop: hp(3)}}
@@ -2118,7 +2119,7 @@ useEffect(() => {
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -2149,7 +2150,7 @@ useEffect(() => {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -2165,7 +2166,7 @@ useEffect(() => {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
@@ -2191,15 +2192,15 @@ useEffect(() => {
       />
 
       <CustomSnackbar
-        message={'Success'}
-        messageDescription={'EBC Updated Successfully'}
+        message={t('Success')}
+        messageDescription={t('EBCUpdatedSuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
 
       <CustomSnackbar
-        message={'Alert!'}
-        messageDescription={'Kindly Fill All Fields'}
+        message={t('Alert!')}
+        messageDescription={t('KindlyFillAllFields')}
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackbarVisibleAlert}
       />

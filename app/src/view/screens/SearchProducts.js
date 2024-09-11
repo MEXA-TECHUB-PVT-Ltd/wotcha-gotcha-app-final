@@ -20,6 +20,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Fontiso from "react-native-vector-icons/Fontisto";
 import { base_url } from "../../../../baseUrl";
+import Loader from "../../assets/Custom/Loader";
 
 export default function SearchProducts({ navigation, route }) {
   const { apiEndpoint } = route.params;
@@ -419,19 +420,7 @@ export default function SearchProducts({ navigation, route }) {
         // numColumns={3} // Set the number of columns to 3
         renderItem={({ item }) => renderAvailableVideo(item)}
       /> */}
-      <View
-        style={{
-          position: "absolute",
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
+{loading && <Loader />}
     </View>
   );
 }

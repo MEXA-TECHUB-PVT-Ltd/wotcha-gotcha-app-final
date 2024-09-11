@@ -230,11 +230,13 @@ const Headers = ({
           }}
         >
           {image ? (
-            <Image
-              source={{ uri: image }} // Use image URI if available
-              style={styles.profileImgs}
-              resizeMode="contain"
-            />
+            <View style={{ backgroundColor: 'red', borderRadius: 30 }}>
+              <Image
+                source={{ uri: image }} // Use image URI if available
+                style={styles.profileImgs}
+              />
+            </View>
+
           ) : (
             <MaterialCommunityIcons
               style={{ marginTop: hp(0.5) }}
@@ -322,7 +324,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     //paddingHorizontal:wp(5),
     height: hp(5),
-    marginTop: StatusBar.currentHeight - 20,
+    // marginTop: StatusBar.currentHeight - 20,
   },
   headerText: {
     color: "#333333",
@@ -332,11 +334,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   logoImage: {
-    alignSelf: "center",
+    // alignSelf: "center",
     resizeMode: "contain",
     // marginTop: hp(-2.4),
     width: wp(39),
     height: hp(8),
+
   },
   backArrow: {
     position: "absolute",
@@ -358,8 +361,9 @@ const styles = StyleSheet.create({
   profileImgs: {
     width: wp(10),
     height: wp(10),
-    borderRadius: wp(10) / 2, // Assuming the image has dimensions 30x30
-    overflow: "hidden", // Ensure the content is clipped to the border radius
+    resizeMode: 'cover',
+    borderRadius: 100, // Assuming the image has dimensions 30x30
+    //  overflow: "hidden", // Ensure the content is clipped to the border radius
   },
   imgAdd: {
     resizeMode: "contain",

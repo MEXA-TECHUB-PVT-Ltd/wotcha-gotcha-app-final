@@ -13,26 +13,13 @@ import {
   import React, {useState} from 'react';
   import Back from '../../../assets/svg/back.svg';
   import {appImages} from '../../../assets/utilities/index';
-  import Slider from '@react-native-community/slider';
-  import VolumeUp from '../../../assets/svg/VolumeUp.svg';
-  import Like from '../../../assets/svg/Like.svg';
-  import UnLike from '../../../assets/svg/Unlike.svg';
-  import Comment from '../../../assets/svg/Comment.svg';
-  import Send from '../../../assets/svg/Send.svg';
-  import Download from '../../../assets/svg/Download.svg';
   import CustomButton from '../../../assets/Custom/Custom_Button';
-  import Share from 'react-native-share';
-  
+
   import {
     heightPercentageToDP as hp,
     widthPercentageToDP,
     widthPercentageToDP as wp,
   } from 'react-native-responsive-screen';
-  
-  import Fontiso from 'react-native-vector-icons/Fontisto';
-  
-  import IonIcons from 'react-native-vector-icons/Ionicons';
-
   export default function ChangeImageScreen() {
     return (
       <ImageBackground source={appImages.videoBG} style={{flex: 1}}>
@@ -54,9 +41,9 @@ import {
             <CustomButton
               title={'Next'}
               load={false}
-              // checkdisable={inn == '' && cm == '' ? true : false}
+  
               customClick={() => {
-                //navigation.navigate('Profile_image');
+      
               }}
             />
   

@@ -1,26 +1,18 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
-  SafeAreaView,
-  StyleSheet,
-  Dimensions,
   ScrollView,
   View,
   ActivityIndicator,
-  FlatList,
+
   Image,
   Text,
   TouchableOpacity,
   LogBox,
-  Animated,
-  ImageBackground,
-  Pressable,
+
   StatusBar,
 } from 'react-native';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { CommonActions } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import {appImages} from '../../../assets/utilities/index';
 import {Button, Divider, TextInput} from 'react-native-paper';
 import {
   heightPercentageToDP as hp,
@@ -35,7 +27,6 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import CustomButton from '../../../assets/Custom/Custom_Button';
 import {useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import SwitchSelector from 'react-native-switch-selector';
 import User from '../../../assets/svg/User.svg';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
@@ -43,6 +34,8 @@ import styles from './styles';
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
 import { base_url } from '../../../../../baseUrl';
 import { CLOUD_NAME, CLOUDINARY_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
+import { useTranslation } from 'react-i18next';
+
 LogBox.ignoreAllLogs();
 
 const Profile_image = ({navigation}) => {
@@ -53,18 +46,11 @@ const Profile_image = ({navigation}) => {
   const [signin_email, setsignin_email] = useState();
 
   const [userId, setUserId] = useState('');
-
+  const { t } = useTranslation();
   const [authToken, setAuthToken] = useState('');
-
   const [snackbarVisible, setsnackbarVisible] = useState(false);
-
   const [selectedItem, setSelectedItem] = useState('');
-
   const [imageUrl, setImageUrl] = useState(null);
-
-  const [openModel, setOpenModel] = useState(false);
-  const [openGallery, setOpenGallery] = useState(false);
-  const [userName, setUserName] = useState('');
   const [imageUri, setImageUri] = useState(null);
   const [imageInfo, setimageInfo] = useState(null);
 
@@ -73,40 +59,29 @@ const Profile_image = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Make the API request and update the 'data' state
     fetchVideos();
   }, []);
 
   const fetchVideos = async () => {
-    // Simulate loading
     setIsLoading(true);
-
     await getUserID();
-
-    // Once all data is fetched, set loading to false
     setIsLoading(false);
   };
 
   const getUserID = async () => {
-    console.log("Id's");
+
     try {
       const result = await AsyncStorage.getItem('userId ');
       if (result !== null) {
         setUserId(result);
-        console.log('user id retrieved:', result);
       } else {
-        console.log('result is null', result);
       }
 
       const result3 = await AsyncStorage.getItem('authToken ');
       if (result3 !== null) {
         setAuthToken(result3);
-
-        console.log('user id retrieved:', result);
       }
     } catch (error) {
-      // Handle errors here
-      console.error('Error retrieving user ID:', error);
     }
   };
 
@@ -118,16 +93,13 @@ const Profile_image = ({navigation}) => {
         photoQuality: 'medium',
       },
       response => {
-        console.log('image here', response);
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setImageUri(response.assets[0].uri);
-            console.log('response', response.assets[0].uri);
             setimageInfo(response.assets[0]);
           } else if (response.uri) {
             // Handle the case when no assets are present (e.g., for videos)
             setImageUri(response.uri);
-            console.log('response', response.uri);
           }
         }
         ref_RBSheetCamera.current.close();
@@ -138,15 +110,10 @@ const Profile_image = ({navigation}) => {
   const choosePhotoFromLibrary = value => {
     setSelectedItem(value);
     launchImageLibrary({mediaType: 'photo'}, response => {
-      console.log('image here', response);
       if (!response.didCancel && response.assets.length > 0) {
-        console.log('Response', response.assets[0]);
         setImageUri(response.assets[0].uri);
         setimageInfo(response.assets[0]);
       }
-
-      console.log('response', imageInfo);
-
       ref_RBSheetCamera.current.close();
     });
   };
@@ -156,13 +123,7 @@ const Profile_image = ({navigation}) => {
   };
 
   const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setsnackbarVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisible(false);
       navigation.dispatch(
@@ -171,30 +132,23 @@ const Profile_image = ({navigation}) => {
           routes: [{ name: 'BottomTabNavigation' }],
         })
       );
-      // navigation.navigate('BottomTabNavigation');
     }, 3000);
   };
 
   const upload = async () => {
     if (imageInfo !== null) {
-      //uploadVideo()
-      //uploadVideos()
+
       const uri = imageInfo.uri;
       const type = imageInfo.type;
       const name = imageInfo.fileName;
       const source = {uri, type, name};
-      console.log('Video Source', source);
       handleUploadImage(source);
-
-      //uploadVideoCloudinary(imageInfo.uri)
     } else {
       //setModalVisible(true);
     }
   };
 
   const handleUploadImage = data => {
-    //setIsLoading(true);
-
     const dataImage = new FormData();
     dataImage.append('file', data);
     dataImage.append('upload_preset', UPLOAD_PRESET); // Use your Cloudinary upload preset
@@ -211,9 +165,6 @@ const Profile_image = ({navigation}) => {
       .then(res => res.json())
       .then(data => {
         setImageUrl(data.url); // Store the Cloudinary video URL in your state
-        //uploadVideo(data.url)
-        //uploadXpiVideo(data.url);
-        console.log('Image Url', data);
         updateUserName(data.url);
       })
       .catch(err => {
@@ -224,7 +175,6 @@ const Profile_image = ({navigation}) => {
 
   const updateUserName = async data => {
     setIsLoading(true);
-    console.log('TOKEN', authToken);
     const token = authToken;
     const apiUrl = base_url + 'user/uploadImage';
 
@@ -245,11 +195,8 @@ const Profile_image = ({navigation}) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('API Response:', data);
         setIsLoading(false);
         handleUpdatePassword();
-
-        // Handle the response data as needed
       } else {
         setIsLoading(false);
 
@@ -279,8 +226,8 @@ const Profile_image = ({navigation}) => {
           />
         </TouchableOpacity>
 
-        <Text style={styles.txt}>Profile Image</Text>
-        <Text style={styles.txt1}>Add your profile image below</Text>
+        <Text style={styles.txt}>{t('ProfileImage')}</Text> 
+        <Text style={styles.txt1}>{t('AddYourProfileImageBelow')}</Text>
 
         <View style={{alignItems: 'center', marginTop: hp(15)}}>
           <TouchableOpacity style={styles.circleBox}>
@@ -313,21 +260,17 @@ const Profile_image = ({navigation}) => {
             fontFamily: 'Inter-Bold',
             color: '#232323',
           }}>
-          Add Image
+            {t('AddImage')}
+          {/* Add Image */}
         </Button>
         <View style={{marginTop: '25%', alignSelf: 'center'}}>
           <CustomButton
-            title="Complete Profile"
+            title={t('CompleteProfile')}
             load={false}
-            // checkdisable={inn == '' && cm == '' ? true : false}
+
             customClick={() => {
               setIsLoading(true);
-              //setTimeout(() => {
-              //navigation.navigate('BottomTabNavigation');
               upload();
-              //setIsLoading(false);
-              // Replace 'YourTargetScreen' with the screen you want to navigate to
-              //}, 2000);
             }}
           />
         </View>
@@ -359,7 +302,7 @@ const Profile_image = ({navigation}) => {
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -390,7 +333,7 @@ const Profile_image = ({navigation}) => {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -406,7 +349,7 @@ const Profile_image = ({navigation}) => {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
@@ -427,8 +370,8 @@ const Profile_image = ({navigation}) => {
       )}
 
       <CustomSnackbar
-        message={'success'}
-        messageDescription={'Image Uploaded Successfully'}
+        message={t('Success')}
+        messageDescription={t('ImageUploadedSuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />

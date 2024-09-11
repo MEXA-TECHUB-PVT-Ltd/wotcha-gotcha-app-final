@@ -22,7 +22,6 @@ import {
   import Headers from "../../../assets/Custom/Headers";
   import { appImages } from "../../../assets/utilities";
   import Add from "../../../assets/svg/AddMainScreen.svg";
-  import Approved from "../../../assets/svg/Approved";
   import AsyncStorage from "@react-native-async-storage/async-storage";
   import Carousel from "react-native-snap-carousel";
   import NonVerified from "../../../assets/svg/NonVerified.svg";
@@ -31,10 +30,10 @@ import {
   import { useIsFocused } from "@react-navigation/native";
   import { base_url } from "../../../../../baseUrl";
   import EBC from "react-native-vector-icons/MaterialCommunityIcons";
-  
+  import { useTranslation } from 'react-i18next';
 const EBCScreen = () => {
 
-
+  const { t } = useTranslation();
 
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [authToken, setAuthToken] = useState("");
@@ -88,9 +87,6 @@ const EBCScreen = () => {
       const result = await response.json();
       const reverseData = result.AllCategories.reverse();
       setSearchesData(reverseData);
-      // if (result.AllCategories.length > 0) {
-      //   setSelectedItemId(result.AllCategories[0].id);
-      // }
       if (selectedItemId === null && result.AllCategories.length > 0) {
         setSelectedItemId(result.AllCategories[0].id);
       }
@@ -143,9 +139,6 @@ const EBCScreen = () => {
     }
     setLoading(false)
   };
-
-
-
   const renderSearches = (item) => {
     // console.log('First Id', searchesData[0].id);
 const isSelected = selectedItemId === item.id;
@@ -181,8 +174,7 @@ const isSelected = selectedItemId === item.id;
     // <TouchableOpacity onPress={handle_details}>
     <TouchableOpacity onPress={() =>  navigation.navigate("ViewGEBC", { picData: item })}>
     <View style={styles.itemContainer}>
-      {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
-      {/* <Image source={{ uri: item.image }} style={styles.image} /> */}
+
             <View
               style={{
                 width: "100%",
@@ -268,7 +260,7 @@ const isSelected = selectedItemId === item.id;
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>No Data available</Text>
+        <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
       ) : (
       <FlatList
         data={item.data}
@@ -330,8 +322,7 @@ const isSelected = selectedItemId === item.id;
         );
   
         const result = await response.json();
-        // console.log("AllBanners AdsInActiveData---", result.AllBanners);
-        // setAdsInActiveData(result.AllBanners);
+
         const updatedBanners = result.AllBanners.map((banner) => {
           if (banner.image.startsWith("/fileUpload")) {
             banner.image = `https://watch-gotcha-be.mtechub.com${banner.image}`;
@@ -364,7 +355,7 @@ const isSelected = selectedItemId === item.id;
           onPressSearch={() => navigation.navigate("SearchGEBC")}
           //   onPressSearch={handleSearchPress}
           showText={true}
-          text={"EBC"}
+          text={"EBC"} 
           showSearch={true}
         />
       </View>
@@ -393,7 +384,7 @@ const isSelected = selectedItemId === item.id;
           ) : adsData.length === 0 ? (
             <View style={styles.TopBannerView}>
               <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                No Top Banner
+             {t('NoTopBanner')}
               </Text>
             </View>
           ) : (
@@ -497,21 +488,7 @@ const isSelected = selectedItemId === item.id;
             >
               <Text style={{ fontSize: hp(5) }}>{topNewsData.image}</Text>
             </View>
-                {/* <Image
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-
-                    zIndex: 1, // Ensure it's on top of other elements
-                    //flex: 1,
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: wp(3),
-                    resizeMode: "cover",
-                  }}
-                  source={{ uri: topNewsData.image }}
-                /> */}
+              
               </View>
             )}
           </TouchableOpacity>
@@ -547,7 +524,7 @@ const isSelected = selectedItemId === item.id;
           alignItems: "center",
         }}
       >
-         <Text style={{ fontFamily: "Inter-Medium",}}>No data for this category</Text>
+         <Text style={{ fontFamily: "Inter-Medium",}}>{t('NoDataAvailable')}</Text>
       </View>
        
       ) : (
@@ -559,57 +536,6 @@ const isSelected = selectedItemId === item.id;
       )}
     </View>
 
-{/* /////////////////////////////////////////////////////////////// */}
-
-        {/* <View style={{ flex: 1 }}>
-            {categoriesSelect.map((category) => (
-              <View key={category.label}>
-                <View style={{ height: hp(24) }}>
-                  <Text style={styles.text}>{category.label}</Text>
-                  {loading ? (
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <ActivityIndicator size="large" color="#FACA4E" />
-                    </View>
-                  ) : (
-                    <View style={{ flex: 1 }}>
-                      {gebccategoryData[category.label] &&
-                      gebccategoryData[category.label].length === 0 ? (
-                        <View
-                          style={{
-                            flex: 1,
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Text style={{ textAlign: "center" }}>
-                            No data available for {category.label}
-                          </Text>
-                        </View>
-                      ) : (
-                        <FlatList
-                          style={{ flex: 1 }}
-                          showsVerticalScrollIndicator={false}
-                          showsHorizontalScrollIndicator={false}
-                          horizontal
-                          data={gebccategoryData[category.label]}
-                          keyExtractor={(item) => item.gebc_id.toString()} // Ensure a unique key for each item
-                          renderItem={({ item }) =>
-                            renderAvailableAppsGEBC(item)
-                          }
-                        />
-                      )}
-                    </View>
-                  )}
-                </View>
-              </View>
-            ))}
-          </View> */}
         {/* // start of banner slider */}
         <View
           style={{
@@ -624,7 +550,7 @@ const isSelected = selectedItemId === item.id;
           ) : adsinActiveData.length === 0 ? (
             <View style={styles.TopBannerView}>
               <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                No Banner
+                {t('NoBanner')}
               </Text>
             </View>
           ) : (
@@ -659,17 +585,12 @@ const isSelected = selectedItemId === item.id;
         </View>
       </ScrollView>
 
-      {/* ///////////////////////////////////////// */}
-
-
       <TouchableOpacity
         onPress={() => navigation.navigate('GEBC')}
         style={{ position: "absolute", bottom: 1, right: 25 }}
       >
         <Add />
       </TouchableOpacity>
-
-      {/* <Toast ref={(ref) => Toast.setRef(ref)} /> */}
     </View>
   )
 }
@@ -775,13 +696,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
       },
-
-
-
-
-
-
-
 
       itemContainer: {
         marginRight: wp(2),

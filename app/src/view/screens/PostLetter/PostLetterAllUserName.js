@@ -13,45 +13,17 @@ import {
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import Entypo from 'react-native-vector-icons/Entypo';
-
-import {Button, Divider, TextInput} from 'react-native-paper';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import PlusPost from '../../../assets/svg/PlusPost.svg';
-import Approved from '../../../assets/svg/Approved.svg';
-
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-
-import Back from '../../../assets/svg/back.svg';
 import {appImages} from '../../../assets/utilities/index';
-import Slider from '@react-native-community/slider';
-import VolumeUp from '../../../assets/svg/VolumeUp.svg';
-import Like from '../../../assets/svg/Like.svg';
-import UnLike from '../../../assets/svg/Unlike.svg';
-import Comment from '../../../assets/svg/Comment.svg';
-import Send from '../../../assets/svg/Send.svg';
-import Download from '../../../assets/svg/Download.svg';
 import CustomButton from '../../../assets/Custom/Custom_Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PublicLetter from '../../../assets/svg/PublicLetter.svg';
 import PrivateLetter from '../../../assets/svg/PrivateLetter.svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import Share from 'react-native-share';
-
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-
-import Fontiso from 'react-native-vector-icons/Fontisto';
-
-import IonIcons from 'react-native-vector-icons/Ionicons';
-
-import {SelectCountry, Dropdown} from 'react-native-element-dropdown';
-import CPaperInput from '../../../assets/Custom/CPaperInput';
 import Headers from '../../../assets/Custom/Headers';
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
 import { base_url } from '../../../../../baseUrl';
@@ -67,13 +39,7 @@ export default function PostLetterAllUserName({navigation, route}) {
 
   const [categoriesSelect, setCategorySelect] = useState([]);
 
-  const [isFocus, setIsFocus] = useState(false);
-
-  const [isFocusPublicType, setIsFocusPublicType] = useState(false);
-
   const [loading, setLoading] = useState(false);
-
-  const [category, setCategory] = useState('');
 
   const [isTextInputActive, setIsTextInputActive] = useState(false);
   const [isTextInputActiveAddress, setIsTextInputActiveAddress] =
@@ -92,27 +58,9 @@ export default function PostLetterAllUserName({navigation, route}) {
   const [postLetter, setPostLetter] = useState('');
   const [letterType, setLetterTypes] = useState('Public');
 
-  //statrs
-
-  const [selectedItem, setSelectedItem] = useState('');
-
   const [snackbarVisible, setsnackbarVisible] = useState(false);
 
-  const [profileName, setProfileName] = useState('');
-
-  const [imageUrl, setImageUrl] = useState('');
-
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const [description, setDescription] = useState('');
-
-  const [comment, setComment] = useState('');
-
-  const [imageInfo, setImageInfo] = useState(null);
-
   const [userId, setUserId] = useState('');
-
-  const [imageUri, setImageUri] = useState(null);
 
   const receivedDataName = route.params?.name;
   const receivedDatAddress = route.params?.address;
@@ -121,38 +69,24 @@ export default function PostLetterAllUserName({navigation, route}) {
   const receivedDataCategoryId = route.params?.category_id;
   const receivedDataLetterType = route.params?.letterType;
 
-  console.log('Name', receivedDataName);
-  console.log('Address', receivedDatAddress);
-  console.log('Contact', receivedDataContactNumber);
-  console.log('Email', receivedDataEmail);
-  console.log('Id', receivedDataCategoryId);
-  console.log('LetterType', receivedDataLetterType);
-  console.log('LetterTypeAppeal', receivedDataLetterType);
-
   useEffect(() => {
-    // Make the API request and update the 'data' state
     fetchVideos();
   }, []);
 
   const fetchVideos = async () => {
-    // Simulate loading
     setLoading(true);
 
     await getUserID();
-    // Fetch data one by one
     await fetchCategory();
-
-    // Once all data is fetched, set loading to false
     setLoading(false);
   };
 
   const getUserID = async () => {
-    console.log("Id's");
+
     try {
       const result = await AsyncStorage.getItem('userId ');
       if (result !== null) {
         setUserId(result);
-        console.log('user id retrieved:', result);
       }
     } catch (error) {
       // Handle errors here
@@ -163,7 +97,6 @@ export default function PostLetterAllUserName({navigation, route}) {
       const result = await AsyncStorage.getItem('userName');
       if (result !== null) {
         setName(result);
-        console.log('user id retrieved:', result);
       }
     } catch (error) {
       // Handle errors here
@@ -188,18 +121,11 @@ export default function PostLetterAllUserName({navigation, route}) {
 
       if (response.ok) {
         const data = await response.json();
-
-        // Use the data from the API to set the categories
         const categories = data.AllUser.map(category => ({
           label: category.username, // Use the "name" property as the label
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
-
-        console.log('Categories', categories);
-
         setCategorySelect(categories); // Update the state with the formatted category data
-
-        console.log('Data Categories', categoriesSelect);
       } else {
         console.error(
           'Failed to fetch categories:',
@@ -245,13 +171,7 @@ export default function PostLetterAllUserName({navigation, route}) {
   };
 
   const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setsnackbarVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisible(false);
     }, 3000);
@@ -268,17 +188,6 @@ export default function PostLetterAllUserName({navigation, route}) {
     {id: 4, title: 'Introduction'},
     {id: 5, title: 'Greetings'},
   ];
-
-  /* const Category = [
-      {label: 'Politics', value: 'Politics'},
-      {label: 'Sports', value: 'Sports'},
-      {label: 'Business', value: 'Business'},
-      {label: 'Finance', value: 'Finance'},
-      {label: 'Tech', value: 'Tech'},
-      {label: 'Health', value: 'Health'},
-      {label: 'Culture', value: 'Culture'},
-  
-    ]; */
 
   const CategoryPublicType = [
     {label: 'general', value: 'general'},

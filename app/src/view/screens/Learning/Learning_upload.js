@@ -44,8 +44,9 @@ import CustomSnackbar from "../../../assets/Custom/CustomSnackBar";
 import CustomDialog from "../../../assets/Custom/CustomDialog";
 import CustomLoaderButton from "../../../assets/Custom/CustomLoaderButton";
 import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from "../../../../../cloudinaryConfig";
-
+import { useTranslation } from 'react-i18next';
 export default function Learning_upload({ navigation }) {
+  const { t } = useTranslation();
   const route = useRoute();
   const ref_RBSheetCamera = useRef(null);
   const ref_RBSheetCamera1 = useRef(null);
@@ -64,7 +65,6 @@ export default function Learning_upload({ navigation }) {
 
   const [description, setDescription] = useState("");
   const [imageInfo, setImageInfo] = useState(null);
-  const [imageResponse, setImageResponse] = useState(null);
 
   const [snackbarVisible, setsnackbarVisible] = useState(false);
   const [snackbarVisibleAlert, setsnackbarVisibleAlert] = useState(false);
@@ -93,9 +93,7 @@ export default function Learning_upload({ navigation }) {
         const result = await AsyncStorage.getItem("userId ");
         if (result !== null) {
           setUserId(result);
-          console.log("user id---:", result);
         } else {
-          console.log("result is null", result);
         }
       } catch (err) {
         console.error("Error retrieving auth token:", err);
@@ -110,7 +108,6 @@ export default function Learning_upload({ navigation }) {
       try {
         const token = await AsyncStorage.getItem("authToken ");
         if (token) {
-          console.log("token", token);
           setAuthToken(token);
         } else {
           throw new Error("No auth token found");
@@ -155,15 +152,12 @@ export default function Learning_upload({ navigation }) {
       );
 
       const result = await response.json();
-      console.log("AllCategories---", result.AllCategories);
       setData(result.AllCategories); // Update the state with the fetched data
     } catch (error) {
-      console.error("Error Trending:", error);
     }
   };
-  console.log("Categry above function----", category);
+
   const fetchAllSubCategory = async (category) => {
-    console.log("Categry in id--", category);
     const token = authToken;
     try {
       const response = await fetch(
@@ -213,13 +207,11 @@ export default function Learning_upload({ navigation }) {
 
   const upload = async () => {
     if (imageUri.uri || imageInfo.uri !== null) {
-      console.log("click");
 
       const uri = imageUri.uri || imageInfo.uri;
       const type = imageUri.type || imageInfo.type;
       const name = imageUri.fileName || imageInfo.fileName;
       const source = { uri, type, name };
-      console.log("Video Source", source);
       handleUploadVideo(source);
     } else {
       handleUpdatePasswordAlert();
@@ -243,18 +235,10 @@ export default function Learning_upload({ navigation }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("Video Url is", data);
-        // setVideoUrl(data.url); // Store the Cloudinary video URL in your state
-        //uploadVideo(data.url)
-
         handleUploadImage(data.url);
         setVideoURL(data.url);
-        //uploadXpiVideo(data.url);
-        console.log("url comes----", data.url);
       })
       .catch((err) => {
-        //Alert.alert('Error While Uploading Video');
-        console.log("Error While Uploading Video", err);
         setLoading(false);
       });
   };
@@ -265,7 +249,6 @@ export default function Learning_upload({ navigation }) {
     const type = thumbnailImageUritwo.type;
     const name = thumbnailImageUritwo.fileName;
     const sourceImage = { uri, type, name };
-    console.log("Source Image", sourceImage);
     const dataImage = new FormData();
     dataImage.append("file", sourceImage);
     dataImage.append("upload_preset", UPLOAD_PRESET); // Use your Cloudinary upload preset
@@ -281,10 +264,6 @@ export default function Learning_upload({ navigation }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        // setImageUrl(data.url); // Store the Cloudinary video URL in your state
-        //uploadVideo(data.url)
-        //uploadXpiVideo(data.url);
-        console.log("Image Url", data);
         setThumnailUrl(data.url);
         uploadXpiVideo(data.url, data1);
       })
@@ -295,14 +274,6 @@ export default function Learning_upload({ navigation }) {
   };
 
   const uploadXpiVideo = async (data, data1) => {
-    console.log("Image Uri", data);
-    console.log("Video Uri", data1);
-    console.log("Profile Name", profileName);
-    console.log("Description", description);
-    console.log("user id", userId);
-    console.log("category id", category);
-    console.log("subcategory id", subcategory);
-    console.log("authToken", authToken);
 
     const token = authToken;
     const apiUrl = base_url + "learningHobbies/create";
@@ -329,7 +300,6 @@ export default function Learning_upload({ navigation }) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("API Response of Videos:", data);
         setLoading(false);
         handleUpdatePassword();
 
@@ -379,7 +349,6 @@ export default function Learning_upload({ navigation }) {
         //videoQuality: 'medium',
       },
       (response) => {
-        console.log("image here in Camera Upload", response);
         if (!response.didCancel && response.assets.length > 0) {
           setThumbnailImageUri(response.assets[0].uri); // Set thumbnail image URI
           setThumbnailImageUritwo(response.assets[0]);
@@ -391,7 +360,6 @@ export default function Learning_upload({ navigation }) {
   const choosePhotoFromLibrary = (value) => {
     ref_RBSheetCamera.current.close();
     launchImageLibrary({ mediaType: "photo" }, (response) => {
-      console.log("image here in Camera Upload", response);
       if (!response.didCancel && response.assets.length > 0) {
         setThumbnailImageUri(response.assets[0].uri);
         setThumbnailImageUritwo(response.assets[0]); // Set thumbnail image URI
@@ -410,7 +378,6 @@ export default function Learning_upload({ navigation }) {
         mediaType: "video",
       },
       (response) => {
-        console.log("video here in camera upload", response);
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setImageUri(response.assets[0].uri);
@@ -425,7 +392,6 @@ export default function Learning_upload({ navigation }) {
     ref_RBSheetCamera1.current.close();
 
     launchImageLibrary({ mediaType: "video" }, (response) => {
-      console.log("video here camera upload", response);
       if (!response.didCancel && response.assets.length > 0) {
         setImageUri(response.assets[0].uri);
         setImageInfo(response.assets[0]);
@@ -449,7 +415,7 @@ export default function Learning_upload({ navigation }) {
         >
           <IonIcons name={"chevron-back"} color={"#282828"} size={25} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Upload Content</Text>
+        <Text style={styles.headerText}>{t('UploadContent')}</Text>
       </View>
 
       <ScrollView
@@ -505,7 +471,8 @@ export default function Learning_upload({ navigation }) {
                       fontWeight: "700",
                     }}
                   >
-                    Change Content
+                    {t('ChangeContent')}
+                    
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -567,7 +534,8 @@ export default function Learning_upload({ navigation }) {
                           fontWeight: "700",
                         }}
                       >
-                        Change Content
+                        {t('ChangeContent')}
+                        {/* Change Content */}
                       </Text>
                     </View>
                   </ImageBackground>
@@ -586,6 +554,7 @@ export default function Learning_upload({ navigation }) {
                       fontWeight: "700",
                     }}
                   >
+                    {t('Uploadthumbnail')}
                     Upload thumbnail
                   </Text>
                 </>
@@ -601,7 +570,7 @@ export default function Learning_upload({ navigation }) {
 
         <TextInput
           mode="outlined"
-          label="My Video"
+          label={t('MyVideo')}
           value={profileName}
           onChangeText={(text) => setProfileName(text)}
           style={styles.ti}
@@ -641,8 +610,7 @@ export default function Learning_upload({ navigation }) {
               borderRadius: wp(3),
               width: "100%",
             }}
-            // dropdownPosition="top"
-            // mode="modal"
+
             placeholderStyle={{
               color: "#121420",
               //   fontWeight: '400',
@@ -652,20 +620,19 @@ export default function Learning_upload({ navigation }) {
             iconStyle={isFocus ? styles.iconStyle : styles.iconStyleInactive}
             itemTextStyle={{ color: "#000000" }}
             selectedTextStyle={{ fontSize: 16, color: "#000000" }}
-            // inputSearchStyle={styles.inputSearchStyle}
-            // iconStyle={styles.iconStyle}
+
             value={category}
             data={data}
             search={false}
             maxHeight={200}
             labelField="name"
             valueField="id"
-            placeholder={"Select Category"}
+            placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={(item) => {
-              console.log("kon main category id hai----", item.id);
+
               setCategory(item.id);
               setIsFocus(false);
             }}
@@ -696,8 +663,7 @@ export default function Learning_upload({ navigation }) {
               borderRadius: wp(3),
               width: "100%",
             }}
-            // dropdownPosition="top"
-            // mode="modal"
+  
             placeholderStyle={{
               color: "#121420",
               //   fontWeight: '400',
@@ -718,7 +684,7 @@ export default function Learning_upload({ navigation }) {
             maxHeight={200}
             labelField="name"
             valueField="id"
-            placeholder={"Select Sub Category"}
+            placeholder={t('Select Sub Category')}
             searchPlaceholder="Search..."
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
@@ -752,7 +718,7 @@ export default function Learning_upload({ navigation }) {
         >
           <CPaperInput
             multiline={true}
-            placeholder={"Description"}
+            placeholder={t('Description')}
             placeholderTextColor="#121420"
             value={description}
             onChangeText={(text) => setDescription(text)}
@@ -767,41 +733,41 @@ export default function Learning_upload({ navigation }) {
         <View style={styles.loaderButtonView}>
           <View style={styles.loaderButtonInner}>
             <CustomLoaderButton
-              title={"Upload"}
+              title={t('Upload')}
               load={loading}
               customClick={() => {
                 let hasError = false;
 
                 if (!thumbnailImageUritwo) {
-                  setthumbnailImageUritwoError("Thumbnail is required");
+                  setthumbnailImageUritwoError(t('Thumbnailisrequired')); 
                   hasError = true;
                 } else {
                   setthumbnailImageUritwoError("");
                 }
 
                 if (!profileName) {
-                  setProfileNameError("Video title is required");
+                  setProfileNameError(t('Videotitleisrequired')); 
                   hasError = true;
                 } else {
                   setProfileNameError("");
                 }
 
                 if (!category) {
-                  setCategoryError("Category is required");
+                  setCategoryError(t('Categoryisrequired'));
                   hasError = true;
                 } else {
                   setCategoryError("");
                 }
 
                 if (!subcategory) {
-                  setSubcategoryError("Subcategory is required");
+                  setSubcategoryError(t('Subcategoryisrequired'));
                   hasError = true;
                 } else {
                   setSubcategoryError("");
                 }
 
                 if (!description) {
-                  setDescriptionError("Description is required");
+                  setDescriptionError(t('Descriptionisrequired'));
                   hasError = true;
                 } else {
                   setDescriptionError("");
@@ -853,7 +819,8 @@ export default function Learning_upload({ navigation }) {
                 fontSize: hp(2.1),
               }}
             >
-              Select an option
+              {t('Selectanoption')}
+              {/* Select an option */}
             </Text>
             <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
               <Ionicons
@@ -899,7 +866,8 @@ export default function Learning_upload({ navigation }) {
                   fontSize: hp(2.1),
                 }}
               >
-                Take a photo
+                {t('Takeaphoto')}
+                {/* Take a photo */}
               </Text>
             </TouchableOpacity>
 
@@ -928,7 +896,8 @@ export default function Learning_upload({ navigation }) {
                   fontSize: hp(2.1),
                 }}
               >
-                Choose a photo
+                {t('Chooseaphoto')}
+                {/* Choose a photo */}
               </Text>
             </TouchableOpacity>
           </View>
@@ -970,7 +939,8 @@ export default function Learning_upload({ navigation }) {
                 fontSize: hp(2.1),
               }}
             >
-              Select an option
+              {t('Selectanoption')}
+              {/* Select an option */}
             </Text>
             <TouchableOpacity
               onPress={() => ref_RBSheetCamera1.current.close()}
@@ -1018,7 +988,8 @@ export default function Learning_upload({ navigation }) {
                   fontSize: hp(2.1),
                 }}
               >
-                Take a Video
+                 {t('TakeaVideo')}
+                {/* Take a Video */}
               </Text>
             </TouchableOpacity>
 
@@ -1047,7 +1018,8 @@ export default function Learning_upload({ navigation }) {
                   fontSize: hp(2.1),
                 }}
               >
-                Choose a Video
+                 {t('ChooseaVideo')}
+                {/* Choose a Video */}
               </Text>
             </TouchableOpacity>
           </View>
@@ -1055,8 +1027,8 @@ export default function Learning_upload({ navigation }) {
       </ScrollView>
 
       <CustomSnackbar
-        message={"Alert!"}
-        messageDescription={"Kindly Fill All Fields"}
+        message={t('Alert!')}
+        messageDescription={t('KindlyFillAllFields')}
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackbarVisibleAlert}
       />
@@ -1068,8 +1040,8 @@ export default function Learning_upload({ navigation }) {
       />
 
       <CustomSnackbar
-        message={"Success"}
-        messageDescription={"Content Uploaded Successfully"}
+        message={t('Success')}
+        messageDescription={t('ContentUploadedSuccessfully')} 
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />

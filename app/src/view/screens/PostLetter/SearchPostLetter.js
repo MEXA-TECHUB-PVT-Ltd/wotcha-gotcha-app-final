@@ -19,12 +19,13 @@ import {
   import AsyncStorage from '@react-native-async-storage/async-storage';
   import Fontiso from 'react-native-vector-icons/Fontisto';
 import { base_url } from '../../../../../baseUrl';
+import { useTranslation } from 'react-i18next';
 import Approved from "../../../assets/svg/Approved";
+import Loader from '../../../assets/Custom/Loader';
   export default function SearchPostLetter({navigation, route}) {
     const index = route?.params?.selectedItemId
-    console.log('index---------', index)
     const [selectedItemId, setSelectedItemId] = useState(null);
-  
+    const { t } = useTranslation();
     const [authToken, setAuthToken] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
   
@@ -46,12 +47,7 @@ import Approved from "../../../assets/svg/Approved";
     };
   
     const fetchItemData = async search => {
-      console.log('Token', authToken);
-  
-      console.log('SEARCH ITEMS', search);
-  
       const token = authToken;
-  
       try {
         const response = await fetch(
           base_url + `letter/searchLetters?name=${search}`,
@@ -64,7 +60,6 @@ import Approved from "../../../assets/svg/Approved";
         );
   
         const result = await response.json();
-        console.log('AllItems for ', result.letters);
         setData(result.letters); // Update the state with the fetched data
         setSearchTerm('');
         fetchAll();
@@ -76,20 +71,14 @@ import Approved from "../../../assets/svg/Approved";
     };
   
     const fetchAll = async () => {
-      // Simulate loading
       setLoading(true);
-      // Fetch data one by one
       await loadSearchesFromStorage();
-  
-      // Once all data is fetched, set loading to false
       setLoading(false);
     };
   
     useEffect(() => {
       const fetchData = async () => {
-        console.log('Token', authToken);
         const token = authToken;
-  
         try {
           const response = await fetch(
             base_url + `letter/searchLetters?name=${selectedItemId}`,
@@ -102,17 +91,11 @@ import Approved from "../../../assets/svg/Approved";
           );
   
           const result = await response.json();
-          console.log('AllItems', result.letters);
-
-
           const formattedLetters = result.letters.map(letter => ({
             ...letter,
             post_date: convertTimeAndDate(letter.post_date),
           }));
-          // console.log('Resultings of formattedLetters', formattedLetters);
           setData(formattedLetters); //
-
-        //   setData(result.letters); // Update the state with the fetched data
         } catch (error) {
           console.error('Error Trending:', error);
         }
@@ -127,15 +110,12 @@ import Approved from "../../../assets/svg/Approved";
           year: 'numeric',
           month: 'long',
           day: 'numeric',
-          // hour: '2-digit',
-          // minute: '2-digit',
+  
         });
       };
     const handleSearch = text => {
-      console.log('data Search', data);
-  
+
       if (!data) {
-        // Data is not available yet
         return;
       }
       const searchTerm = text.toLowerCase();
@@ -176,7 +156,6 @@ import Approved from "../../../assets/svg/Approved";
         const result3 = await AsyncStorage.getItem('authToken ');
         if (result3 !== null) {
           setAuthToken(result3);
-          console.log('Token', result3);
         }
       } catch (error) {
         // Handle errors here
@@ -185,7 +164,6 @@ import Approved from "../../../assets/svg/Approved";
     };
   
     const saveSearchTerm = async () => {
-      console.log('Search Term', searchTerm);
       if (searchTerm.trim() === '') {
         return;
       }
@@ -196,16 +174,13 @@ import Approved from "../../../assets/svg/Approved";
           id: searches + 1,
           title: searchTerm,
         };
-    
-        // Get existing searches from AsyncStorage
+
         const savedSearches = await AsyncStorage.getItem("lettersearch");
         let searches = [];
     
         if (savedSearches) {
           searches = JSON.parse(savedSearches);
         }
-    
-        // Check if the search term already exists for the current screen
         const existingSearch = searches.find(
           (search) =>
             search.title.toLowerCase() === searchTerm.toLowerCase()
@@ -241,7 +216,6 @@ import Approved from "../../../assets/svg/Approved";
           ]}
           onPress={() => {
             setSelectedItemId(item.title);
-            console.log('Selected item:', item.title);
           }}>
           <Text
             style={[
@@ -255,7 +229,6 @@ import Approved from "../../../assets/svg/Approved";
     };
   
     const renderAvailableApps = item => {
-      console.log('Items images', item);
       const imageUrl = item.signature_image
       ? item.signature_image.startsWith('/fileUpload') || item.signature_image.startsWith('/signatureImages')
         ? base_url + item.signature_image
@@ -351,7 +324,6 @@ import Approved from "../../../assets/svg/Approved";
               flexDirection: "row",
               height: hp(5),
   paddingTop:6,
-  // backgroundColor:'red', width:'60%'
             }}
           >
             <Text
@@ -362,7 +334,8 @@ import Approved from "../../../assets/svg/Approved";
                 fontFamily: "Inter-Bold",
               }}
             >
-              Subject:
+              {t('Subject')}  
+           
             </Text>
             <View style={{height:'100%',width:'75%' }}>
               <Text
@@ -409,95 +382,14 @@ import Approved from "../../../assets/svg/Approved";
             ) : (
             null
             )}
-            {/* <Text
-              numberOfLines={3}
-              ellipsizeMode="tail"
-              style={{
-                color: "#595959",
-                fontSize: 8,
-                fontFamily: "Inter-Regular",
-              }}
-            >
-              {item.body}
-            </Text> */}
+  
           </View>
           <View
             style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
           ></View>
         </View>
       </TouchableOpacity>
-        // <TouchableOpacity
-        // //   onPress={() => navigation.navigate('ViewNews', { picData: item })}
-        //   onPress={() =>
-        //     navigation.navigate("LetterDetails", {
-        //       Letters: item,
-        //       identifier: false,
-        //     })
-        //   }
-        //   style={{
-        //     height: hp(18),
-        //     flex: 1,
-        //     borderRadius: wp(3),
-        //     margin: 5,
-        //   }}>
-        //      <View style={styles.imagecontainer}>
-        //     <Image style={styles.image} source={{ uri: item?.image }} />
-        //     <View style={styles.descriptionContainer}>
-        //       <Text
-        //         ellipsizeMode="tail"
-        //         numberOfLines={1}
-        //         style={styles.titleStyle}
-        //       >
-        //         {item?.name}
-        //       </Text>
-        //       <Text
-        //         ellipsizeMode="tail"
-        //         numberOfLines={5}
-        //         style={styles.description}
-        //       >
-        //         {item?.description}
-        //       </Text>
-        //     </View>
-        //   </View>
-        //   {/* <Image
-        //     style={{
-        //       position: 'absolute',
-        //       top: 0,
-        //       left: 0,
-        //       zIndex: 1, // Ensure it's on top of other elements
-        //       flex: 1,
-        //       width: '100%',
-        //       height: '100%',
-        //       borderRadius: wp(3),
-        //       resizeMode: 'cover',
-        //     }}
-        //     source={{uri: item?.thumbnail}}
-        //   />
-        //   <View
-        //     style={{
-        //       position: 'absolute',
-        //       top: hp(14.5),
-        //       left: 7,
-        //       //height: hp(3),
-        //       //width: wp(21),
-        //       //borderRadius: wp(3),
-        //       //backgroundColor: '#FACA4E',
-        //       justifyContent: 'center',
-        //       alignItems: 'center',
-        //       zIndex: 2, // Ensure it's on top
-        //     }}>
-        //     <Text
-        //       numberOfLines={1}
-        //       ellipsizeMode="tail"
-        //       style={{
-        //         fontSize: hp(1.9),
-        //         fontFamily: 'Inter-Medium',
-        //         color: '#FFFFFF',
-        //       }}>
-        //       {item?.description}
-        //     </Text>
-        //   </View> */}
-        // </TouchableOpacity>
+     
       );
     };
   
@@ -522,23 +414,22 @@ import Approved from "../../../assets/svg/Approved";
             />
             <TextInput
               style={{flex: 1, marginLeft: wp(3)}}
-              placeholder="Search here"
+              placeholder={t('SearchHere')} 
               value={searchTerm}
               onChangeText={text => {
                 setSearchTerm(text);
-                //setSelectedItemId(text)
+      
                 handleSearch(text);
               }}
               onSubmitEditing={() => {
                 saveSearchTerm();
-                // This code will execute when the "Okay" button is pressed
-                //console.log("Good", searchTerm);
+          
               }}
             />
           </View>
         </View>
   
-        <Text style={styles.latestSearch}>Latest Search</Text>
+        <Text style={styles.latestSearch}>{t('LatestSearch')}</Text>
   
         <View style={styles.latestSearchList}>
           <FlatList
@@ -553,10 +444,10 @@ import Approved from "../../../assets/svg/Approved";
           />
         </View>
   
-        <Text style={styles.latestSearch}>Top Searches</Text>
+        <Text style={styles.latestSearch}>{t('TopSearches')}</Text>
   
         {data && data.length === 0 ? (
-          <Text style={styles.noDataText}>No data available</Text>
+          <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
         ) : (
           <FlatList
             style={{ marginTop: hp(3), marginHorizontal: wp(5), flex: 1 }}
@@ -565,27 +456,8 @@ import Approved from "../../../assets/svg/Approved";
             renderItem={({ item }) => renderAvailableApps(item)}
           />
         )}
-        {/* <FlatList
-          style={{marginTop: hp(3), marginHorizontal: wp(5), flex: 1}}
-          showsVerticalScrollIndicator={false}
-          data={data}
-          //keyExtractor={item => item.id.toString()}
-          numColumns={3} // Set the number of columns to 3
-          renderItem={({item}) => renderAvailableApps(item)}
-        /> */}
-          <View
-          style={{
-            position: "absolute",
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-        </View>
+       
+        {loading && <Loader />}
       </View>
     );
   }
@@ -602,7 +474,6 @@ import Approved from "../../../assets/svg/Approved";
       marginTop: hp(8),
       marginHorizontal: wp(8),
       height: hp(8),
-      //borderWidth: 3,
     },
     searchBar: {
       height: hp(5.9),

@@ -13,15 +13,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useState, useRef, useMemo, useEffect} from 'react';
-import Back from '../../../assets/svg/back.svg';
 import {appImages} from '../../../assets/utilities/index';
-import Slider from '@react-native-community/slider';
-import VolumeUp from '../../../assets/svg/VolumeUp.svg';
-import Like from '../../../assets/svg/Like.svg';
-import UnLike from '../../../assets/svg/Unlike.svg';
-import Comment from '../../../assets/svg/Comment.svg';
-import Send from '../../../assets/svg/Send.svg';
-import Download from '../../../assets/svg/Download.svg';
 import BottomSheet, {BottomSheetFlatList} from '@gorhom/bottom-sheet';
 import ButtonSend from '../../../assets/svg/ButtonSend.svg';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -33,23 +25,15 @@ import SmileEmoji from '../../../assets/svg/SmileEmoji.svg';
 
 import Share from 'react-native-share';
 
-import axios from 'axios';
-
-import RNFetchBlob from 'rn-fetch-blob';
-
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 
-import Fontiso from 'react-native-vector-icons/Fontisto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import IonIcons from 'react-native-vector-icons/Ionicons';
-
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import { base_url } from '../../../../../baseUrl';
 import Custom_Button from '../../../assets/Custom/Custom_Button';
 
 export default function CameraView({navigation, route}) {
@@ -61,31 +45,17 @@ export default function CameraView({navigation, route}) {
 
   const [comments, setComments] = useState([]);
 
-  const [likes, setLikes] = useState(null);
-
-  const [commentsCount, setCommentsCount] = useState(null);
-
   const [showReply, setShowReply] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
   const [userId, setUserId] = useState('');
 
-  const [showMenu, setShowMenu] = useState(false);
-
-  const [progress, setProgress] = useState(0);
-
   const [isBottomSheetExpanded, setIsBottomSheetExpanded] = useState(false);
 
   const ref_Comments = useRef(null);
- const [speed, setSpeed] = useState(1); // Initial speed value
-  const [time, setTime] = useState(0); // Initial time value
 
   const [authToken, setAuthToken] = useState([]);
-
-  const refSlide = useRef();
-
-  const bottomSheetRef = useRef(null);
   // variables
   const snapPoints = useMemo(() => ['25%', '50%'], []);
 
@@ -103,37 +73,25 @@ export default function CameraView({navigation, route}) {
   const fetchAll = async () => {
     // Simulate loading
     setLoading(true);
-    // Fetch data one by one
-
     await getUserID();
-
-    //await fetchLikes()
-    //await fetchCommentsCounts()
-
-    // Once all data is fetched, set loading to false
     setLoading(false);
   };
 
-   const handleSpeedChange = (value) => {
-    // Update the speed value
-    setSpeed(value);
-  };
   const getUserID = async () => {
-    console.log("Id's");
+
     try {
       const result = await AsyncStorage.getItem('userId ');
       if (result !== null) {
         setUserId(result);
-        console.log('user id retrieved:', result);
+
       } else {
-        console.log('user id null:', result);
+
       }
 
       const result1 = await AsyncStorage.getItem('authToken ');
       if (result1 !== null) {
         setAuthToken(result1);
-        console.log('user token retrieved:', result1);
-        await fetchComments(result1);
+  
       } else {
         console.log('result is null', result);
       }
@@ -143,75 +101,16 @@ export default function CameraView({navigation, route}) {
     }
   };
 
-  const dismissSnackbar = () => {
-    setsnackbarVisible(false);
-  };
-
-  const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
-    setsnackbarVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
-    setTimeout(() => {
-      setsnackbarVisible(false);
-
-      if (pastedURL !== '') {
-        requestStoragePermission();
-      } else {
-        console.log('Please Add Video Url');
-      }
-
-      //navigation.goBack();
-    }, 3000);
-  };
   const sendComment = ()=>{
     <Text>hi</Text>
   }
 
   const clearTextInput = () => {
-    console.log('came to logssssss', commentText);
+
     // Clear the text in the TextInput
     setCommentText(null);
     sendComment();
   };
-
-  const chats = [
-    {
-      id: 1,
-      name: 'John Doe',
-      message: 'The laughter in this video is contagious!',
-      reply: false,
-    },
-    {
-      id: 2,
-      name: 'Olivia Bennett',
-      message: 'I wish I had a friend group like this. You all are incredible!',
-      reply: false,
-    },
-    {
-      id: 3,
-      name: 'Ethan Rodriguez',
-      message:
-        'This video just made my day! Thanks for sharing your awesome moments.',
-      reply: false,
-    },
-    {
-      id: 4,
-      name: 'Mia Bennett',
-      message: 'Friendship goals right there! Love how close you all are',
-      reply: false,
-    },
-    {
-      id: 5,
-      name: 'Liam Sullivan',
-      message:
-        'Looks like you guys are having an absolute blast! Wish I could join in on the fun',
-      reply: false,
-    },
-  ];
 
 
   const renderComments = item => {
@@ -415,29 +314,7 @@ export default function CameraView({navigation, route}) {
 const gotoPost=()=>{
     navigation.navigate('CameraUpload')
 }
-  const requestStoragePermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        {
-          title: 'Downloader App Storage Permission',
-          message:
-            'Downloader App needs access to your storage ' +
-            'so you can download files',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        // downloadFile();
-      } else {
-        console.log('storage permission denied');
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  };
+
   const toggleContent = () => {
     setShowFullContent(!showFullContent);
   };
@@ -447,21 +324,6 @@ const gotoPost=()=>{
     // sendLikes();
   };
 
- 
-  const shareViaWhatsApp = async () => {
-    const shareOptions = {
-      title: 'Share via',
-      message: 'Hey! Check out this cool app!',
-      url: 'https://play.google.com/store/apps/details?id=your.app.package',
-      //social: Share.Social,
-    };
-
-    try {
-      await Share.open(shareOptions);
-    } catch (error) {
-      console.error('Error sharing via WhatsApp:', error.message);
-    }
-  };
 
   return (
     <GestureHandlerRootView style={{flex: 1}}>

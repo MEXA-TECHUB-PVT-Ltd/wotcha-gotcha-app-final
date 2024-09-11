@@ -1,0 +1,6 @@
+framework module react_native_signature_capture {
+  umbrella header "react-native-signature-capture-umbrella.h"
+
+  export *
+  module * { export * }
+}

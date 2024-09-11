@@ -73,6 +73,8 @@ import Entypo from "react-native-vector-icons/Entypo";
 import CustomSnackbar from "../../../assets/Custom/CustomSnackBar";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { base_url } from "../../../../../baseUrl";
+import Loader from "../../../assets/Custom/Loader";
+import { useTranslation } from 'react-i18next';
 
 export default function Tv_Promax_details({ navigation, route }) {
   const [showFullContent, setShowFullContent] = useState(false);
@@ -80,7 +82,7 @@ export default function Tv_Promax_details({ navigation, route }) {
   const [pastedURL, setPastedURL] = useState(
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
   );
-
+  const { t } = useTranslation();
   const [comments, setComments] = useState([]);
 
   const [likes, setLikes] = useState(null);
@@ -808,6 +810,7 @@ export default function Tv_Promax_details({ navigation, route }) {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      {loading && <Loader />}
       <View style={{ flex: 1 }}>
         {/* Add a parent View */}
 
@@ -1151,8 +1154,8 @@ export default function Tv_Promax_details({ navigation, route }) {
         </View>
 
         <CustomSnackbar
-          message={"success"}
-          messageDescription={"Video downloaded successfully"}
+          message={t('Success')}
+          messageDescription={t('VideoDownloadedSuccessfully')} 
           onDismiss={dismissSnackbar} // Make sure this function is defined
           visible={snackbarVisible}
         />
@@ -1188,7 +1191,8 @@ export default function Tv_Promax_details({ navigation, route }) {
                 fontSize: hp(2.3),
               }}
             >
-              Comments
+              {t('Comments')}
+              
             </Text>
           </View>
 
@@ -1201,7 +1205,7 @@ export default function Tv_Promax_details({ navigation, route }) {
                   alignItems: "center",
                 }}
               >
-                <Text>No Comments Yet</Text>
+                <Text>{t('NoCommentsYet')}</Text>
               </View>
             ) : (
               <FlatList
@@ -1255,7 +1259,7 @@ export default function Tv_Promax_details({ navigation, route }) {
                 value={commentText} // Bind the value to the state variable
                 onChangeText={(text) => setCommentText(text)} // Update state on text change
                 placeholderTextColor={"#848484"}
-                placeholder="Write Comment Here"
+                placeholder={t('WriteCommentHere')}
                 style={{ flex: 1, marginLeft: wp(1) }}
               />
 
@@ -1294,7 +1298,7 @@ export default function Tv_Promax_details({ navigation, route }) {
                   onChangeText={(text) => setCommentText(text)} // Update state on text change
                   placeholderTextColor={"#848484"}
                   // placeholder="Add a reply"
-                  placeholder="Write Comment Here"
+                  placeholder={t('WriteCommentHere')}
                   style={{ flex: 1, marginLeft: wp(1) }}
                 />
                 <TouchableOpacity
@@ -1317,19 +1321,7 @@ export default function Tv_Promax_details({ navigation, route }) {
           />
         ) : null}
       </View>
-      <View
-        style={{
-          position: "absolute",
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
+ 
        {/* //-----------------\\ */}
        <RBSheet
         ref={ref_RBSheetCamera}
@@ -1363,7 +1355,8 @@ export default function Tv_Promax_details({ navigation, route }) {
               color: '#303030',
               fontSize: hp(2.3),
             }}>
-            Select an option
+              {t('Selectanoption')}
+            
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <IonIcons
@@ -1395,7 +1388,8 @@ export default function Tv_Promax_details({ navigation, route }) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Update Video
+                {t('UpdateVideo')}
+              
             </Text>
           </TouchableOpacity>
 
@@ -1423,15 +1417,16 @@ export default function Tv_Promax_details({ navigation, route }) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Delete Video
+                {t('DeleteVideo')}
+              
             </Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
       <CustomSnackbar
-          message={'success'}
-          messageDescription={'Video deleted successfully'}
+          message={t('Success')}
+          messageDescription={t('VideoDeletedSuccessfully')}
           onDismiss={dismissDeleteSnackbar} // Make sure this function is defined
           visible={snackbarDeleteVisible}
         />
@@ -1454,8 +1449,10 @@ const styles = StyleSheet.create({
     marginHorizontal: wp(8),
   },
   bottomView: {
-    flex: 1,
-    justifyContent: "flex-end",
+    position:'absolute',
+    bottom:0
+    // flex: 1,
+    // justifyContent: "flex-end",
     // You can add padding or content to this view as needed.
   },
   textProfileName: {

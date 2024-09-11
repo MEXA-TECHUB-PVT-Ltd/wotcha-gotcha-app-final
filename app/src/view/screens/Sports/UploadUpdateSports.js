@@ -1,35 +1,23 @@
 import {
     StyleSheet,
-    FlatList,
-    Text,
-    Image,
-    ScrollView,
-    TextInput,
+
     StatusBar,
     ImageBackground,
     View,
     TouchableOpacity,
   } from 'react-native';
   import React, {useState} from 'react';
-
   import CustomButton from '../../../assets/Custom/Custom_Button';
-  import Share from 'react-native-share';
-  
   import {
     heightPercentageToDP as hp,
     widthPercentageToDP,
     widthPercentageToDP as wp,
   } from 'react-native-responsive-screen';
-  
-  import Fontiso from 'react-native-vector-icons/Fontisto';
-  
   import IonIcons from 'react-native-vector-icons/Ionicons';
   
   export default function UploadUpdateSports({navigation, route}) {
-  
+
     const receivedData = route.params?.Video;
-  
-    console.log("Recieved Data", receivedData)
     return (
       <ImageBackground source={{uri:receivedData.uri}} style={{flex: 1}}>
         <StatusBar
@@ -56,22 +44,13 @@ import {
             <CustomButton
               title={'Next'}
               load={false}
-              // checkdisable={inn == '' && cm == '' ? true : false}
+
               customClick={() => {
                 navigation.navigate("UploadScreenSports", { Video: receivedData })
                 //navigation.navigate('Profile_image');
               }}
             />
-  
-           {/*  <Text
-              style={{
-                fontFamily: 'Inter',
-                fontWeight:'bold',
-                fontSize: hp(2.1),
-                color: '#FFFFFF',
-              }}>
-              Change Pic
-            </Text> */}
+
           </View>
         </View>
       </ImageBackground>

@@ -19,11 +19,12 @@ import {
   import AsyncStorage from "@react-native-async-storage/async-storage";
   import Fontiso from "react-native-vector-icons/Fontisto";
   import { base_url } from "../../../../../baseUrl";
-  
+import Loader from "../../../assets/Custom/Loader";
+import { useTranslation } from 'react-i18next';
 
 export default function Leaning_Search_Video({navigation}) {
   const [selectedItemId, setSelectedItemId] = useState(null);
-
+  const { t } = useTranslation();
   const [authToken, setAuthToken] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -37,7 +38,6 @@ export default function Leaning_Search_Video({navigation}) {
 
  
   useEffect(() => {
-    // Make the API request and update the 'data' state
     fetchAll();
   }, []);
 
@@ -46,10 +46,6 @@ export default function Leaning_Search_Video({navigation}) {
   };
 
   const fetchItemData = async search => {
-    console.log('Token', authToken);
-
-    console.log('SEARCH ITEMS', search);
-
     const token = authToken;
 
     try {
@@ -64,7 +60,6 @@ export default function Leaning_Search_Video({navigation}) {
       );
 
       const result = await response.json();
-      console.log('AllItems for search ', result.videos);
       setData(result.videos); // Update the state with the fetched data
       setSearchTerm('');
       fetchAll();
@@ -76,18 +71,13 @@ export default function Leaning_Search_Video({navigation}) {
   };
 
   const fetchAll = async () => {
-    // Simulate loading
     setLoading(true);
-    // Fetch data one by one
     await loadSearchesFromStorage();
-
-    // Once all data is fetched, set loading to false
     setLoading(false);
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log('Token', authToken);
       const token = authToken;
 
       try {
@@ -102,7 +92,6 @@ export default function Leaning_Search_Video({navigation}) {
         );
 
         const result = await response.json();
-        console.log('AllItems for video', result.videos);
         setData(result.videos); // Update the state with the fetched data
       } catch (error) {
         console.error('Error Trending:', error);
@@ -113,8 +102,6 @@ export default function Leaning_Search_Video({navigation}) {
   }, [selectedItemId]);
 
   const handleSearch = text => {
-    console.log('data Search', data);
-
     if (!data) {
       // Data is not available yet
       return;
@@ -126,8 +113,6 @@ export default function Leaning_Search_Video({navigation}) {
     );
 
     setFilteredData(filteredApps);
-
-    // Set the active search item if it exists in the saved searches
     const matchingItem = searches.find(
       (item) => item.title.toLowerCase() === searchTerm
     );
@@ -157,7 +142,6 @@ export default function Leaning_Search_Video({navigation}) {
       const result3 = await AsyncStorage.getItem('authToken ');
       if (result3 !== null) {
         setAuthToken(result3);
-        console.log('Token', result3);
       }
     } catch (error) {
       // Handle errors here
@@ -166,7 +150,6 @@ export default function Leaning_Search_Video({navigation}) {
   };
 
   const saveSearchTerm = async () => {
-    console.log('Search Term', searchTerm);
     if (searchTerm.trim() === '') {
       return;
     }
@@ -206,22 +189,7 @@ export default function Leaning_Search_Video({navigation}) {
     } catch (error) {
       console.error("Error saving search term:", error);
     }
-    // try {
-    //   const newSearchTerm = {id: searches.length + 1, title: searchTerm};
-    //   const updatedSearches = [...searches, newSearchTerm];
-
-    //   await AsyncStorage.setItem(
-    //     'learningHobbies',
-    //     JSON.stringify(updatedSearches),
-    //   );
-    //   setSearches(updatedSearches);
-    //   setSelectedItemId(searchTerm);
-    //   fetchItems(searchTerm);
-    //   //setSearchTerm(''); // Clear the input field
-    //   //fetchAll();
-    // } catch (error) {
-    //   console.error('Error saving search term:', error);
-    // }
+    
   };
 
   const renderSearches = item => {
@@ -237,7 +205,6 @@ export default function Leaning_Search_Video({navigation}) {
         ]}
         onPress={() => {
           setSelectedItemId(item.title);
-          console.log('Selected item:', item.title);
         }}>
         <Text
           style={[
@@ -251,7 +218,6 @@ export default function Leaning_Search_Video({navigation}) {
   };
 
   const renderAvailableApps = item => {
-    console.log('Items images', item);
 
     return (
       <TouchableOpacity
@@ -281,44 +247,7 @@ export default function Leaning_Search_Video({navigation}) {
             </Text>
           </View>
         </View>
-        {/* <Image
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            zIndex: 1, // Ensure it's on top of other elements
-            flex: 1,
-            width: '100%',
-            height: '100%',
-            borderRadius: wp(3),
-            resizeMode: 'cover',
-          }}
-          source={{uri: item?.thumbnail}}
-        />
-        <View
-          style={{
-            position: 'absolute',
-            top: hp(14.5),
-            left: 7,
-            //height: hp(3),
-            //width: wp(21),
-            //borderRadius: wp(3),
-            //backgroundColor: '#FACA4E',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 2, // Ensure it's on top
-          }}>
-          <Text
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            style={{
-              fontSize: hp(1.9),
-              fontFamily: 'Inter-Medium',
-              color: '#FFFFFF',
-            }}>
-            {item?.description}
-          </Text>
-        </View> */}
+       
       </TouchableOpacity>
     );
   };
@@ -344,23 +273,22 @@ export default function Leaning_Search_Video({navigation}) {
           />
           <TextInput
             style={{flex: 1, marginLeft: wp(3)}}
-            placeholder="Search here"
+            placeholder={t('SearchHere')}
             value={searchTerm}
             onChangeText={text => {
               setSearchTerm(text);
-              //setSelectedItemId(text)
+       
               handleSearch(text);
             }}
             onSubmitEditing={() => {
               saveSearchTerm();
-              // This code will execute when the "Okay" button is pressed
-              //console.log("Good", searchTerm);
+            
             }}
           />
         </View>
       </View>
 
-      <Text style={styles.latestSearch}>Latest Search</Text>
+      <Text style={styles.latestSearch}>{t('LatestSearch')}</Text>
 
       <View style={styles.latestSearchList}>
         <FlatList
@@ -374,10 +302,10 @@ export default function Leaning_Search_Video({navigation}) {
         />
       </View>
 
-      <Text style={styles.latestSearch}>Top Searches</Text>
+      <Text style={styles.latestSearch}>{t('TopSearches')}</Text>
 
       {data && data.length === 0 ? (
-        <Text style={styles.noDataText}>No data available</Text>
+        <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
       ) : (
         <FlatList
           style={{ marginTop: hp(3), marginHorizontal: wp(5), flex: 1 }}
@@ -386,27 +314,8 @@ export default function Leaning_Search_Video({navigation}) {
           renderItem={({ item }) => renderAvailableApps(item)}
         />
       )}
-      {/* <FlatList
-        style={{marginTop: hp(3), marginHorizontal: wp(5), flex: 1}}
-        showsVerticalScrollIndicator={false}
-        data={data}
-        //keyExtractor={item => item.id.toString()}
-        numColumns={3} // Set the number of columns to 3
-        renderItem={({item}) => renderAvailableApps(item)}
-      /> */}
-        <View
-        style={{
-          position: "absolute",
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
+    
+      {loading && <Loader />}
     </View>
   );
 }
@@ -423,7 +332,6 @@ const styles = StyleSheet.create({
     marginTop: hp(8),
     marginHorizontal: wp(8),
     height: hp(8),
-    //borderWidth: 3,
   },
   searchBar: {
     height: hp(5.9),

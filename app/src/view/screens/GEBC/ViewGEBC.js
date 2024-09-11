@@ -15,12 +15,7 @@ import {
 } from 'react-native';
 import React, {useState, useRef, useMemo, useEffect} from 'react';
 import {appImages} from '../../../assets/utilities/index';
-import Like from '../../../assets/svg/Like.svg';
-import UnLike from '../../../assets/svg/Unlike.svg';
-import Comment from '../../../assets/svg/Comment.svg';
-import Send from '../../../assets/svg/Send.svg';
-import Download from '../../../assets/svg/Download.svg';
-import BottomSheet, {BottomSheetFlatList} from '@gorhom/bottom-sheet';
+
 import ButtonSend from '../../../assets/svg/ButtonSend.svg';
 import EmojiPicker from 'rn-emoji-keyboard';
 import DownArrowComments from '../../../assets/svg/DownArrowComments.svg';
@@ -40,21 +35,18 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 
-import Fontiso from 'react-native-vector-icons/Fontisto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import IonIcons from 'react-native-vector-icons/Ionicons';
-
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import Headers from '../../../assets/Custom/Headers';
 import { base_url } from '../../../../../baseUrl';
 import RBSheet from "react-native-raw-bottom-sheet";
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
-
+import Loader from '../../../assets/Custom/Loader';
+import { useTranslation } from 'react-i18next';
 export default function ViewGEBC({navigation, route}) {
   const [showFullContent, setShowFullContent] = useState(false);
-
+  const { t } = useTranslation();
   const [pastedURL, setPastedURL] = useState(
     'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
   );
@@ -71,21 +63,12 @@ export default function ViewGEBC({navigation, route}) {
 
   const [userId, setUserId] = useState('');
 
-  const [showMenu, setShowMenu] = useState(false);
-
-  const [progress, setProgress] = useState(0);
-
   const [isBottomSheetExpanded, setIsBottomSheetExpanded] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const ref_Comments = useRef(null);
-
   const [authToken, setAuthToken] = useState([]);
 
-  const refSlide = useRef();
-
-  const bottomSheetRef = useRef(null);
   // variables
   const snapPoints = useMemo(() => ['25%', '50%'], []);
 
@@ -103,30 +86,19 @@ export default function ViewGEBC({navigation, route}) {
   const fetchAll = async () => {
     // Simulate loading
     setLoading(true);
-    // Fetch data one by one
-
     await getUserID();
-
-    //await fetchLikes()
-    //await fetchCommentsCounts()
-
-    // Once all data is fetched, set loading to false
     setLoading(false);
   };
 
   const openEmoji = () => {
-    console.log('Is Open');
     setIsOpen(true);
-    console.log('Is Open', isOpen);
   };
 
   const getUserID = async () => {
-    console.log("Id's");
     try {
       const result = await AsyncStorage.getItem('userId ');
       if (result !== null) {
         setUserId(result);
-        console.log('user id retrieved:', result);
       } else {
         console.log('user id null:', result);
       }
@@ -134,7 +106,6 @@ export default function ViewGEBC({navigation, route}) {
       const result1 = await AsyncStorage.getItem('authToken ');
       if (result1 !== null) {
         setAuthToken(result1);
-        console.log('user token retrieved:', result1);
         await fetchComments(result1);
       } else {
         console.log('result is null', result);
@@ -161,7 +132,6 @@ export default function ViewGEBC({navigation, route}) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("All Comments of usersssss", data.AllComments)
         setComments(data.AllComments || []);
 
         await fetchLikes(value);
@@ -193,7 +163,6 @@ export default function ViewGEBC({navigation, route}) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('All Likes', data.totalLikes);
         setLikes(data.totalLikes);
         fetchCommentsCounts(values);
         //setLikes(data.totalLikes);
@@ -225,7 +194,6 @@ export default function ViewGEBC({navigation, route}) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('All Comments', data.totalComments);
         setCommentsCount(data.totalComments);
       } else {
         console.error(
@@ -244,13 +212,7 @@ export default function ViewGEBC({navigation, route}) {
   };
 
   const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setsnackbarVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisible(false);
 
@@ -260,55 +222,16 @@ export default function ViewGEBC({navigation, route}) {
         console.log('Please Add Video Url');
       }
 
-      //navigation.goBack();
     }, 3000);
   };
 
   const clearTextInput = () => {
-    console.log('came to logssssss', commentText);
-    // Clear the text in the TextInput
     setCommentText(null);
     sendComment();
   };
 
-  const chats = [
-    {
-      id: 1,
-      name: 'John Doe',
-      message: 'The laughter in this video is contagious!',
-      reply: false,
-    },
-    {
-      id: 2,
-      name: 'Olivia Bennett',
-      message: 'I wish I had a friend group like this. You all are incredible!',
-      reply: false,
-    },
-    {
-      id: 3,
-      name: 'Ethan Rodriguez',
-      message:
-        'This video just made my day! Thanks for sharing your awesome moments.',
-      reply: false,
-    },
-    {
-      id: 4,
-      name: 'Mia Bennett',
-      message: 'Friendship goals right there! Love how close you all are',
-      reply: false,
-    },
-    {
-      id: 5,
-      name: 'Liam Sullivan',
-      message:
-        'Looks like you guys are having an absolute blast! Wish I could join in on the fun',
-      reply: false,
-    },
-  ];
-
   const sendComment = async () => {
     setLoading(true);
-    console.log('Set Loading ', loading);
     const token = authToken; // Replace with your actual token
 
     try {
@@ -331,11 +254,8 @@ export default function ViewGEBC({navigation, route}) {
         axiosConfig,
       );
 
-      console.log('Response', response);
-
       if (response.status === 200) {
         setLoading(false);
-        console.log('Comment sent successfully');
         fetchAll();
       } else {
         setLoading(false);
@@ -353,22 +273,11 @@ export default function ViewGEBC({navigation, route}) {
   };
 
   const handlePick = emojiObject => {
-    console.log('Emoji Object', emojiObject);
     //setIsOpen(false)
     setCommentText(emojiObject.emoji);
-
-    /* example emojiObject = {
-        "emoji": "❤️",
-        "name": "red heart",
-        "slug": "red_heart",
-        "unicode_version": "0.6",
-      }
-    */
   };
 
   const sendLikes = async () => {
-    console.log('likes Token', authToken);
-    console.log('User Id', userId);
     setLoading(true);
     const token = authToken; // Replace with your actual token
 
@@ -395,7 +304,6 @@ export default function ViewGEBC({navigation, route}) {
 
       if (response.status === 200) {
         setLoading(false);
-        console.log('EBC Liked  successfully');
         fetchAll();
       } else {
         setLoading(false);
@@ -413,7 +321,7 @@ export default function ViewGEBC({navigation, route}) {
   };
 
   const renderComments = item => {
-    console.log('Items of comments', item);
+
     return (
       <View>
         <TouchableOpacity
@@ -464,8 +372,6 @@ export default function ViewGEBC({navigation, route}) {
               //flex: 1,
               marginLeft: wp(3),
               height: hp(5),
-              //marginTop: hp(1),
-              //borderWidth:3,
               justifyContent: 'space-around',
             }}>
             <Text
@@ -653,119 +559,6 @@ export default function ViewGEBC({navigation, route}) {
     }
   };
 
-  const downloadFile = () => {
-    const {config, fs} = RNFetchBlob;
-    const date = new Date();
-    const fileDir = fs.dirs.DownloadDir;
-    config({
-      // add this option that makes response data to be stored as a file,
-      // this is much more performant.
-      fileCache: true,
-      addAndroidDownloads: {
-        useDownloadManager: true,
-        notification: true,
-        path:
-          fileDir +
-          '/download_' +
-          Math.floor(date.getDate() + date.getSeconds() / 2) +
-          '.JPG',
-        description: 'file download',
-      },
-    })
-      .fetch('GET', receivedData.image, {
-        //some headers ..
-      })
-      .then(res => {
-        setsnackbarVisible(true);
-        // the temp file path
-        console.log('The file saved to ', res.path());
-      });
-  };
-
-
-  // ////////for canva
-//   useEffect(() => {
-//   if (Platform.OS === 'android') {
-//     requestStoragePermission();
-//   } else {
-//     downloadFile();
-//   }
-// }, []);
-
-// const requestStoragePermission = async () => {
-//   try {
-//     const granted = await PermissionsAndroid.request(
-//       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-//       {
-//         title: 'Downloader App Storage Permission',
-//         message:
-//           'Downloader App needs access to your storage ' +
-//           'so you can download files',
-//         buttonNeutral: 'Ask Me Later',
-//         buttonNegative: 'Cancel',
-//         buttonPositive: 'OK',
-//       }
-//     );
-//     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-//       downloadFile();
-//     } else {
-//       console.log('storage permission denied');
-//     }
-//   } catch (err) {
-//     console.warn(err);
-//   }
-// };
-
-// const downloadFile = async () => {
-//   const { config, fs } = RNFetchBlob;
-//   const date = new Date();
-//   const fileDir = fs.dirs.DownloadDir;
-//   const filePath =
-//     fileDir +
-//     '/download_' +
-//     Math.floor(date.getDate() + date.getSeconds() / 2) +
-//     '.JPG';
-
-//   try {
-//     const response = await config({
-//       fileCache: true,
-//       addAndroidDownloads: {
-//         useDownloadManager: true,
-//         notification: true,
-//         path: filePath,
-//         description: 'file download',
-//       },
-//     }).fetch('GET', receivedData.image);
-
-//     console.log('The file saved to ', response.path());
-
-//     // Draw the image and emoji on the canvas
-//     const canvas = canvasRef.current;
-//     if (canvas) {
-//       const ctx = canvas.getContext('2d');
-//       const img = new Image();
-//       img.src = response.path();
-
-//       img.onload = () => {
-//         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-//         // Draw the emoji on the canvas
-//         ctx.font = '48px serif';
-//         ctx.fillText('😊', 50, 50); // Adjust the position and emoji as needed
-
-//         // Save the canvas as an image
-//         canvas.toDataURL('image/jpeg', (dataUrl) => {
-//           // Handle the data URL
-//           console.log(dataUrl);
-//           // You can use RNFetchBlob to save this data URL as an image file
-//         });
-//       };
-//     }
-//   } catch (error) {
-//     console.error('Error downloading file:', error);
-//   }
-// };
-
 // //for canva
   const toggleContent = () => {
     setShowFullContent(!showFullContent);
@@ -777,8 +570,6 @@ export default function ViewGEBC({navigation, route}) {
   };
 
   const receivedData = route.params?.picData;
-
-  console.log('Data Recieved on pics', receivedData);
 
   var details = receivedData.description;
 
@@ -828,7 +619,7 @@ export default function ViewGEBC({navigation, route}) {
           <Headers
             showBackIcon={true}
             showText={true}
-            text={'EBC Details'}
+            text={t('EBCDetails')}
             onPress={() => navigation.goBack()}
           />
         </View>
@@ -882,14 +673,7 @@ export default function ViewGEBC({navigation, route}) {
                   }}
                 />
             </View>
-              // <Image
-              //   style={{
-              //     width: '100%',
-              //     borderRadius: wp(10) / 2,
-              //     height: '100%',
-              //   }}
-              //   source={{uri: receivedData?.userimage}}
-              // />
+  
             )}
           </TouchableOpacity>
 
@@ -1113,7 +897,8 @@ export default function ViewGEBC({navigation, route}) {
                 fontSize: hp(2.3),
               }}
             >
-              Comments
+              {t('Comments')}
+              {/* Comments */}
             </Text>
           </View>
 
@@ -1126,7 +911,7 @@ export default function ViewGEBC({navigation, route}) {
                   alignItems: "center",
                 }}
               >
-                <Text>No Comments Yet</Text>
+                <Text>{t('NoCommentsYet')}</Text>
               </View>
             ) : (
               <FlatList
@@ -1137,19 +922,7 @@ export default function ViewGEBC({navigation, route}) {
               />
             )}
           </View>
-
-          {loading && (
-            <View
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: [{ translateX: -25 }, { translateY: -25 }],
-              }}
-            >
-              <ActivityIndicator size="large" color="#FACA4E" />
-            </View>
-          )}
+          {loading && <Loader />}
 
           {isBottomSheetExpanded === false ? (
             <View
@@ -1180,7 +953,7 @@ export default function ViewGEBC({navigation, route}) {
                 value={commentText} // Bind the value to the state variable
                 onChangeText={(text) => setCommentText(text)} // Update state on text change
                 placeholderTextColor={"#848484"}
-                placeholder="Write Comment Here"
+                placeholder={t('WriteCommentHere')}
                 style={{ flex: 1, marginLeft: wp(1) }}
               />
 
@@ -1219,7 +992,7 @@ export default function ViewGEBC({navigation, route}) {
                   onChangeText={(text) => setCommentText(text)} // Update state on text change
                   placeholderTextColor={"#848484"}
                   // placeholder="Add a reply"
-                  placeholder="Write Comment Here"
+                  placeholder={t('WriteCommentHere')}
                   style={{ flex: 1, marginLeft: wp(1) }}
                 />
                 <TouchableOpacity
@@ -1242,92 +1015,9 @@ export default function ViewGEBC({navigation, route}) {
           onClose={() => setIsOpen(false)}
         />
       ) : null}
-
-      {/* {isBottomSheetExpanded && showReply === false ? (
-        <View
-          style={{
-            width: '100%',
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            backgroundColor: 'white',
-            flexDirection: 'row',
-            alignItems: 'center',
-            height: hp(8),
-          }}>
-          <TouchableOpacity
-            onPress={() => openEmoji()}
-            style={{
-              height: hp(8),
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: wp(14),
-            }}>
-            <SmileEmoji />
-          </TouchableOpacity>
-
-          <TextInput
-            value={commentText} // Bind the value to the state variable
-            onChangeText={text => setCommentText(text)} // Update state on text change
-            placeholderTextColor={'#848484'}
-            placeholder="Write Comment Here"
-            style={{flex: 1, marginLeft: wp(1)}}
-          />
-
-          <TouchableOpacity onPress={() => clearTextInput()}>
-            <ButtonSend />
-          </TouchableOpacity>
-        </View>
-      ) : (
-        isBottomSheetExpanded && (
-          <View
-            style={{
-              width: '100%',
-              backgroundColor: 'white',
-              flexDirection: 'row',
-              alignItems: 'center',
-              height: hp(8),
-            }}>
-            <TouchableOpacity
-              style={{
-                height: hp(8),
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: wp(14),
-              }}>
-              <SmileEmoji />
-            </TouchableOpacity>
-
-            <TextInput
-              value={commentText} // Bind the value to the state variable
-              onChangeText={text => setCommentText(text)} // Update state on text change
-              placeholderTextColor={'#848484'}
-              placeholder="Add a reply"
-              style={{flex: 1, marginLeft: wp(1)}}
-            />
-
-            <TouchableOpacity onPress={() => clearTextInput()}>
-              <ButtonSend />
-            </TouchableOpacity>
-          </View>
-        )
-      )} */}
-
-      <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
       <CustomSnackbar
-          message={'success'}
-          messageDescription={'EBC downloaded successfully'}
+          message={t('Success')}
+          messageDescription={t('EBCDownloadedSuccessfully')} 
           onDismiss={dismissSnackbar} // Make sure this function is defined
           visible={snackbarVisible}
         />
@@ -1350,8 +1040,6 @@ const styles = StyleSheet.create({
   bottomView: {
     flex: 1,
     marginTop: hp(3),
-    //justifyContent: 'flex-end',
-    // You can add padding or content to this view as needed.
   },
   textProfileName: {
     color: 'black',

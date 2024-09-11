@@ -14,7 +14,7 @@ import {
 import React, {useState, useEffect, useRef} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Entypo from 'react-native-vector-icons/Entypo';
-
+import { useTranslation } from 'react-i18next';
 import {Button, Divider, TextInput} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import PlusPost from '../../../assets/svg/PlusPost.svg';
@@ -72,7 +72,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
   const [isFocusPublicType, setIsFocusPublicType] = useState(false);
 
   const [loading, setLoading] = useState(false);
-
+  const { t } = useTranslation();
   const [category, setCategory] = useState('');
 
   const [isTextInputActive, setIsTextInputActive] = useState(false);
@@ -121,6 +121,11 @@ export default function UpdatePostLetterInfo({navigation, route}) {
 
   const receivedData = route.params?.Video;
 
+  const [categoryError, setCategoryError] = useState("");
+  const [subcategoryError, setSubcategoryError] = useState("");
+  const [subCate, setSubCate] = useState([]);
+  const [subcategory, setSubCategory] = useState("");
+  const [Username, setUserName] = useState('');
   // console.log('ReceivedData', receivedData);
   // console.log('name', name);
 
@@ -180,10 +185,21 @@ export default function UpdatePostLetterInfo({navigation, route}) {
         setAuthToken(result3);
         //await fetchCategory(result3, id);
         authTokenAndId(id, result3);
+        userUserName();
       }
     } catch (error) {
       // Handle errors here
       console.error('Error retrieving user ID:', error);
+    }
+  };
+
+  const userUserName = async id => {
+    try {
+      const result3 = await AsyncStorage.getItem('userName');
+      if (result3 !== null) {
+        setUserName(result3);  
+      }
+    } catch (error) {
     }
   };
 
@@ -402,6 +418,30 @@ export default function UpdatePostLetterInfo({navigation, route}) {
       </TouchableOpacity>
     );
   };
+
+
+  
+  const [isCategoryActive, setIsCategoryActive] = useState(false); // Track if category dropdown is active
+  const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
+    const handleCategoryFocus = () => {
+      setIsCategoryActive(true);
+      setIsSubCategoryActive(false); // Make the sub-category dropdown inactive
+    };
+    
+    const handleCategoryBlur = () => {
+      setIsCategoryActive(false);
+    };
+    
+    const handleSubCategoryFocus = () => {
+      setIsSubCategoryActive(true);
+      setIsCategoryActive(false); // Make the category dropdown inactive
+    };
+    
+    const handleSubCategoryBlur = () => {
+      setIsSubCategoryActive(false);
+    };
+
+
   return (
     <View style={styles.container}>
       <StatusBar
@@ -464,7 +504,16 @@ export default function UpdatePostLetterInfo({navigation, route}) {
             </View>
           )}
 
-          <TouchableOpacity
+<Text
+            style={{
+              color: '#333333',
+              marginLeft: wp(3),
+              fontFamily: 'Inter',
+              fontWeight: 'bold',
+            }}>
+            {Username}
+          </Text>
+          {/* <TouchableOpacity
             onPress={() => ref_RBSheetCamera.current.open()}
             style={{
               flexDirection: 'row',
@@ -482,7 +531,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
             </Text>
 
             <Ionicons name="chevron-down" size={21} color="#FACA4E" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
         <Text
@@ -493,12 +542,13 @@ export default function UpdatePostLetterInfo({navigation, route}) {
             marginTop: hp(3),
             marginLeft: wp(8),
           }}>
-          Sender's Information
+            {t('SendersInformation')}
+          {/* Sender's Information */}
         </Text>
 
         <TextInput
           mode="outlined"
-          label="Name"
+          label={t('Name')}
           value={name}
           onChangeText={text => setName(text)}
           style={[styles.ti, {marginTop: '5%'}]}
@@ -524,7 +574,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
 
         <TextInput
           mode="outlined"
-          label="Address"
+          label={t('Address')}
           value={address}
           onChangeText={text => setAddress(text)}
           style={[styles.ti, {marginTop: '5%'}]}
@@ -550,7 +600,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
 
         <TextInput
           mode="outlined"
-          label="Contact Number"
+          label={t('ContactNumber')}
           value={contact}
           onChangeText={text => setContact(text)}
           style={[styles.ti, {marginTop: '5%'}]}
@@ -578,7 +628,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
 
         <TextInput
           mode="outlined"
-          label="Email Address"
+          label={t('EmailAddress')}
           value={email}
           onChangeText={text => setEmail(text)}
           style={[styles.ti, {marginTop: '5%'}]}
@@ -650,6 +700,128 @@ export default function UpdatePostLetterInfo({navigation, route}) {
           />
         </View> */}
 
+
+
+
+
+
+<View style={{ marginHorizontal: wp(7)}}>
+          <Dropdown
+            style={
+              isCategoryActive
+                ? styles.textInputSelectedCategory
+                : styles.textInputCategoryNonSelected
+            }
+            containerStyle={{
+              marginTop: 3,
+              alignSelf: 'center',
+              borderRadius: wp(3),
+              width: '100%',
+            }}
+    
+            placeholderStyle={{
+              color: '#121420',
+              fontFamily: 'Inter',
+              fontSize: hp(1.8),
+            }}
+            iconStyle={isFocus ? styles.iconStyle : styles.iconStyleInactive}
+            itemTextStyle={{color: '#000000'}}
+            selectedTextStyle={{fontSize: 16, color: '#000000'}}
+            value={category}
+            data={categoriesSelect}
+            search={false}
+            maxHeight={200}
+            labelField="label"
+            valueField="value"
+            placeholder={t('SelectCategory')}
+            searchPlaceholder="Search..."
+            onFocus={handleCategoryFocus}
+            onBlur={handleCategoryBlur}
+            onChange={item => {
+              setCategoryId(item.value);
+              setIsFocus(false);
+            }}
+            renderRightIcon={() => (
+              <AntDesign
+                style={styles.icon}
+                color={isFocus ? '#000000' : '#000000'}
+                name="down"
+                size={15}
+              />
+            )}
+          />
+              <View style={{ marginTop:hp(-3), marginBottom:hp(3)}}>
+                    {categoryError ? <Text style={styles.errorText}>{categoryError}</Text> : null}
+                    </View>
+        </View>
+
+        <View style={{ marginHorizontal: wp(7) }}>
+          <Dropdown
+           style={
+            isSubCategoryActive
+              ? styles.textInputSelectedCategory
+              : styles.textInputCategoryNonSelected
+          }
+            containerStyle={{
+              marginTop: 3,
+              alignSelf: "center",
+              borderRadius: wp(3),
+              width: "100%",
+            }}
+
+            placeholderStyle={{
+              color: "#121420",
+              //   fontWeight: '400',
+              fontFamily: "Inter",
+              fontSize: hp(1.8),
+            
+            }}
+            iconStyle={isFocus ? styles.iconStyle : styles.iconStyleInactive}
+            itemTextStyle={{ color: "#000000", }}
+            selectedTextStyle={{ fontSize: 16, color: "#000000",   height: 42, textAlignVertical: "center",}}
+            value={subcategory}
+            data={subCate}
+            search={false}
+            maxHeight={200}
+            labelField="name"
+            valueField="id"
+            placeholder={t('SelectSubCategory')}
+            searchPlaceholder="Search..."
+            onFocus={handleSubCategoryFocus}
+            onBlur={handleSubCategoryBlur}
+ 
+            onChange={(item) => {
+              setSubCategory(item.id);
+              setIsFocus(false);
+            }}
+            renderRightIcon={() => (
+              <AntDesign
+                style={styles.icon}
+                color={isFocus ? '#000000' : '#000000'}
+                name="down"
+                size={15}
+              />
+            )}
+          />
+         <View style={{ marginTop:hp(-3), marginBottom:hp(3)}}>
+          {subcategoryError ? <Text style={styles.errorText}>{subcategoryError}</Text> : null}
+          </View>
+        </View>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <View
           style={{marginLeft: wp(8), marginTop: hp(1.8), marginRight: wp(8)}}>
           <Dropdown
@@ -679,7 +851,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
             maxHeight={200}
             labelField="label"
             valueField="value"
-            placeholder={'Select Type'}
+            placeholder={t('SelectType')}
             searchPlaceholder="Search..."
             onFocus={() => setIsFocusPublicType(true)}
             onBlur={() => setIsFocusPublicType(false)}
@@ -701,7 +873,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
 
         <View style={{marginTop: '30%', alignSelf: 'center'}}>
           <CustomButton
-            title="Next"
+            title={t('Next')}
             //load={loading}
             // checkdisable={inn == '' && cm == '' ? true : false}
             customClick={() => {
@@ -759,7 +931,8 @@ export default function UpdatePostLetterInfo({navigation, route}) {
               color: '#303030',
               fontSize: hp(2.3),
             }}>
-            Select Letter Type
+              {t('SelectLetterType')}
+           
           </Text>
           <TouchableOpacity>
             <Ionicons
@@ -791,7 +964,8 @@ export default function UpdatePostLetterInfo({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Public letter
+                {t('PublicLetter')}
+              
             </Text>
           </TouchableOpacity>
 
@@ -819,7 +993,8 @@ export default function UpdatePostLetterInfo({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Private Letter
+                {t('PrivateLetter')}
+              
             </Text>
           </TouchableOpacity>
         </View>
@@ -862,7 +1037,8 @@ export default function UpdatePostLetterInfo({navigation, route}) {
               fontFamily: 'Inter-Bold',
               //fontWeight: 'bold',
             }}>
-            Unable To Post!
+              {t('UnableToPost')}
+            {/* Unable To Post! */}
           </Text>
 
           <Text
@@ -876,12 +1052,13 @@ export default function UpdatePostLetterInfo({navigation, route}) {
               fontFamily: 'Inter-Regular',
               //fontWeight: 'bold',
             }}>
-            Upgrade for private letter posting and a{'\n'}seamless experience
+               {t('UpgradeForPrivateLetterPostingAndASeamlessExperience')}
+            {/* Upgrade for private letter posting and a{'\n'}seamless experience */}
           </Text>
 
           <View style={{marginHorizontal: wp(10)}}>
             <CustomButton
-              title="Buy Subscription"
+              title={t('BuySubscription')}
               customClick={() => {
                 ref_RBSendOffer.current.close();
                 navigation.navigate('SubscriptionPayment');
@@ -903,7 +1080,8 @@ export default function UpdatePostLetterInfo({navigation, route}) {
                 fontFamily: 'Inter-Regular',
                 //fontWeight: 'bold',
               }}>
-              Maybe later
+                {t('Maybelater')}
+              {/* Maybe later */}
             </Text>
           </TouchableOpacity>
         </View>
@@ -923,8 +1101,8 @@ export default function UpdatePostLetterInfo({navigation, route}) {
       </View>
 
       <CustomSnackbar
-        message={'Alert!'}
-        messageDescription={'Kindly Fill All Fields'}
+        message={t('Alert!')}
+        messageDescription={t('KindlyFillAllFields')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
@@ -940,7 +1118,7 @@ const styles = StyleSheet.create({
   ti: {
     marginHorizontal: '7%',
     marginTop: '10%',
-    width: 300,
+    // width: 300,
     backgroundColor: 'white',
     fontSize: wp(4),
     paddingLeft: '2%',
@@ -948,12 +1126,12 @@ const styles = StyleSheet.create({
   },
   textInputCategoryNonSelected: {
     borderWidth: 1,
-    borderRadius: wp(3),
-    width: '98%',
+    borderRadius: wp(1),
+    width: '100%',
     borderColor: '#E7EAF2',
     paddingHorizontal: 20,
     paddingVertical: 6.8,
-    marginBottom: 20,
+    // marginBottom: 20,
     marginTop: hp(3),
   },
   iconStyle: {
@@ -963,5 +1141,24 @@ const styles = StyleSheet.create({
   },
   iconStyleInactive: {
     color: '#FACA4E',
+  },
+
+
+  textInputSelectedCategory: {
+    borderWidth: 1,
+    borderRadius: wp(1),
+    width: '100%',
+    borderColor: '#FACA4E',
+
+    paddingHorizontal: 20,
+    paddingVertical: 6.8,
+    // marginBottom: 10,
+    marginTop: hp(3),
+  },
+
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginTop: 4,
   },
 });

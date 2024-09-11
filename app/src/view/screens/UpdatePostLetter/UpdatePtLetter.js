@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
-
+import { useTranslation } from 'react-i18next';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 import {Button, Divider, TextInput} from 'react-native-paper';
@@ -64,7 +64,7 @@ export default function UpdatePtLetter({navigation, route}) {
   const [postLetter, setPostLetter] = useState('');
   const [subjectOfLetter, setSubjectOfLetter] = useState('');
   const [introductionOfLetter, setIntroductionOfLetter] = useState('');
-
+  const { t } = useTranslation();
   const [greetings, setGreetings] = useState('');
 
   const [userImage, setUserImage] = useState();
@@ -79,7 +79,7 @@ export default function UpdatePtLetter({navigation, route}) {
 
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState('');
-
+  const [Username, setUserName] = useState('');
   const receivedDataName = route.params?.name;
   const receivedDatAddress = route.params?.address;
   const receivedDataContactNumber = route.params?.contactNumber;
@@ -131,7 +131,6 @@ export default function UpdatePtLetter({navigation, route}) {
   };
 
   const getUserID = async () => {
-    console.log("Id's");
     try {
       const result = await AsyncStorage.getItem('userId ');
       if (result !== null) {
@@ -184,10 +183,21 @@ export default function UpdatePtLetter({navigation, route}) {
         setAuthToken(result3);
         //await fetchCategory(result3, id);
         authTokenAndId(id, result3);
+        userUserName()
       }
     } catch (error) {
       // Handle errors here
       console.error('Error retrieving user ID:', error);
+    }
+  };
+
+  const userUserName = async id => {
+    try {
+      const result3 = await AsyncStorage.getItem('userName');
+      if (result3 !== null) {
+        setUserName(result3);  
+      }
+    } catch (error) {
     }
   };
 
@@ -338,7 +348,7 @@ export default function UpdatePtLetter({navigation, route}) {
         <Headers
           showBackIcon={true}
           showText={true}
-          text={'Post Letter'}
+          text={t('PostLetter')}
           onPress={() => navigation.goBack()}
         />
       </View>
@@ -387,7 +397,17 @@ export default function UpdatePtLetter({navigation, route}) {
           </View>
         )}
 
-        <TouchableOpacity
+          <Text
+            style={{
+              color: '#333333',
+              marginLeft: wp(3),
+              fontFamily: 'Inter',
+              fontWeight: 'bold',
+            }}>
+            {Username}
+          </Text>
+
+        {/* <TouchableOpacity
           onPress={() => ref_RBSheetCamera.current.open()}
           style={{
             flexDirection: 'row',
@@ -405,7 +425,7 @@ export default function UpdatePtLetter({navigation, route}) {
           </Text>
 
           <Ionicons name="chevron-down" size={21} color="#FACA4E" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <View
@@ -433,7 +453,7 @@ export default function UpdatePtLetter({navigation, route}) {
         <View style={{marginLeft: wp(8), marginTop: hp(3)}}>
           <CPaperInput
             //multiline={true}
-            placeholder={'Subject Of Letter'}
+            placeholder={t('SubjectOfLetter')}
             //heading={'Title'}
             placeholderTextColor="#121420"
             value={subjectOfLetter}
@@ -448,7 +468,7 @@ export default function UpdatePtLetter({navigation, route}) {
         <View style={{marginLeft: wp(8), marginTop: hp(1)}}>
           <CPaperInput
             //multiline={true}
-            placeholder={'Introduction Of Letter'}
+            placeholder={t('IntroductionOfLetter')}
             //heading={'Title'}
             placeholderTextColor="#121420"
             value={introductionOfLetter}
@@ -462,7 +482,7 @@ export default function UpdatePtLetter({navigation, route}) {
         <View style={{marginLeft: wp(8), marginTop: hp(3)}}>
           <CPaperInput
             multiline={true}
-            placeholder={'Type Here'}
+            placeholder={t('TypeHere')}
             //heading={'Title'}
             placeholderTextColor="#121420"
             value={postLetter}
@@ -474,7 +494,7 @@ export default function UpdatePtLetter({navigation, route}) {
         <View style={{marginLeft: wp(8), marginTop: hp(1)}}>
           <CPaperInput
             multiline={true}
-            placeholder={'Greetings'}
+            placeholder={t('Greetings')}
             //heading={'Title'}
             placeholderTextColor="#121420"
             value={greetings}
@@ -485,7 +505,7 @@ export default function UpdatePtLetter({navigation, route}) {
 
         <View style={{marginTop: hp(1), marginHorizontal: wp(8)}}>
           <CustomButton
-            title={'Next'}
+            title={t('Next')}
             load={false}
             // checkdisable={inn == '' && cm == '' ? true : false}
             customClick={() => {
@@ -550,7 +570,8 @@ export default function UpdatePtLetter({navigation, route}) {
               color: '#303030',
               fontSize: hp(2.3),
             }}>
-            Select Letter Type
+              {t('SelectLetterType')}
+            
           </Text>
           <TouchableOpacity>
             <Ionicons
@@ -588,7 +609,8 @@ export default function UpdatePtLetter({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Public letter
+                {t('PublicLetter')}
+              {/* Public letter */}
             </Text>
           </TouchableOpacity>
 
@@ -616,7 +638,8 @@ export default function UpdatePtLetter({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Private Letter
+                {t('PrivateLetter')}
+             
             </Text>
           </TouchableOpacity>
         </View>
@@ -659,7 +682,8 @@ export default function UpdatePtLetter({navigation, route}) {
               fontFamily: 'Inter-Bold',
               //fontWeight: 'bold',
             }}>
-            Unable To Post!
+              {t('UnableToPost')}
+     
           </Text>
 
           <Text
@@ -673,7 +697,8 @@ export default function UpdatePtLetter({navigation, route}) {
               fontFamily: 'Inter-Regular',
               //fontWeight: 'bold',
             }}>
-            Upgrade for private letter posting and a{'\n'}seamless experience
+               {t('UpgradeForPrivateLetterPostingAndASeamlessExperience')}
+      
           </Text>
 
           <View style={{marginHorizontal: wp(10)}}>
@@ -700,7 +725,8 @@ export default function UpdatePtLetter({navigation, route}) {
                 fontFamily: 'Inter-Regular',
                 //fontWeight: 'bold',
               }}>
-              Maybe later
+                {t('Maybelater')}
+              {/* Maybe later */}
             </Text>
           </TouchableOpacity>
         </View>

@@ -10,7 +10,8 @@ import {
   Text,
   View,
   SectionList,
-  Dimensions
+  Dimensions,
+  Platform
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import {
@@ -32,50 +33,21 @@ import { appImages } from "../../../assets/utilities";
 import Add from "../../../assets/svg/AddMainScreen.svg";
 import { base_url } from "../../../../../baseUrl";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import Swiper from "react-native-swiper";
+
 import Carousel from 'react-native-snap-carousel';
 import KidsActive from "../../../assets/svg/KidsActive";
-const bannerAds = [
-  {
-    id: 1,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-  {
-    id: 2,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-  {
-    id: 3,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-  {
-    id: 4,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-];
+import { useTranslation } from 'react-i18next';
+
 export default function Kids_vid({ route }) {
+  const { t } = useTranslation();
   const navigation = useNavigation();
-  // const { identifier } = route.params;
-  // console.log("identifier from cinematices ", identifier)
   const [data, setData] = useState([]);
 
   const [authToken, setAuthToken] = useState("");
 
-  const [dataElectronics, setDataElectronics] = useState(null);
-
   const isFocused = useIsFocused();
 
-  const [dataVehicles, setDataVehicles] = useState(null);
-
-  const [dataClothing, setDataClothing] = useState(null);
-
-  //const [regions, setRegions] = useState(null);
-
-  const [regions, setRegions] = useState(null);
-
   const [loading, setLoading] = useState(false);
-
-  const [categoriesSelect, setCategorySelect] = useState([]);
 
   const [snackBarVisible, setSnackbarVisible] = useState(false);
 
@@ -110,11 +82,8 @@ export default function Kids_vid({ route }) {
   useEffect(() => {
     if (authToken && isFocused) {
       if (selectedItemId == null) {
-        // console.log('useeffect mein id hai', selectedItemId)
         setSelectedItemId(9);
       }
-
-      // fetchAllData();
       fetchAllCinematicsCategory();
     }
   }, [authToken]);
@@ -129,7 +98,6 @@ export default function Kids_vid({ route }) {
     setLoading(true);
     setNoData(false);
     try {
-      // await fetchAllCinematicsCategory();
       await fetchTopVideos();
       await fetchSubCategory(selectedItemId);
     } catch (error) {
@@ -140,7 +108,6 @@ export default function Kids_vid({ route }) {
   };
 
   const fetchAllCinematicsCategory = async () => {
-    //console.log("Categry in id", selectedItemId)
     const token = authToken;
 
     try {
@@ -155,7 +122,6 @@ export default function Kids_vid({ route }) {
       );
 
       const result = await response.json();
-      console.log("AllCategories---", result.AllCategories);
       setData(result.AllCategories); // Update the state with the fetched data
     } catch (error) {
       console.error("Error Trending:", error);
@@ -163,7 +129,6 @@ export default function Kids_vid({ route }) {
   };
 
   const fetchTopVideos = async () => {
-    // console.log("Categry in id", selectedItemId);
     const token = authToken;
 
     try {
@@ -175,7 +140,6 @@ export default function Kids_vid({ route }) {
       });
 
       const result = await response.json();
-      console.log("getTopVideo------..", result.data);
       setDataTopVideos(result.data);
     } catch (error) {
       console.error("Error Trending:", error);
@@ -206,10 +170,7 @@ export default function Kids_vid({ route }) {
 
         // Reverse the titles
         const reversedSections = formattedSections.reverse();
-        // console.log('results---', formattedSections);
         setSections(reversedSections);
-
-        // Check if there is no data
         const hasNoData = formattedSections.every(
           (section) => section.data.length === 0
         );
@@ -240,7 +201,6 @@ export default function Kids_vid({ route }) {
     try {
       const response = await fetch(
         base_url + "banner/getAllActiveBanners?topBanner=true",
-        // base_url + "banner/getAllBannersByUser/97",
         {
           method: "GET",
           headers: {
@@ -280,7 +240,6 @@ export default function Kids_vid({ route }) {
         }
         return banner;
       });
-      // console.log("AllBanners AdsInActiveData---", updatedBanners);
       setAdsInActiveData(updatedBanners);
     } catch (error) {
       console.error("Error AllBanners AdsInActiveData---", error);
@@ -288,14 +247,12 @@ export default function Kids_vid({ route }) {
     setIsLoading(false);
   };
   const renderVideoItem = ({ item }) => (
-    // <TouchableOpacity onPress={handle_details}>
     <TouchableOpacity
       onPress={() =>
         navigation.navigate("Kids_vid_details", { videoData: item })
       }
     >
       <View style={styles.itemContainer}>
-        {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
         <Image source={{ uri: item.thumbnail }} style={styles.image} />
         <Text ellipsizeMode="tail" numberOfLines={1} style={styles.text}>
           {item.name}
@@ -311,7 +268,7 @@ export default function Kids_vid({ route }) {
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>No Data available</Text>
+        <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
       ) : (
         <FlatList
           data={item.data}
@@ -331,33 +288,6 @@ export default function Kids_vid({ route }) {
   const handle_details = () => {
     navigation.navigate("Cinematics_details");
   };
-  const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={handle_details}>
-      <View style={styles.itemContainer}>
-        <Image source={item.image} style={styles.image} />
-        <Text style={styles.text}>{item.title}</Text>
-        <Text style={styles.text1}>{item.time}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-  const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
-    setSnackbarVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
-    setTimeout(() => {
-      setSnackbarVisible(false);
-    }, 3000);
-  };
-
-  const goToScreen = () => {
-    ref_RBSheetCamera.current.close();
-
-    navigation.navigate("Sell");
-  };
 
   const takeVideoFromCamera = async () => {
     ref_RBSheetCamera.current.close();
@@ -367,13 +297,10 @@ export default function Kids_vid({ route }) {
         mediaType: "video",
       },
       (response) => {
-        console.log("video here from camera", response);
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setImageUri(response.assets[0].uri);
             setImageInfo(response.assets[0]);
-
-            console.log("response", response.assets[0].uri);
             navigation.navigate("Kids_vid_upload", {
               imageUri: response.assets[0],
             });
@@ -385,170 +312,23 @@ export default function Kids_vid({ route }) {
 
   const chooseVideoFromLibrary = () => {
     ref_RBSheetCamera.current.close();
-
-    launchImageLibrary({ mediaType: "video" }, (response) => {
-      console.log("video here from gallery", response);
-      if (!response.didCancel && response.assets.length > 0) {
-        setImageUri(response.assets[0].uri);
-        setImageInfo(response.assets[0]);
-        navigation.navigate("Kids_vid_upload", {
-          imageUri: response.assets[0],
-        });
-      }
-    });
-  };
-  const renderAvailableAppsMarket = (item) => {
-    console.log("Items of market zone", item?.images[0]?.image);
-    return (
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("ProductDetails", { ProductDetails: item })
+    setTimeout(() => {
+      launchImageLibrary({ mediaType: "video" }, (response) => {
+        if (!response.didCancel && response.assets.length > 0) {
+          setImageUri(response.assets[0].uri);
+          setImageInfo(response.assets[0]);
+          navigation.navigate("Kids_vid_upload", {
+            imageUri: response.assets[0],
+          });
         }
-        style={{ width: wp(25.5), margin: 5 }}
-      >
-        <View>
-          {!item?.images[0]?.image ||
-          item?.images[0]?.image === "undefined" ||
-          item?.images[0]?.image.startsWith("/") ? (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                zIndex: 1,
-                width: "100%",
-                height: hp(12),
-                borderRadius: wp(1),
-                resizeMode: "cover",
-              }}
-              source={appImages.galleryPlaceHolder}
-            />
-          ) : (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-
-                zIndex: 1, // Ensure it's on top of other elements
-                //flex: 1,
-                width: "100%",
-                height: hp(16),
-                borderRadius: wp(2.5),
-                resizeMode: "cover",
-              }}
-              source={{ uri: item?.images[0]?.image }}
-            />
-          )}
-        </View>
-
-        <View
-          style={{
-            position: "absolute",
-            top: hp(12),
-            left: 7,
-            //height: hp(3),
-            //width: wp(21),
-            //borderRadius: wp(3),
-            //backgroundColor: '#FACA4E',
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 2, // Ensure it's on top
-          }}
-        >
-          <Text
-            style={{
-              fontSize: hp(1.7),
-              fontFamily: "Inter",
-              color: "black",
-              fontWeight: "700",
-            }}
-          >
-            {item?.title}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
+      });
+    }, 300);
+ 
   };
 
-  const renderAvailableApps = (item) => {
-    console.log("Items of market zone", item?.images[0]?.image);
-    return (
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("ProductDetails", { ProductDetails: item })
-        }
-        style={{ width: wp(25.5), margin: 5 }}
-      >
-        <View>
-          {!item?.images[0]?.image ||
-          item?.images[0]?.image === "undefined" ||
-          item?.images[0]?.image.startsWith("/") ? (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                zIndex: 1,
-                width: "100%",
-                height: hp(12),
-                borderRadius: wp(1),
-                resizeMode: "cover",
-              }}
-              source={appImages.galleryPlaceHolder}
-            />
-          ) : (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-
-                zIndex: 1, // Ensure it's on top of other elements
-                //flex: 1,
-                width: "100%",
-                height: hp(16),
-                borderRadius: wp(2.5),
-                resizeMode: "cover",
-              }}
-              source={{ uri: item?.images[0]?.image }}
-            />
-          )}
-        </View>
-
-        <View
-          style={{
-            position: "absolute",
-            top: hp(12),
-            left: 7,
-            //height: hp(3),
-            //width: wp(21),
-            //borderRadius: wp(3),
-            //backgroundColor: '#FACA4E',
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 2, // Ensure it's on top
-          }}
-        >
-          <Text
-            style={{
-              fontSize: hp(1.7),
-              fontFamily: "Inter",
-              color: "black",
-              fontWeight: "700",
-            }}
-          >
-            {item?.title}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
 
   const renderSearches = (item) => {
-    // console.log("Regions", item);
     const isSelected = selectedItemId === item.id;
-    // console.log('is selected hai---', isSelected)
     return (
       <TouchableOpacity
         style={[
@@ -559,7 +339,6 @@ export default function Kids_vid({ route }) {
         ]}
         onPress={() => {
           setSelectedItemId(item.id);
-          console.log("Selected item:", item.id);
         }}
       >
         <Text
@@ -573,11 +352,7 @@ export default function Kids_vid({ route }) {
       </TouchableOpacity>
     );
   };
-  const goto_camera = () => {
-    navigation.navigate("CameraView");
-  };
 
-  // console.log('data for top aa gya ----', dataTopVideos)
   return (
     <View style={styles.container}>
       <StatusBar
@@ -586,7 +361,7 @@ export default function Kids_vid({ route }) {
         barStyle="dark-content" // You can set the StatusBar text color to dark or light
       />
 
-      <View style={{ marginTop: hp(5) }}>
+      <View style={{ marginTop:Platform.OS =="ios" ? 0: hp(5) }}>
         <Headers
           OnpresshowHome={() => {
             navigation.navigate("MoreScreen");
@@ -596,12 +371,8 @@ export default function Kids_vid({ route }) {
           onPressSearch={() =>
             navigation.navigate("Kid_Search_Video")
           }
-          // onPressSearch={() =>
-          //   navigation.navigate("SearchProducts", {
-          //     apiEndpoint: "kidVids/searchByTitle",
-          //   })
-          // }
-          text={"Kids-Vids"}
+  
+          text={t('KidVids')}
           showSearch={true}
         />
       </View>
@@ -627,7 +398,7 @@ export default function Kids_vid({ route }) {
         <ActivityIndicator size="large" color="#FACA4E" />
       ) : adsData.length === 0 ? (
         <View style={styles.TopBannerView}>
-          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>No Top Banner</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>{t('NoTopBanner')}</Text>
         </View>
       ) : (
         <Carousel
@@ -645,7 +416,7 @@ export default function Kids_vid({ route }) {
                   height: hp(15),
                   width: '100%',
                   borderWidth: 1,
-                  resizeMode: 'contain',
+                  resizeMode:Platform.OS == "ios" ? "cover" : 'contain',
                   borderRadius: 10,
                 }}
               />
@@ -669,7 +440,7 @@ export default function Kids_vid({ route }) {
             contentContainerStyle={{ alignItems: "center" }}
             showsHorizontalScrollIndicator={false}
             horizontal
-            //data={regions}
+
             data={data}
             //keyExtractor={item => item.id.toString()}
             renderItem={({ item }) => renderSearches(item)}
@@ -766,12 +537,9 @@ export default function Kids_vid({ route }) {
                 //fontWeight: '700',
               }}
             >
-              {/*  Explore the intricate web of global politics in this
-              thought-provoking video as we delve into the ever-shifting
-              landscape of international diplomacy...... */}
 
               {dataTopVideos === undefined || dataTopVideos === 0
-                ? "No Top Kid-Vids Shown"
+                ? t('NoTopKidVidsShown')
                 : dataTopVideos?.description}
             </Text>
           </View>
@@ -790,100 +558,6 @@ export default function Kids_vid({ route }) {
           )}
         </View>
 
-        {/* /////////////////////////////////////////////////////////////// */}
-
-        {/* <View>
-          <Text
-            style={{
-              fontWeight: "bold",
-              color: "#4A4A4A",
-              fontSize: hp(2),
-              textAlign: "left",
-              fontFamily: "Inter",
-              top: "5%",
-            }}
-          >
-            Hollywood European Latin - American movies
-          </Text>
-          <View style={{ margin: "4%" }}></View>
-          <FlatList
-            data={dataCinematics}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.flatListContent}
-          />
-        </View>
-        <View>
-          <Text
-            style={{
-              fontWeight: "bold",
-              color: "#4A4A4A",
-              fontSize: hp(1.9),
-              textAlign: "left",
-              fontFamily: "Inter",
-              top: "5%",
-            }}
-          >
-            Bollywood Chinese Japanese and Asian movies
-          </Text>
-          <View style={{ margin: "4%" }}></View>
-          <FlatList
-            data={dataCinematics}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.flatListContent}
-          />
-        </View>
-        <View>
-          <Text
-            style={{
-              fontWeight: "bold",
-              color: "#4A4A4A",
-              fontSize: hp(2),
-              textAlign: "left",
-              fontFamily: "Inter",
-              top: "6%",
-            }}
-          >
-            Nollywood and African movies
-          </Text>
-          <View style={{ margin: "4%" }}></View>
-          <FlatList
-            data={dataCinematics}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.flatListContent}
-          />
-        </View>
-        <View>
-          <Text
-            style={{
-              fontWeight: "bold",
-              color: "#4A4A4A",
-              fontSize: hp(1.7),
-              textAlign: "left",
-              fontFamily: "Inter",
-              top: "6%",
-            }}
-          >
-            Arabic, Persian Turkish, and Middle Eastern movies
-          </Text>
-          <View style={{ margin: "4%" }}></View>
-          <FlatList
-            data={dataCinematics}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.flatListContent}
-          />
-        </View> */}
                       {/* // start of banner slider */}
   <View
       style={{
@@ -897,7 +571,7 @@ export default function Kids_vid({ route }) {
         <ActivityIndicator size="large" color="#FACA4E" />
       ) : adsinActiveData.length === 0 ? (
         <View style={styles.TopBannerView}>
-          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>No Banner</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>{t('NoBanner')}</Text>
         </View>
       ) : (
         <Carousel
@@ -915,7 +589,7 @@ export default function Kids_vid({ route }) {
                   height: hp(15),
                   width: '100%',
                   borderWidth: 1,
-                  resizeMode: 'contain',
+                  resizeMode:Platform.OS == "ios" ? "cover" : 'contain',
                   borderRadius: 10,
                 }}
               />
@@ -954,7 +628,6 @@ export default function Kids_vid({ route }) {
           container: {
             borderTopLeftRadius: wp(10),
             borderTopRightRadius: wp(10),
-            height: hp(39),
           },
         }}
       >
@@ -973,7 +646,8 @@ export default function Kids_vid({ route }) {
               fontSize: hp(2.3),
             }}
           >
-            Select an option
+            {t('Selectanoption')}
+            
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
@@ -985,119 +659,7 @@ export default function Kids_vid({ route }) {
           </TouchableOpacity>
         </View>
 
-        <View
-          style={{
-            //flexDirection: 'row',
-            justifyContent: "space-evenly",
-            //alignItems: 'center',
-            //borderWidth: 3,
-            marginTop: hp(3),
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{ flexDirection: "row", marginHorizontal: wp(7) }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              Phones And Electronics
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              height: hp(0.1),
-              marginHorizontal: wp(8),
-              marginTop: hp(3),
-              backgroundColor: "#00000012",
-            }}
-          ></View>
-
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{
-              flexDirection: "row",
-              marginTop: hp(1.8),
-              marginHorizontal: wp(7),
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              Vehicle Parts
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              height: hp(0.1),
-              marginHorizontal: wp(8),
-              marginTop: hp(3),
-              backgroundColor: "#00000012",
-            }}
-          ></View>
-
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{
-              flexDirection: "row",
-              marginTop: hp(1.8),
-              marginHorizontal: wp(7),
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              Clothing and Related item
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              height: hp(0.1),
-              marginTop: hp(1.8),
-              marginHorizontal: wp(8),
-              marginTop: hp(3),
-              backgroundColor: "#00000012",
-            }}
-          ></View>
-
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{
-              flexDirection: "row",
-              marginTop: hp(1.8),
-              marginHorizontal: wp(7),
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              All other items
-            </Text>
-          </TouchableOpacity>
-        </View>
+      
       </RBSheet>
 
       <RBSheet
@@ -1116,7 +678,8 @@ export default function Kids_vid({ route }) {
           container: {
             borderTopLeftRadius: wp(10),
             borderTopRightRadius: wp(10),
-            height: hp(25),
+            paddingVertical:30
+            // height: hp(25),
           },
         }}
       >
@@ -1136,7 +699,8 @@ export default function Kids_vid({ route }) {
               fontSize: hp(2.1),
             }}
           >
-            Select an option
+            {t('Selectanoption')}
+            {/* Select an option */}
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
@@ -1147,10 +711,11 @@ export default function Kids_vid({ route }) {
             />
           </TouchableOpacity>
         </View>
+        <View style={{height:20}}/>
+
 
         <View
           style={{
-            top: "1%",
             flex: 1,
             marginHorizontal: wp(8),
             marginBottom: hp(1),
@@ -1170,19 +735,19 @@ export default function Kids_vid({ route }) {
               borderWidth: 1,
             }}
           >
-            <View style={{ marginLeft: wp(3) }}>
+            <View>
               <Camera width={21} height={21} />
             </View>
 
             <Text
               style={{
                 color: "grey",
-                marginLeft: wp(3),
                 // fontWeight: "600",
                 fontSize: hp(2.1),
               }}
             >
-              Take a Video
+              {t('TakeAVideo')}
+              {/* Take a Video */}
             </Text>
           </TouchableOpacity>
 
@@ -1198,20 +763,20 @@ export default function Kids_vid({ route }) {
               marginLeft: wp(8), // Add margin to separate the options
             }}
           >
-            <View style={{ marginLeft: wp(3) }}>
+            <View>
               <Gallery width={21} height={21} />
             </View>
 
             <Text
               style={{
                 color: "grey",
-                marginLeft: wp(3),
                 fontWeight: "600",
                 fontFamily: "BebasNeue-Regular",
                 fontSize: hp(2.1),
               }}
             >
-              Choose a Video
+              {t('ChooseAVideo')}
+              {/* Choose a Video */}
             </Text>
           </TouchableOpacity>
         </View>
@@ -1232,7 +797,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2F2F2",
     flexDirection: "row",
     alignItems: "center",
-    //marginLeft: wp(3.8),
     borderRadius: wp(5),
     borderWidth: 0.5,
     borderColor: "#00000017",
@@ -1242,8 +806,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: hp(2.1),
     height: hp(7),
-    // marginLeft: wp(1),
-    //borderWidth: 3,
   },
   searchHeader: {
     flexDirection: "row",
@@ -1252,7 +814,6 @@ const styles = StyleSheet.create({
     marginTop: hp(5),
     marginHorizontal: wp(8),
     height: hp(8),
-    //borderWidth: 3,
   },
   latestSearch: {
     fontFamily: "Inter",
@@ -1298,21 +859,15 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#4A4A4A",
     fontSize: hp(2),
-    // textAlign: 'left',
     fontFamily: "Inter",
     marginTop: 5,
     fontSize: hp(1.9),
-    // right: "20%",
+
   },
   text1: {
-    // fontWeight: 'bold',
     color: "#4A4A4A",
     fontSize: hp(1.5),
-    // textAlign: 'left',
     fontFamily: "Inter",
-
-    // marginTop: 5,
-    // right: "20%",
   },
   flatListContent: {
     paddingHorizontal: wp(2),
@@ -1326,7 +881,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontFamily: "Inter-SemiBold",
     marginBottom: 6,
-    // top: "6%",
   },
   videoItem: {
     marginRight: 15,

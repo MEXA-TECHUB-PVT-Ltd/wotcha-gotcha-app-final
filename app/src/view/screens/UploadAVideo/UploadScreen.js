@@ -9,9 +9,10 @@ import {
   ImageBackground,
   View,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
-
+import { useTranslation } from 'react-i18next';
 import {Button, Divider, TextInput} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -57,7 +58,7 @@ export default function UploadScreen() {
 
   const [description, setDescription] = useState('');
 
-
+  const { t } = useTranslation();
   const [isFocus, setIsFocus] = useState(false);
 
 
@@ -78,8 +79,7 @@ export default function UploadScreen() {
       
       <View style={styles.header}>
         <IonIcons name={'chevron-back'} color={'#282828'} size={25} />
-
-        <Text style={styles.headerText}>Upload Pic</Text>
+        <Text style={styles.headerText}>{t('UploadPic')}</Text>
       </View>
 
       <ScrollView
@@ -114,14 +114,15 @@ export default function UploadScreen() {
               color: '#232323',
               fontWeight: '700',
             }}>
-            Change Pic
+              {t('ChangePic')}
+            
           </Text>
         </View>
       </View>
 
       <TextInput
         mode="outlined"
-        label="Pic Name"
+        label={t('PicName')}
         onChangeText={text => setProfileName(text)}
         style={styles.ti}
         outlineColor="#0000001F"
@@ -166,7 +167,7 @@ export default function UploadScreen() {
         maxHeight={200}
         labelField="label"
         valueField="value"
-        placeholder={'Select Category'}
+        placeholder={t('SelectCategory')}
         searchPlaceholder="Search..."
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
@@ -189,7 +190,7 @@ export default function UploadScreen() {
 
          <CPaperInput
               multiline={true}
-              placeholder={'Description'}
+              placeholder={t('Description')}
               placeholderTextColor="#121420"
               value={description}
               onChangeText={text => setDescription(text)}
@@ -199,7 +200,7 @@ export default function UploadScreen() {
         <View style={{marginTop:hp(5), marginBottom:hp(5),justifyContent:'center',alignItems:'center'}}>
 
         <CustomButton
-            title={'Next'}
+            title={t('Next')}
             load={false}
             // checkdisable={inn == '' && cm == '' ? true : false}
             customClick={() => {
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     height: hp(6.2),
-    marginTop: hp(3),
+    marginTop:Platform.OS == "ios" ? 0 : hp(3),
     alignItems: 'center',
     marginHorizontal: wp(8),
   },

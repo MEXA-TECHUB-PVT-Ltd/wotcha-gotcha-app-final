@@ -53,12 +53,14 @@ const bannerAds = [
     image: require("../../../assets/images/BannerAds.png"),
   },
 ];
+
+import { useTranslation } from 'react-i18next';
 export default function Tv_Promax({  route }) {
   const navigation = useNavigation();
   // const { identifier } = route.params;
   // console.log("identifier from cinematices ", identifier)
   const [data, setData] = useState([]);
-
+  const { t } = useTranslation();
   const [authToken, setAuthToken] = useState("");
 
   const isFocused = useIsFocused();
@@ -418,7 +420,7 @@ export default function Tv_Promax({  route }) {
           showHome={true}
           showText={true}
           onPressSearch={() => navigation.navigate("Tv_Search_Video")}
-          text={"Tv ProgMax"}
+          text={t('TvProgMax')}
           showSearch={true}
         />
       </View>
@@ -445,7 +447,7 @@ export default function Tv_Promax({  route }) {
         <ActivityIndicator size="large" color="#FACA4E" />
       ) : adsData.length === 0 ? (
         <View style={styles.TopBannerView}>
-          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>No Top Banner</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>{t('NoTopBanner')}</Text>
         </View>
       ) : (
         <Carousel
@@ -567,7 +569,7 @@ export default function Tv_Promax({  route }) {
               }}
             >
               {dataTopVideos === undefined || dataTopVideos === 0
-                ? "No Top Tv ProgMax Shown"
+                ? t('NoTopTvProgMaxShown')
                 : dataTopVideos?.description}
             </Text>
           </View>
@@ -601,7 +603,7 @@ export default function Tv_Promax({  route }) {
         <ActivityIndicator size="large" color="#FACA4E" />
       ) : adsinActiveData.length === 0 ? (
         <View style={styles.TopBannerView}>
-          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>No Banner</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>{t('NoBanner')}</Text>
         </View>
       ) : (
         <Carousel
@@ -677,7 +679,8 @@ export default function Tv_Promax({  route }) {
               fontSize: hp(2.3),
             }}
           >
-            Select an option
+            {t('Selectanoption')}
+            {/* Select an option */}
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
@@ -689,119 +692,7 @@ export default function Tv_Promax({  route }) {
           </TouchableOpacity>
         </View>
 
-        <View
-          style={{
-            //flexDirection: 'row',
-            justifyContent: "space-evenly",
-            //alignItems: 'center',
-            //borderWidth: 3,
-            marginTop: hp(3),
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{ flexDirection: "row", marginHorizontal: wp(7) }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              Phones And Electronics
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              height: hp(0.1),
-              marginHorizontal: wp(8),
-              marginTop: hp(3),
-              backgroundColor: "#00000012",
-            }}
-          ></View>
-
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{
-              flexDirection: "row",
-              marginTop: hp(1.8),
-              marginHorizontal: wp(7),
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              Vehicle Parts
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              height: hp(0.1),
-              marginHorizontal: wp(8),
-              marginTop: hp(3),
-              backgroundColor: "#00000012",
-            }}
-          ></View>
-
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{
-              flexDirection: "row",
-              marginTop: hp(1.8),
-              marginHorizontal: wp(7),
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              Clothing and Related item
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              height: hp(0.1),
-              marginTop: hp(1.8),
-              marginHorizontal: wp(8),
-              marginTop: hp(3),
-              backgroundColor: "#00000012",
-            }}
-          ></View>
-
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{
-              flexDirection: "row",
-              marginTop: hp(1.8),
-              marginHorizontal: wp(7),
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              All other items
-            </Text>
-          </TouchableOpacity>
-        </View>
+        
       </RBSheet>
 
       <RBSheet
@@ -840,7 +731,8 @@ export default function Tv_Promax({  route }) {
               fontSize: hp(2.1),
             }}
           >
-            Select an option
+           {t('Selectanoption')}
+            {/* Select an option */}
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
@@ -886,7 +778,8 @@ export default function Tv_Promax({  route }) {
                 fontSize: hp(2.1),
               }}
             >
-              Take a Video
+              {t('TakeaVideo')}
+              {/* Take a Video */}
             </Text>
           </TouchableOpacity>
 
@@ -915,7 +808,8 @@ export default function Tv_Promax({  route }) {
                 fontSize: hp(2.1),
               }}
             >
-              Choose a Video
+               {t('ChooseaVideo')}
+              {/* Choose a Video */}
             </Text>
           </TouchableOpacity>
         </View>

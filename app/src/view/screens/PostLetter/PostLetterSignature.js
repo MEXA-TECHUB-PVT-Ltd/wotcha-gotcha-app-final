@@ -12,76 +12,30 @@ import {
   } from 'react-native';
   import React, {useState, useRef} from 'react';
   import RBSheet from 'react-native-raw-bottom-sheet';
-  import Entypo from 'react-native-vector-icons/Entypo';
-  
-  import {Button, Divider, TextInput} from 'react-native-paper';
-  import AntDesign from 'react-native-vector-icons/AntDesign';
-  import PlusPost from '../../../assets/svg/PlusPost.svg';
-  import Approved from '../../../assets/svg/Approved.svg';
-  
-  
-  import Back from '../../../assets/svg/back.svg';
   import {appImages} from '../../../assets/utilities/index';
-  import Slider from '@react-native-community/slider';
-  import VolumeUp from '../../../assets/svg/VolumeUp.svg';
-  import Like from '../../../assets/svg/Like.svg';
-  import UnLike from '../../../assets/svg/Unlike.svg';
-  import Comment from '../../../assets/svg/Comment.svg';
-  import Send from '../../../assets/svg/Send.svg';
-  import Download from '../../../assets/svg/Download.svg';
   import CustomButton from '../../../assets/Custom/Custom_Button';
   import Ionicons from 'react-native-vector-icons/Ionicons';
   import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
   import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-  import PublicLetter from '../../../assets/svg/PublicLetter.svg';
-  import PrivateLetter from '../../../assets/svg/PrivateLetter.svg';
-  
-  import Share from 'react-native-share';
-  
   import {
     heightPercentageToDP as hp,
     widthPercentageToDP,
     widthPercentageToDP as wp,
   } from 'react-native-responsive-screen';
-  
-  import Fontiso from 'react-native-vector-icons/Fontisto';
-  
-  import IonIcons from 'react-native-vector-icons/Ionicons';
-  
-  import {SelectCountry, Dropdown} from 'react-native-element-dropdown';
   import CPaperInput from '../../../assets/Custom/CPaperInput';
   import Headers from '../../../assets/Custom/Headers';
   import CustomSnackbar from './../../../assets/Custom/CustomSnackBar';
+  import { useTranslation } from 'react-i18next';
 
 export default function PostLetterSignature({navigation, route}) {
-
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [contact, setContact] = useState('');
+const { t } = useTranslation();
   const [email, setEmail] = useState('');
-
   const [imageUri, setImageUri] = useState('');
-
-
   const [selectedItem, setSelectedItem] = useState('');
-
-
   const [loading, setLoading] = useState(false);
-
   const ref_RBSheetCameraCanvas = useRef(null);
 
-  const [isTextInputActive, setIsTextInputActive] = useState(false);
-  const [isTextInputActiveAddress, setIsTextInputActiveAddress] =
-    useState(false);
-
-  const [isTextInputActiveContact, setIsTextInputActiveContact] =
-    useState(false);
-
-  const [isTextInputActiveEmail, setIsTextInputActiveEmail] = useState(false);
-
-  const [selectedItemId, setSelectedItemId] = useState(null);
   const ref_RBSheetCamera = useRef(null);
-  const [postLetter, setPostLetter] = useState('');
   const [letterType, setLetterTypes] = useState('Public');
 
   const [snackbarVisible, setsnackbarVisible] = useState(false);
@@ -105,59 +59,13 @@ export default function PostLetterSignature({navigation, route}) {
 
   const receivedDataLetterImg = route.params?.letterImg;
 
-  console.log ("Name", receivedDataName )
-  console.log ("Address", receivedDatAddress )
-  console.log ("Contact", receivedDataContactNumber )
-  console.log ("Email", receivedDataEmail )
-  console.log ("Id", receivedDataCategoryId )
-  console.log ("LetterType", receivedDataLetterType )
-
-  console.log ("Greetings", receivedDataGreetingsTitle )
-
-  console.log ("Subject", receivedDatasubjectOfLetter )
-
-  console.log ("Introduction", receivedDataintroductionOfLetter )
-
-  console.log ("Post Letter", receivedDatapostLetter )
-
-  console.log ("Appeal Of Letter", receivedDataAppealOfLetter )
-
-  console.log ("Letter Img", receivedDataLetterImg )
-
-
-  const takePhotoFromCamera = async value => {
-    setSelectedItem(value);
-    launchCamera(
-      {
-        mediaType: 'photo',
-        // videoQuality: 'medium',
-      },
-      response => {
-        console.log('image here', response);
-        if (!response.didCancel) {
-          if (response.assets && response.assets.length > 0) {
-            setImageUri(response.assets[0].uri);
-            console.log('response', response.assets[0].uri);
-          } else if (response.uri) {
-            // Handle the case when no assets are present (e.g., for videos)
-            setImageUri(response.uri);
-            console.log('response', response.uri);
-          }
-        }
-        ref_RBSheetCameraCanvas.current.close();
-      },
-    );
-  };
-
   const choosePhotoFromLibrary = value => {
     setSelectedItem(value);
     launchImageLibrary({mediaType: 'photo'}, response => {
-      console.log('image here', response);
+
       if (!response.didCancel && response.assets.length > 0) {
         setImageUri(response.assets[0].uri);
       }
-      console.log('response', imageUri);
-
       ref_RBSheetCameraCanvas.current.close();
     });
   };
@@ -169,96 +77,15 @@ export default function PostLetterSignature({navigation, route}) {
     navigation.navigate("PostLetterEditSignature")
   }
 
-  const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
-    setsnackbarVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
-    setTimeout(() => {
-      setsnackbarVisible(false);
-    }, 3000);
-  };
-
   const dismissSnackbar = () => {
     setsnackbarVisible(false);
   };
-
-
-  const handleFocus = () => {
-    setIsTextInputActive(true);
-  };
-
-  const handleBlur = () => {
-    setIsTextInputActive(false);
-  };
-
-  const handleFocusAddress = () => {
-    setIsTextInputActiveAddress(true);
-  };
-
-  const handleBlurAddress = () => {
-    setIsTextInputActiveAddress(false);
-  };
-
-  const handleFocusContact = () => {
-    setIsTextInputActiveContact(true);
-  };
-
-  const handleBlurContact = () => {
-    setIsTextInputActiveContact(false);
-  };
-
-  const handleFocusEmail = () => {
-    setIsTextInputActiveEmail(true);
-  };
-
-  const handleBlurEmail = () => {
-    setIsTextInputActiveEmail(false);
-  };
-
-  const searches = [
-    {id: 1, title: 'Subject'},
-    {id: 2, title: 'Subject'},
-    {id: 3, title: 'Greetings'},
-    {id: 4, title: 'Introduction'},
-    {id: 5, title: 'Greetings'},
-  ];
 
   const setLetterType = value => {
     setLetterTypes(value);
     ref_RBSheetCamera.current.close();
   };
 
-  
-  const renderSearches = item => {
-    console.log('Items', item);
-    const isSelected = selectedItemId === item.id;
-
-    return (
-      <TouchableOpacity
-        style={[
-          styles.searchesDetails,
-          {
-            // backgroundColor: isSelected ? '#FACA4E' : null,
-          },
-        ]}
-        onPress={() => {
-          setSelectedItemId(item.id);
-          console.log('Selected item:', item.title);
-        }}>
-        <Text
-          style={[
-            styles.textSearchDetails,
-            {color: isSelected ? '#FACA4E' : '#939393'},
-          ]}>
-          {item.title}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
   return (
     <View style={styles.container}>
     <StatusBar
@@ -326,7 +153,8 @@ export default function PostLetterSignature({navigation, route}) {
           marginTop: hp(3),
           marginLeft: wp(8),
         }}>
-        Signature
+          {t('Signature')}
+        {/* Signature */}
       </Text>
       
       <View style={{marginLeft:wp(8), marginTop:hp(5)}}>
@@ -350,18 +178,19 @@ export default function PostLetterSignature({navigation, route}) {
           fontFamily: 'Inter-Regular',
           fontSize: hp(1.7)
         }}>
-        Edit Signature
+          {t('EditSignature')}
+        {/* Edit Signature */}
       </Text>
       </TouchableOpacity>
 
       <View style={{marginTop: '18%', alignSelf: 'center'}}>
         <CustomButton
-          title="Next"
+          title={t('Next')}
           load={loading}
-          // checkdisable={inn == '' && cm == '' ? true : false}
+  
           customClick={() => {
             navigation.navigate('PostLetterEditSignature');
-            //navigation.navigate('Profile_image');
+      
           }}
         />
       </View>
@@ -395,7 +224,7 @@ export default function PostLetterSignature({navigation, route}) {
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -422,7 +251,7 @@ export default function PostLetterSignature({navigation, route}) {
             }>
            <Image source={appImages.ArtBoard} style={{ resizeMode:'contain'}}/>
 
-            <Text style={{marginTop:hp(-1.8),color: '#333333'}}>From canvas</Text>
+            <Text style={{marginTop:hp(-1.8),color: '#333333'}}>{t('FromCanvas')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -438,14 +267,14 @@ export default function PostLetterSignature({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
       <CustomSnackbar
-        message={'success'}
-        messageDescription={'Letter Posted Successfully'}
+        message={t('Success')}
+        messageDescription={t('LetterPostedSuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />

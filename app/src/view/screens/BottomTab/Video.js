@@ -18,8 +18,6 @@ import {
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import Fontiso from 'react-native-vector-icons/Fontisto';
-import Entypo from 'react-native-vector-icons/Entypo';
 import Add from '../../../assets/svg/AddMainScreen.svg';
 import Headers from '../../../assets/Custom/Headers';
 import {appImages} from '../../../assets/utilities';
@@ -28,28 +26,18 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
-
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Carousel from 'react-native-snap-carousel';
 import {useIsFocused} from '@react-navigation/native';
 import { base_url } from '../../../../../baseUrl';
-import Swiper from "react-native-swiper";
 import VideoActive from "../../../assets/svg/VideoActive";
-
+import { useTranslation } from 'react-i18next';
 
 export default function Video() {
   const navigation = useNavigation();
   const [selectedItemId, setSelectedItemId] = useState(null);
-
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-
-  const [topVideoImage, setTopVideoImage] = useState('');
-
-  const [banners, setBanners] = useState([]);
-
-  const [topVideoText, setTopVideoText] = useState('');
 
   const [searchesData, setSearches] = useState([]);
 
@@ -62,38 +50,13 @@ export default function Video() {
   const [selectedItem, setSelectedItem] = useState('');
 
   const [data, setData] = useState([]);
-
-  const [dataLatestVideos, setDataLatestVideos] = useState([]);
-
   const [dataTopVideos, setDataTopVideos] = useState([]);
-
-  const [dataMostViewedVideos, setMostViewedVideos] = useState([]);
-
-  const [dataMostCommentedVideos, setMostCommentedVideos] = useState([]);
 
   const ref_RBSheetCamera = useRef(null);
 
     const [adsData, setAdsData] = useState([]);
   const [adsinActiveData, setAdsInActiveData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-
-  // useEffect(() => {
-  //   // Check if it's the initial load (selectedItemId is not set yet)
-  //   if (selectedItemId === null) {
-  //     setSelectedItemId(17);
-
-  //   } else {
-  //     // Fetch data based on the updated selectedItemId
-  //     fetchVideos();
-  //   }
-  // }, [selectedItemId, isFocused]);
-
-
-
-
-
-
 
   const [sections, setSections] = useState([]);
   const [noData, setNoData] = useState(false);
@@ -140,9 +103,7 @@ const fetchAllCinematicsCategory = async () => {
     const categories = result.AllCategories.reverse();
     // console.log('Search Results', categories);
     setSearches(categories); // Update the state with the fetched data
-    // if (result.AllCategories.length > 0) {
-    //   setSelectedItemId(result.AllCategories[0].id);
-    // }
+
     if (selectedItemId === null && categories.length > 0) {
       setSelectedItemId(categories[0].id);
     }
@@ -180,72 +141,6 @@ const fetchSubCategorySport = async (selectedItemId) => {
   }
   setLoading(false)
 };
-
-
-
-
-
-
-
-
-
-  // useEffect(() => {
-  //   // Fetch category data on initial load
-  //   getUserID();
-  // }, []);
-  // useEffect(() => {
-  //   if (selectedItemId !== null) {
-  //     // Fetch data based on the updated selectedItemId
-  //     fetchTopVideos();
-  //   }
-  // }, [selectedItemId, isFocused]);
-
-
-  // const fetchVideos = async () => {
-  //   // Simulate loading
-  //   setLoading(true);
-
-  //   // Fetch data one by one
-  //   await getUserID();
-  //   // await fetchLatestVideos();
-  //   // await fetchMostViewedVideos();
-  //   // await fetchMostCommentedVideos();
-  //   // await fetchBanners();
-
-  //   // Once all data is fetched, set loading to false
-  //   setLoading(false);
-  // };
-
-  // const getUserID = async () => {
-  //   // console.log('AT User Id');
-  //   try {
-  //     const result = await AsyncStorage.getItem('authToken ');
-  //     if (result !== null) {
-  //       setAuthToken(result);
-  //       await fetchCategory(result);
-  //       // console.log('user id retrieved:', result);
-  //     }
-  //   } catch (error) {
-  //     // Handle errors here
-  //     console.error('Error retrieving user ID:', error);
-  //   }
-  // };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   useEffect(() => {
@@ -311,57 +206,6 @@ const fetchSubCategorySport = async (selectedItemId) => {
       setIsLoading(false);
     };
 
-    const fetchCategory = async (token) => {
-      try {
-        const response = await fetch(
-          base_url + 'videoCategory/getAllVideoCategories',
-          {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-    
-        const result = await response.json();
-        const categories = result.AllCategories.reverse();
-        // console.log('Search Results', categories);
-        setSearches(categories); // Update the state with the fetched data
-    
-        if (categories.length > 0) {
-          // Set the first category ID as selected
-          setSelectedItemId(categories[0].id);
-        }
-      } catch (error) {
-        console.error('Error category: ', error);
-      }
-    };
-    // const fetchCategory = async result => {
-    //   // console.log('Auth Token category', result);
-    //   const token = result;
-  
-    //   try {
-    //     const response = await fetch(
-    //       base_url + 'videoCategory/getAllVideoCategories',
-    //       {
-    //         method: 'GET',
-    //         headers: {
-    //           Authorization: `Bearer ${token}`,
-    //         },
-    //       },
-    //     );
-  
-    //     const result = await response.json();
-    //     console.log('Search Results', result.AllCategories);
-    //     setSearches(result.AllCategories.reverse()); // Update the state with the fetched data
-    //     // setSelectedItemId()
-  
-    //     await fetchTopVideos();
-    //   } catch (error) {
-    //     console.error('Error category: ', error);
-    //   }
-    // };
-  
     const fetchTopVideos = async () => {
       // console.log('TOP VIDEO CALLED----???---', authToken);
       const token = authToken;
@@ -378,126 +222,14 @@ const fetchSubCategorySport = async (selectedItemId) => {
         );
   
         const result = await response.json();
-        console.log('Resultings of Top Videossss????????', result.AllVideos[0]);
         setDataTopVideos(result.AllVideos[0]); // Update the state with the fetched data
-  
-        // await fetchTrendingVideos();
-    
+
       } catch (error) {
         console.error('Error top:', error);
       }
       setLoading(false)
     };
 
-  // const fetchTrendingVideos = async () => {
-  //   // console.log('Categry in id', selectedItemId);
-  //   // console.log("Id's", authToken);
-
-  //   const token = authToken;
-
-  //   try {
-  //     const response = await fetch(
-  //       base_url + `xpi/getTrendingVideosByCategory/${selectedItemId}?page=1&limit=5`,
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-
-  //     const result = await response.json();
-  //     // console.log('Resultings', result.Videos);
-  //     setData(result.Videos); // Update the state with the fetched data
-  //     await fetchLatestVideos();
-  //   } catch (error) {
-  //     console.error('Error Trending:', error);
-  //   }
-  // };
-
-  // const fetchLatestVideos = async () => {
-  //   const token = authToken;
-
-  //   try {
-  //     const response = await fetch(
-  //       base_url + `xpi/getAllRecentVideosByCategory/${selectedItemId}?page=1&limit=2`,
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-
-  //     const result = await response.json();
-  //     // console.log('Resultings', result.Videos);
-  //     setDataLatestVideos(result.Videos); // Update the state with the fetched data
-  //     await fetchMostViewedVideos();
-  
-  //   } catch (error) {
-  //     console.error('Error latest:', error);
-  //   }
-  // };
-
-  // const fetchMostViewedVideos = async () => {
-  //   const token = authToken;
-
-  //   try {
-  //     const response = await fetch(
-  //       base_url + `xpi/getMostViewedVideosByCategory/${selectedItemId}?page=1&limit=5`,
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-
-  //     const result = await response.json();
-  //     // console.log('Resultings', result.Videos);
-  //     setMostViewedVideos(result.Videos); // Update the state with the fetched data
-  //     await fetchMostCommentedVideos();
-  //   } catch (error) {
-  //     console.error('Error most view:', error);
-  //   }
-  // };
-
-  // const fetchMostCommentedVideos = async () => {
-  //   const token = authToken;
-
-  //   try {
-  //     const response = await fetch(
-  //       base_url + `xpi/getMostCommentedVideosByCategory/${selectedItemId}?page=1&limit=5`,
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-
-  //     const result = await response.json();
-  //     // console.log('Resultings', result.Videos);
-  //     setMostCommentedVideos(result.Videos); // Update the state with the fetched data
-  //   } catch (error) {
-  //     console.error('Error comment:', error);
-  //   }
-  // };
-
-
-
- 
-  /*  const takePhotoFromCamera = value => {
-    ref_RBSheetCamera.current.close();
-    setSelectedItem(value);
-    navigation.navigate('UploadUpdateVideo');
-  };
-
-  const choosePhotoFromLibrary = value => {
-    ref_RBSheetCamera.current.close();
-    setSelectedItem(value);
-    navigation.navigate('UploadUpdateVideo');
-  }; */
 
   const takePhotoFromCamera = async value => {
     setSelectedItem(value);
@@ -507,7 +239,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
         videoQuality: 'medium',
       },
       response => {
-        console.log('image here', response);
+
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setLoading(true);
@@ -519,7 +251,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
               Video: response.assets[0],
             });
           } else if (response.uri) {
-            console.log('response', imageInfo);
+
             ref_RBSheetCamera.current.close();
             setLoading(false);
 
@@ -528,7 +260,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
             });
           }
         }
-        console.log('response', imageInfo);
+
         ref_RBSheetCamera.current.close();
         setLoading(false);
 
@@ -540,11 +272,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
   const choosePhotoFromLibrary = value => {
     setSelectedItem(value);
     launchImageLibrary({mediaType: 'video'}, response => {
-      console.log('image here', response);
       if (!response.didCancel && response.assets.length > 0) {
-        /*  console.log('Response', response.assets[0]);
-        setImageUri(response.assets[0].uri);
-        setImageInfo(response.assets[0]); */
         setLoading(true);
         setImageInfo(response.assets[0]);
         ref_RBSheetCamera.current.close();
@@ -553,172 +281,12 @@ const fetchSubCategorySport = async (selectedItemId) => {
         navigation.navigate('UploadUpdateVideo', {Video: response.assets[0]});
       }
 
-      console.log('response', imageInfo);
       ref_RBSheetCamera.current.close();
       setLoading(false);
 
       //navigation.navigate('UploadUpdateVideo', {Video: response.assets[0]});
     });
   };
-
-  const availableAppsVideo = [
-    {
-      id: 1,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches1,
-    },
-    {
-      id: 2,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches2,
-    },
-    {
-      id: 3,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches3,
-    },
-    {
-      id: 4,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches4,
-    },
-    {
-      id: 5,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches1,
-    },
-    {
-      id: 6,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches2,
-    },
-    {
-      id: 7,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches3,
-    },
-    {
-      id: 8,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches4,
-    },
-    {
-      id: 9,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches1,
-    },
-    {
-      id: 10,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches2,
-    },
-  ];
-
-  const availableApps = [
-    {
-      id: 1,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches1,
-    },
-    {
-      id: 2,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches2,
-    },
-    {
-      id: 3,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches3,
-    },
-    {
-      id: 4,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches4,
-    },
-    {
-      id: 5,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches1,
-    },
-    {
-      id: 6,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches2,
-    },
-    {
-      id: 7,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches3,
-    },
-    {
-      id: 8,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches4,
-    },
-    {
-      id: 9,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches1,
-    },
-    {
-      id: 10,
-      title: 'Explore the intricate web of global pol.....',
-      image: appImages.topSearches2,
-    },
-  ];
-
-  const searches = [
-    {id: 1, title: 'Games'},
-    {id: 2, title: 'Business'},
-    {id: 3, title: 'Education'},
-    {id: 4, title: 'Games'},
-    {id: 5, title: 'Business'},
-    {id: 6, title: 'Education'},
-    {id: 7, title: 'Games'},
-    {id: 8, title: 'Business'},
-    {id: 9, title: 'Education'},
-    {id: 10, title: 'Games'},
-  ];
-
-  const renderAvailableApps = item => {
-    // console.log('Items', item);
-    return (
-      <View style={{width: wp(30), margin: 5}}>
-        <View>
-          <Image
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-
-              zIndex: 1, // Ensure it's on top of other elements
-              //flex: 1,
-              width: '100%',
-              height: hp(12),
-              borderRadius: wp(3),
-              resizeMode: 'cover',
-            }}
-            source={item.image}
-          />
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginLeft: wp(2),
-            marginTop: hp(12.5),
-          }}>
-          <Text style={{fontSize: hp(1.1), fontWeight: 'bold', width: wp(23)}}>
-            {item.title}
-          </Text>
-
-          <Entypo name={'dots-three-vertical'} size={14} color={'#4A4A4A'} />
-        </View>
-      </View>
-    );
-  };
-
- 
 
   const renderSearches = item => {
     // console.log('Items', item);
@@ -734,7 +302,6 @@ const fetchSubCategorySport = async (selectedItemId) => {
         ]}
         onPress={() => {
           setSelectedItemId(item.id);
-          console.log('Selected item:', item.id);
         }}>
         <Text
           style={[
@@ -746,83 +313,6 @@ const fetchSubCategorySport = async (selectedItemId) => {
       </TouchableOpacity>
     );
   };
-
-
-
-
-
-
-  const renderAvailableAppsVideo = item => {
-    //console.log('Itemsss', item);
-    // console.log('Video Link', item.thumbnail);
-    return (
-      <TouchableOpacity
-        onPress={() => navigation.navigate('ViewVideo', {videoData: item , identifier: false})}
-        style={{width: wp(48), borderRadius: 5, margin: 5}}>
-        <View>
-          {item.thumbail === '' ||
-          item.thumbnail === null ||
-          item.thumbnail.startsWith('/') ||
-          item.thumbnail === undefined ? (
-            <Image
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-
-                zIndex: 1, // Ensure it's on top of other elements
-                //flex: 1,
-                width: '100%',
-                height: hp(12),
-                borderRadius: wp(1),
-                resizeMode: 'cover',
-              }}
-              source={appImages.galleryPlaceHolder}
-            />
-          ) : (
-            <Image
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-
-                zIndex: 1, // Ensure it's on top of other elements
-                //flex: 1,
-                width: '100%',
-                height: hp(12),
-                borderRadius: wp(1),
-                resizeMode: 'cover',
-              }}
-              source={{uri: item.thumbnail}}
-            />
-          )}
-        </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginLeft: wp(0.5),
-            marginTop: hp(12.5),
-          }}>
-          <Text
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            style={{
-              fontSize: hp(1.5),
-              fontFamily: 'Inter-Regular',
-              color: '#000000',
-              width: wp(23),
-            }}>
-            {item.description}
-          </Text>
-
-          {/* <Entypo name={'dots-three-vertical'} size={14} color={'#4A4A4A'} /> */}
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-
 
 
 
@@ -887,14 +377,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
             }}>
             {item.description}
           </Text>
-
-          {/* <Entypo name={'dots-three-vertical'} size={14} color={'#4A4A4A'} /> */}
         </View>
-
-      {/* <Text  ellipsizeMode="tail"
-                numberOfLines={1} style={styles.text}>{item.name}</Text>
-      <Text  ellipsizeMode="tail"
-                numberOfLines={2} style={styles.text1}>{item.description}</Text> */}
     </View>
   </TouchableOpacity>
   );
@@ -903,7 +386,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>No Data available</Text>
+        <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
       ) : (
       <FlatList
         data={item.data}
@@ -923,26 +406,14 @@ const fetchSubCategorySport = async (selectedItemId) => {
         backgroundColor="transparent"
         barStyle="dark-content" // You can set the StatusBar text color to dark or light
       />
-{/* 
- <Headers
-          showListings={true}
-          navigation={navigation}
-          showLogo={true}
-          onPressListings={()=>{navigation.openDrawer()}}
-          onPressProfile={() => navigation.navigate('ViewProfile')}
-          showProfileImage={true}
-        />
- */}
+
       <View style={{marginTop: hp(5)}}>
         <Headers
           OnpresshowHome={()=>{navigation.navigate('MoreScreen')}}
           showHome={true}
-          // showListings={true}
-          // navigation={navigation}
-          // onPressListings={()=>{navigation.openDrawer()}}
           onPressSearch={() => navigation.navigate('SearchScreen')}
           showText={true}
-          text={'Video Mania'}
+          text={t('VideoMania')}
           showSearch={true}
         />
       </View>
@@ -954,9 +425,6 @@ const fetchSubCategorySport = async (selectedItemId) => {
           marginTop: hp(1),
           marginHorizontal: wp(4),
         }}>
-
-       {/* // */}
-        {/* // start of banner slider */}
 
         <View
       style={{
@@ -970,7 +438,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
         <ActivityIndicator size="large" color="#FACA4E" />
       ) : adsData.length === 0 ? (
         <View style={styles.TopBannerView}>
-          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>No Top Banner</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>{t('NoTopBanner')}</Text>
         </View>
       ) : (
         <Carousel
@@ -1001,22 +469,6 @@ const fetchSubCategorySport = async (selectedItemId) => {
         />
       )}
     </View>
-        {/* ////slider end */}
-         {/* <View style={styles.bannerview}>
-        <Image
-          style={{
-            width: "100%",
-            borderRadius: wp(2),
-            height: "100%",
-            resizeMode: "contain",
-          }}
-          source={{
-            uri: "https://neilpatel.com/wp-content/uploads/2021/02/ExamplesofSuccessfulBannerAdvertising.jpg",
-          }}
-        />
-      </View> */}
-
-         
 
         <View style={styles.latestSearchList}>
         <View>
@@ -1066,7 +518,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
                   width: "100%",
                   height: "100%",
                   borderRadius: wp(3),
-                  resizeMode: "cover",
+                  resizeMode: "contain",
                 }}
                 // source={{ uri: dataTopVideos?.video }}
                 source={appImages.videoPlaceHolder}
@@ -1114,99 +566,13 @@ const fetchSubCategorySport = async (selectedItemId) => {
               }}
             >
               {dataTopVideos === undefined || dataTopVideos === 0
-                ? "No Top Video Shown"
+                ? t('NoTopVideoShown')
                 : dataTopVideos?.description}
             </Text>
           </View>
         </View>
         {/* //////////////////////////// */}
-        {/* <View
-          style={{
-            marginTop: hp(1.5),
-            marginLeft: wp(2.5),
-            flexDirection: 'row',
-            height: hp(17),
-          }}>
-          <View
-            //onPress={() => navigation.navigate('ViewVideo')}
-            style={{width: wp(39), height: '100%', borderRadius: wp(5)}}>
-            <Image
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                zIndex: 1, // Ensure it's on top of other elements
-                //flex: 1,
-                width: '100%',
-                height: '100%',
-                borderRadius: wp(3),
-                resizeMode: 'cover',
-              }}
-              source={appImages?.videoPlaceHolder}
-            />
-            <View
-              style={{
-                position: 'absolute',
-                top: hp(12),
-                left: 7,
-                //height: hp(3),
-                //width: wp(21),
-                //borderRadius: wp(3),
-                //backgroundColor: '#FACA4E',
-                justifyContent: 'center',
-                alignItems: 'center',
-                zIndex: 2, // Ensure it's on top
-              }}>
-              <Text
-                style={{
-                  fontSize: hp(1.5),
-                  fontFamily: 'Inter',
-                  color: 'black',
-                  fontWeight: '700',
-                }}>
-                {dataTopVideos?.name}
-              </Text>
-            </View>
-          </View>
-
-          <View
-            style={{
-              marginTop: hp(3),
-              height: hp(12.8),
-              width: '45%',
-              marginHorizontal: wp(1.5),
-            }}>
-            <Text
-              numberOfLines={5}
-              ellipsizeMode="tail"
-              style={{
-                fontSize: hp(1.5),
-                //marginLeft: wp(1),
-                lineHeight: hp(2),
-                fontFamily: 'Inter-Regular',
-                color: '#000000',
-                //fontWeight: '700',
-              }}>
-
-              {dataTopVideos?.description}
-            </Text>
-          </View>
-        </View> */}
-
-{/* <View style={{  width: '100%',
-    height: '100%',
-    borderRadius: 10,
-    overflow: 'hidden',
-    position: 'relative',}}>
-      <Video
-        source={{ uri: dataTopVideos?.video }}
-        style={{ flex: 1,
-          width: '100%',
-          height: '100%',}}
-        controls={true} // Show video controls
-        resizeMode="contain"
-      />
-    </View> */}
+    
 
 <View style={{  flex: 1, marginTop:hp(2),
     marginBottom: hp(5)}}>
@@ -1220,7 +586,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
           alignItems: "center",
         }}
       >
-         <Text style={{ fontFamily: "Inter-Medium",}}>No data for this category</Text>
+         <Text style={{ fontFamily: "Inter-Medium",}}>{t('NoDataAvailable')}</Text>
       </View>
        
       ) : (
@@ -1233,225 +599,6 @@ const fetchSubCategorySport = async (selectedItemId) => {
     </View>
 
 {/* /////////////////////////////////////////////////////////////// */}
-
-        {/* <View
-          // onPress={() => navigation.navigate('ViewVideo')}
-          style={{marginTop: hp(1.5), height: hp(23)}}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              marginLeft: wp(3),
-              fontFamily: 'Inter',
-              color: '#4A4A4A',
-              fontWeight: 'bold',
-            }}>
-            Trending
-          </Text>
-
-          <View style={{marginTop: hp(1), height: '100%'}}>
-            {loading === true ? (
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <ActivityIndicator size="large" color="#FACA4E" />
-              </View>
-            ) : (
-              <>
-                {data?.length === 0 ? (
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Text style={{fontWeight: 'bold', fontSize: hp(2.1)}}>
-                      No data available
-                    </Text>
-                  </View>
-                ) : (
-                  <FlatList
-                    style={{flex: 1}}
-                    showsHorizontalScrollIndicator={false}
-                    data={data}
-                    horizontal
-                    //keyExtractor={item => item.id.toString()}
-                    renderItem={({item}) => renderAvailableAppsVideo(item)}
-                  />
-                )}
-              </>
-            )}
-          </View>
-        </View>
-
-        <View style={{marginTop: hp(5), height: hp(23)}}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              marginLeft: wp(3),
-              fontFamily: 'Inter',
-              color: '#4A4A4A',
-              fontWeight: 'bold',
-            }}>
-            Latest Video
-          </Text>
-
-          <View style={{marginTop: hp(1), height: '100%'}}>
-            {loading === true ? (
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <ActivityIndicator size="large" color="#FACA4E" />
-              </View>
-            ) : (
-              <>
-                {dataLatestVideos?.length === 0 ? (
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Text style={{fontWeight: 'bold', fontSize: hp(2.1)}}>
-                      No data available
-                    </Text>
-                  </View>
-                ) : (
-                  <FlatList
-                    style={{flex: 1}}
-                    showsHorizontalScrollIndicator={false}
-                    data={dataLatestVideos}
-                    horizontal
-                    // keyExtractor={item => item.id.toString()}
-                    renderItem={({item}) => renderAvailableAppsVideo(item)}
-                  />
-                )}
-              </>
-            )}
-          </View>
-        </View>
-
-        <View style={{marginTop: hp(5), height: hp(23)}}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              marginLeft: wp(3),
-              fontFamily: 'Inter',
-              color: '#4A4A4A',
-              fontWeight: 'bold',
-            }}>
-            Most Viewed
-          </Text>
-
-          <View style={{marginTop: hp(1), height: '100%'}}>
-            {loading === true ? (
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <ActivityIndicator size="large" color="#FACA4E" />
-              </View>
-            ) : (
-              <>
-                {dataMostViewedVideos?.length === 0 ? (
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Text style={{fontWeight: 'bold', fontSize: hp(2.1)}}>
-                      No data available
-                    </Text>
-                  </View>
-                ) : (
-                  <FlatList
-                    style={{flex: 1}}
-                    showsHorizontalScrollIndicator={false}
-                    data={dataMostViewedVideos}
-                    horizontal
-                    //keyExtractor={item => item.id.toString()}
-                    renderItem={({item}) => renderAvailableAppsVideo(item)}
-                  />
-                )}
-              </>
-            )}
-          </View>
-        </View>
-
-        <View style={{marginTop: hp(5), height: hp(23)}}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              marginLeft: wp(3),
-              fontFamily: 'Inter',
-              color: '#4A4A4A',
-              fontWeight: 'bold',
-            }}>
-            Most Commented
-          </Text>
-
-          <View style={{marginTop: hp(1), height: '100%'}}>
-            {loading === true ? (
-              <View
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <ActivityIndicator size="large" color="#FACA4E" />
-              </View>
-            ) : (
-              <>
-                {dataMostCommentedVideos?.length === 0 ? (
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <Text style={{fontWeight: 'bold', fontSize: hp(2.1)}}>
-                      No data available
-                    </Text>
-                  </View>
-                ) : (
-                  <FlatList
-                    style={{flex: 1}}
-                    showsHorizontalScrollIndicator={false}
-                    data={dataMostCommentedVideos}
-                    horizontal
-                    //keyExtractor={item => item.id.toString()}
-                    renderItem={({item}) => renderAvailableAppsVideo(item)}
-                  />
-                )}
-              </>
-            )}
-          </View>
-        </View> */}
-
 
            {/* // start of banner slider */}
            <View
@@ -1467,7 +614,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
           ) : adsinActiveData.length === 0 ? (
             <View style={styles.TopBannerView}>
               <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                No Banner
+                {t('NoBanner')}
               </Text>
             </View>
           ) : (
@@ -1532,7 +679,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -1563,7 +710,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -1579,7 +726,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>

@@ -13,30 +13,17 @@ import {
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
-
-import {Button, Divider, TextInput} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import PlusPost from '../../../assets/svg/PlusPost.svg';
-
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-
-import Back from '../../../assets/svg/back.svg';
 import {appImages} from '../../../assets/utilities/index';
-import CustomButton from '../../../assets/Custom/Custom_Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import Share from 'react-native-share';
-
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-
-import Fontiso from 'react-native-vector-icons/Fontisto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import EmojiSelector from 'react-native-emoji-selector';
 import CPaperInput from '../../../assets/Custom/CPaperInput';
@@ -47,14 +34,11 @@ import CustomDialog from '../../../assets/Custom/CustomDialog';
 import { base_url } from '../../../../../baseUrl';
 import { CLOUD_NAME, CLOUDINARY_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
 import CustomLoaderButton from '../../../assets/Custom/CustomLoaderButton';
-
-const Category = [
-  {label: 'Item 1', value: '1'},
-  {label: 'Item 2', value: '2'},
-  {label: 'Item 3', value: '3'},
-];
+import Loader from '../../../assets/Custom/Loader';
+import { useTranslation } from 'react-i18next';
 
 export default function GEBC({navigation}) {
+  const { t } = useTranslation();
   const [selectedItem, setSelectedItem] = useState('');
 
   const [snackbarVisible, setsnackbarVisible] = useState(false);
@@ -62,8 +46,6 @@ export default function GEBC({navigation}) {
   const [snackbarVisibleAlert, setsnackbarVisibleAlert] = useState(false);
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-
-  const [profileName, setProfileName] = useState('');
 
   const [imageUrl, setImageUrl] = useState('');
 
@@ -76,8 +58,6 @@ export default function GEBC({navigation}) {
   const [isTextInputActive, setIsTextInputActive] = useState(false);
 
   const [category, setCategory] = useState('');
-
-  const [description, setDescription] = useState('');
 
   const [comment, setComment] = useState('');
 
@@ -109,8 +89,6 @@ export default function GEBC({navigation}) {
   
     const [profileNameError, setProfileNameError] = useState("");
 
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -136,10 +114,6 @@ export default function GEBC({navigation}) {
 
     fetchData();
   }, []);
-
-  console.log('userid ---', userId)
-  console.log('username ---', userName)
-  console.log('authtokeb ---', authToken)
 
   const fetchUser = async (id, token) => {
     try {
@@ -215,102 +189,19 @@ export default function GEBC({navigation}) {
   };
 
 
-  //--------------------\\
-
   const emojiToImage = emoji => {
-    //const emojiCodePoint = emoji.codePointAt(0).toString(16); // Get Unicode code point
-    // const imageUrl = `https://twemoji.maxcdn.com/v/latest/72x72/${emojiCodePoint}.png`; // Example UR
-    //console.log('EMOJI', imageUrl);
     console.log(emoji);
     setEmojiUrl(emoji);
     setShowEmojiPicker(false);
   };
 
-  //--------------------\\
-
-  // const fetchCategory = async result => {
-  //   console.log('TOKEN', result);
-  //   const token = result;
-
-  //   try {
-  //     const response = await fetch(
-  //       base_url + 'gebc/category/getAll?page=1&limit=10000',
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-
-  //     if (response.ok) {
-  //       const data = await response.json();
-
-  //       // Use the data from the API to set the categories
-  //       const categories = data.AllCategories.map(category => ({
-  //         label: category.name, // Use the "name" property as the label
-  //         value: category.id.toString(), // Convert "id" to a string for the value
-  //       }));
-
-  //       console.log('Categories', categories);
-
-  //       setCategorySelect(categories); // Update the state with the formatted category data
-
-  //       console.log('Data Categories', categoriesSelect);
-  //     } else {
-  //       console.error(
-  //         'Failed to fetch categories:',
-  //         response.status,
-  //         response.statusText,
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error('Errors:', error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (authToken && categoryId) {
-  //     fetchAllSubCategory(categoryId);
-  //   }
-  // }, [authToken, categoryId]);
-
- 
-  // const fetchAllSubCategory = async (categoryId) => {
-  //   // console.log("Categry in id--", categoryId)
-  //   const token = authToken;
-  //   try {
-  //     const response = await fetch(
-  //       // base_url + "cinematics/sub_category/getAll?page=1&limit=1000",
-  //       base_url + `gebc/sub_category/getAllByCategory?category_id=${categoryId}`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     const result = await response.json();
-  //     setSubCate(result.SubCategories);
-  //     // const subcategories = result.SubCategories.map(category => ({
-  //     //   label: category.name, // Use the "name" property as the label
-  //     //   value: category.id.toString(), // Convert "id" to a string for the value
-  //     // }));
-  //     // setSubCate(subcategories);
-  //   } catch (error) {
-  //     console.error("Error Trending:", error);
-  //   }
-  // };
-
 
   const upload = async () => {
     if (emojiUrl !== '' && comment !== '' && categoryId !== '') {
       uploadVideo();
-      //handleUploadImage();
-      //uploadVideo();
+ 
     } else {
       handleUpdatePasswordAlert();
-      //setModalVisible(true);
     }
   };
 
@@ -322,47 +213,8 @@ export default function GEBC({navigation}) {
     setModalVisible(false);
   };
 
-  const handleUploadImage = data => {
-    setLoading(true);
-    const uri = imageInfo.uri;
-    const type = imageInfo.type;
-    const name = imageInfo.fileName;
-    const sourceImage = {uri, type, name};
-    console.log('Source Image', sourceImage);
-    const dataImage = new FormData();
-    dataImage.append('file', sourceImage);
-    dataImage.append('upload_preset', UPLOAD_PRESET); // Use your Cloudinary upload preset
-    dataImage.append('cloud_name', CLOUD_NAME); // Use your Cloudinary cloud name
-
-    fetch(CLOUDINARY_URL, {
-      method: 'POST',
-      body: dataImage,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-      .then(res => res.json())
-      .then(data => {
-        setImageUrl(data.url); // Store the Cloudinary video URL in your state
-        //uploadVideo(data.url)
-        //uploadXpiVideo(data.url);
-        console.log('Image Url', data);
-        //uploadXpiVideo(data.url,data)
-        uploadVideo(data.url);
-      })
-      .catch(err => {
-        setLoading(false);
-        console.log('Error While Uploading Video', err);
-      });
-  };
-
   const uploadVideo = async data => {
     setLoading(true)
-    console.log('Image Uri', emojiUrl);
-    console.log('disc category Id', categoryId);
-    console.log('Description', comment);
-    console.log('user id', userId);
 
     const token = authToken;
     const apiUrl = base_url  + 'gebc/createGEBC';
@@ -388,7 +240,6 @@ export default function GEBC({navigation}) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('API Response:', data);
         setLoading(false);
         handleUpdatePassword();
 
@@ -420,13 +271,7 @@ export default function GEBC({navigation}) {
   };
 
   const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setsnackbarVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisible(false);
       navigation.replace('EBCScreen');
@@ -438,13 +283,7 @@ export default function GEBC({navigation}) {
   };
 
   const handleUpdatePasswordAlert = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setsnackbarVisibleAlert(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisibleAlert(false);
     }, 3000);
@@ -454,16 +293,6 @@ export default function GEBC({navigation}) {
     setsnackbarVisibleAlert(false);
   };
 
-  const Category = [
-    {label: 'Politics', value: 'Politics'},
-    {label: 'Sports', value: 'Sports'},
-    {label: 'Business', value: 'Business'},
-    {label: 'Finance', value: 'Finance'},
-    {label: 'Tech', value: 'Tech'},
-    {label: 'Health', value: 'Health'},
-    {label: 'Culture', value: 'Culture'},
-  ];
-
   const takePhotoFromCamera = async value => {
     setSelectedItem(value);
     launchCamera(
@@ -472,16 +301,13 @@ export default function GEBC({navigation}) {
         //videoQuality: 'medium',
       },
       response => {
-        console.log('image here', response);
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setImageUri(response.assets[0].uri);
-            console.log('response', response.assets[0].uri);
             setImageInfo(response.assets[0]);
           } else if (response.uri) {
             // Handle the case when no assets are present (e.g., for videos)
             setImageUri(response.uri);
-            console.log('response', response.uri);
           }
         }
         ref_RBSheetCamera.current.close();
@@ -492,14 +318,10 @@ export default function GEBC({navigation}) {
   const choosePhotoFromLibrary = value => {
     setSelectedItem(value);
     launchImageLibrary({mediaType: 'Photo'}, response => {
-      console.log('image here', response);
       if (!response.didCancel && response.assets.length > 0) {
-        console.log('Response', response.assets[0]);
         setImageUri(response.assets[0].uri);
         setImageInfo(response.assets[0]);
       }
-
-      console.log('response', imageInfo);
 
       ref_RBSheetCamera.current.close();
     });
@@ -557,10 +379,7 @@ export default function GEBC({navigation}) {
               height: wp(10),
               borderRadius: wp(10) / 2,
             }}>
-            {/*  <Image
-              source={appImages.profileImg}
-              style={{width: '100%', height: '100%', resizeMode: 'cover'}}
-            /> */}
+
             {userImage ? (
               <View
                 style={{
@@ -570,10 +389,7 @@ export default function GEBC({navigation}) {
                   overflow: 'hidden',
                   borderRadius: wp(10) / 2,
                 }}>
-                {/*  <Image
-              source={appImages.profileImg}
-              style={{width: '100%', height: '100%', resizeMode: 'cover'}}
-            /> */}
+    
                 <Image
                   source={{uri: userImage}}
                   style={{width: '100%', height: '100%', resizeMode: 'cover'}}
@@ -617,7 +433,7 @@ export default function GEBC({navigation}) {
           <CPaperInput
             multiline={true}
             style={{flex: 1}}
-            placeholder={'Add EBC'}
+            placeholder={t('AddEBC')}
             placeholderTextColor="#B0B0B0"
             value={comment}
             onChangeText={text => setComment(text)}
@@ -627,30 +443,6 @@ export default function GEBC({navigation}) {
         <View style={{marginHorizontal:hp('4%'), marginTop:hp('-2%')}}>
 {profileNameError ? <Text style={styles.errorText}>{profileNameError}</Text> : null}
         </View>
-        {/*   <TouchableOpacity
-          onPress={() => ref_RBSheetCamera.current.open()}
-          style={{
-            flexDirection: 'row',
-            height: hp(5),
-            width: wp(35),
-            alignItems: 'center',
-            marginTop: hp(3),
-            marginHorizontal: wp(8),
-          }}>
-          <TouchableOpacity onPress={() => ref_RBSheetCamera.current.open()}>
-            <PlusPost />
-          </TouchableOpacity>
-          <Text
-            style={{
-              fontSize: hp(1.8),
-              marginLeft: wp(2),
-              color: '#FACA4E',
-              fontWeight: 'bold',
-              fontFamily: 'Inter',
-            }}>
-            Add Image
-          </Text>
-        </TouchableOpacity> */}
 
         {imageUri !== null ? (
           <View
@@ -706,8 +498,6 @@ export default function GEBC({navigation}) {
               borderRadius: wp(3),
               width: '100%',
             }}
-            // dropdownPosition="top"
-            // mode="modal"
             placeholderStyle={{
               color: '#121420',
               //   fontWeight: '400',
@@ -717,20 +507,16 @@ export default function GEBC({navigation}) {
             iconStyle={isFocus ? styles.iconStyle : styles.iconStyleInactive}
             itemTextStyle={{color: '#000000'}}
             selectedTextStyle={{fontSize: 16, color: '#000000'}}
-            // inputSearchStyle={styles.inputSearchStyle}
-            // iconStyle={styles.iconStyle}
             value={category}
             data={categoriesSelect}
             search={false}
             maxHeight={200}
             labelField="label"
             valueField="value"
-            placeholder={'Select Category'}
+            placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
             onFocus={handleCategoryFocus}
             onBlur={handleCategoryBlur}
-            // onFocus={() => setIsFocus(true)}
-            // onBlur={() => setIsFocus(false)}
             onChange={item => {
               //setCategory(item.label);
               setCategoryId(item.value);
@@ -764,8 +550,6 @@ export default function GEBC({navigation}) {
               borderRadius: wp(3),
               width: "100%",
             }}
-            // dropdownPosition="top"
-            // mode="modal"
             placeholderStyle={{
               color: "#121420",
               //   fontWeight: '400',
@@ -784,14 +568,12 @@ export default function GEBC({navigation}) {
             maxHeight={200}
             labelField="name"
             valueField="id"
-            placeholder={"Select Sub Category"}
+            placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             onFocus={handleSubCategoryFocus}
             onBlur={handleSubCategoryBlur}
-            // onFocus={() => setIsFocus(true)}
-            // onBlur={() => setIsFocus(false)}
             onChange={(item) => {
-              console.log("kon sub category id hai----", item.id);
+
               setSubCategory(item.id);
               setIsFocus(false);
             }}
@@ -818,7 +600,7 @@ export default function GEBC({navigation}) {
             //borderWidth: 3,
           }}>
           <Text style={{color: '#FACA4E', fontWeight: 'bold'}}>
-            Click on this emoji to select your emoji's
+             {t('ClickOnThisEmojiToSelectYourEmojis')}
           </Text>
           <TouchableOpacity
             style={{marginTop: hp(3)}}
@@ -830,18 +612,13 @@ export default function GEBC({navigation}) {
         {showEmojiPicker && (
           <View style={{marginHorizontal: wp(10), marginTop: hp(10)}}>
             <EmojiSelector
-              placeholder={'Search Emoji...'}
+              placeholder={t('SearchEmoji...')}
               onEmojiSelected={emoji => emojiToImage(emoji)}
               showTabs={false}
             />
           </View>
         )}
 
-        {/*  <EmojiSelector
-          placeholder={'Search Emoji...'}
-          onEmojiSelected={emoji => emojiToImage(emoji)}
-          showTabs={false}
-        /> */}
       </ScrollView>
 
       <View
@@ -853,28 +630,28 @@ export default function GEBC({navigation}) {
         }}>
 
 <CustomLoaderButton
-              title={"Post"}
+              title= {t('Post')} 
               load={loading}
               customClick={() => {
                 let hasError = false;
 
         
                 if (!comment) {
-                  setProfileNameError("Title is required");
+                  setProfileNameError(t('Titleisrequired'));
                   hasError = true;
                 } else {
                   setProfileNameError("");
                 }
 
                 if (!categoryId) {
-                  setCategoryError("Category is required");
+                  setCategoryError(t('Categoryisrequired'));
                   hasError = true;
                 } else {
                   setCategoryError("");
                 }
 
                 if (!subcategory) {
-                  setSubcategoryError("Subcategory is required");
+                  setSubcategoryError(t('Subcategoryisrequired'));
                   hasError = true;
                 } else {
                   setSubcategoryError("");
@@ -892,18 +669,7 @@ export default function GEBC({navigation}) {
                 }
               }}
             />
-        {/* <CustomButton
-          title="Post"
-          load={false}
-          // checkdisable={inn == '' && cm == '' ? true : false}
-          customClick={() => {
-            if (userId !== '') {
-              upload();
-            } else {
-              ref_RBSendOffer.current.open();
-            }
-          }}
-        /> */}
+    
       </View>
 
       <RBSheet
@@ -932,7 +698,7 @@ export default function GEBC({navigation}) {
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -963,7 +729,7 @@ export default function GEBC({navigation}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -979,23 +745,12 @@ export default function GEBC({navigation}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
-      <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
+   {loading && <Loader />}
 
       <CustomDialog
         visible={modalVisible}
@@ -1005,15 +760,15 @@ export default function GEBC({navigation}) {
       />
 
       <CustomSnackbar
-        message={'Success'}
-        messageDescription={'EBC Posted Successfully'}
+        message={t('Success')}
+        messageDescription={t('EBCPostedSuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
 
       <CustomSnackbar
-        message={'Alert!'}
-        messageDescription={'Kindly Fill All Fields'}
+        message={t('Alert!')}
+        messageDescription={t('KindlyFillAllFields')}
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackbarVisibleAlert}
       />

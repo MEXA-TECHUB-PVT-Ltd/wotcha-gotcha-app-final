@@ -34,12 +34,12 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
 import { base_url } from '../../../../../baseUrl';
-
+import { useTranslation } from 'react-i18next';
 export default function ViewUpdateQAFI({navigation, route}) {
   const [showFullContent, setShowFullContent] = useState(false);
   const identifier  = route.params.identifier;
   const [showMenu, setShowMenu] = useState(true);
-
+  const { t } = useTranslation();
   const [showLikes, setShowLikes] = useState(false);
 
   const ref_RBSheetCamera = useRef(null);
@@ -363,7 +363,8 @@ export default function ViewUpdateQAFI({navigation, route}) {
               color: '#303030',
               fontSize: hp(2.3),
             }}>
-            Select an option
+              {t('Selectanoption')}
+            
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <IonIcons
@@ -395,7 +396,8 @@ export default function ViewUpdateQAFI({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Update QAFI
+                {t('UpdateQAFI')}
+              
             </Text>
           </TouchableOpacity>
 
@@ -423,15 +425,16 @@ export default function ViewUpdateQAFI({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Delete QAFI
+                {t('DeleteQAFI')}
+             
             </Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
       <CustomSnackbar
-        message={'success'}
-        messageDescription={'QAFI deleted successfully'}
+        message={t('Success')}
+        messageDescription={t('QAFIDeletedSuccessfully')}
         onDismiss={dismissDeleteSnackbar} // Make sure this function is defined
         visible={snackbarDeleteVisible}
       />
