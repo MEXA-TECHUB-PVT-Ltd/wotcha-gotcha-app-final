@@ -20,10 +20,12 @@ import {
   import AsyncStorage from '@react-native-async-storage/async-storage';
   import Fontiso from 'react-native-vector-icons/Fontisto';
   import { base_url } from '../../../../../baseUrl';
-  
+import Loader from '../../../assets/Custom/Loader';
+import { useTranslation } from 'react-i18next';
+
   export default function SearchScreenSports({navigation}) {
     const [selectedItemId, setSelectedItemId] = useState(null);
-  
+    const { t } = useTranslation();
     const [authToken, setAuthToken] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
   
@@ -45,10 +47,6 @@ import {
     };
   
     const fetchItemData = async search => {
-      console.log('Token', authToken);
-  
-      console.log('SEARCH ITEMS', search);
-  
       const token = authToken;
   
       try {
@@ -63,7 +61,6 @@ import {
         );
   
         const result = await response.json();
-        console.log('AllItems for sports', result.sports);
         setData(result.sports); // Update the state with the fetched data
         setSearchTerm('');
         fetchAll();
@@ -75,18 +72,14 @@ import {
     };
   
     const fetchAll = async () => {
-      // Simulate loading
+
       setLoading(true);
-      // Fetch data one by one
       await loadSearchesFromStorage();
-  
-      // Once all data is fetched, set loading to false
       setLoading(false);
     };
   
     useEffect(() => {
       const fetchData = async () => {
-        console.log('Token', authToken);
         const token = authToken;
   
         try {
@@ -101,7 +94,6 @@ import {
           );
   
           const result = await response.json();
-          console.log('AllItems for pehly se search---', result.sports);
           setData(result.sports); // Update the state with the fetched data
         } catch (error) {
           console.error('Error Trending:', error);
@@ -112,8 +104,6 @@ import {
     }, [selectedItemId]);
   
     const handleSearch = text => {
-      console.log('data Search', data);
-  
       if (!data) {
         // Data is not available yet
         return;
@@ -125,8 +115,6 @@ import {
       );
   
       setFilteredData(filteredApps);
-  
-      // Set the active search item if it exists in the saved searches
       const matchingItem = searches.find(
         (item) => item.title.toLowerCase() === searchTerm
       );
@@ -156,7 +144,6 @@ import {
         const result3 = await AsyncStorage.getItem('authToken ');
         if (result3 !== null) {
           setAuthToken(result3);
-          // console.log('Token', result3);
         }
       } catch (error) {
         // Handle errors here
@@ -165,34 +152,28 @@ import {
     };
   
     const saveSearchTerm = async () => {
-      console.log('Search Term', searchTerm);
       if (searchTerm.trim() === '') {
         return;
       }
   
       try {
-        // Construct the new search term object
         const newSearchTerm = {
           id: searches + 1,
           title: searchTerm,
         };
     
-        // Get existing searches from AsyncStorage
         const savedSearches = await AsyncStorage.getItem("Sportsdata");
         let searches = [];
     
         if (savedSearches) {
           searches = JSON.parse(savedSearches);
         }
-    
-        // Check if the search term already exists for the current screen
         const existingSearch = searches.find(
           (search) =>
             search.title.toLowerCase() === searchTerm.toLowerCase()
         );
     
         if (!existingSearch) {
-          // Save the new search term
           searches.push(newSearchTerm);
           await AsyncStorage.setItem(
             "Sportsdata",
@@ -205,22 +186,7 @@ import {
       } catch (error) {
         console.error("Error saving search term:", error);
       }
-      // try {
-      //   const newSearchTerm = {id: searches.length + 1, title: searchTerm};
-      //   const updatedSearches = [...searches, newSearchTerm];
-  
-      //   await AsyncStorage.setItem(
-      //     'picTour',
-      //     JSON.stringify(updatedSearches),
-      //   );
-      //   setSearches(updatedSearches);
-      //   setSelectedItemId(searchTerm);
-      //   fetchItems(searchTerm);
-      //   //setSearchTerm(''); // Clear the input field
-      //   //fetchAll();
-      // } catch (error) {
-      //   console.error('Error saving search term:', error);
-      // }
+   
     };
   
     const renderSearches = item => {
@@ -236,7 +202,6 @@ import {
           ]}
           onPress={() => {
             setSelectedItemId(item.title);
-            console.log('Selected item:', item.title);
           }}>
           <Text
             style={[
@@ -250,7 +215,6 @@ import {
     };
   
     const renderAvailableApps = item => {
-      console.log('Items images', item);
   
       return (
         <TouchableOpacity
@@ -280,44 +244,7 @@ import {
               </Text>
             </View>
           </View>
-          {/* <Image
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              zIndex: 1, // Ensure it's on top of other elements
-              flex: 1,
-              width: '100%',
-              height: '100%',
-              borderRadius: wp(3),
-              resizeMode: 'cover',
-            }}
-            source={{uri: item?.thumbnail}}
-          />
-          <View
-            style={{
-              position: 'absolute',
-              top: hp(14.5),
-              left: 7,
-              //height: hp(3),
-              //width: wp(21),
-              //borderRadius: wp(3),
-              //backgroundColor: '#FACA4E',
-              justifyContent: 'center',
-              alignItems: 'center',
-              zIndex: 2, // Ensure it's on top
-            }}>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={{
-                fontSize: hp(1.9),
-                fontFamily: 'Inter-Medium',
-                color: '#FFFFFF',
-              }}>
-              {item?.description}
-            </Text>
-          </View> */}
+         
         </TouchableOpacity>
       );
     };
@@ -343,23 +270,21 @@ import {
             />
             <TextInput
               style={{flex: 1, marginLeft: wp(3)}}
-              placeholder="Search here"
+              placeholder={t('SearchHere')}
               value={searchTerm}
               onChangeText={text => {
                 setSearchTerm(text);
-                //setSelectedItemId(text)
+
                 handleSearch(text);
               }}
               onSubmitEditing={() => {
                 saveSearchTerm();
-                // This code will execute when the "Okay" button is pressed
-                //console.log("Good", searchTerm);
               }}
             />
           </View>
         </View>
   
-        <Text style={styles.latestSearch}>Latest Search</Text>
+        <Text style={styles.latestSearch}>{t('LatestSearch')}</Text>
   
         <View style={styles.latestSearchList}>
           <FlatList
@@ -374,10 +299,10 @@ import {
           />
         </View>
   
-        <Text style={styles.latestSearch}>Top Searches</Text>
+        <Text style={styles.latestSearch}>{t('TopSearches')}</Text>
   
         {data && data.length === 0 ? (
-          <Text style={styles.noDataText}>No data available</Text>
+          <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
         ) : (
                <FlatList
           style={{marginTop: hp(3), marginHorizontal: wp(5), flex: 1}}
@@ -388,27 +313,8 @@ import {
           renderItem={({item}) => renderAvailableApps(item)}
         />
         )}
-        {/* <FlatList
-          style={{marginTop: hp(3), marginHorizontal: wp(5), flex: 1}}
-          showsVerticalScrollIndicator={false}
-          data={data}
-          //keyExtractor={item => item.id.toString()}
-          numColumns={3} // Set the number of columns to 3
-          renderItem={({item}) => renderAvailableApps(item)}
-        /> */}
-          <View
-          style={{
-            position: "absolute",
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-        </View>
+    
+        {loading && <Loader />}
       </View>
     );
   }
@@ -425,7 +331,6 @@ import {
       marginTop: hp(8),
       marginHorizontal: wp(8),
       height: hp(8),
-      //borderWidth: 3,
     },
     searchBar: {
       height: hp(5.9),

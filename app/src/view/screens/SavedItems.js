@@ -10,6 +10,7 @@ import {
   ImageBackground,
   View,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -52,27 +53,12 @@ import {SelectCountry, Dropdown} from 'react-native-element-dropdown';
 import CPaperInput from '../../assets/Custom/CPaperInput';
 import Headers from '../../assets/Custom/Headers';
 import { base_url } from '../../../../baseUrl';
+import Loader from '../../assets/Custom/Loader';
 
-const Category = [
-  {label: 'Item 1', value: '1'},
-  {label: 'Item 2', value: '2'},
-  {label: 'Item 3', value: '3'},
-];
-
-const availableApps = [
-  {id: 1, title: 'Lense', image: appImages.lense},
-  {id: 2, title: 'Holder', image: appImages.holder},
-  {id: 3, title: 'HeadPhone', image: appImages.headPhone},
-  {id: 4, title: 'Shoes', image: appImages.shoes},
-  {id: 5, title: 'Printer', image: appImages.printer},
-  {id: 6, title: 'Lense', image: appImages.lense},
-  {id: 7, title: 'Holder', image: appImages.holder},
-  {id: 8, title: 'HeadPhone', image: appImages.headPhone},
-  {id: 9, title: 'Shoes', image: appImages.shoes},
-  //{id: 10, title: 'Printer', image: appImages.printer},
-];
+import { useTranslation } from 'react-i18next';
 
 export default function SavedItems({navigation}) {
+  const { t } = useTranslation();
   const [userId, setUserId] = useState('');
 
   const [authToken, setAuthToken] = useState('');
@@ -218,11 +204,11 @@ export default function SavedItems({navigation}) {
     <View style={styles.container}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
 
-      <View style={{marginTop: hp(5)}}>
+      <View style={{marginTop:Platform.OS =="ios" ? 0: hp(5)}}>
         <Headers
           onPress={() => navigation.goBack()}
           showText={true}
-          text={'Saved Items'}
+          text={t('Settings.SavedItems')}
           showBackIcon={true}
         />
       </View>
@@ -236,7 +222,7 @@ export default function SavedItems({navigation}) {
         renderItem={({item}) => renderAvailableApps(item)}
       />
 
-      <View
+      {/* <View
         style={{
           position: 'absolute',
           top: 0,
@@ -247,7 +233,8 @@ export default function SavedItems({navigation}) {
           alignItems: 'center',
         }}>
         {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
+      </View> */}
+      {loading && <Loader />}
     </View>
   );
 }

@@ -13,60 +13,32 @@ import {
   } from 'react-native';
   import React, {useState, useEffect, useRef} from 'react';
   import RBSheet from 'react-native-raw-bottom-sheet';
-  
-  import {Button, Divider, TextInput} from 'react-native-paper';
-  import AntDesign from 'react-native-vector-icons/AntDesign';
-  
   import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-  
-  import Back from '../../../assets/svg/back.svg';
+
   import {appImages} from '../../../assets/utilities/index';
-  import Slider from '@react-native-community/slider';
-  import VolumeUp from '../../../assets/svg/VolumeUp.svg';
-  import Like from '../../../assets/svg/Like.svg';
-  import UnLike from '../../../assets/svg/Unlike.svg';
-  import Comment from '../../../assets/svg/Comment.svg';
-  import Send from '../../../assets/svg/Send.svg';
-  import Download from '../../../assets/svg/Download.svg';
+
   import CustomButton from '../../../assets/Custom/Custom_Button';
   import Ionicons from 'react-native-vector-icons/Ionicons';
   import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
   import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
-  import axios from 'axios';
-  import cloudinary from 'cloudinary-core';
-  import Share from 'react-native-share';
-  
   import {
     heightPercentageToDP as hp,
     widthPercentageToDP,
     widthPercentageToDP as wp,
   } from 'react-native-responsive-screen';
-  
-  import Fontiso from 'react-native-vector-icons/Fontisto';
-  
   import IonIcons from 'react-native-vector-icons/Ionicons';
   
   import AsyncStorage from '@react-native-async-storage/async-storage';
-  
-  import {SelectCountry, Dropdown} from 'react-native-element-dropdown';
   import CPaperInput from '../../../assets/Custom/CPaperInput';
-  
+  import { useTranslation } from 'react-i18next';
   import CustomDialog from '../../../assets/Custom/CustomDialog';
   import { base_url } from '../../../../../baseUrl';
-import Video from '../BottomTab/Video';
 import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
   
-  const Category = [
-    {label: 'Item 1', value: '1'},
-    {label: 'Item 2', value: '2'},
-    {label: 'Item 3', value: '3'},
-  ];
-  
   export default function UpdateContent({navigation, route}) {
+    const { t } = useTranslation();
     const { apiEndpoint } = route.params;
     const { Video } = route.params;
-    console.log('apiEndpoint---------', apiEndpoint);
-    console.log('Video---------', Video);
     const [selectedItem, setSelectedItem] = useState('');
   
     const [selectedItemThumbnial, setSelectedItemThumbnial] = useState('');
@@ -81,15 +53,11 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
   
     const [isTextInputActive, setIsTextInputActive] = useState(false);
   
-    const [category, setCategory] = useState('');
-  
     const [categoryId, setCategoryId] = useState('');
   
     const [userId, setUserId] = useState('');
   
     const [authToken, setAuthToken] = useState('');
-  
-    const [categoriesSelect, setCategorySelect] = useState([]);
   
     const [categoryType, setCategoryType] = useState(null);
   
@@ -116,9 +84,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
     const ref_RBSheetThumbnail = useRef(null);
   
     const receivedData = route.params?.Video;
-  
-    // console.log('Recieved Data', receivedData);
-  
+
     useEffect(() => {
       // Make the API request and update the 'data' state
       fetchVideos();
@@ -137,9 +103,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
       setLoading(true);
   
       await getUserID();
-      // Fetch data one by one
-  
-      // Once all data is fetched, set loading to false
+
       setLoading(false);
     };
   
@@ -187,16 +151,10 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
         description !== '' &&
         imageInfoThumbnail !== null
       ) {
-        //uploadVideo()
-        //uploadVideos()
-            
+
         const uri = imageUri.uri || imageInfo.uri;
         const type = imageUri.type || imageInfo.type;
         const name = imageUri.fileName || imageInfo.fileName;
-
-        // const uri = imageInfo.uri;
-        // const type = imageInfo.type;
-        // const name = imageInfo.fileName;
         const source = {uri, type, name};
         console.log('Video Source', source);
         handleUploadVideo(source, category);
@@ -206,28 +164,6 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
         setModalVisible(true);
       }
     };
-  
-    /* const cloudinaryCore = new cloudinary.Cloudinary({ cloud_name: 'dzaawjnl1' });
-    
-      const uploadVideoCloudinary = (videoUri) => {
-        cloudinaryCore.openUploadWidget(
-          {
-            cloud_name: 'dzaawjnl1',
-            upload_preset: 'ml_default',
-            sources: ['local', 'url', 'camera'],
-            resource_type: 'video',
-            files: [videoUri], // Pass the videoUri here
-          },
-          (error, result) => {
-            if (!error && result && result.event === 'success') {
-              // The URL path of the uploaded video is in result.info.secure_url
-              const videoURL = result.info.secure_url;
-              console.log('Video URL:', videoURL);
-            }
-          }
-        );
-      };
-     */
   
     const handleUploadVideo = (video, category) => {
       setLoading(true);
@@ -246,10 +182,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
       })
         .then(res => res.json())
         .then(data => {
-          console.log('Video Url is', data);
           setVideoUrl(data.url); // Store the Cloudinary video URL in your state
-          //uploadVideo(data.url)
-  
           handleUploadImage(data.url, category);
           //uploadXpiVideo(data.url);
           console.log(data);
@@ -267,7 +200,6 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
       const type = imageInfoThumbnail.type;
       const name = imageInfoThumbnail.fileName;
       const sourceImage = {uri, type, name};
-      console.log('Source Image', sourceImage);
       const dataImage = new FormData();
       dataImage.append('file', sourceImage);
       dataImage.append('upload_preset', UPLOAD_PRESET); // Use your Cloudinary upload preset
@@ -284,9 +216,6 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
         .then(res => res.json())
         .then(data => {
           setImageUrl(data.url); // Store the Cloudinary video URL in your state
-          //uploadVideo(data.url)
-          //uploadXpiVideo(data.url);
-          console.log('Image Url imageInfoThumbnail', data);
           uploadXpiVideo(data.url, data1, category);
         })
         .catch(err => {
@@ -297,15 +226,6 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
   
   
     const uploadXpiVideo = async (data, data1, category) => {
-        console.log('video_id id', receivedData?.video_id);
-        console.log('category id', receivedData?.category_id);
-        console.log('sub_category_id', receivedData?.sub_category_id);
-        console.log('user_id', receivedData?.user_id);
-        console.log('name', profileName);
-      console.log('Image Uri', data);
-      console.log('Video Uri', data1);
-      console.log('Description', description);
-
   
       const token = authToken;
     //   const apiUrl = base_url + 'xpi/updateXpiVideo';
@@ -321,14 +241,6 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
         description: description,
         video: data1,
         thumbnail: data,
-
-
-        // description: description,
-        // user_id: userId,
-        // name: profileName,
-        // video: data1,
-        // thumbnail: data,
-        // video_category: category,
       };
   
       try {
@@ -343,7 +255,6 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
   
         if (response.ok) {
           const data = await response.json();
-          console.log('API Response of Videos:', data);
           setLoading(false);
           handleUpdatePassword();
   
@@ -380,13 +291,6 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
         description: description,
         video: data1,
         thumbnail: data,
-        // id: receivedData?.video_id,
-        // user_id: userId,
-        // name: profileName,
-        // description: description,
-        // video_category: category,
-        // video: dataVideo,
-        // thumbnail: receivedData?.thumbnail,
       };
   
       try {
@@ -401,7 +305,6 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
   
         if (response.ok) {
           const data = await response.json();
-          console.log('API Response of Videos:', data);
           setLoading(false);
           handleUpdatePassword();
   
@@ -441,13 +344,6 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
         description: description,
         video: data1,
         thumbnail: data,
-        // id: receivedData?.video_id,
-        // user_id: userId,
-        // name: profileName,
-        // description: description,
-        // video_category: receivedData?.video_category,
-        // video: dataVideo,
-        // thumbnail: dataThumbnail,
       };
   
       try {
@@ -462,7 +358,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
   
         if (response.ok) {
           const data = await response.json();
-          console.log('API Response of Videos:', data);
+
           setLoading(false);
           handleUpdatePassword();
   
@@ -520,7 +416,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
   
         if (response.ok) {
           const data = await response.json();
-          console.log('API Response of Videos:', data);
+        
           setLoading(false);
           handleUpdatePassword();
   
@@ -562,16 +458,16 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
           videoQuality: 'medium',
         },
         response => {
-          console.log('image here', response);
+         
           if (!response.didCancel) {
             if (response.assets && response.assets.length > 0) {
               setImageUri(response.assets[0].uri);
-              console.log('response', response.assets[0].uri);
+         
               setImageInfo(response.assets[0]);
             } else if (response.uri) {
               // Handle the case when no assets are present (e.g., for videos)
               setImageUri(response.uri);
-              console.log('response', response.uri);
+        
             }
           }
           ref_RBSheetCamera.current.close();
@@ -582,14 +478,14 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
     const choosePhotoFromLibrary = value => {
       setSelectedItem(value);
       launchImageLibrary({mediaType: 'video'}, response => {
-        console.log('image here', response);
+   
         if (!response.didCancel && response.assets.length > 0) {
-          console.log('Response', response.assets[0]);
+         
           setImageUri(response.assets[0].uri);
           setImageInfo(response.assets[0]);
         }
   
-        console.log('response', imageInfo);
+
   
         ref_RBSheetCamera.current.close();
       });
@@ -603,16 +499,16 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
           videoQuality: 'medium',
         },
         response => {
-          console.log('image here', response);
+     
           if (!response.didCancel) {
             if (response.assets && response.assets.length > 0) {
               setThumbnailImageUri(response.assets[0].uri);
-              console.log('response', response.assets[0].uri);
+         
               setImageInfoThumbnail(response.assets[0]);
             } else if (response.uri) {
               // Handle the case when no assets are present (e.g., for videos)
               setThumbnailImageUri(response.uri);
-              console.log('response', response.uri);
+             
             }
           }
           ref_RBSheetThumbnail.current.close();
@@ -623,37 +519,27 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
     const choosePhotoFromLibraryThumbnail = value => {
       setSelectedItemThumbnial(value);
       launchImageLibrary({mediaType: 'Photo'}, response => {
-        console.log('image here', response);
+      
         if (!response.didCancel && response.assets.length > 0) {
-          console.log('Response', response.assets[0]);
+          
           setThumbnailImageUri(response.assets[0].uri);
           setImageInfoThumbnail(response.assets[0]);
         }
-  
-        console.log('response', imageInfo);
   
         ref_RBSheetThumbnail.current.close();
       });
     };
   
     const handleUpdatePassword = async () => {
-      // Perform the password update logic here
-      // For example, you can make an API request to update the password
-  
-      // Assuming the update was successful
       setsnackbarVisible(true);
-  
-      // Automatically hide the Snackbar after 3 seconds
+
       setTimeout(() => {
         setsnackbarVisible(false);
         //handleUpload()
         navigation.navigate('ViewProfile');
       }, 3000);
     };
-  
-    const handleUpload = () => {
-      console.log('Id', categoryId);
-    };
+
   
     const dismissSnackbar = () => {
       setsnackbarVisible(false);
@@ -661,7 +547,6 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
   
     const checkUpdate = async () => {
       const cloudinaryUrl = 'http://res.cloudinary.com';
-      console.log('Image Info', imageInfo?.uri);
       console.log('Data Fetched', isDataFetched);
       if (
         isDataFetched && // Check if data has been fetched
@@ -677,14 +562,12 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
         imageInfo.uri &&
         imageInfo.uri.startsWith(cloudinaryUrl)
       ) {
-        console.log('Only Image Info Is Cloudinary and thumbnail is not');
+  
         handleUploadImageC(receivedData?.video);
       } else if (
         thumbnailImageUri &&
         thumbnailImageUri.startsWith(cloudinaryUrl)
       ) {
-        console.log('Image Info', imageInfo);
-        console.log('Only Thumbnail Is Cloudinary and Image Info is not');
   
         convertDurationAndStore();
       } else {
@@ -719,7 +602,6 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
         const type = imageInfo.type;
         const name = imageInfo.fileName;
         const source = {uri, type, name};
-        console.log('Video Source', source);
   
         handleUploadVideoC(category, source);
       }
@@ -770,7 +652,6 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
       })
         .then(res => res.json())
         .then(data => {
-          console.log('Video Url is', data);
           setVideoUrl(data.url); // Store the Cloudinary video URL in your state
           //uploadVideo(data.url)
           uploadXpiVideoWithVideoChange(data.url, category);
@@ -794,7 +675,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
       const type = imageInfoThumbnail.type;
       const name = imageInfoThumbnail.fileName;
       const sourceImage = {uri, type, name};
-      console.log('Source Image', sourceImage);
+
       const dataImage = new FormData();
       dataImage.append('file', sourceImage);
       dataImage.append('upload_preset', 'ml_default'); // Use your Cloudinary upload preset
@@ -813,7 +694,6 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
           setImageUrl(data.url); // Store the Cloudinary video URL in your state
           //uploadVideo(data.url)
           //uploadXpiVideo(data.url);
-          console.log('Image Url imageInfoThumbnail', data);
           uploadXpiVideoWithThumbnailChange(data1, data.url);
         })
         .catch(err => {
@@ -834,7 +714,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
             <IonIcons name={'chevron-back'} color={'#282828'} size={25} />
           </TouchableOpacity>
   
-          <Text style={styles.headerText}>Update Video</Text>
+          <Text style={styles.headerText}>{t('UpdateVideo')}</Text> 
         </View>
   
         <ScrollView
@@ -893,7 +773,8 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
                     color: '#232323',
                     fontWeight: '700',
                   }}>
-                  Change Video
+                    {t('ChangeVideo')}
+                  {/* Change Video */}
                 </Text>
               </TouchableOpacity>
               {imageInfo == null && (
@@ -959,7 +840,8 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
                     color: '#232323',
                     fontWeight: '700',
                   }}>
-                  Upload Thumbnail
+                    {t('Uploadthumbnail')}
+                  {/* Upload Thumbnail */}
                 </Text>
               </TouchableOpacity>
               {thumbnailImageUri == null && null}
@@ -969,7 +851,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
           <View style={{marginRight: wp(2)}}>
             <TextInput
               mode="outlined"
-              label="Video"
+              label={t('Video')}
               value={profileName}
               outlineStyle={{borderRadius: wp(3)}}
               onChangeText={text => setProfileName(text)}
@@ -984,58 +866,6 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
             />
           </View>
   
-          {/*  <View style={{marginHorizontal: wp(7)}}>
-              <Dropdown
-                style={
-                  isFocus
-                    ? styles.textInputSelectedCategory
-                    : styles.textInputCategoryNonSelected
-                }
-                containerStyle={{
-                  marginTop: 3,
-                  alignSelf: 'center',
-                  borderRadius: wp(3),
-                  width: '100%',
-                }}
-                // dropdownPosition="top"
-                // mode="modal"
-                placeholderStyle={{
-                  color: '#121420',
-                  //   fontWeight: '400',
-                  fontFamily: 'Inter',
-                  fontSize: hp(1.8),
-                }}
-                iconStyle={isFocus ? styles.iconStyle : styles.iconStyleInactive}
-                itemTextStyle={{color: '#000000'}}
-                selectedTextStyle={{fontSize: 16, color: '#000000'}}
-                // inputSearchStyle={styles.inputSearchStyle}
-                // iconStyle={styles.iconStyle}
-                value={category}
-                data={categoriesSelect}
-                search={false}
-                maxHeight={200}
-                labelField="label"
-                valueField="value"
-                placeholder={'Select Category'}
-                searchPlaceholder="Search..."
-                onFocus={() => setIsFocus(true)}
-                onBlur={() => setIsFocus(false)}
-                onChange={item => {
-                  //setCategory(item.label);
-                  setCategoryId(item.value);
-                  setIsFocus(false);
-                }}
-                renderRightIcon={() => (
-                  <AntDesign
-                    style={styles.icon}
-                    color={isFocus ? '#FACA4E' : '#C4C4C4'}
-                    name="down"
-                    size={15}
-                  />
-                )}
-              />
-            </View> */}
-  
           <View
             style={{
               justifyContent: 'center',
@@ -1044,7 +874,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
             }}>
             <CPaperInput
               multiline={true}
-              placeholder={'Description'}
+              placeholder={t('Description')}
               placeholderTextColor="#121420"
               value={description}
               onChangeText={text => setDescription(text)}
@@ -1059,14 +889,12 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
               alignItems: 'center',
             }}>
             <CustomButton
-              title={'Update'}
+              title={t('Update')}
               load={false}
               // checkdisable={inn == '' && cm == '' ? true : false}
               customClick={() => {
                 checkUpdate();
-                //upload();
-                //handleUpdatePassword();
-                //navigation.navigate('Profile_image');
+
               }}
             />
           </View>
@@ -1098,7 +926,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
               marginHorizontal: wp(8),
               alignItems: 'center',
             }}>
-            <Text style={styles.maintext}>Select an option</Text>
+            <Text style={styles.maintext}>{t('SelectAnOption')}</Text>
             <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
               <Ionicons
                 name="close"
@@ -1129,7 +957,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
                 size={25}
               />
   
-              <Text style={{color: '#333333'}}>From camera</Text>
+              <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
             </TouchableOpacity>
   
             <TouchableOpacity
@@ -1145,7 +973,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
                 size={25}
               />
   
-              <Text style={{color: '#333333'}}>From gallery</Text>
+              <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
             </TouchableOpacity>
           </View>
         </RBSheet>
@@ -1176,7 +1004,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
               marginHorizontal: wp(8),
               alignItems: 'center',
             }}>
-            <Text style={styles.maintext}>Select an option</Text>
+            <Text style={styles.maintext}>{t('SelectAnOption')}</Text> 
             <TouchableOpacity
               onPress={() => ref_RBSheetThumbnail.current.close()}>
               <Ionicons
@@ -1208,7 +1036,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
                 size={25}
               />
   
-              <Text style={{color: '#333333'}}>From camera</Text>
+              <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
             </TouchableOpacity>
   
             <TouchableOpacity
@@ -1226,14 +1054,14 @@ import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from 
                 size={25}
               />
   
-              <Text style={{color: '#333333'}}>From gallery</Text>
+              <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
             </TouchableOpacity>
           </View>
         </RBSheet>
   
         <CustomSnackbar
-          message={'success'}
-          messageDescription={'Update Video successfully'}
+          message={t('Success')}
+          messageDescription={t('UpdateVideoSuccessfully')}
           onDismiss={dismissSnackbar} // Make sure this function is defined
           visible={snackbarVisible}
         />

@@ -14,7 +14,7 @@ import {
 import React, {useState, useRef, useEffect} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Entypo from 'react-native-vector-icons/Entypo';
-
+import { useTranslation } from 'react-i18next';
 import RNFetchBlob from 'rn-fetch-blob';
 
 import {Button, Divider, TextInput} from 'react-native-paper';
@@ -77,7 +77,7 @@ export default function UpdatePostLetterEditSignature({navigation, route}) {
   const [fileType, setFileType] = useState('');
 
   const [fileName, setFileName] = useState('');
-
+  const { t } = useTranslation();
   const [imageUri, setImageUri] = useState(null);
 
   const ref_RBSheetCameraCanvas = useRef(null);
@@ -700,7 +700,7 @@ export default function UpdatePostLetterEditSignature({navigation, route}) {
         <Headers
           showBackIcon={true}
           showText={true}
-          text={'Edit Signature'}
+          text={t('EditSignature')}
           onPress={() => navigation.goBack()}
         />
       </View>
@@ -762,7 +762,8 @@ export default function UpdatePostLetterEditSignature({navigation, route}) {
               fontFamily: 'Inter-Regular',
               fontSize: hp(1.7),
             }}>
-            Clear
+              {t('Clear')}
+            
           </Text>
         </TouchableOpacity>
 
@@ -841,14 +842,15 @@ export default function UpdatePostLetterEditSignature({navigation, route}) {
               fontFamily: 'Inter-Regular',
               fontSize: hp(1.7),
             }}>
-            Upload From Gallery
+              {t('UploadFromGallery')}
+            {/* Upload From Gallery */}
           </Text>
         </TouchableOpacity>
       </View>
 
       {imageInfo && (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Text>Uploaded Signature:</Text>
+          <Text>{t('UploadedSignature')}</Text>
           <View style={{marginTop: hp(3)}}>
             <Image
               //source={{uri: `data:image/png;base64,${encodedImage}`}}
@@ -861,7 +863,7 @@ export default function UpdatePostLetterEditSignature({navigation, route}) {
 
       <View style={{marginTop: '10%', alignSelf: 'center'}}>
         <CustomButton
-          title="Done"
+          title={t('Done')}
           // load={loading}
           // checkdisable={inn == '' && cm == '' ? true : false}
           customClick={() => {
@@ -928,7 +930,7 @@ export default function UpdatePostLetterEditSignature({navigation, route}) {
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity
             onPress={() => ref_RBSheetCameraCanvas.current.close()}>
             <Ionicons
@@ -960,7 +962,7 @@ export default function UpdatePostLetterEditSignature({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>

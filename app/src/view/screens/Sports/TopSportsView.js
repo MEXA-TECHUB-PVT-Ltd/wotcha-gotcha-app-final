@@ -25,9 +25,7 @@ import {
       setShowFullContent(!showFullContent);
     };
     const receivedData = route.params?.picData;
-    console.log("Data Recieved on pics", receivedData);
     var details = receivedData.description;
-  
   
     return (
       <GestureHandlerRootView style={{ flex: 1 }}>

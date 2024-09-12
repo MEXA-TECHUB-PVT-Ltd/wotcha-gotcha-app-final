@@ -11,6 +11,7 @@ import {
     View,
     Alert,
     Dimensions,
+    Platform,
   } from "react-native";
   import React, { useState, useEffect } from "react";
   import {
@@ -34,11 +35,11 @@ import {
   import { base_url } from "../../../../../baseUrl";
   import News from "react-native-vector-icons/Entypo";
 import { tr } from "rn-emoji-keyboard";
-
+import { useTranslation } from 'react-i18next';
   export default function NewsScreen({ route }) {
 
 
-
+    const { t } = useTranslation();
     const [selectedItemId, setSelectedItemId] = useState(null);
     const [authToken, setAuthToken] = useState("");
     const [newsData, setNewsData] = useState([]);
@@ -453,7 +454,7 @@ import { tr } from "rn-emoji-keyboard";
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionHeader}>{item.title}</Text>
         {item.data.length === 0 ? (
-          <Text style={styles.noDataText}>No Data available</Text>
+          <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
         ) : (
         <FlatList
           data={item.data}
@@ -825,7 +826,7 @@ import { tr } from "rn-emoji-keyboard";
           barStyle="dark-content"
         />
   
-        <View style={{ marginTop: hp(5) }}>
+        <View style={{ marginTop:Platform.OS =="ios" ? 0 : hp(5) }}>
           <Headers
             OnpresshowHome={() => {
               navigation.navigate("MoreScreen");
@@ -835,7 +836,7 @@ import { tr } from "rn-emoji-keyboard";
             // onPressSearch={() => navigation.navigate("SearchAppsDisc", {selectedItemId: selectedItemId})}
             onPressSearch={handleSearchPress}
             showText={true}
-            text={"News"}
+            text={t('News')}
             showSearch={true}
           />
         </View>
@@ -863,7 +864,8 @@ import { tr } from "rn-emoji-keyboard";
             ) : adsData.length === 0 ? (
               <View style={styles.TopBannerView}>
                 <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No Top Banner
+                {t('NoTopBanner')}
+                  
                 </Text>
               </View>
             ) : (
@@ -882,7 +884,7 @@ import { tr } from "rn-emoji-keyboard";
                         height: hp(15),
                         width: "100%",
                         borderWidth: 1,
-                        resizeMode: "contain",
+                        resizeMode:Platform.OS == "ios" ? "cover" : "contain",
                         borderRadius: 10,
                       }}
                     />
@@ -988,7 +990,7 @@ import { tr } from "rn-emoji-keyboard";
               landscape of international diplomacy...... */}
 
               {topNewsData === undefined || topNewsData === 0
-                ? "No Top News Shown"
+                ? t('NoTopNewsShown')
                 : topNewsData?.description}
             </Text>
           </View>
@@ -1009,7 +1011,7 @@ import { tr } from "rn-emoji-keyboard";
           alignItems: "center",
         }}
       >
-         <Text style={{ fontFamily: "Inter-Medium",}}>No data for this category</Text>
+         <Text style={{ fontFamily: "Inter-Medium",}}>{t('NoDataAvailable')}</Text>
       </View>
        
       ) : (
@@ -1087,7 +1089,7 @@ import { tr } from "rn-emoji-keyboard";
             ) : adsinActiveData.length === 0 ? (
               <View style={styles.TopBannerView}>
                 <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No Banner
+                {t('NoBanner')}
                 </Text>
               </View>
             ) : (
@@ -1106,7 +1108,7 @@ import { tr } from "rn-emoji-keyboard";
                         height: hp(15),
                         width: "100%",
                         borderWidth: 1,
-                        resizeMode: "contain",
+                        resizeMode:Platform.OS =="ios" ? "cover" : "contain",
                         borderRadius: 10,
                       }}
                     />

@@ -17,21 +17,13 @@ import {
     widthPercentageToDP,
     widthPercentageToDP as wp,
   } from "react-native-responsive-screen";
-  import Entypo from "react-native-vector-icons/Entypo";
   import Carousel from "react-native-snap-carousel";
-  import Fontiso from "react-native-vector-icons/Fontisto";
   import Headers from "../../../assets/Custom/Headers";
-  import Approved from "../../../assets/svg/Approved";
-  import Chat from "../../../assets/svg/Chat.svg";
-  
   import Add from "../../../assets/svg/AddMainScreen.svg";
-  import Swiper from "react-native-swiper";
   import { appImages } from "../../../assets/utilities";
-  import ProfileActive from '../../../assets/svg/ProfileActive.svg';
   import AsyncStorage from "@react-native-async-storage/async-storage";
-  import CategoryInactive from "../../../assets/svg/CategoryInactive";
   import RBSheet from "react-native-raw-bottom-sheet";
-  
+  import { useTranslation } from 'react-i18next';
   import { launchCamera, launchImageLibrary } from "react-native-image-picker";
   import { useIsFocused } from "@react-navigation/native";
   import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -41,19 +33,12 @@ import {
   import Sport from "react-native-vector-icons/MaterialIcons";
   export default function Sports() {
     const navigation = useNavigation();
-    const [selectedItemVideoId, setSelectedItemVideoId] = useState(null);
-  
-    const [selectedItemDiscId, setSelectedItemDiscId] = useState(null);
-  
+    const { t } = useTranslation();
     const [selectedItemPicsId, setSelectedItemPicsId] = useState(null);
   
     const [imageInfo, setImageInfo] = useState(null);
   
-    const [selectedItemMarketId, setSelectedItemMarketId] = useState(null);
-  
     const isFocused = useIsFocused();
-    //pic
-    const [selectedItemId, setSelectedItemId] = useState(8);
   
     const [loading, setLoading] = useState(false);
   
@@ -77,14 +62,6 @@ import {
     const [sections, setSections] = useState([]);
   const [noData, setNoData] = useState(false);
  
-
-
-
-
-
-
-
-
   useEffect(() => {
     const getAuthToken = async () => {
       try {
@@ -104,14 +81,12 @@ import {
   }, []);
 
 
-
   const [adsData, setAdsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     if (authToken) {
       fetchBannerConfig();
       fetchBannerInActive();
-      // fetchSubCategory(selectedItemId)
     }
   }, [authToken]);
 
@@ -131,7 +106,6 @@ import {
       );
 
       const result = await response.json();
-      // console.log("AllBanners---", result.AllBanners);
       setAdsData(result.AllBanners);
     } catch (error) {
       console.error("Error AllBanners:", error);
@@ -155,15 +129,12 @@ import {
       );
 
       const result = await response.json();
-      // console.log("AllBanners AdsInActiveData---", result.AllBanners);
-      // setAdsInActiveData(result.AllBanners);
       const updatedBanners = result.AllBanners.map(banner => {
         if (banner.image.startsWith('/fileUpload')) {
           banner.image = `https://watch-gotcha-be.mtechub.com${banner.image}`;
         }
         return banner;
       });
-      // console.log("AllBanners AdsInActiveData---", updatedBanners);
       setAdsInActiveData(updatedBanners);
     } catch (error) {
       console.error("Error AllBanners AdsInActiveData---", error);
@@ -171,10 +142,6 @@ import {
     setIsLoading(false);
   };
 
-
-
-
-  // Fetch all data when authToken is set and screen is focused
   useEffect(() => {
     if (authToken && isFocused) {
       fetchAllCinematicsCategory();
@@ -194,10 +161,6 @@ import {
       const result = await response.json();
       const reverseData = result.AllCategories.reverse();
       setSearches(reverseData);
-      // setSearchesData(reverseData);
-      // if (result.AllCategories.length > 0) {
-      //   setSelectedItemId(result.AllCategories[0].id);
-      // }
       if (selectedItemPicsId === null && result.AllCategories.length > 0) {
         setSelectedItemPicsId(result.AllCategories[0].id);
       }
@@ -252,402 +215,8 @@ import {
     setLoading(false)
   };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // useEffect(() => {
-  //   if (authToken && isFocused) {
-  //     fetchAllCinematicsCategory();
-  //   }
-  // }, [authToken]);
-
-  // useEffect(() => {
-  //   if (authToken) {
-  //     fetchAllData();
-  //   }
-  // }, [authToken, selectedItemPicsId]);
-
-  // const fetchAllData = async () => {
-  //   setLoading(true);
-  //   setNoData(false);
-  //   try {
-  //     // await fetchAllCinematicsCategory();
-  //     await fetchTopSport();
-  //     await fetchSubCategorySport(selectedItemPicsId);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // const fetchAllCinematicsCategory = async () => {
-  //   //console.log("Categry in id", selectedItemId)
-  //   const token = authToken;
-
-  //   try {
-  //     const response = await fetch(
-  //       base_url + "sports/category/getAll",
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     const result = await response.json();
-  //     const reverseData = result.AllCategories.reverse().
-  //     console.log("AllCategories---", reverseData);
-  //     setSearches(reverseData);// Update the state with the fetched data
-  //   } catch (error) {
-  //     console.error("Error Trending:", error);
-  //   }
-  // };
-
-  // const fetchTopSport = async () => {
-  //    // console.log("Categry in id", selectedItemId);
-  //    const token = authToken;
-
-  //    try {
-  //      const response = await fetch(
-  //        base_url + "sports/getTopSport",
-  //        {
-  //          method: "GET",
-  //          headers: {
-  //            Authorization: `Bearer ${token}`,
-  //          },
-  //        }
-  //      );
- 
-  //      const result = await response.json();
-  //      console.log("getTopVideo------..", result.data);
-  //      setDataTopVideos(result.data);
-  //    } catch (error) {
-  //      console.error("Error Trending:", error);
-  //    }
-  // };
-
-  // const fetchSubCategorySport = async (selectedItemPicsId) => {
-  //   console.log(' kon c id hai selceted----', selectedItemPicsId)
-  //   const token = authToken;
-  
-  //   try {
-  //     const response = await fetch(
-  //       `${base_url}sports/getByCategory/${selectedItemPicsId}?page=1&limit=100000`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  
-  //     const result = await response.json();
-  
-  //     if (Array.isArray(result.data) && result.data.length > 0) {
-  //       const formattedSections = result.data.map(category => ({
-  //         title: category.sub_category_name,
-  //         data: category.Sport_result.Sports,
-  //       }));
-  
-  //       // console.log('results--- for subs', formattedSections);
-  //       setSections(formattedSections);
-  
-  //       // Check if there is no data
-  //       const hasNoData = formattedSections.every(section => section.data.length === 0);
-  //       setNoData(hasNoData);
-  //     } else {
-  //       setSections([]);
-  //       setNoData(true);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching subcategories:", error);
-  //     setNoData(true);  // Assume no data on error
-  //   }
-  // };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
- 
-
-    const fetchCategory = async (result) => {
-      const token = result;
-  
-      try {
-        const response = await fetch(
-          base_url + "sports/category/getAll",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        const result = await response.json();
-        // console.log('Search Results', result.AllCategories);
-        setSearches(result.AllCategories); // Update the state with the fetched data
-      } catch (error) {
-        console.error("Error for fetch:", error);
-      }
-    };
-  
-    const fetchSubCategory = async (selectedItemId) => {
-      console.log(' kon c id hai selceted----', selectedItemId)
-      const token = authToken;
-    
-      try {
-        const response = await fetch(
-          `${base_url}sports/getByCategory/${selectedItemId}?page=1&limit=100000`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-    
-        const result = await response.json();
-    
-        if (Array.isArray(result.data) && result.data.length > 0) {
-          const formattedSections = result.data.map(category => ({
-            title: category.sub_category_name,
-            data: category.Sport_result.Sports,
-          }));
-    
-          // console.log('results--- for subs', formattedSections);
-          setSections(formattedSections);
-    
-          // Check if there is no data
-          const hasNoData = formattedSections.every(section => section.data.length === 0);
-          setNoData(hasNoData);
-        } else {
-          setSections([]);
-          setNoData(true);
-        }
-      } catch (error) {
-        console.error("Error fetching subcategories:", error);
-        setNoData(true);  // Assume no data on error
-      }
-    };
-
-    const fetchTrendingVideos = async () => {
-      // console.log('selected id trending videos', authToken);
-      const token = authToken;
-  
-      try {
-        const response = await fetch(
-          base_url +
-            `picTour/getAllTrendingToursByCategory/${selectedItemPicsId}?page=1&limit=100000`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        const result = await response.json();
-        // console.log('Resultings Pics Tourzs', result.Tours);
-        setData(result.Tours); // Update the state with the fetched data
-      } catch (error) {
-        console.error("Error Trending:", error);
-      }
-    };
-  
-    const fetchLatestVideos = async () => {
-      // console.log('selected id latest videos', authToken);
-  
-      const token = authToken;
-  
-      try {
-        const response = await fetch(
-          base_url +
-            `picTour/getAllRecentVideosByCategory/${selectedItemPicsId}?page=1&limit=100000`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        const result = await response.json();
-        // console.log('Resultings', result.Tours);
-        setDataLatestVideos(result.Tours); // Update the state with the fetched data
-      } catch (error) {
-        console.error("Error for latest:", error);
-      }
-    };
-  
-    const fetchMostViewedVideos = async () => {
-      // console.log('selected id most viewed videos', authToken);
-  
-      const token = authToken;
-  
-      try {
-        const response = await fetch(
-          base_url +
-            `picTour/getMostViewedToursByCategory/${selectedItemPicsId}?page=1&limit=100000`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        const result = await response.json();
-        // console.log('Resultings Most Viewed', result.Tours);
-        setMostViewedVideos(result.Tours); // Update the state with the fetched data
-      } catch (error) {
-        console.error("Error for Most Views:", error);
-      }
-    };
-  
-    const fetchTopVideos = async () => {
-      const token = authToken;
-      try {
-        const response = await fetch(
-          base_url + `top/app/top_tour/${selectedItemPicsId}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        const result = await response.json();
-        // Check if result and result.topTour are defined and not null
-        if (result && result.topTour && result.topTour.length > 0) {
-          // console.log("Response result:", result.topTour[0]);
-          setDataTopVideos(result.topTour[0]); // Update the state with the fetched data
-        } else {
-          // console.error('No topTour data available');
-          setDataTopVideos([]);
-          // console.log("Response result:", []); // Set to an empty array or handle as needed
-        }
-      } catch (error) {
-        console.error("Error for Top:", error);
-      }
-    };
-  
-    // const fetchTopVideos = async () => {
-    //   // console.log('Category Top Videos', selectedItemPicsId);
-    //   const token = authToken;
-  
-    //   try {
-    //     const response = await fetch(
-    //       base_url + `top/app/top_tour/${selectedItemPicsId}`,
-    //       {
-    //         method: 'GET',
-    //         headers: {
-    //           Authorization: `Bearer ${token}`,
-    //         },
-    //       },
-    //     );
-  
-    //     const result = await response.json();
-    //     // console.log('Resultings of Top Videossss', result);
-    //     setDataTopVideos(result.topTour[0]); // Update the state with the fetched data
-    //   } catch (error) {
-    //     console.error('Error for Top:', error);
-    //   }
-    // };
-  
-    const fetchMostCommentedVideos = async () => {
-      // console.log('selected most commented videos', authToken);
-  
-      const token = authToken;
-  
-      try {
-        const response = await fetch(
-          base_url +
-            `picTour/getMostCommentedToursByCategory/${selectedItemPicsId}?page=1&limit=100000`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        const result = await response.json();
-        // console.log('Resultings', result.Tours);
-        setMostCommentedVideos(result.Tours); // Update the state with the fetched data
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
-  
-    //pics search
   
     const renderSearchesPic = (item) => {
-      // console.log('First Id', searchesData[0].id);
-      // let isSelected;
-      // if (selectedItemPicsId === null) {
-      //   isSelected = searchesData[0].id === item.id;
-      //   setSelectedItemPicsId(searchesData[0].id);
-      // } else {
-      //   // console.log('Items', item);
-      //   isSelected = selectedItemPicsId === item.id;
-      // }
       const isSelected = selectedItemPicsId === item.id;
       return (
         <TouchableOpacity
@@ -659,7 +228,7 @@ import {
           ]}
           onPress={() => {
             setSelectedItemPicsId(item.id);
-            console.log("Selected item:", item.id);
+    
           }}
         >
           <Text
@@ -675,93 +244,6 @@ import {
     };
   
   
-  
-    const renderAvailableAppsVideo = (item) => {
-      // console.log('Items of Pics', item);
-      return (
-        <TouchableOpacity
-          onPress={() => navigation.navigate("SportsDetails", { picData: item })}
-          style={{
-            width: wp(35),
-            borderRadius: wp(5),
-            height: hp(25),
-            margin: 5,
-          }}
-        >
-          <View>
-            {!item.image ||
-            item.image === "undefined" ||
-            item.image.startsWith("/") ? (
-              <Image
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  zIndex: 1,
-                  width: "100%",
-                  height: hp(12),
-                  borderRadius: wp(1),
-                  resizeMode: "cover",
-                }}
-                source={appImages.galleryPlaceHolder}
-              />
-            ) : (
-              <Image
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  zIndex: 1,
-                  width: "100%",
-                  height: hp(12),
-                  borderRadius: wp(1),
-                  resizeMode: "cover",
-                }}
-                source={{ uri: item.image }}
-              />
-            )}
-  
-            {/* <Image
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-  
-                zIndex: 1, // Ensure it's on top of other elements
-                //flex: 1,
-                width: '100%',
-                height: hp(12),
-                borderRadius: wp(1),
-                resizeMode: 'cover',
-              }}
-              source={appImages.topSearches1}
-            /> */}
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginLeft: wp(0.5),
-              marginTop: hp(14),
-            }}
-          >
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={{
-                fontSize: hp(1.5),
-                fontFamily: "Inter-Regular",
-                color: "#000000",
-                width: wp(23),
-              }}
-            >
-              {item.name}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      );
-    };
-  
     const takePhotoFromCamera = async (value) => {
       setSelectedItem(value);
       launchCamera(
@@ -770,7 +252,7 @@ import {
           //videoQuality: 'medium',
         },
         (response) => {
-          console.log("image here", response);
+  
           if (!response.didCancel) {
             if (response.assets && response.assets.length > 0) {
               setLoading(true);
@@ -782,7 +264,6 @@ import {
                 Video: response.assets[0],
               });
             } else if (response.uri) {
-              console.log("response", imageInfo);
               ref_RBSheetCamera.current.close();
               setLoading(false);
   
@@ -791,11 +272,8 @@ import {
               });
             }
           }
-          //console.log('response', imageInfo);
           ref_RBSheetCamera.current.close();
           setLoading(false);
-  
-          // navigation.navigate('UploadUpdatePic', {Video: response.assets[0]});
         }
       );
     };
@@ -803,33 +281,26 @@ import {
     const choosePhotoFromLibrary = (value) => {
       setSelectedItem(value);
       launchImageLibrary({ mediaType: "photo" }, (response) => {
-        console.log("image here", response);
         if (!response.didCancel && response.assets.length > 0) {
-          /*  console.log('Response', response.assets[0]);
-          setImageUri(response.assets[0].uri);
-          setImageInfo(response.assets[0]); */
+
           setLoading(true);
           setImageInfo(response.assets[0]);
           ref_RBSheetCamera.current.close();
           setLoading(false);
-  
           navigation.navigate("UploadUpdateSports", { Video: response.assets[0] });
         }
-  
-        //console.log('response', imageInfo);
         ref_RBSheetCamera.current.close();
         setLoading(false);
-  
-        //navigation.navigate('UploadUpdatePic', {Video: response.assets[0]});
+
       });
     };
   
 
     const renderVideoItem = ({ item }) => (
-      // <TouchableOpacity onPress={handle_details}>
+
       <TouchableOpacity onPress={() => navigation.navigate('SportsDetails', {SportsData: item, identifier: false})}>
       <View style={styles.itemContainer}>
-        {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
+  
         <Image source={{ uri: item.image }} style={styles.image} />
         <Text  ellipsizeMode="tail"
                   numberOfLines={1} style={styles.text}>{item.name}</Text>
@@ -843,7 +314,7 @@ import {
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionHeader}>{item.title}</Text>
         {item.data.length === 0 ? (
-          <Text style={styles.noDataText}>No Data available</Text>
+          <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
         ) : (
         <FlatList
           data={item.data}
@@ -876,19 +347,9 @@ import {
             onPressListings={() => navigation.openDrawer()}
             // showListings={true}
             showHome={true}
-            text={"Sports"}
+            text={t('Sports')}
           />
         </View>
-  
-        {/* <Headers
-            onPress={() => navigation.goBack()}
-            showSearch={true}
-            onPressSearch={() => navigation.navigate('SearchScreenPicTours')}
-            showText={true}
-            onPressListings={() => navigation.openDrawer()}
-            showListings={true}
-            text={'Pic Tour'}
-          /> */}
   
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -912,7 +373,8 @@ import {
             ) : adsData.length === 0 ? (
               <View style={styles.TopBannerView}>
                 <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No Top Banner
+                  
+                  {t('NoTopBanner')}
                 </Text>
               </View>
             ) : (
@@ -944,47 +406,6 @@ import {
               />
             )}
           </View>
-          {/* <View
-            style={{
-              alignItems: "center",
-              height: hp(16),
-              marginLeft: 8,
-              marginVertical: hp(2),
-            }}
-          >
-            {isLoading ? (
-              <ActivityIndicator size="large" color="#FACA4E" />
-            ) : adsData.length === 0 ? (
-             <View style={styles.TopBannerView}>
-              <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                          No Top Banner
-                        </Text>
-              </View>
-            ) : (
-              <Swiper autoplay={true} loop={true}>
-                {adsData.map((banner) => (
-                  <View
-                    key={banner.id}
-                    style={{
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Image
-                      source={{ uri: banner?.image }}
-                      style={{
-                        height: hp(15),
-                        width: "100%",
-                        borderWidth: 1,
-                        resizeMode: "contain",
-                        borderRadius: 10,
-                      }}
-                    />
-                  </View>
-                ))}
-              </Swiper>
-            )}
-          </View>  */}
-  
   
           <View style={[styles.latestSearchList, { marginLeft: wp(3) }]}>
           <View>
@@ -1050,31 +471,7 @@ import {
                 />
                 </TouchableOpacity>
               )}
-              {/* <View
-                style={{
-                  position: "absolute",
-                  top: hp(14),
-                  left: 7,
-                  //height: hp(3),
-                  //width: wp(21),
-                  //borderRadius: wp(3),
-                  //backgroundColor: '#FACA4E',
-                  justifyContent: "center",
-                  alignItems: "center",
-                  zIndex: 2, // Ensure it's on top
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: hp(1.6),
-                    fontFamily: "Inter",
-                    color: "black",
-                    fontWeight: "700",
-                  }}
-                >
-                  {dataTopVideos?.pic_category_name}
-                </Text>
-              </View> */}
+            
             </View>
   
                 <View style={{ justifyContent: "flex-start", width: "50%", paddingTop:2 , marginLeft:'2%'}}>
@@ -1090,7 +487,7 @@ import {
                 }}
               >
                 {dataTopVideos === 0
-                  ? "No Top Sports Shown"
+                  ? t('NoTopSportsShown')
                   : dataTopVideos?.description}
               </Text>
             </View>
@@ -1109,7 +506,7 @@ import {
           alignItems: "center",
         }}
       >
-         <Text style={{ fontFamily: "Inter-Regular",}}>No data for this category</Text>
+         <Text style={{ fontFamily: "Inter-Regular",}}>{t('NoTopSportsShown')}</Text>
       </View>
        
       ) : (
@@ -1121,220 +518,6 @@ import {
       )}
     </View>
 
-{/* /////////////////////////////////////////////////////////////// */}
-
-          {/* <View style={{ marginTop: hp(1.5), height: hp(23) }}>
-            <Text
-              style={{
-                fontSize: hp(2.3),
-                marginLeft: wp(2.5),
-                fontFamily: "Inter",
-                color: "#4A4A4A",
-                fontWeight: "bold",
-              }}
-            >
-              Trending
-            </Text>
-  
-            <View style={{ marginTop: hp(1), height: "100%" }}>
-              {loading === true ? (
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <ActivityIndicator size="large" color="#FACA4E" />
-                </View>
-              ) : !data || data.length === 0 ? (
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                    No data available
-                  </Text>
-                </View>
-              ) : (
-                <FlatList
-                  style={{ flex: 1 }}
-                  showsHorizontalScrollIndicator={false}
-                  data={data}
-                  horizontal
-                  //keyExtractor={item => item.id.toString()}
-                  renderItem={({ item }) => renderAvailableAppsVideo(item)}
-                />
-              )}
-            </View>
-          </View>
-  
-          <View style={{ marginTop: hp(5), height: hp(23) }}>
-            <Text
-              style={{
-                fontSize: hp(2.3),
-                marginLeft: wp(3),
-                fontFamily: "Inter",
-                color: "#4A4A4A",
-                fontWeight: "bold",
-              }}
-            >
-              Latest Sports
-            </Text>
-  
-            <View style={{ marginTop: hp(1), height: "100%" }}>
-              {loading === true ? (
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <ActivityIndicator size="large" color="#FACA4E" />
-                </View>
-              ) : !dataLatestVideos || dataLatestVideos.length === 0 ? (
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                    No data available
-                  </Text>
-                </View>
-              ) : (
-                <FlatList
-                  style={{ flex: 1 }}
-                  showsHorizontalScrollIndicator={false}
-                  data={dataLatestVideos}
-                  horizontal
-                  // keyExtractor={item => item.id.toString()}
-                  renderItem={({ item }) => renderAvailableAppsVideo(item)}
-                />
-              )}
-            </View>
-          </View>
-  
-          <View style={{ marginTop: hp(5), height: hp(23) }}>
-            <Text
-              style={{
-                fontSize: hp(2.3),
-                marginLeft: wp(3),
-                fontFamily: "Inter",
-                color: "#4A4A4A",
-                fontWeight: "bold",
-              }}
-            >
-              Most Viewed
-            </Text>
-  
-            <View style={{ marginTop: hp(1), height: "100%" }}>
-              {loading === true ? (
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <ActivityIndicator size="large" color="#FACA4E" />
-                </View>
-              ) : !dataMostViewedVideos || dataMostViewedVideos.length === 0 ? (
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                    No data available
-                  </Text>
-                </View>
-              ) : (
-                <FlatList
-                  style={{ flex: 1 }}
-                  showsHorizontalScrollIndicator={false}
-                  data={dataMostViewedVideos}
-                  horizontal
-                  //keyExtractor={item => item.id.toString()}
-                  renderItem={({ item }) => renderAvailableAppsVideo(item)}
-                />
-              )}
-            </View>
-          </View>
-  
-          <View style={{ marginTop: hp(5), height: hp(23) }}>
-            <Text
-              style={{
-                fontSize: hp(2.3),
-                marginLeft: wp(3),
-                fontFamily: "Inter",
-                color: "#4A4A4A",
-                fontWeight: "bold",
-              }}
-            >
-              Most Commented
-            </Text>
-  
-            <View style={{ marginTop: hp(1), height: "100%" }}>
-              {loading === true ? (
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <ActivityIndicator size="large" color="#FACA4E" />
-                </View>
-              ) : !dataMostCommentedVideos ||
-                dataMostCommentedVideos.length === 0 ? (
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                    No data available
-                  </Text>
-                </View>
-              ) : (
-                <FlatList
-                  style={{ flex: 1 }}
-                  showsHorizontalScrollIndicator={false}
-                  data={dataMostCommentedVideos}
-                  horizontal
-                  //keyExtractor={item => item.id.toString()}
-                  renderItem={({ item }) => renderAvailableAppsVideo(item)}
-                />
-              )}
-            </View>
-          </View> */}
 
           {/* // start of banner slider */}
           <View
@@ -1359,7 +542,8 @@ import {
             ) : adsinActiveData.length === 0 ? (
               <View style={styles.TopBannerView}>
                 <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No Banner
+                  
+                  {t('NoBanner')}
                 </Text>
               </View>
             ) : (
@@ -1421,7 +605,7 @@ import {
               alignItems: "center",
             }}
           >
-            <Text style={styles.maintext}>Select an option</Text>
+            <Text style={styles.maintext}>{t('Selectanoption')}</Text>
             <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
               <Ionicons
                 name="close"
@@ -1454,7 +638,7 @@ import {
                 size={25}
               />
   
-              <Text style={{ color: "#333333" }}>From camera</Text>
+              <Text style={{ color: "#333333" }}>{t('Fromcamera')}</Text>
             </TouchableOpacity>
   
             <TouchableOpacity
@@ -1471,7 +655,7 @@ import {
                 size={25}
               />
   
-              <Text style={{ color: "#333333" }}>From gallery</Text>
+              <Text style={{ color: "#333333" }}>{t('Fromgallery')}</Text>
             </TouchableOpacity>
           </View>
         </RBSheet>
@@ -1506,7 +690,6 @@ import {
       marginTop: hp(2.1),
       height: hp(7),
       marginLeft: wp(5),
-      //borderWidth: 3,
     },
     searchesDetails: {
       flexDirection: "row",
@@ -1514,10 +697,8 @@ import {
       alignItems: "center",
       padding: wp(3.3),
       justifyContent: "center",
-      //width: wp(23),
       backgroundColor: "#F2F2F2",
       borderRadius: wp(5),
-      //height: hp(5),
     },
     textSearchDetails: {
       fontFamily: "Inter",
@@ -1559,23 +740,9 @@ import {
       justifyContent: "center",
       alignItems: "center",
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
     itemContainer: {
       marginRight: wp(2),
       width: wp(35),
-      // alignItems: "center",
     },
     image: {
       width: wp(35),
@@ -1587,11 +754,9 @@ import {
       fontWeight: "700",
       color: "#4A4A4A",
       fontSize: hp(2),
-      // textAlign: 'left',
       fontFamily: "Inter",
       marginTop: 5,
       fontSize: hp(1.9),
-      // right: "20%",
     },
     text1: {
       color: "#4A4A4A",

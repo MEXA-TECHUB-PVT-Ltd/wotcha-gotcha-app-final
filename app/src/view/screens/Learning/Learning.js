@@ -10,7 +10,8 @@ import {
   Text,
   View,
   SectionList,
-  Dimensions
+  Dimensions,
+  Platform
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import {
@@ -18,8 +19,6 @@ import {
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import Fontiso from "react-native-vector-icons/Fontisto";
-import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import RBSheet from "react-native-raw-bottom-sheet";
 import Camera from "../../../assets/svg/Camera.svg";
@@ -35,11 +34,10 @@ import { base_url } from "../../../../../baseUrl";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import PuzzleActive from "../../../assets/svg/PuzzleActive";
 import Swiper from "react-native-swiper";
-
-export default function Learning({  route }) {
+import { useTranslation } from 'react-i18next';
+export default function Learning({ route }) {
   const navigation = useNavigation();
-  // const { identifier } = route.params;
-  // console.log("identifier from cinematices ", identifier)
+  const { t } = useTranslation();
   const [data, setData] = useState([]);
 
   const [authToken, setAuthToken] = useState("");
@@ -78,13 +76,10 @@ export default function Learning({  route }) {
 
   useEffect(() => {
     if (authToken && isFocused) {
-      if(selectedItemId == null)
-        // console.log('useeffect mein id hai', selectedItemId)
-        {
-          setSelectedItemId(10)
-        }
-        
-      // fetchAllData();
+      if (selectedItemId == null)
+      {
+        setSelectedItemId(10)
+      }
       fetchAllCinematicsCategory();
     }
   }, [authToken]);
@@ -99,7 +94,6 @@ export default function Learning({  route }) {
     setLoading(true);
     setNoData(false);
     try {
-      // await fetchAllCinematicsCategory();
       await fetchTopVideos();
       await fetchSubCategory(selectedItemId);
     } catch (error) {
@@ -110,12 +104,11 @@ export default function Learning({  route }) {
   };
 
   const fetchAllCinematicsCategory = async () => {
-    //console.log("Categry in id", selectedItemId)
     const token = authToken;
 
     try {
       const response = await fetch(
-       
+
         base_url + "learningHobbies/category/getAll?page=1&limit=10000",
         {
           method: "GET",
@@ -126,7 +119,6 @@ export default function Learning({  route }) {
       );
 
       const result = await response.json();
-      // console.log("AllCategories---", result.AllCategories);
       setData(result.AllCategories); // Update the state with the fetched data
     } catch (error) {
       console.error("Error Trending:", error);
@@ -134,34 +126,32 @@ export default function Learning({  route }) {
   };
 
   const fetchTopVideos = async () => {
-     // console.log("Categry in id", selectedItemId);
-     const token = authToken;
+    const token = authToken;
 
-     try {
-       const response = await fetch(
-         base_url + "learningHobbies/getTopVideo",
-         {
-           method: "GET",
-           headers: {
-             Authorization: `Bearer ${token}`,
-           },
-         }
-       );
- 
-       const result = await response.json();
-      //  console.log("getTopVideo------..", result.data);
-       setDataTopVideos(result.data);
-     } catch (error) {
-       console.error("Error Trending:", error);
-     }
+    try {
+      const response = await fetch(
+        base_url + "learningHobbies/getTopVideo",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
+      setDataTopVideos(result.data);
+    } catch (error) {
+      console.error("Error Trending:", error);
+    }
   };
 
   const fetchSubCategory = async (selectedItemId) => {
     const token = authToken;
-  
+
     try {
       const response = await fetch(
-  
+
         `${base_url}learningHobbies/getByCategory/${selectedItemId}?page=1&limit=10000`,
         {
           method: "GET",
@@ -170,20 +160,18 @@ export default function Learning({  route }) {
           },
         }
       );
-  
+
       const result = await response.json();
-  
+
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
           title: category.sub_category_name,
           data: category.video_result.videos,
         }));
-  
-             // Reverse the titles
-      const reversedSections = formattedSections.reverse();
-      console.log('results---', reversedSections);
-      setSections(reversedSections);
 
+        // Reverse the titles
+        const reversedSections = formattedSections.reverse();
+        setSections(reversedSections);
         // Check if there is no data
         const hasNoData = formattedSections.every(section => section.data.length === 0);
         setNoData(hasNoData);
@@ -200,119 +188,101 @@ export default function Learning({  route }) {
   const [adsinActiveData, setAdsInActiveData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    if (authToken){
+    if (authToken) {
       fetchBannerConfig();
+      fetchBannerInActive();
     }
-    }, [authToken]);
-  
-    const fetchBannerConfig = async () => {
-      const token = authToken;
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          base_url + "banner/getAllActiveBanners?topBanner=true",
-          // base_url + "banner/getAllBannersByUser/97",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        const result = await response.json();
-        // console.log("AllBanners---", result.AllBanners);
-        setAdsData(result.AllBanners);
-      } catch (error) {
-        console.error("Error AllBanners:", error);
-      }
-      setIsLoading(false); 
-    };
-    const fetchBannerInActive = async () => {
-      const token = authToken;
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          base_url + "banner/getAllActiveBanners?topBanner=false",
-          // base_url + "banner/getAllBannersByUser/97",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        const result = await response.json();
-        // setAdsInActiveData(result.AllBanners);
-        const updatedBanners = result.AllBanners.map(banner => {
-          if (banner.image.startsWith('/fileUpload')) {
-            banner.image = `https://watch-gotcha-be.mtechub.com${banner.image}`;
-          }
-          return banner;
-        });
-        // console.log("AllBanners AdsInActiveData---", updatedBanners);
-        setAdsInActiveData(updatedBanners);
-      } catch (error) {
-        console.error("Error AllBanners AdsInActiveData---", error);
-      }
-      setIsLoading(false);
-    };
-  
+  }, [authToken]);
+
+  const fetchBannerConfig = async () => {
+    const token = authToken;
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        base_url + "banner/getAllActiveBanners?topBanner=true",
+        // base_url + "banner/getAllBannersByUser/97",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
+      // console.log("AllBanners---", result.AllBanners);
+      setAdsData(result.AllBanners);
+    } catch (error) {
+      console.error("Error AllBanners:", error);
+    }
+    setIsLoading(false);
+  };
+  const fetchBannerInActive = async () => {
+    const token = authToken;
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        base_url + "banner/getAllActiveBanners?topBanner=false",
+        // base_url + "banner/getAllBannersByUser/97",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
+      // setAdsInActiveData(result.AllBanners);
+      const updatedBanners = result.AllBanners.map(banner => {
+        if (banner.image.startsWith('/fileUpload')) {
+          banner.image = `https://watch-gotcha-be.mtechub.com${banner.image}`;
+        }
+        return banner;
+      });
+      // console.log("AllBanners AdsInActiveData---", updatedBanners);
+      setAdsInActiveData(updatedBanners);
+    } catch (error) {
+      console.error("Error AllBanners AdsInActiveData---", error);
+    }
+    setIsLoading(false);
+  };
+
   const renderVideoItem = ({ item }) => (
     // <TouchableOpacity onPress={handle_details}>
-    <TouchableOpacity onPress={() => navigation.navigate('Learning_details', {videoData: item})}>
-    <View style={styles.itemContainer}>
-      {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
-      <Image source={{ uri: item.thumbnail }} style={styles.image} />
-      <Text  ellipsizeMode="tail"
-                numberOfLines={1} style={styles.text}>{item.name}</Text>
-      <Text  ellipsizeMode="tail"
-                numberOfLines={2} style={styles.text1}>{item.description}</Text>
-    </View>
-  </TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.navigate('Learning_details', { videoData: item })}>
+      <View style={styles.itemContainer}>
+        {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
+        <Image source={{ uri: item.thumbnail }} style={styles.image} />
+        <Text ellipsizeMode="tail"
+          numberOfLines={1} style={styles.text}>{item.name}</Text>
+        <Text ellipsizeMode="tail"
+          numberOfLines={2} style={styles.text1}>{item.description}</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   const renderSection = ({ item }) => (
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>No Data available</Text>
+        <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
       ) : (
-      <FlatList
-        data={item.data}
-        renderItem={renderVideoItem}
-        keyExtractor={(videoItem) => videoItem.video_id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-    )}
+        <FlatList
+          data={item.data}
+          renderItem={renderVideoItem}
+          keyExtractor={(videoItem) => videoItem.video_id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 
   const handle_add = () => {
     ref_RBSheetCamera.current.open();
   };
- 
 
-  // const handle_details = () => {
-  //   navigation.navigate("Cinematics_details");
-  // };
-  // const renderItem = ({ item }) => (
-  //   <TouchableOpacity onPress={handle_details}>
-  //     <View style={styles.itemContainer}>
-  //       <Image source={item.image} style={styles.image} />
-  //       <Text style={styles.text}>{item.title}</Text>
-  //       <Text style={styles.text1}>{item.time}</Text>
-  //     </View>
-  //   </TouchableOpacity>
-  // );
-
-  const goToScreen = () => {
-    ref_RBSheetCamera.current.close();
-
-    navigation.navigate("Sell");
-  };
 
   const takeVideoFromCamera = async () => {
     ref_RBSheetCamera.current.close();
@@ -322,13 +292,11 @@ export default function Learning({  route }) {
         mediaType: "video",
       },
       (response) => {
-        console.log("video here from camera", response);
+
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setImageUri(response.assets[0].uri);
             setImageInfo(response.assets[0]);
-
-            console.log("response", response.assets[0].uri);
             navigation.navigate("Learning_upload", {
               imageUri: response.assets[0],
             });
@@ -340,23 +308,22 @@ export default function Learning({  route }) {
 
   const chooseVideoFromLibrary = () => {
     ref_RBSheetCamera.current.close();
+    setTimeout(() => {
+      launchImageLibrary({ mediaType: "video" }, (response) => {
+        if (!response.didCancel && response.assets.length > 0) {
+          setImageUri(response.assets[0].uri);
+          setImageInfo(response.assets[0]);
+          navigation.navigate("Learning_upload", {
+            imageUri: response.assets[0],
+          });
+        }
+      });
+    }, 300);
 
-    launchImageLibrary({ mediaType: "video" }, (response) => {
-      console.log("video here from gallery", response);
-      if (!response.didCancel && response.assets.length > 0) {
-        setImageUri(response.assets[0].uri);
-        setImageInfo(response.assets[0]);
-        navigation.navigate("Learning_upload", {
-          imageUri: response.assets[0],
-        });
-      }
-    });
   };
 
   const renderSearches = (item) => {
-    // console.log("Regions", item);
     const isSelected = selectedItemId === item.id;
-// console.log('is selected hai---', isSelected)
     return (
       <TouchableOpacity
         style={[
@@ -367,7 +334,6 @@ export default function Learning({  route }) {
         ]}
         onPress={() => {
           setSelectedItemId(item.id);
-          console.log("Selected item:", item.id);
         }}
       >
         <Text
@@ -381,12 +347,7 @@ export default function Learning({  route }) {
       </TouchableOpacity>
     );
   };
-  const goto_camera = () => {
-    navigation.navigate("CameraView");
-  };
 
-
-  // console.log('data for top aa gya ----', dataTopVideos)
   return (
     <View style={styles.container}>
       <StatusBar
@@ -395,7 +356,7 @@ export default function Learning({  route }) {
         barStyle="dark-content" // You can set the StatusBar text color to dark or light
       />
 
-      <View style={{ marginTop: hp(5) }}>
+      <View style={{ marginTop: Platform.OS == "ios" ? 0 : hp(5) }}>
         <Headers
           OnpresshowHome={() => {
             navigation.navigate("MoreScreen");
@@ -403,7 +364,7 @@ export default function Learning({  route }) {
           showHome={true}
           showText={true}
           onPressSearch={() => navigation.navigate("Leaning_Search_Video")}
-          text={"Learning & Hobbies"}
+          text={t('Drawer.LearningHobbies')}
           showSearch={true}
         />
       </View>
@@ -413,94 +374,58 @@ export default function Learning({  route }) {
         style={{
           flex: 1,
           marginTop: hp(1),
-          marginHorizontal: wp(7),
+          marginHorizontal: wp(6),
         }}
       >
-
-  
-           {/* // start of banner slider */}
-           <View
-      style={{
-        alignItems: 'center',
-        height: hp(16),
-        // marginLeft: 8,
-        marginVertical: hp(2),
-      }}
-    >
-      {isLoading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : adsData.length === 0 ? (
-        <View style={styles.TopBannerView}>
-          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>No Top Banner</Text>
-        </View>
-      ) : (
-        <Carousel
-          data={adsData}
-          renderItem={({ item }) => (
-            <View
-              key={item.id}
-              style={{
-                justifyContent: 'center',
-              }}
-            >
-              <Image
-                source={{ uri: item?.image }}
-                style={{
-                  height: hp(15),
-                  width: '100%',
-                  borderWidth: 1,
-                  resizeMode: 'contain',
-                  borderRadius: 10,
-                }}
-              />
-            </View>
-          )}
-          sliderWidth={Dimensions.get('window').width}
-          itemWidth={Dimensions.get('window').width * 0.86}
-          loop={true}
-          autoplay={true}
-        />
-      )}
-    </View>
-  
-          {/* <View
+        <View
           style={{
-          alignItems: 'center',
-          height: hp(14),
-          marginLeft:8,
-          marginVertical:hp(2)
+            alignItems: 'center',
+            height: hp(16),
+            // marginLeft: 8,
+            marginVertical: hp(2),
           }}
         >
-
-          <Swiper autoplay={true} loop={true}>
-            {bannerAds.map((banner) => (
-              <View
-                key={banner.id}
-                style={{
-
-                  justifyContent: "center",
-   
-                }}
-              >
-                <Image
-                  source={banner.image}
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : adsData.length === 0 ? (
+            <View style={styles.TopBannerView}>
+              <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>{t('NoTopBanner')}</Text>
+            </View>
+          ) : (
+            <Carousel
+              data={adsData}
+              renderItem={({ item }) => (
+                <View
+                  key={item.id}
                   style={{
-                    height: hp(13),
-                    width: wp(83),
-                    borderWidth: 1,
-                    // resizeMode:'contain',
-                    borderRadius: 10,
+                    justifyContent: 'center',
                   }}
-                />
-              </View>
-            ))}
-          </Swiper>
-        </View> */}
+                >
+                  <Image
+                    source={{ uri: item?.image }}
+                    style={{
+                      height: hp(15),
+                      width: '100%',
+                      borderWidth: 1,
+                      resizeMode: Platform.OS == "ios" ? "cover" : 'contain',
+                      borderRadius: 10,
+                    }}
+                  />
+                </View>
+              )}
+              sliderWidth={Dimensions.get('window').width}
+              itemWidth={Dimensions.get('window').width * 0.86}
+              loop={true}
+              autoplay={true}
+            />
+          )}
+        </View>
+
         {/* ////slider end */}
 
         <View style={styles.latestSearchList}>
-        <View>
-              <PuzzleActive width={23} height={23} />
+          <View>
+            <PuzzleActive width={23} height={23} />
           </View>
           <FlatList
             style={{ flex: 1 }}
@@ -509,14 +434,13 @@ export default function Learning({  route }) {
             horizontal
             //data={regions}
             data={data}
-            //keyExtractor={item => item.id.toString()}
             renderItem={({ item }) => renderSearches(item)}
           />
         </View>
         <View
-          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(16), marginBottom:30 }}
+          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(16), marginBottom: 30 }}
         >
-          <TouchableOpacity onPress={() => navigation.navigate('Learning_details', {videoData: dataTopVideos})} style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
+          <TouchableOpacity onPress={() => navigation.navigate('Learning_details', { videoData: dataTopVideos })} style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
             {dataTopVideos === 0 ? (
               <Image
                 style={{
@@ -573,10 +497,10 @@ export default function Learning({  route }) {
             </View>
           </TouchableOpacity>
 
-          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop:2 }}>
-            <Text 
-             ellipsizeMode="tail"
-             numberOfLines={7}
+          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop: 2 }}>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={7}
               style={{
                 fontSize: hp(1.5),
                 marginLeft: wp(1),
@@ -587,71 +511,73 @@ export default function Learning({  route }) {
               }}
             >
               {dataTopVideos === undefined || dataTopVideos === 0
-                ? "No Top Learning Shown"
+                ? t('NoTopLearningShown')
                 : dataTopVideos?.description}
             </Text>
           </View>
         </View>
 
-{/* //////////////////////////////////////////////////////////// */}
-<View style={{  flex: 1,
-    paddingTop: 20}}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : (
-        <FlatList
-          data={sections}
-          renderItem={renderSection}
-          keyExtractor={(item) => item.title}
-        />
-      )}
-    </View>
-
-{/* /////////////////////////////////////////////////////////////// */}
-              {/* // start of banner slider */}
-              <View
-      style={{
-        alignItems: 'center',
-        height: hp(16),
-        // marginLeft: 8,
-        marginVertical: hp(2),
-      }}
-    >
-      {isLoading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : adsinActiveData.length === 0 ? (
-        <View style={styles.TopBannerView}>
-          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>No Banner</Text>
-        </View>
-      ) : (
-        <Carousel
-          data={adsinActiveData}
-          renderItem={({ item }) => (
-            <View
-              key={item.id}
-              style={{
-                justifyContent: 'center',
-              }}
-            >
-              <Image
-                source={{ uri: item?.image }}
-                style={{
-                  height: hp(15),
-                  width: '100%',
-                  borderWidth: 1,
-                  resizeMode: 'contain',
-                  borderRadius: 10,
-                }}
-              />
-            </View>
+        {/* //////////////////////////////////////////////////////////// */}
+        <View style={{
+          flex: 1,
+          paddingTop: 20
+        }}>
+          {loading ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : (
+            <FlatList
+              data={sections}
+              renderItem={renderSection}
+              keyExtractor={(item) => item.title}
+            />
           )}
-          sliderWidth={Dimensions.get('window').width}
-          itemWidth={Dimensions.get('window').width * 0.9}
-          loop={true}
-          autoplay={true}
-        />
-      )}
-    </View>
+        </View>
+
+        {/* /////////////////////////////////////////////////////////////// */}
+        {/* // start of banner slider */}
+        <View
+          style={{
+            alignItems: 'center',
+            height: hp(16),
+            // marginLeft: 8,
+            marginVertical: hp(2),
+          }}
+        >
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : adsinActiveData.length === 0 ? (
+            <View style={styles.TopBannerView}>
+              <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>{t('NoBanner')}</Text>
+            </View>
+          ) : (
+            <Carousel
+              data={adsinActiveData}
+              renderItem={({ item }) => (
+                <View
+                  key={item.id}
+                  style={{
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Image
+                    source={{ uri: item?.image }}
+                    style={{
+                      height: hp(15),
+                      width: '100%',
+                      borderWidth: 1,
+                      resizeMode: 'contain',
+                      borderRadius: 10,
+                    }}
+                  />
+                </View>
+              )}
+              sliderWidth={Dimensions.get('window').width}
+              itemWidth={Dimensions.get('window').width * 0.9}
+              loop={true}
+              autoplay={true}
+            />
+          )}
+        </View>
         {/* ////slider end */}
       </ScrollView>
 
@@ -678,7 +604,7 @@ export default function Learning({  route }) {
           container: {
             borderTopLeftRadius: wp(10),
             borderTopRightRadius: wp(10),
-            height: hp(39),
+            // height: hp(39),
           },
         }}
       >
@@ -697,7 +623,8 @@ export default function Learning({  route }) {
               fontSize: hp(2.3),
             }}
           >
-            Select an option
+            {t('Selectanoption')}
+            {/* Select an option */}
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
@@ -709,119 +636,7 @@ export default function Learning({  route }) {
           </TouchableOpacity>
         </View>
 
-        <View
-          style={{
-            //flexDirection: 'row',
-            justifyContent: "space-evenly",
-            //alignItems: 'center',
-            //borderWidth: 3,
-            marginTop: hp(3),
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{ flexDirection: "row", marginHorizontal: wp(7) }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              Phones And Electronics
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              height: hp(0.1),
-              marginHorizontal: wp(8),
-              marginTop: hp(3),
-              backgroundColor: "#00000012",
-            }}
-          ></View>
-
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{
-              flexDirection: "row",
-              marginTop: hp(1.8),
-              marginHorizontal: wp(7),
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              Vehicle Parts
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              height: hp(0.1),
-              marginHorizontal: wp(8),
-              marginTop: hp(3),
-              backgroundColor: "#00000012",
-            }}
-          ></View>
-
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{
-              flexDirection: "row",
-              marginTop: hp(1.8),
-              marginHorizontal: wp(7),
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              Clothing and Related item
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              height: hp(0.1),
-              marginTop: hp(1.8),
-              marginHorizontal: wp(8),
-              marginTop: hp(3),
-              backgroundColor: "#00000012",
-            }}
-          ></View>
-
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{
-              flexDirection: "row",
-              marginTop: hp(1.8),
-              marginHorizontal: wp(7),
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              All other items
-            </Text>
-          </TouchableOpacity>
-        </View>
+    
       </RBSheet>
 
       <RBSheet
@@ -840,7 +655,8 @@ export default function Learning({  route }) {
           container: {
             borderTopLeftRadius: wp(10),
             borderTopRightRadius: wp(10),
-            height: hp(25),
+            paddingVertical: 30
+            // height: hp(25),
           },
         }}
       >
@@ -860,7 +676,8 @@ export default function Learning({  route }) {
               fontSize: hp(2.1),
             }}
           >
-            Select an option
+             {t('Selectanoption')}
+            {/* Select an option */}
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
@@ -871,10 +688,9 @@ export default function Learning({  route }) {
             />
           </TouchableOpacity>
         </View>
-
+        <View style={{ height: 20 }} />
         <View
           style={{
-            top: "1%",
             flex: 1,
             marginHorizontal: wp(8),
             marginBottom: hp(1),
@@ -894,19 +710,19 @@ export default function Learning({  route }) {
               borderWidth: 1,
             }}
           >
-            <View style={{ marginLeft: wp(3) }}>
+            <View >
               <Camera width={21} height={21} />
             </View>
 
             <Text
               style={{
                 color: "grey",
-                marginLeft: wp(3),
                 // fontWeight: "600",
                 fontSize: hp(2.1),
               }}
             >
-              Take a Video
+               {t('TakeaVideo')}
+              {/* Take a Video */}
             </Text>
           </TouchableOpacity>
 
@@ -922,20 +738,19 @@ export default function Learning({  route }) {
               marginLeft: wp(8), // Add margin to separate the options
             }}
           >
-            <View style={{ marginLeft: wp(3) }}>
+            <View>
               <Gallery width={21} height={21} />
             </View>
 
             <Text
               style={{
                 color: "grey",
-                marginLeft: wp(3),
                 fontWeight: "600",
                 fontFamily: "BebasNeue-Regular",
                 fontSize: hp(2.1),
               }}
             >
-              Choose a Video
+              {t('ChooseaVideo')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -956,7 +771,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2F2F2",
     flexDirection: "row",
     alignItems: "center",
-    //marginLeft: wp(3.8),
     borderRadius: wp(5),
     borderWidth: 0.5,
     borderColor: "#00000017",
@@ -966,8 +780,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: hp(2.1),
     height: hp(7),
-    // marginLeft: wp(1),
-    //borderWidth: 3,
   },
   searchHeader: {
     flexDirection: "row",
@@ -976,7 +788,6 @@ const styles = StyleSheet.create({
     marginTop: hp(5),
     marginHorizontal: wp(8),
     height: hp(8),
-    //borderWidth: 3,
   },
   latestSearch: {
     fontFamily: "Inter",
@@ -1010,7 +821,6 @@ const styles = StyleSheet.create({
   itemContainer: {
     marginRight: wp(2),
     width: wp(35),
-    // alignItems: "center",
   },
   image: {
     width: wp(35),
@@ -1022,21 +832,14 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#4A4A4A",
     fontSize: hp(2),
-    // textAlign: 'left',
     fontFamily: "Inter",
     marginTop: 5,
     fontSize: hp(1.9),
-    // right: "20%",
   },
   text1: {
-    // fontWeight: 'bold',
     color: "#4A4A4A",
     fontSize: hp(1.5),
-    // textAlign: 'left',
     fontFamily: "Inter",
-    
-    // marginTop: 5,
-    // right: "20%",
   },
   flatListContent: {
     paddingHorizontal: wp(2),
@@ -1045,13 +848,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sectionHeader: {
- 
-              color: "#4A4A4A",
-              fontSize: hp(2.3),
-              textAlign: "left",
-              fontFamily: "Inter-SemiBold",
-              marginBottom:6
-              // top: "6%",
+    color: "#4A4A4A",
+    fontSize: hp(2.3),
+    textAlign: "left",
+    fontFamily: "Inter-SemiBold",
+    marginBottom: 6
   },
   videoItem: {
     marginRight: 15,

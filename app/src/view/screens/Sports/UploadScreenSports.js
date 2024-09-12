@@ -36,11 +36,11 @@ import CPaperInput from '../../../assets/Custom/CPaperInput';
 import { base_url } from '../../../../../baseUrl';
 import { CLOUD_NAME, CLOUDINARY_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
 import CustomLoaderButton from '../../../assets/Custom/CustomLoaderButton';
-
+import { useTranslation } from 'react-i18next';
 
 export default function UploadScreenSports({navigation, route}) {
   const [selectedItem, setSelectedItem] = useState('');
-
+  const { t } = useTranslation();
   const [profileName, setProfileName] = useState('');
 
   const [loading, setLoading] = useState(false);
@@ -79,12 +79,7 @@ export default function UploadScreenSports({navigation, route}) {
 
   const [profileNameError, setProfileNameError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
-  const [thumbnailError, setthumbnailImageUritwoError] = useState("");
-
-
   const receivedData = route.params?.Video;
-
-  // console.log('Recieved Data', receivedData);
 
   const navigateToScreen = () => {
     ref_RBSendOffer.current.close();
@@ -103,23 +98,23 @@ export default function UploadScreenSports({navigation, route}) {
   };
 
   const getUserID = async () => {
-    // console.log("Id's");
+ 
     try {
       const result = await AsyncStorage.getItem('userId ');
       if (result !== null) {
         setUserId(result);
-        // console.log('user id retrieved:', result);
+        
       } else {
-        console.log('result is null', result);
+         
       }
 
       const result1 = await AsyncStorage.getItem('authToken ');
       if (result1 !== null) {
         setAuthToken(result1);
-        // console.log('user token retrieved:', result1);
+       
         await fetchCategory(result1);
       } else {
-        console.log('result is null', result);
+         
       }
     } catch (error) {
       // Handle errors here
@@ -172,11 +167,11 @@ export default function UploadScreenSports({navigation, route}) {
 
  
   const fetchAllSubCategory = async (categoryId) => {
-    // console.log("Categry in id--", categoryId)
+     
     const token = authToken;
     try {
       const response = await fetch(
-        // base_url + "cinematics/sub_category/getAll?page=1&limit=1000",
+        
         base_url + `sports/sub_category/getAllByCategory?category_id=${categoryId}`,
         {
           method: "GET",
@@ -212,22 +207,17 @@ export default function UploadScreenSports({navigation, route}) {
         videoQuality: 'medium',
       },
       response => {
-        console.log('image here', response);
+       
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
-            //setImageUri(response.assets[0].uri);
-            // setImageUri(response.assets[0])
+         
             setImageInfo(response.assets[0]);
             setImageUri(response.assets[0].uri);
-            console.log('response', response.assets[0]);
+           
           } else if (response.uri) {
-            // Handle the case when no assets are present (e.g., for videos)
-            // setImageUri(response.uri);
-            console.log('response of image', response.assets[0]);
-
+         
             setImageInfo(response.assets[0]);
-
-            //console.log('response', response.uri);
+  
           }
         }
         ref_RBSheetCamera.current.close();
@@ -238,18 +228,14 @@ export default function UploadScreenSports({navigation, route}) {
   const choosePhotoFromLibrary = value => {
     setSelectedItem(value);
     launchImageLibrary({mediaType: 'photo'}, response => {
-      console.log('image here', response);
+       
       if (!response.didCancel && response.assets.length > 0) {
         setImageInfo(response.assets[0]);
         setImageUri(response.assets[0].uri);
-        console.log('response', response.assets[0]);
+        
       }
-      console.log('response', response.assets[0]);
-
+ 
       setImageInfo(response.assets[0]);
-
-      //console.log('response', imageUri);
-
       ref_RBSheetCamera.current.close();
     });
   };
@@ -257,7 +243,6 @@ export default function UploadScreenSports({navigation, route}) {
   const handleUpdatePassword = async () => {
     setsnackbarVisible(true);
 
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisible(false);
       navigation.replace('Sports');
@@ -271,13 +256,12 @@ export default function UploadScreenSports({navigation, route}) {
       categoryId !== '' &&
       description !== ''
     ) {
-      //uploadVideo()
-      //uploadVideos()
+
       const uri = imageInfo.uri;
       const type = imageInfo.type;
       const name = imageInfo.fileName;
       const source = {uri, type, name};
-      console.log('Video Source', source);
+
       handleUploadImage(source);
     } else {
       setModalVisible(true);
@@ -290,7 +274,6 @@ export default function UploadScreenSports({navigation, route}) {
     const type = imageInfo.type;
     const name = imageInfo.fileName;
     const sourceImage = {uri, type, name};
-    console.log('Source Image', sourceImage);
     const dataImage = new FormData();
     dataImage.append('file', sourceImage);
     dataImage.append('upload_preset', UPLOAD_PRESET); // Use your Cloudinary upload preset
@@ -307,13 +290,7 @@ export default function UploadScreenSports({navigation, route}) {
       .then(res => res.json())
       .then(data => {
         setImageUrl(data.url); // Store the Cloudinary video URL in your state
-        //uploadVideo(data.url)
-        //uploadXpiVideo(data.url);
-        console.log('Image Url', data);
-
         createPicTour(data.url);
-        //uploadXpiVideo(data.url,data)
-        // uploadVideo(data.url);
       })
       .catch(err => {
         setLoading(false);
@@ -322,74 +299,7 @@ export default function UploadScreenSports({navigation, route}) {
   };
 
 
-  // const createPicTour = async value => {
-  //   console.log('Image Value', value);
-
-  //   console.log('Profile Name', profileName);
-
-  //   console.log('Description', description);
-
-  //   console.log('category id', categoryId);
-
-  //   console.log('user id', userId);
-
-  //   console.log("for upload sub subcategory Categry----", subcategory)
-
-  //   const token = authToken;
-  //   const apiUrl = base_url + 'sports/create';
-
-  //   // Construct the request data as FormData
-  //   const formData = new FormData();
-
-  //   formData.append('name', profileName);
-  //   formData.append('description', description);
-  //   formData.append('category_id', categoryId);
-  //   formData.append('sub_category_id', subcategory);
-  //   formData.append('user_id', userId);
-  //   formData.append('image', value);
-
-  //   try {
-  //     const response = await fetch(apiUrl, {
-  //       method: 'POST',
-  //       headers: {
-  //         Authorization: `Bearer ${token}`, // Use the provided token
-  //         'Content-Type': 'multipart/form-data', // Set the content type to FormData
-  //       },
-  //       body: formData,
-  //     });
-
-  //     if (response.ok) {
-  //       const responseData = await response.json();
-  //       console.log('API Response:', responseData);
-  //       setLoading(false);
-  //       handleUpdatePassword();
-  //       // Handle the response data as needed
-  //     } else {
-  //       setLoading(false);
-  //       console.error(
-  //         'Failed to upload video:',
-  //         response.status,
-  //         response.statusText,
-  //       );
-  //       // Handle the error
-  //     }
-  //   } catch (error) {
-  //     console.error('API Request Error:', error);
-  //     setLoading(false);
-  //     // Handle the error
-  //   }
-  // };
-////////////////////////////////
 const createPicTour = async (value) => {
-
-  console.log('category id', categoryId);
-  console.log("subcategory id", subcategory)
-  console.log('user id', userId);
-  console.log('Profile Name', profileName);
-  console.log('Description', description);
-  console.log('Image Value', value);
-
-
   const token = authToken;
   const apiUrl = base_url + 'sports/create';
 
@@ -416,7 +326,6 @@ const createPicTour = async (value) => {
 
     if (response.ok) {
       const data = await response.json();
-      console.log('API Response of Videos:', data);
       setLoading(false);
       handleUpdatePassword();
 
@@ -429,17 +338,14 @@ const createPicTour = async (value) => {
         response.status,
         response.statusText,
       );
-      // Handle the error
     }
   } catch (error) {
     console.error('API Request Error:', error);
     setLoading(false);
 
-    // Handle the error
   }
 };
 
-  // ////////////////////////
   const dismissSnackbar = () => {
     setsnackbarVisible(false);
   };
@@ -475,7 +381,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
           <IonIcons name={'chevron-back'} color={'#282828'} size={25} />
         </TouchableOpacity>
 
-        <Text style={styles.headerText}>Upload Sports</Text>
+        <Text style={styles.headerText}>{t('UploadSports')}</Text>
       </View>
 
       <ScrollView
@@ -526,7 +432,8 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
                 color: '#232323',
                 fontWeight: '700',
               }}>
-              Change Sports
+                {t('ChangeSports')}
+              {/* Change Sports */}
             </Text>
           </TouchableOpacity>
           {imageInfo == null && (
@@ -548,7 +455,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
         <View style={{marginRight: wp(2)}}>
           <TextInput
             mode="outlined"
-            label="Title"
+            label={t('Title')}
             outlineStyle={{borderRadius: wp(3)}}
             onChangeText={text => setProfileName(text)}
             style={[styles.ti, {borderRadius: wp(10)}]}
@@ -579,31 +486,25 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
               borderRadius: wp(3),
               width: '100%',
             }}
-            // dropdownPosition="top"
-            // mode="modal"
             placeholderStyle={{
               color: '#121420',
-              //   fontWeight: '400',
               fontFamily: 'Inter',
               fontSize: hp(1.8),
             }}
             iconStyle={isFocus ? styles.iconStyle : styles.iconStyleInactive}
             itemTextStyle={{color: '#000000'}}
             selectedTextStyle={{fontSize: 16, color: '#000000'}}
-            // inputSearchStyle={styles.inputSearchStyle}
-            // iconStyle={styles.iconStyle}
             value={category}
             data={categoriesSelect}
             search={false}
             maxHeight={200}
             labelField="label"
             valueField="value"
-            placeholder={'Select Category'}
+            placeholder={t('Select Category')}
             searchPlaceholder="Search..."
             onFocus={handleCategoryFocus}
             onBlur={handleCategoryBlur}
-            // onFocus={() => setIsFocus(true)}
-            // onBlur={() => setIsFocus(false)}
+
             onChange={item => {
               //setCategory(item.label);
               setCategoryId(item.value);
@@ -636,19 +537,18 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
               borderRadius: wp(3),
               width: '100%',
             }}
-            // dropdownPosition="top"
-            // mode="modal"
+        
+   
             placeholderStyle={{
               color: '#121420',
-              //   fontWeight: '400',
+       
               fontFamily: 'Inter',
               fontSize: hp(1.8),
             }}
             iconStyle={isFocus ? styles.iconStyle : styles.iconStyleInactive}
             itemTextStyle={{color: '#000000'}}
             selectedTextStyle={{fontSize: 16, color: '#000000'}}
-            // inputSearchStyle={styles.inputSearchStyle}
-            // iconStyle={styles.iconStyle}
+
             value={subcategory}
             data={subCate}
             search={false}
@@ -657,12 +557,12 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
             valueField="value"
             onFocus={handleSubCategoryFocus}
             onBlur={handleSubCategoryBlur}
-            placeholder={'Select Sub Category'}
+            placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             // onFocus={() => setIsFocus(true)}
             // onBlur={() => setIsFocus(false)}
             onChange={(item) => {
-              console.log("kon sub category id hai----", item.value);
+   
               setSubCategory(item.value);
               setIsFocus(false);
             }}
@@ -688,7 +588,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
           }}>
           <CPaperInput
             multiline={true}
-            placeholder={'Description'}
+            placeholder={t('Description')}
             placeholderTextColor="#121420"
             value={description}
             onChangeText={text => setDescription(text)}
@@ -705,54 +605,37 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          {/* <CustomButton
-            title={'Upload'}
-            load={false}
-            // checkdisable={inn == '' && cm == '' ? true : false}
-            customClick={() => {
-              //handleUpdatePassword()
-              console.log('Upload Pics');
-              if (userId !== '') {
-                //uploadVideos();
-                upload(); 
-              } else {
-                ref_RBSendOffer.current.open();
-              }
-              //navigation.navigate('Profile_image');
-            }}
-          /> */}
-
 
 <CustomLoaderButton
-              title={"Upload"}
+              title={t('Upload')}
               load={loading}
               customClick={() => {
                 let hasError = false;
 
         
                 if (!profileName) {
-                  setProfileNameError("Title is required");
+                  setProfileNameError(t('Titleisrequired')); 
                   hasError = true;
                 } else {
                   setProfileNameError("");
                 }
 
                 if (!categoryId) {
-                  setCategoryError("Category is required");
+                  setCategoryError(t('Categoryisrequired')); 
                   hasError = true;
                 } else {
                   setCategoryError("");
                 }
 
                 if (!subcategory) {
-                  setSubcategoryError("Subcategory is required");
+                  setSubcategoryError(t('Subcategoryisrequired')); 
                   hasError = true;
                 } else {
                   setSubcategoryError("");
                 }
 
                 if (!description) {
-                  setDescriptionError("Description is required");
+                  setDescriptionError(t('Descriptionisrequired'));
                   hasError = true;
                 } else {
                   setDescriptionError("");
@@ -797,7 +680,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -828,7 +711,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -844,30 +727,17 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
       <CustomSnackbar
-        message={'success'}
-        messageDescription={'Upload sports successfully'}
+        message={t('Success')} 
+        messageDescription={t('Uploadsportssuccessfully')} 
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
-
-      {/* <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View> */}
 
       <RBSheet
         ref={ref_RBSendOffer}
@@ -1014,7 +884,6 @@ const styles = StyleSheet.create({
   ti: {
     marginHorizontal: '7%',
     marginTop: '5%',
-    //width: 300,
     backgroundColor: 'white',
     fontSize: wp(4),
     paddingLeft: '2%',

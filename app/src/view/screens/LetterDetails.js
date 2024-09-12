@@ -28,7 +28,7 @@ import Video from 'react-native-video';
 import Back from "../../assets/svg/back.svg";
 import { appImages } from "../../assets/utilities/index";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-
+import { useTranslation } from 'react-i18next';
 import Share from "react-native-share";
 
 import {
@@ -68,7 +68,7 @@ export default function LetterDetails({ navigation, route }) {
   const ref_RBSheetCamera = useRef(null);
 
   console.log("Recieved Letter Data", receivedData);
-
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Make the API request and update the 'data' state
@@ -353,7 +353,7 @@ export default function LetterDetails({ navigation, route }) {
           onPress={() => navigation.goBack()}
           showBackIcon={true}
           showText={true}
-          text={"Letter Details"}
+          text={t('LetterDetails')}
         />
       </View>
       <View>
@@ -460,7 +460,7 @@ export default function LetterDetails({ navigation, route }) {
               fontWeight: "bold",
             }}
           >
-            Subject:
+            {t('Subject')}
           </Text>
           <View style={{height:'100%', width:'80%'}}>
             <Text
@@ -660,7 +660,8 @@ export default function LetterDetails({ navigation, route }) {
               color: '#303030',
               fontSize: hp(2.3),
             }}>
-            Select an option
+              {t('Selectanoption')}
+            
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <IonIcons
@@ -692,7 +693,8 @@ export default function LetterDetails({ navigation, route }) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Update Letter
+                {t('UpdateLetter')}
+             
             </Text>
           </TouchableOpacity>
 
@@ -720,15 +722,16 @@ export default function LetterDetails({ navigation, route }) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Delete Letter
+                 {t('DeleteLetter')}
+             
             </Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
      
       <CustomSnackbar
-        message={'success'}
-        messageDescription={'Letter deleted successfully'}
+        message={t('Success')}
+        messageDescription={t('LetterDeletedSuccessfully')}
         onDismiss={dismissDeleteSnackbar} // Make sure this function is defined
         visible={snackbarDeleteVisible}
       />

@@ -14,7 +14,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useState, useRef, useMemo, useCallback, useEffect} from 'react';
-
+import { useTranslation } from 'react-i18next';
 import Back from '../../../assets/svg/back.svg';
 
 import {appImages} from '../../../assets/utilities/index';
@@ -93,7 +93,7 @@ export default function ViewVideo({navigation, route}) {
   const [authToken, setAuthToken] = useState('');
 
   const [commentsCount, setCommentsCount] = useState(null);
-
+  const { t } = useTranslation();
   const [showReply, setShowReply] = useState(false);
 
   const [loading, setLoading] = useState(false);
@@ -1240,7 +1240,8 @@ export default function ViewVideo({navigation, route}) {
                 fontFamily: 'Inter-Bold',
                 fontSize: hp(2.3),
               }}>
-              Comments
+                {t('Comments')}
+              
             </Text>
           </View>
 
@@ -1258,7 +1259,7 @@ export default function ViewVideo({navigation, route}) {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text>No Comments Yet</Text>
+                <Text>{t('NoCommentsYet')}</Text>
               </View>
             ) : (
               <BottomSheetFlatList
@@ -1292,7 +1293,7 @@ export default function ViewVideo({navigation, route}) {
                 value={commentText} // Bind the value to the state variable
                 onChangeText={text => setCommentText(text)} // Update state on text change
                 placeholderTextColor={'#848484'}
-                placeholder="Write Comment Heressssss"
+                placeholder={t('WriteCommentHere')}
                 style={{flex: 1, marginLeft: wp(1)}}
               />
 
@@ -1323,7 +1324,7 @@ export default function ViewVideo({navigation, route}) {
                 value={commentText} // Bind the value to the state variable
                 onChangeText={text => setCommentText(text)} // Update state on text change
                 placeholderTextColor={'#848484'}
-                placeholder="Add a reply"
+                placeholder={t('WriteCommentHere')}
                 style={{flex: 1, marginLeft: wp(1)}}
               />
 
@@ -1368,7 +1369,7 @@ export default function ViewVideo({navigation, route}) {
               value={commentText} // Bind the value to the state variable
               onChangeText={text => setCommentText(text)} // Update state on text change
               placeholderTextColor={'#848484'}
-              placeholder="Write Comment Here"
+              placeholder={t('WriteCommentHere')}
               style={{flex: 1, marginLeft: wp(1)}}
             />
 
@@ -1414,7 +1415,7 @@ export default function ViewVideo({navigation, route}) {
         )}
       </View>
 
-      <View
+      {/* <View
         style={{
           position: 'absolute',
           top: 0,
@@ -1425,7 +1426,7 @@ export default function ViewVideo({navigation, route}) {
           alignItems: 'center',
         }}>
         {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
+      </View> */}
 
       {/* //-----------------\\ */}
       <RBSheet
@@ -1460,7 +1461,8 @@ export default function ViewVideo({navigation, route}) {
               color: '#303030',
               fontSize: hp(2.3),
             }}>
-            Select an option
+              {t('Selectanoption')}
+            
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <IonIcons
@@ -1492,7 +1494,8 @@ export default function ViewVideo({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Update Video
+                {t('UpdateVideo')}
+              
             </Text>
           </TouchableOpacity>
 
@@ -1520,7 +1523,8 @@ export default function ViewVideo({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Delete Video
+                {t('DeleteVideo')}
+              
             </Text>
           </TouchableOpacity>
         </View>
@@ -1544,8 +1548,10 @@ const styles = StyleSheet.create({
     marginHorizontal: wp(8),
   },
   bottomView: {
-    flex: 1,
-    justifyContent: 'flex-end',
+    position:'absolute',
+    bottom:0
+    // flex: 1,
+    // justifyContent: 'flex-end',
     // You can add padding or content to this view as needed.
   },
   textProfileName: {

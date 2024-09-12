@@ -11,7 +11,8 @@ import {
   Text,
   View,
   Dimensions,
-  Linking 
+  Linking,
+  Platform
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import {
@@ -90,7 +91,7 @@ export default function Dashboard({ route }) {
   const [isLoading, setIsLoading] = useState(true);
   const [aLoader, setAloader] = useState(true);
   const scrollViewRef = useRef();
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const [isSelectedActive, setIsSelectedActive] = useState(true);
   const [categoryActive, setcategoryActive] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -136,15 +137,6 @@ export default function Dashboard({ route }) {
   const [selectedLetterItemId, setSelectedLetterItemId] = useState(1);
   const [selectedQAFIItemId, setSelectedQAFIItemId] = useState(null);
   const [selectedEBCItemId, setSelectedEBCItemId] = useState(null);
-  // useEffect(() => {
-  // const loaderTimeout = setTimeout(() => {
-  //     setAloader(false);
-  //   }, 35000);
-
-  //  return () => clearTimeout(loaderTimeout);
-  // }, []);
-
-  const [flatListKey, setFlatListKey] = useState(Date.now());
 
   useEffect(() => {
     const fetchInstalledAppData = async () => {
@@ -187,16 +179,9 @@ export default function Dashboard({ route }) {
     const loadFavouriteData = async () => {
       try {
         const storedData = await AsyncStorage.getItem("favouriteData");
-        console.log(
-          "IS FOCUSED OF FAVOURITE DATA IS CALLED",
-          typeof storedData
-        );
-        console.log(
-          "IS FOCUSED OF FAVOURITE DATA IS CALLED LENGTH",
-          storedData.length
-        );
+
         if (storedData.length === 2) {
-          console.log("FAVOURITE IS NULLl");
+        
           const initialFavouriteData = dataApps.slice(0, 4);
           await AsyncStorage.setItem(
             "favouriteData",
@@ -206,7 +191,7 @@ export default function Dashboard({ route }) {
         } else {
           const parsedData = JSON.parse(storedData);
           setFavouriteData(parsedData);
-          console.log("FAVOURITE IS NOT NULL");
+       
         }
       } catch (error) {
         console.error("Error loading favourite data from AsyncStorage:", error);
@@ -348,38 +333,7 @@ export default function Dashboard({ route }) {
       console.error("Error opening the app:", error);
     }
   };
-  const renderunUsedApps = (item) => {
-    return (
-      <TouchableOpacity
-        onLongPress={() => {
-          setIsLongPress(true);
-          setIsCancelModalVisible(true);
-          setFavouriteItem(item);
-        }}
-        onPress={() => openunusedApp(item)}
-        style={styles.items}
-      >
-        <Image
-          style={{ width: 43, height: 43 }}
-          source={{ uri: `data:image/png;base64,${item?.image}` }}
-        />
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <Text
-            style={{
-              color: "#000000",
-              textAlign: "center",
-              fontSize: hp(1.2),
-              fontWeight: "bold",
-            }}
-            ellipsizeMode="tail"
-            numberOfLines={1}
-          >
-            {item?.label}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+
   //------------------------------------------------------------\\
 
   const renderApps = (item) => {
@@ -401,9 +355,6 @@ export default function Dashboard({ route }) {
 
           await RNLauncherKitHelper.launchApplication(item.bundle);
 
-          //----------------------\\
-          // Your additional logic here
-          //----------------------\\
         } else {
           // If the app is not in the array, add it with count 1
           const randomIndex = Math.floor(Math.random() * 6); // Random index between 0 and 5
@@ -418,10 +369,6 @@ export default function Dashboard({ route }) {
           setTopData(updatedTopData);
 
           await RNLauncherKitHelper.launchApplication(item.bundle);
-
-          //----------------------\\
-          // Your additional logic here
-          //----------------------\\
         }
       } catch (error) {
         console.error("Error opening the app:", error);
@@ -463,73 +410,6 @@ export default function Dashboard({ route }) {
   };
 
 
-  
-  // const renderFavouritesApps = item => {
-  //   //console.log('item at first', item);
-  //   const openApp = async items => {
-  //     try {
-  //       // Launch the application
-  //       await RNLauncherKitHelper.launchApplication(item.bundle);
-
-  //       // Check if the app is already in the topData array
-  //       const appIndex = topData.findIndex(app => app.bundle === item.bundle);
-
-  //       if (appIndex !== -1) {
-  //         // If the app is already in the array, update the count
-  //         const updatedTopData = [...topData];
-  //         updatedTopData[appIndex] = {
-  //           ...updatedTopData[appIndex],
-  //           count: updatedTopData[appIndex].count + 1,
-  //         };
-
-  //         setTopData(updatedTopData);
-  //       } else {
-  //         // If the app is not in the array, add it with count 1
-  //         setTopData(prevData => [
-  //           ...prevData,
-  //           {
-  //             label: item.label,
-  //             bundle: item.bundle,
-  //             image: item.image,
-  //             count: 1,
-  //           },
-  //         ]);
-  //       }
-
-  //       await RNLauncherKitHelper.launchApplication(items); // Assuming 'item.label' is the package name
-  //     } catch (error) {
-  //       console.error('Error opening the app:', error);
-  //       await RNLauncherKitHelper.launchApplication(items); // Assuming 'item.label' is the package name
-  //     }
-  //   };
-
-  //   return (
-  //     <TouchableOpacity
-  //       onLongPress={() => {
-  //         setIsLongPressRemove(true);
-  //         setIsCancelRemoveModalVisible(true);
-  //         setRemoveFavouriteItem(item);
-  //       }}
-  //       //onPress={() => openApp(item?.bundle)}
-  //       style={styles.items}>
-  //       <Image
-  //         style={{width: 43, height: 43}}
-  //         source={{uri: `data:image/png;base64,${item?.image}`}}
-  //       />
-  //       <Text
-  //         style={{
-  //           color: '#000000',
-  //           textAlign: 'center',
-  //           fontSize: hp(1.2),
-  //           fontWeight: 'bold',
-  //         }}
-  //         ellipsizeMode="tail"
-  //         numberOfLines={1}>
-  //         {item?.label}
-  //       </Text>
-  //     </TouchableOpacity>
-  //   );
-  // };
   const renderAvailableApps = (item) => {
     // Render the item only if count is equal to 2
     if (item.count >= 2) {
@@ -566,8 +446,6 @@ export default function Dashboard({ route }) {
     setIsCancelRemoveModalVisible(false);
   };
 
-  //---------------------------------------------------\\
-
   //--------------------Video---------------------------\\
 
   const [loadingOne, setLoadingOne] = useState(false);
@@ -575,8 +453,6 @@ export default function Dashboard({ route }) {
   const [imageInfo, setImageInfo] = useState(null);
 
   const [selectedItem, setSelectedItem] = useState("");
-
-  // const [data, setVideoData] = useState([]);
 
   const ref_RBSheetCamera = useRef(null);
 
@@ -588,7 +464,6 @@ export default function Dashboard({ route }) {
         videoQuality: "medium",
       },
       (response) => {
-        //   console.log('image here', response);
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setLoadingOne(true);
@@ -600,7 +475,6 @@ export default function Dashboard({ route }) {
               Video: response.assets[0],
             });
           } else if (response.uri) {
-            console.log("response", imageInfo);
             ref_RBSheetCamera.current.close();
             setLoading(false);
 
@@ -609,7 +483,6 @@ export default function Dashboard({ route }) {
             });
           }
         }
-        console.log("response", imageInfo);
         ref_RBSheetCamera.current.close();
         setLoading(false);
 
@@ -623,9 +496,6 @@ export default function Dashboard({ route }) {
     launchImageLibrary({ mediaType: "video" }, (response) => {
       // console.log('image here', response);
       if (!response.didCancel && response.assets.length > 0) {
-        /*  console.log('Response', response.assets[0]);
-        setImageUri(response.assets[0].uri);
-        setImageInfo(response.assets[0]); */
         setLoading(true);
         setImageInfo(response.assets[0]);
         ref_RBSheetCamera.current.close();
@@ -633,8 +503,6 @@ export default function Dashboard({ route }) {
 
         navigation.navigate("UploadUpdateVideo", { Video: response.assets[0] });
       }
-
-      console.log("response", imageInfo);
       ref_RBSheetCamera.current.close();
       setLoading(false);
 
@@ -670,23 +538,16 @@ export default function Dashboard({ route }) {
         (item) => item.bundle === removeFavouriteItem.bundle
       );
 
-      console.log("Favourite Item", isItemInFavourites);
-
       if (isItemInFavourites) {
         // Item already exists, remove it from favouriteData
         const updatedFavouriteData = favouriteData.filter(
           (item) => item.bundle !== removeFavouriteItem.bundle
         );
         setFavouriteData(updatedFavouriteData);
-
-        //   console.log('Item removed from favourites');
-
         setModalDeleteFavouriteApps(false);
       } else {
-        // Item doesn't exist, add it to favouriteData
-        setFavouriteData((prevData) => [...prevData, favouriteItem]);
-        //   console.log('Add to Favorites pressed for:');
 
+        setFavouriteData((prevData) => [...prevData, favouriteItem]);
         setModalDeleteFavouriteApps(false);
       }
     } else {
@@ -694,21 +555,6 @@ export default function Dashboard({ route }) {
     }
   };
 
-  // ////
-  // const targetRef = useRef(null);
-  // const [dataMarket, setDataMarket] = useState([]);
-  // Function to check if an element is in the viewport
-  //   const isElementInViewport = (el) => {
-  //     if (!el) return false;
-
-  //     const rect = el.getBoundingClientRect();
-  //     return (
-  //       rect.top >= 0 &&
-  //       rect.left >= 0 &&
-  //       rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-  //       rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-  //     );
-  //   };
   const fetchDataForVisibleComponent = async () => {
     await fetchDataIfVisible(fetchCategoryMarket);
     await fetchDataIfVisible(fetchAllMarket);
@@ -751,40 +597,10 @@ export default function Dashboard({ route }) {
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(new Array(4).fill(false));
-  // const [loading, setLoading] = useState([
-  //   true,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  //   false,
-  // ]);
+ 
   const [error, setError] = useState(null);
   const [authToken, setAuthToken] = useState(null);
-  const [selectedItemVideoId, setSelectedItemVideoId] = useState(17); // Set selectedItemVideoId to 17 initially
-  const [selectedItemDiscId, setSelectedItemDiscId] = useState(1);
-  const [selectedItemPicsId, setSelectedItemPicsId] = useState(34);
-  // const [selectedItemIdMarket, setSelectedItemIdMarket] = useState('Africa');
+
   const [categoriesSelectMarket, setCategorySelectMarket] = useState([]);
   const RegionArea = ["Africa", "Europe", "Americas", "Asia", "Middle East"];
   const MassApp = [
@@ -802,101 +618,95 @@ export default function Dashboard({ route }) {
   const containerHeight = Math.min(screenHeight * 0.8, itemHeight);
 
 
-// xpi video start
-// Fetch all data when authToken is set and screen is focused
-const [Xpisearches, setXpiSearches] = useState([]);
-const [DataTopXpiData, setDataTopXpiData] = useState([]);
-const [selectedXpiItemId, setSelectedXpiItemId] = useState(null);
-const [isXpiLoading, setIsXpiLoading] = useState(true);
-const [noXpiData, setNoXpiData] = useState(false);
- const [Xpisections, setXpiSections] = useState([]);
+  // xpi video start
+  // Fetch all data when authToken is set and screen is focused
+  const [Xpisearches, setXpiSearches] = useState([]);
+  const [DataTopXpiData, setDataTopXpiData] = useState([]);
+  const [selectedXpiItemId, setSelectedXpiItemId] = useState(null);
+  const [isXpiLoading, setIsXpiLoading] = useState(true);
+  const [noXpiData, setNoXpiData] = useState(false);
+  const [Xpisections, setXpiSections] = useState([]);
 
-useEffect(() => {
-  if (authToken && isFocused) {
-    fetchAllCinematicsCategory();
-    // fetchTopSport();
-    fetchTopXpiVideos(selectedXpiItemId);
-    fetchSubCategoryXpiVideo(selectedXpiItemId);
-  }
-}, [authToken, selectedXpiItemId, isFocused]);
-
-// Fetch categories
-const fetchAllCinematicsCategory = async () => {
-  setIsXpiLoading(true)
-  try {
-    const response = await fetch(`${base_url}videoCategory/getAllVideoCategories`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
-    const result = await response.json();
-    // setSearchesData(result.AllCategories);
-
-    const categories = result.AllCategories.reverse();
-    // console.log('Search Results', categories);
-    setXpiSearches(categories); // Update the state with the fetched data
-    // if (result.AllCategories.length > 0) {
-    //   setSelectedItemId(result.AllCategories[0].id);
-    // }
-    if (selectedXpiItemId === null && categories.length > 0) {
-      setSelectedXpiItemId(categories[0].id);
+  useEffect(() => {
+    if (authToken && isFocused) {
+      fetchAllCinematicsCategory();
+      // fetchTopSport();
+      fetchTopXpiVideos(selectedXpiItemId);
+      fetchSubCategoryXpiVideo(selectedXpiItemId);
     }
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-  }
-  setIsXpiLoading(false)
-};
+  }, [authToken, selectedXpiItemId, isFocused]);
+
+  // Fetch categories
+  const fetchAllCinematicsCategory = async () => {
+    setIsXpiLoading(true)
+    try {
+      const response = await fetch(`${base_url}videoCategory/getAllVideoCategories`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      const result = await response.json();
+
+      const categories = result.AllCategories.reverse();
+      setXpiSearches(categories); // Update the state with the fetched data
+  
+      if (selectedXpiItemId === null && categories.length > 0) {
+        setSelectedXpiItemId(categories[0].id);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+    setIsXpiLoading(false)
+  };
 
 
-// Fetch top sports
-const fetchTopXpiVideos = async (selectedXpiItemId) => {
-  const token = authToken;
-  setIsXpiLoading(true)
-  try {
-    const response = await fetch(
-      base_url + `top/getAllTopVideosByCategory/${selectedXpiItemId}`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
+  // Fetch top sports
+  const fetchTopXpiVideos = async (selectedXpiItemId) => {
+    const token = authToken;
+    setIsXpiLoading(true)
+    try {
+      const response = await fetch(
+        base_url + `top/getAllTopVideosByCategory/${selectedXpiItemId}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      },
-    );
-    const result = await response.json();
-    // console.log('Resultings of Top Videossss????????', result.AllVideos[0]);
-    setDataTopXpiData(result.AllVideos[0]); // Update the state with the fetched data
-  } catch (error) {
-    console.error('Error top:', error);
-  }
-  setIsXpiLoading(false)
-};
-
-// Fetch sub-category sports
-const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
-  setIsXpiLoading(true)
-  try {
-    const response = await fetch(`${base_url}xpi/getAllVideosBycategory/${selectedXpiItemId}?page=1&limit=100000`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
-    const result = await response.json();
-    if (Array.isArray(result.data) && result.data.length > 0) {
-      const formattedSections = result.data.map(category => ({
-        title: category.sub_category_name,
-        data: category.video_result.Videos,
-      }));
-      setXpiSections(formattedSections);
-
-      setNoXpiData(formattedSections.every(section => section.data.length === 0));
-    } else {
-      setXpiSections([]);
-      setNoXpiData(true);
+      );
+      const result = await response.json();
+      setDataTopXpiData(result.AllVideos[0]); // Update the state with the fetched data
+    } catch (error) {
+      console.error('Error top:', error);
     }
-  } catch (error) {
-    console.error("Error fetching sub-category sports:", error);
-    setNoXpiData(true); // Assume no data on error
-  }
-  setIsXpiLoading(false)
-};
+    setIsXpiLoading(false)
+  };
+
+  // Fetch sub-category sports
+  const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
+    setIsXpiLoading(true)
+    try {
+      const response = await fetch(`${base_url}xpi/getAllVideosBycategory/${selectedXpiItemId}?page=1&limit=100000`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      const result = await response.json();
+      if (Array.isArray(result.data) && result.data.length > 0) {
+        const formattedSections = result.data.map(category => ({
+          title: category.sub_category_name,
+          data: category.video_result.Videos,
+        }));
+        setXpiSections(formattedSections);
+        setNoXpiData(formattedSections.every(section => section.data.length === 0));
+      } else {
+        setXpiSections([]);
+        setNoXpiData(true);
+      }
+    } catch (error) {
+      console.error("Error fetching sub-category sports:", error);
+      setNoXpiData(true); // Assume no data on error
+    }
+    setIsXpiLoading(false)
+  };
 
   const renderSearchesVideo = (item) => {
     const isSelected = selectedXpiItemId === item.id;
@@ -927,15 +737,14 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
   };
 
   const renderXpiVideoItem = ({ item }) => (
-    // <TouchableOpacity onPress={handle_details}>
-    <TouchableOpacity  onPress={() => navigation.navigate('ViewVideo', {videoData: item , identifier: false})}>
-    <View style={styles.itemContainer}>
-      {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
-      <View>
+    <TouchableOpacity onPress={() => navigation.navigate('ViewVideo', { videoData: item, identifier: false })}>
+      <View style={styles.itemContainer}>
+
+        <View>
           {item.thumbail === '' ||
-          item.thumbnail === null ||
-          // item.thumbnail.startsWith('/') ||
-          item.thumbnail === undefined ? (
+            item.thumbnail === null ||
+            // item.thumbnail.startsWith('/') ||
+            item.thumbnail === undefined ? (
             <Image
               style={{
                 position: 'absolute',
@@ -965,7 +774,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
                 borderRadius: wp(1),
                 resizeMode: 'cover',
               }}
-              source={{uri: item.thumbnail}}
+              source={{ uri: item.thumbnail }}
             />
           )}
         </View>
@@ -988,8 +797,8 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
             {item.description}
           </Text>
         </View>
-    </View>
-  </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
   );
 
   const renderXpiVideoSection = ({ item }) => (
@@ -998,26 +807,26 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
       {item.data.length === 0 ? (
         <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
       ) : (
-      <FlatList
-        data={item.data}
-        renderItem={renderXpiVideoItem}
-        keyExtractor={(videoItem) => videoItem.video_id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-    )}
+        <FlatList
+          data={item.data}
+          renderItem={renderXpiVideoItem}
+          keyExtractor={(videoItem) => videoItem.video_id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 
 
 
-// Pic Module start
+  // Pic Module start
   const [Picsearches, setPicSearches] = useState([]);
   const [DataTopPicData, setDataTopPicData] = useState([]);
   const [selectedPicItemId, setSelectedPicItemId] = useState(null);
   const [isPicLoading, setIsPicLoading] = useState(true);
   const [noPicData, setNoPicData] = useState(false);
-   const [Picsections, setPicSections] = useState([]);
+  const [Picsections, setPicSections] = useState([]);
   useEffect(() => {
     const getMainCategory = async () => {
       setIsPicLoading(true);
@@ -1026,14 +835,14 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
           method: "GET",
           headers: { Authorization: `Bearer ${authToken}` },
         });
-  
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-  
+
         const result = await response.json();
         setPicSearches(result.AllCategories);
-  
+
         // Set the first item as the default selected item if no item is currently selected
         if (selectedPicItemId === null && result.AllCategories.length > 0) {
           setSelectedPicItemId(result.AllCategories[0].id);
@@ -1044,7 +853,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
         setIsPicLoading(false);
       }
     };
-  
+
     getMainCategory();
   }, [authToken]);
 
@@ -1059,7 +868,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
 
 
 
-    const fetchTopForPics = async (selectedPicItemId) => {
+  const fetchTopForPics = async (selectedPicItemId) => {
     const token = authToken;
     try {
       const response = await fetch(
@@ -1088,39 +897,36 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
   };
 
 
- // Fetch sub-category sports
- const fetchSubCategorySport = async (selectedPicItemId) => {
-  setIsPicLoading(true)
-  try {
-    const response = await fetch(`${base_url}picTour/getAllPicTourByCategory/${selectedPicItemId}?page=1&limit=100000`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
-    const result = await response.json();
+  // Fetch sub-category sports
+  const fetchSubCategorySport = async (selectedPicItemId) => {
+    setIsPicLoading(true)
+    try {
+      const response = await fetch(`${base_url}picTour/getAllPicTourByCategory/${selectedPicItemId}?page=1&limit=100000`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      const result = await response.json();
 
-    if (Array.isArray(result.data) && result.data.length > 0) {
-      const formattedSections = result.data.map(category => ({
-        title: category.sub_category_name,
-        data: category.tour_result.Tours,
-      }));
-      
-      setPicSections(formattedSections);
+      if (Array.isArray(result.data) && result.data.length > 0) {
+        const formattedSections = result.data.map(category => ({
+          title: category.sub_category_name,
+          data: category.tour_result.Tours,
+        }));
 
-      // console.log('sub cate hai---', formattedSections)
-      setNoPicData(formattedSections.every(section => section.data.length === 0));
-    } else {
-      setPicSections([]);
-      setNoPicData(true);
+        setPicSections(formattedSections);
+        setNoPicData(formattedSections.every(section => section.data.length === 0));
+      } else {
+        setPicSections([]);
+        setNoPicData(true);
+      }
+    } catch (error) {
+      console.error("Error fetching sub-category sports:", error);
+      setNoPicData(true); // Assume no data on error
     }
-  } catch (error) {
-    console.error("Error fetching sub-category sports:", error);
-    setNoPicData(true); // Assume no data on error
-  }
-  setIsPicLoading(false)
-};
+    setIsPicLoading(false)
+  };
 
   const renderSearchesPic = (item) => {
-    // console.log('Items for search pics-------', item.id);
     const isSelected = selectedPicItemId === item.id;
 
     return (
@@ -1134,7 +940,6 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
         ]}
         onPress={() => {
           setSelectedPicItemId(item.id);
-          console.log('Selected item:', item.id);
         }}
       >
         <Text
@@ -1150,12 +955,11 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
   };
 
   const renderPicsItem = ({ item }) => (
-    // <TouchableOpacity onPress={handle_details}>
+
     <TouchableOpacity onPress={() => navigation.navigate("PicDetails", { picData: item })}>
-    <View style={styles.itemContainer}>
-      {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
-      <Image source={{ uri: item.image }} style={styles.image} />
-      <View
+      <View style={styles.itemContainer}>
+        <Image source={{ uri: item.image }} style={styles.image} />
+        <View
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -1223,12 +1027,12 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
         </View>
 
 
-      {/* <Text  ellipsizeMode="tail"
+        {/* <Text  ellipsizeMode="tail"
                 numberOfLines={1} style={styles.text}>{item.name}</Text>
       <Text  ellipsizeMode="tail"
                 numberOfLines={2} style={styles.text1}>{item.description}</Text> */}
-    </View>
-  </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
   );
 
   const renderPicsSection = ({ item }) => (
@@ -1238,19 +1042,19 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
       {item.data.length === 0 ? (
         <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
       ) : (
-      <FlatList
-        data={item.data}
-        renderItem={renderPicsItem}
-        keyExtractor={(videoItem) => videoItem.tour_id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-    )}
+        <FlatList
+          data={item.data}
+          renderItem={renderPicsItem}
+          keyExtractor={(videoItem) => videoItem.tour_id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 
 
-//New Render start
+  //New Render start
   const renderNewsSearches = (item) => {
     // console.log('Items', item);
     const isSelected = selectedNewsItemId === item.id;
@@ -1265,7 +1069,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
         ]}
         onPress={() => {
           setSelectedNewsItemId(item.id);
-        
+
         }}
       >
         <Text
@@ -1305,7 +1109,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
       //Alert.alert(result)
       const formattedLetters = result.topitem.map((letter) => ({
         ...letter,
-        post_date: convertTimeAndDate(letter.post_date), 
+        post_date: convertTimeAndDate(letter.post_date),
       }));
       // console.log('Resultings of setLetterLoading', result.topitem);
       setTopLetterData(formattedLetters[0]); // Update the state with the fetched data
@@ -1373,7 +1177,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
     );
   };
 
-  
+
   const renderEBCSearches = (item) => {
     // console.log('Items', item);
     const isSelected = selectedEBCItemId === item.id;
@@ -1408,6 +1212,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
         const token = await AsyncStorage.getItem("authToken ");
         if (token) {
           setAuthToken(token);
+          console.log('user token-------', token)
         } else {
           throw new Error("No auth token found");
         }
@@ -1424,68 +1229,14 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
     if (authToken) {
       const fetchSequentialData = async () => {
         const marketId = selectedItemIdMarket || "Africa";
-        // const DiscId = selectedItemDiscId || 1;
-
-        // const fetchFunctions = [
-        //   fetchCategory,
-        //   fetchTopVideos,
-        //   fetchTrendingVideos,
-        //   fetchLatestVideos,
-        //   fetchMostViewedVideos,
-        //   fetchMostCommentedVideos,
-        //   fetchTopNews,
-        //   fetchNews,
-        //   fetchCategoryPics,
-        //   fetchTopPics,
-        //   fetchTrendingPics,
-        //   fetchLatestPics,
-        //   fetchMostViewedPics,
-        //   fetchMostCommentedPics,
-        //   fetchTopMarket,
-        //   fetchCategoryMarket,
-        //   fetchElectronicsMarket,
-        //   fetchVehiclesMarket,
-        //   fetchClothingMarket,
-        //   fetchAllMarket,
-        //   fetchLetterPublicGeneral,
-        //   fetchLetterPrivateCelebrity,
-        //   fetchLetterPrivateFriends,
-        //   fetchLetterPublicCelebrity,
-        //   fetchQAFI,
-        //   fetchGEBC,
-        // ];
+      
         const fetchFunctions = [
-          // ye comment hai
-          // fetchCategory, // 0
-          // fetchTopVideos, // 1
-          // fetchTrendingVideos, // 2
-          // fetchLatestVideos, // 3
-          // fetchMostViewedVideos, // 4
-          // fetchMostCommentedVideos, // 5
-
-          // fetchTopNews, // 6
-          // fetchNews, // 7
-
-
-// ye comment hai
-          // fetchCategoryPics, // 8    6
-          // fetchTopPics, // 9    7
-          // fetchTrendingPics, // 10    8
-          // fetchLatestPics, // 11    9
-          // fetchMostViewedPics, // 12  10
-          // fetchMostCommentedPics, // 13    11
-          // fetchTopMarket, // 14   12   0
-          // fetchCategoryMarket, // 15     
+      
           fetchElectronicsMarket, // 16   13   1
           fetchVehiclesMarket, // 17   14   2
           fetchClothingMarket, // 18   15  3
           fetchAllMarket, // 19    16   4
-          // fetchLetterPublicGeneral, // 20
-          // fetchLetterPrivateCelebrity, // 21
-          // fetchLetterPrivateFriends, // 22
-          // fetchLetterPublicCelebrity, // 23
-          // fetchQAFI, // 24
-          // fetchGEBC, // 25
+      
         ];
 
         let newData = [];
@@ -1521,7 +1272,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
               return prevload.map((item, index) => (index === i ? false : item));
             });
             break;
-    
+
           }
         }
       };
@@ -1535,23 +1286,15 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
 
   useEffect(() => {
     if (authToken) {
-      // fetchBannerConfig();
-      // fetchBannerInActive();
+
       fetchTopMarket();
       fetchBanners();
-      // fetchTopDiscNews();
       fetchCategoryMarket();
       fetchTopLetter()
       fetchLetterPublicGeneralLetter();
     }
   }, [authToken]);
 
-
-  // useEffect(() => {
-  //   if (authToken) {
-  //     fetchBanners();
-  //   }
-  // }, [authToken]);
 
   const fetchBanners = async () => {
     setIsLoading(true);
@@ -1569,103 +1312,17 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
       setIsLoading(false);
     }
   };
-  // const fetchBannerConfig = async () => {
-  //   const token = authToken;
-  //   setIsLoading(true);
-  //   try {
-  //     const response = await fetch(
-  //       base_url + "banner/getAllActiveBanners?topBanner=true",
-  //       // base_url + "banner/getAllBannersByUser/97",
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     const result = await response.json();
-  //     // console.log("AllBanners---top ", result.AllBanners);
-  //     setAdsData(result.AllBanners);
-  //   } catch (error) {
-  //     console.error("Error AllBanners:", error);
-  //   }
-  //   setIsLoading(false);
-  // };
-  // const fetchBannerInActive = async () => {
-  //   const token = authToken;
-  //   setIsLoading(true);
-  //   try {
-  //     const response = await fetch(
-  //       base_url + "banner/getAllActiveBanners?topBanner=false",
-  //       // base_url + "banner/getAllBannersByUser/97",
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     const result = await response.json();
-  //     // setAdsInActiveData(result.AllBanners);
-  //     const updatedBanners = result.AllBanners.map(banner => {
-  //       if (banner.image.startsWith('/fileUpload')) {
-  //         banner.image = `https://watch-gotcha-be.mtechub.com${banner.image}`;
-  //       }
-  //       return banner;
-  //     });
-  //     // console.log("AllBanners AdsInActiveData---", updatedBanners);
-  //     setAdsInActiveData(updatedBanners);
-  //   } catch (error) {
-  //     console.error("Error AllBanners AdsInActiveData---", error);
-  //   }
-  //   setIsLoading(false);
-  // };
-
-
-
-  const fetchTopDiscNews = async () => {
-    // console.log('Categry in id', categoryIdNews);
-    // console.log('News Called');
-    setLoading(true);
-    const token = authToken;
-
-    try {
-      const response = await fetch(
-        // base_url + `top/getAllTopQAFIByCategory/${categoryIdNews}`,
-        base_url + "top/getAllTopQAFIByCategory/3",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      // console.log('Resultings of TopNews', result.AllQAFI[0]);
-      //Alert.alert(result)
-
-      setTopNewsData(result.AllQAFI[0]); // Update the state with the fetched data
-    } catch (error) {
-      setLoading(false);
-      console.error("Error Trending:", error);
-    }
-  };
-
-
-
- const [cinLoading, setCinLoading] = useState(true);
- const [fanLoading, setfanLoading] = useState(true);
- const [kidLoading, setKidLoading] = useState(true);
- const [learnLoading, setLearnLoading] = useState(true);
- const [tvLoading, setTvLoading] = useState(true);
- const [Cinematicdata, setCinematicData] = useState([]);
- const [fandata, setFanData] = useState([]);
- const [kiddata, setKidData] = useState([]);
- const [learndata, setLearnData] = useState([]);
- const [tvdata, setTvData] = useState([]);
+ 
+  const [cinLoading, setCinLoading] = useState(true);
+  const [fanLoading, setfanLoading] = useState(true);
+  const [kidLoading, setKidLoading] = useState(true);
+  const [learnLoading, setLearnLoading] = useState(true);
+  const [tvLoading, setTvLoading] = useState(true);
+  const [Cinematicdata, setCinematicData] = useState([]);
+  const [fandata, setFanData] = useState([]);
+  const [kiddata, setKidData] = useState([]);
+  const [learndata, setLearnData] = useState([]);
+  const [tvdata, setTvData] = useState([]);
   const [selectedCinematicItemId, setSelectedCinematicItemId] = useState(null);
   const [selectedFanstarItemId, setSelectedFanStarItemId] = useState(null);
   const [selectedKidItemId, setSelectedKidItemId] = useState(null);
@@ -1692,7 +1349,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
   }, [authToken]);
 
   const fetchAllCineCategory = async () => {
-    //console.log("Categry in id", selectedItemId)
+
     const token = authToken;
 
     try {
@@ -1707,10 +1364,8 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
       );
 
       const result = await response.json();
-      // console.log("AllCategories---", result.AllCategories);
       setCinematicData(result.AllCategories); // Update the state with the fetched data
       if (result.AllCategories.length > 0) {
-        // Set the first category ID as selected
         setSelectedCinematicItemId(result.AllCategories[0].id);
       }
     } catch (error) {
@@ -1738,34 +1393,34 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
     }
   };
 
- 
+
 
   const fetchCineTopVideos = async () => {
-     // console.log("Categry in id", selectedItemId);
-     const token = authToken;
+    // console.log("Categry in id", selectedItemId);
+    const token = authToken;
 
-     try {
-       const response = await fetch(
-         base_url + "cinematics/getTopVideo",
-         {
-           method: "GET",
-           headers: {
-             Authorization: `Bearer ${token}`,
-           },
-         }
-       );
- 
-       const result = await response.json();
+    try {
+      const response = await fetch(
+        base_url + "cinematics/getTopVideo",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
       //  console.log("getTopVideo------..", result.data);
-       setDataTopVideos(result.data);
-     } catch (error) {
-       console.error("Error Trending:", error);
-     }
+      setDataTopVideos(result.data);
+    } catch (error) {
+      console.error("Error Trending:", error);
+    }
   };
 
   const fetchCineSubCategory = async (selectedCinematicItemId) => {
     const token = authToken;
-  
+
     try {
       const response = await fetch(
         `${base_url}cinematics/getByCategory/${selectedCinematicItemId}?page=1&limit=1000`,
@@ -1776,19 +1431,16 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
           },
         }
       );
-  
+
       const result = await response.json();
-  
+
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
           title: category.sub_category_name,
           data: category.video_result.videos,
         }));
-  
-        // console.log('results---', formattedSections);
+
         setSections(formattedSections);
-  
-        // Check if there is no data
         const hasNoData = formattedSections.every(section => section.data.length === 0);
         setNoData(hasNoData);
       } else {
@@ -1801,13 +1453,8 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
     }
   };
 
-
-
-
-  
-  
   useEffect(() => {
-    if (authToken  && isFocused) {
+    if (authToken && isFocused) {
       fetchAllFanStarCategory();
     }
   }, [authToken]);
@@ -1831,7 +1478,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
       // console.log("AllCategories---", result.AllCategories);
       const categories = result.AllCategories;
       setFanData(result.AllCategories); // Update the state with the fetched data
-    
+
       if (categories.length > 0) {
         // Set the first category ID as selected
         setSelectedFanStarItemId(categories[0].id);
@@ -1863,31 +1510,31 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
 
 
   const fetchTopFanVideos = async () => {
-     // console.log("Categry in id", selectedItemId);
-     const token = authToken;
+    // console.log("Categry in id", selectedItemId);
+    const token = authToken;
 
-     try {
-       const response = await fetch(
-         base_url + "fanStar/getTopVideo",
-         {
-           method: "GET",
-           headers: {
-             Authorization: `Bearer ${token}`,
-           },
-         }
-       );
- 
-       const result = await response.json();
+    try {
+      const response = await fetch(
+        base_url + "fanStar/getTopVideo",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
       //  console.log("getTopVideo------..", result.data);
-       setDataFanTopVideos(result.data);
-     } catch (error) {
-       console.error("Error Trending for top:", error);
-     }
+      setDataFanTopVideos(result.data);
+    } catch (error) {
+      console.error("Error Trending for top:", error);
+    }
   };
 
   const fetchFanSubCategory = async (selectedFanstarItemId) => {
     const token = authToken;
-  
+
     try {
       const response = await fetch(
         `${base_url}fanStar/getByCategory/${selectedFanstarItemId}?page=1&limit=100000`,
@@ -1898,20 +1545,20 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
           },
         }
       );
-  
+
       const result = await response.json();
-  
+
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
           title: category.sub_category_name,
           data: category.video_result.videos,
         }));
-  
-         // Reverse the titles
-      const reversedSections = formattedSections.reverse();
+
+        // Reverse the titles
+        const reversedSections = formattedSections.reverse();
         // console.log('results---', formattedSections);
         setFanSections(reversedSections);
-  
+
         // Check if there is no data
         const hasNoData = formattedSections.every(section => section.data.length === 0);
         setNoData(hasNoData);
@@ -2046,10 +1693,9 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
 
   useEffect(() => {
     if (authToken && isFocused) {
-      if(selectedlearnItemId == null)
-        {
-          setSelectedLearnItemId(10)
-        }
+      if (selectedlearnItemId == null) {
+        setSelectedLearnItemId(10)
+      }
       fetchAllLearnCategory();
     }
   }, [authToken]);
@@ -2080,7 +1726,7 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
 
     try {
       const response = await fetch(
-       
+
         base_url + "learningHobbies/category/getAll?page=1&limit=10000",
         {
           method: "GET",
@@ -2099,34 +1745,34 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
   };
 
   const fetchLearnTopVideos = async () => {
-     // console.log("Categry in id", selectedItemId);
-     const token = authToken;
+    // console.log("Categry in id", selectedItemId);
+    const token = authToken;
 
-     try {
-       const response = await fetch(
-         base_url + "learningHobbies/getTopVideo",
-         {
-           method: "GET",
-           headers: {
-             Authorization: `Bearer ${token}`,
-           },
-         }
-       );
- 
-       const result = await response.json();
+    try {
+      const response = await fetch(
+        base_url + "learningHobbies/getTopVideo",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
       //  console.log("getTopVideo------..", result.data);
-       setDataLearnTopVideos(result.data);
-     } catch (error) {
-       console.error("Error Trending:", error);
-     }
+      setDataLearnTopVideos(result.data);
+    } catch (error) {
+      console.error("Error Trending:", error);
+    }
   };
 
   const fetchLearnSubCategory = async (selectedlearnItemId) => {
     const token = authToken;
-  
+
     try {
       const response = await fetch(
-  
+
         `${base_url}learningHobbies/getByCategory/${selectedlearnItemId}?page=1&limit=10000`,
         {
           method: "GET",
@@ -2135,19 +1781,19 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
           },
         }
       );
-  
+
       const result = await response.json();
-  
+
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
           title: category.sub_category_name,
           data: category.video_result.videos,
         }));
-  
-             // Reverse the titles
-      const reversedSections = formattedSections.reverse();
-      // console.log('results---', reversedSections);
-      setLearnSections(reversedSections);
+
+        // Reverse the titles
+        const reversedSections = formattedSections.reverse();
+        // console.log('results---', reversedSections);
+        setLearnSections(reversedSections);
 
         // Check if there is no data
         const hasNoData = formattedSections.every(section => section.data.length === 0);
@@ -2169,10 +1815,9 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
 
   useEffect(() => {
     if (authToken && isFocused) {
-      if(selectedtvItemId == null)
-        {
-          setSelectedTvItemId(17)
-        }
+      if (selectedtvItemId == null) {
+        setSelectedTvItemId(17)
+      }
       fetchAllTvCategory();
     }
   }, [authToken]);
@@ -2220,30 +1865,30 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
   };
 
   const fetchTvTopVideos = async () => {
-     // console.log("Categry in id", selectedItemId);
-     const token = authToken;
+    // console.log("Categry in id", selectedItemId);
+    const token = authToken;
 
-     try {
-       const response = await fetch(
-         base_url + "tvProgmax/getTopVideo",
-         {
-           method: "GET",
-           headers: {
-             Authorization: `Bearer ${token}`,
-           },
-         }
-       );
- 
-       const result = await response.json();
-       setDataTvTopVideos(result.data);
-     } catch (error) {
-       console.error("Error Trending:", error);
-     }
+    try {
+      const response = await fetch(
+        base_url + "tvProgmax/getTopVideo",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
+      setDataTvTopVideos(result.data);
+    } catch (error) {
+      console.error("Error Trending:", error);
+    }
   };
 
   const fetchTvSubCategory = async (selectedtvItemId) => {
     const token = authToken;
-  
+
     try {
       const response = await fetch(
         `${base_url}tvProgmax/getByCategory/${selectedtvItemId}?page=1&limit=10000`,
@@ -2254,19 +1899,19 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
           },
         }
       );
-  
+
       const result = await response.json();
-  
+
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
           title: category.sub_category_name,
           data: category.video_result.videos,
         }));
-  
-             // Reverse the titles
-      const reversedSections = formattedSections.reverse();
-      // console.log('results---', reversedSections);
-      setTvSections(reversedSections);
+
+        // Reverse the titles
+        const reversedSections = formattedSections.reverse();
+        // console.log('results---', reversedSections);
+        setTvSections(reversedSections);
 
         // Check if there is no data
         const hasNoData = formattedSections.every(section => section.data.length === 0);
@@ -2280,20 +1925,20 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
       setNoData(true);  // Assume no data on error
     }
   };
-  
-  
+
+
   const renderTvVideoItem = ({ item }) => (
     // <TouchableOpacity onPress={handle_details}>
-    <TouchableOpacity onPress={() => navigation.navigate('Tv_Promax_details', {videoData: item})}>
-    <View style={styles.itemContainer}>
-      {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
-      <Image source={{ uri: item.thumbnail }} style={styles.image} />
-      <Text  ellipsizeMode="tail"
-                numberOfLines={1} style={styles.nametext}>{item.name}</Text>
-      <Text  ellipsizeMode="tail"
-                numberOfLines={2} style={styles.text1}>{item.description}</Text>
-    </View>
-  </TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.navigate('Tv_Promax_details', { videoData: item })}>
+      <View style={styles.itemContainer}>
+        {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
+        <Image source={{ uri: item.thumbnail }} style={styles.image} />
+        <Text ellipsizeMode="tail"
+          numberOfLines={1} style={styles.nametext}>{item.name}</Text>
+        <Text ellipsizeMode="tail"
+          numberOfLines={2} style={styles.text1}>{item.description}</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   const renderTvSection = ({ item }) => (
@@ -2302,322 +1947,174 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
       {item.data.length === 0 ? (
         <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
       ) : (
-      <FlatList
-        data={item.data}
-        renderItem={renderTvVideoItem}
-        keyExtractor={(videoItem) => videoItem.video_id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-    )}
+        <FlatList
+          data={item.data}
+          renderItem={renderTvVideoItem}
+          keyExtractor={(videoItem) => videoItem.video_id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 
-
-
-
-  // console.log('adsData----------', adsData)
-
-  // if (error) {
-  //   return <Text>Error--: {error.message}</Text>;
-  // }
-  // ////////////////////////////api function
-  const fetchCategory = async (token, id) => {
-    try {
-      const response = await fetch(
-        base_url + "videoCategory/getAllVideoCategories",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      // console.log('Category------------', result.AllCategories)
-      return result.AllCategories.reverse();
-    } catch (error) {
-      console.error("Error Trending:", error);
-      throw error;
-    }
-  };
-
-  const fetchTopVideos = async (token, id) => {
-    try {
-      const response = await fetch(base_url + `top/app/top_video/${id}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const result = await response.json();
-      // console.log('Top', result.topVideo[0])
-      return result.topVideo;
-    } catch (error) {
-      console.error("Error Trending:", error);
-      throw error;
-    }
-  };
-  const fetchTrendingVideos = async (token, id) => {
-    try {
-      const response = await fetch(
-        base_url + `xpi/getTrendingVideosByCategory/${id}?page=1&limit=5`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      // console.log('trending', result.Videos)
-      return result.Videos;
-    } catch (error) {
-      console.error("Error Trending:", error);
-      throw error;
-    }
-  };
-
-  const fetchLatestVideos = async (token, id) => {
-    try {
-      const response = await fetch(
-        base_url + `xpi/getAllRecentVideosByCategory/${id}?page=1&limit=2`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      // console.log('Recent', result.Videos)
-      return result.Videos;
-    } catch (error) {
-      console.error("Error Trending:", error);
-      throw error;
-    }
-  };
-
-  const fetchMostViewedVideos = async (token, id) => {
-    try {
-      const response = await fetch(
-        base_url + `xpi/getMostViewedVideosByCategory/${id}?page=1&limit=5`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      // console.log('Viewed', result.Videos)
-      return result.Videos;
-    } catch (error) {
-      console.error("Error Trending:", error);
-      throw error;
-    }
-  };
-
-  const fetchMostCommentedVideos = async (token, id) => {
-    try {
-      const response = await fetch(
-        base_url + `xpi/getMostCommentedVideosByCategory/${id}?page=1&limit=5`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      // console.log('Commented', result.Videos)
-      return result.Videos;
-    } catch (error) {
-      console.error("Error Trending:", error);
-      throw error;
-    }
-  };
-
-  // ////Fetch News
-
   //DISC///////////////////////////////////////////////////////////////////////////////// new dics api 7/7/2024
-  
-  // For News API category and subcatery start
-    // Fetch all data when authToken is set and screen is focused
-    const [searchesNewsData, setSearchesNewsData] = useState([]);
-    const [Newsections, setNewsSections] = useState([]);
-    const [noNewData, setNoNewsData] = useState(false);
-    useEffect(() => {
-      if (authToken && isFocused) {
-        fetchAllNewsCategory();
-        fetchTopSport();
-        fetchSubCategoryNews(selectedNewsItemId);
-      }
-    }, [authToken, selectedNewsItemId, isFocused]);
-  
-    // Fetch categories
-    const fetchAllNewsCategory = async () => {
-      setNewLoader(true);
-      try {
-        const response = await fetch(`${base_url}news/category/getAll?page=1&limit=10000`, {
-          method: "GET",
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
-        const result = await response.json();
-        // setSearchesNewsData(result.AllCategories);
-        const reverseData = result.AllCategories.reverse();
-        setSearchesNewsData(reverseData);
-        // console.log('news hai---------', result.AllCategories)
-        // if (result.AllCategories.length > 0) {
-        //   setSelectedItemId(result.AllCategories[0].id);
-        // }
-        if (selectedNewsItemId === null && result.AllCategories.length > 0) {
-          setSelectedNewsItemId(result.AllCategories[0].id);
-        }
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-      setNewLoader(false);
-    };
-  
-    // Fetch top sports
-    const fetchTopSport = async () => {
-      setNewLoader(true);
-      try {
-        const response = await fetch(`${base_url}news/getTopNews`, {
-          method: "GET",
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
-        const result = await response.json();
-        // console.log('what news top,', result.data)
-        setTopNewsData(result.data);
-      } catch (error) {
-        console.error("Error fetching top sports:", error);
-      }
-      setNewLoader(false);
-    };
-  
-    // Fetch sub-category sports
-    const fetchSubCategoryNews = async (categoryId) => {
-      setNewLoader(true);
-      try {
-        const response = await fetch(`${base_url}news/getAllNewsByCategory/${categoryId}?page=1&limit=100000`, {
-          method: "GET",
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
-        const result = await response.json();
-        if (Array.isArray(result.data) && result.data.length > 0) {
-          const formattedSections = result.data.map(category => ({
-            title: category.sub_category_name,
-            data: category.news_result.News,
-          }));
-          setNewsSections(formattedSections);
-          setNoNewsData(formattedSections.every(section => section.data.length === 0));
-        } else {
-          setNewsSections([]);
-          setNoNewsData(true);
-        }
-      } catch (error) {
-        console.error("Error fetching sub-category sports:", error);
-        setNoNewsData(true); // Assume no data on error
-      }
-      setNewLoader(false);
-    };
+  // Fetch all data when authToken is set and screen is focused
+  const [searchesNewsData, setSearchesNewsData] = useState([]);
+  const [Newsections, setNewsSections] = useState([]);
+  const [noNewData, setNoNewsData] = useState(false);
+  useEffect(() => {
+    if (authToken && isFocused) {
+      fetchAllNewsCategory();
+      fetchTopSport();
+      fetchSubCategoryNews(selectedNewsItemId);
+    }
+  }, [authToken, selectedNewsItemId, isFocused]);
 
-    const renderNewsItem = ({ item }) => (
-      // <TouchableOpacity onPress={handle_details}>
-      <TouchableOpacity onPress={() => navigation.navigate("ViewNews", { picData: item })}>
+  // Fetch categories
+  const fetchAllNewsCategory = async () => {
+    setNewLoader(true);
+    try {
+      const response = await fetch(`${base_url}news/category/getAll?page=1&limit=10000`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      const result = await response.json();
+      const reverseData = result.AllCategories.reverse();
+      setSearchesNewsData(reverseData);
+      if (selectedNewsItemId === null && result.AllCategories.length > 0) {
+        setSelectedNewsItemId(result.AllCategories[0].id);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+    setNewLoader(false);
+  };
+
+  // Fetch top sports
+  const fetchTopSport = async () => {
+    setNewLoader(true);
+    try {
+      const response = await fetch(`${base_url}news/getTopNews`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      const result = await response.json();
+      // console.log('what news top,', result.data)
+      setTopNewsData(result.data);
+    } catch (error) {
+      console.error("Error fetching top sports:", error);
+    }
+    setNewLoader(false);
+  };
+
+  // Fetch sub-category sports
+  const fetchSubCategoryNews = async (categoryId) => {
+    setNewLoader(true);
+    try {
+      const response = await fetch(`${base_url}news/getAllNewsByCategory/${categoryId}?page=1&limit=100000`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      const result = await response.json();
+      if (Array.isArray(result.data) && result.data.length > 0) {
+        const formattedSections = result.data.map(category => ({
+          title: category.sub_category_name,
+          data: category.news_result.News,
+        }));
+        setNewsSections(formattedSections);
+        setNoNewsData(formattedSections.every(section => section.data.length === 0));
+      } else {
+        setNewsSections([]);
+        setNoNewsData(true);
+      }
+    } catch (error) {
+      console.error("Error fetching sub-category sports:", error);
+      setNoNewsData(true); // Assume no data on error
+    }
+    setNewLoader(false);
+  };
+
+  const renderNewsItem = ({ item }) => (
+    // <TouchableOpacity onPress={handle_details}>
+    <TouchableOpacity onPress={() => navigation.navigate("ViewNews", { picData: item })}>
       <View style={styles.itemContainer}>
         {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
         <Image source={{ uri: item.image }} style={styles.image} />
         <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              height: hp(7),
-              width: wp(25),
-            }}
-          >
-            {item?.user_image ? (
-              <View
-                style={{
-                  width: wp(7),
-                  marginLeft: wp(0.5),
-                  height: wp(7),
-                  overflow: "hidden",
-                  borderRadius: wp(7) / 2,
-                }}
-              >
-                <Image
-                  source={{ uri: item?.user_image }}
-                  style={{ width: "100%", height: "100%", resizeMode: "cover" }}
-                />
-              </View>
-            ) : (
-              <View
-                style={{
-                  width: wp(7),
-                  marginLeft: wp(0.5),
-                  height: wp(7),
-                  borderRadius: wp(7) / 2,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <MaterialCommunityIcons
-                  // style={{marginTop: hp(0.5)}}
-                  name={"account-circle"}
-                  size={24}
-                  color={"#FACA4E"}
-                />
-                {/*  <Image
-              source={appImages.profileImg}
-              style={{width: '100%', height: '100%', resizeMode: 'cover'}}
-            /> */}
-              </View>
-            )}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            height: hp(7),
+            width: wp(25),
+          }}
+        >
+          {item?.user_image ? (
+            <View
+              style={{
+                width: wp(7),
+                marginLeft: wp(0.5),
+                height: wp(7),
+                overflow: "hidden",
+                borderRadius: wp(7) / 2,
+              }}
+            >
+              <Image
+                source={{ uri: item?.user_image }}
+                style={{ width: "100%", height: "100%", resizeMode: "cover" }}
+              />
+            </View>
+          ) : (
+            <View
+              style={{
+                width: wp(7),
+                marginLeft: wp(0.5),
+                height: wp(7),
+                borderRadius: wp(7) / 2,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <MaterialCommunityIcons
+                // style={{marginTop: hp(0.5)}}
+                name={"account-circle"}
+                size={24}
+                color={"#FACA4E"}
+              />
   
-            <View style={{ width: 70 }}>
-              <Text
-                ellipsizeMode="tail"
-                numberOfLines={1}
-                style={{
-                  fontSize: hp(1.5),
-                  marginLeft: wp(0.7),
-                  color: "#000000",
-                  fontWeight: "bold",
-                  fontFamily: "Inter",
-                }}
-              >
-                {item.username}
-              </Text>
             </View>
-            <View style={{ marginLeft: wp(1) }}>
-              <NonVerified />
-            </View>
+          )}
+
+          <View style={{ width: 70 }}>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={1}
+              style={{
+                fontSize: hp(1.5),
+                marginLeft: wp(0.7),
+                color: "#000000",
+                fontWeight: "bold",
+                fontFamily: "Inter",
+              }}
+            >
+              {item.username}
+            </Text>
           </View>
+          <View style={{ marginLeft: wp(1) }}>
+            <NonVerified />
+          </View>
+        </View>
 
-
-        {/* <Text  ellipsizeMode="tail"
-                  numberOfLines={1} style={styles.text}>{item.name}</Text>
-        <Text  ellipsizeMode="tail"
-                  numberOfLines={2} style={styles.text1}>{item.description}</Text> */}
       </View>
     </TouchableOpacity>
-    );
-  
-    const renderNewsSection = ({ item }) => (
-      <View style={styles.sectionContainer}>
-        <Text style={styles.sectionHeader}>{item.title}</Text>
-        {item.data.length === 0 ? (
-          <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
-        ) : (
+  );
+
+  const renderNewsSection = ({ item }) => (
+    <View style={styles.sectionContainer}>
+      <Text style={styles.sectionHeader}>{item.title}</Text>
+      {item.data.length === 0 ? (
+        <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
+      ) : (
         <FlatList
           data={item.data}
           renderItem={renderNewsItem}
@@ -2626,435 +2123,404 @@ const fetchSubCategoryXpiVideo = async (selectedXpiItemId) => {
           showsHorizontalScrollIndicator={false}
         />
       )}
-      </View>
-    );
-  // For News API category and subcatery end
+    </View>
+  );
 
-// QAFI API for Category and sub start 9.9.2024
-// Fetch all data when authToken is set and screen is focused
-const [searchesQAFIData, setSearchesQAFIData] = useState([]);
-const [QAFIsections, setQAFISections] = useState([]);
-const [noQAFIData, setNoQAFIData] = useState(false);
-const [TopQAFIData, setTopQAFIData] = useState([]);
-const [QAFILoading, setQAFILoading] = useState(true);
+  // QAFI API for Category and sub start 9.9.2024
+  // Fetch all data when authToken is set and screen is focused
+  const [searchesQAFIData, setSearchesQAFIData] = useState([]);
+  const [QAFIsections, setQAFISections] = useState([]);
+  const [noQAFIData, setNoQAFIData] = useState(false);
+  const [TopQAFIData, setTopQAFIData] = useState([]);
+  const [QAFILoading, setQAFILoading] = useState(true);
 
-useEffect(() => {
-  if (authToken && isFocused) {
-    fetchAllQAFICategory();
-    fetchTopQAFI();
-    fetchSubCategoryQAFI(selectedQAFIItemId);
-  }
-}, [authToken, selectedQAFIItemId, isFocused]);
-
-// Fetch categories
-const fetchAllQAFICategory = async () => {
-  setQAFILoading(true)
-  try {
-    const response = await fetch(`${base_url}qafi/category/getAll?page=1&limit=10000`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
-    const result = await response.json();
-    const reverseData = result.AllCategories.reverse();
-    setSearchesQAFIData(reverseData);
-    // setSearchesQAFIData(result.AllCategories);
-    
-    // if (result.AllCategories.length > 0) {
-    //   setSelectedItemId(result.AllCategories[0].id);
-    // }
-    if (selectedQAFIItemId === null && result.AllCategories.length > 0) {
-      setSelectedQAFIItemId(result.AllCategories[0].id);
+  useEffect(() => {
+    if (authToken && isFocused) {
+      fetchAllQAFICategory();
+      fetchTopQAFI();
+      fetchSubCategoryQAFI(selectedQAFIItemId);
     }
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-  }
-  setQAFILoading(false)
-};
+  }, [authToken, selectedQAFIItemId, isFocused]);
 
-// Fetch top sports
-const fetchTopQAFI = async () => {
-  setQAFILoading(true)
-  try {
-    const response = await fetch(`${base_url}qafi/getTopQafi`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
-    const result = await response.json();
-    setTopQAFIData(result.data);
-  } catch (error) {
-    console.error("Error fetching top sports:", error);
-  }
-  setQAFILoading(false)
-};
-
-// Fetch sub-category sports
-const fetchSubCategoryQAFI = async (selectedQAFIItemId) => {
-  setQAFILoading(true)
-  try {
-    const response = await fetch(`${base_url}qafi/getAllQafisByCategory/${selectedQAFIItemId}?page=1&limit=100000`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
-    const result = await response.json();
-
-    if (Array.isArray(result.data) && result.data.length > 0) {
-      const formattedSections = result.data.map(category => ({
-        title: category.sub_category_name,
-        data: category.QAFI_result.QAFIs,
-      }));
-      
-      setQAFISections(formattedSections);
-
-      console.log('sub cate hai---', formattedSections)
-      setNoQAFIData(formattedSections.every(section => section.data.length === 0));
-    } else {
-      setQAFISections([]);
-      setNoQAFIData(true);
-    }
-  } catch (error) {
-    console.error("Error fetching sub-category sports:", error);
-    setNoQAFIData(true); // Assume no data on error
-  }
-  setQAFILoading(false)
-};
-
-const renderQAFIItem = ({ item }) => (
-  // <TouchableOpacity onPress={handle_details}>
-  <TouchableOpacity  onPress={() => navigation.navigate("ViewQAFI", { picData: item })}>
-  <View style={styles.itemContainer}>
-    {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
-    {/* <Image source={{ uri: item.image }} style={styles.image} /> */}
-        
+  // Fetch categories
+  const fetchAllQAFICategory = async () => {
+    setQAFILoading(true)
+    try {
+      const response = await fetch(`${base_url}qafi/category/getAll?page=1&limit=10000`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      const result = await response.json();
+      const reverseData = result.AllCategories.reverse();
+      setSearchesQAFIData(reverseData);
  
-          <View>
-        <Image
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-
-            zIndex: 1, // Ensure it's on top of other elements
-            //flex: 1,
-            width: "100%",
-            height: hp(12),
-            borderRadius: wp(1),
-            resizeMode: "cover",
-          }}
-          source={{ uri: item.image }}
-        />
-      </View>
-
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          marginTop: hp(12),
-          height: hp(7),
-          width: wp(25),
-        }}
-      >
-        {item?.user_image ? (
-          <View
-            style={{
-              width: wp(7),
-              marginLeft: wp(0.5),
-              height: wp(7),
-              overflow: "hidden",
-              borderRadius: wp(7) / 2,
-            }}
-          >
-            <Image
-              source={{ uri: item?.user_image }}
-              style={{ width: "100%", height: "100%", resizeMode: "cover" }}
-            />
-          </View>
-        ) : (
-          <View
-            style={{
-              width: wp(7),
-              marginLeft: wp(0.5),
-              height: wp(7),
-              borderRadius: wp(7) / 2,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <MaterialCommunityIcons
-              // style={{marginTop: hp(0.5)}}
-              name={"account-circle"}
-              size={24}
-              color={"#FACA4E"}
-            />
-            {/*  <Image
-              source={appImages.profileImg}
-              style={{width: '100%', height: '100%', resizeMode: 'cover'}}
-            /> */}
-          </View>
-        )}
-
-        <View style={{ width: 70 }}>
-          <Text
-            ellipsizeMode="tail"
-            numberOfLines={1}
-            style={{
-              fontSize: hp(1.5),
-              marginLeft: wp(0.7),
-              color: "#000000",
-              fontWeight: "bold",
-              fontFamily: "Inter",
-            }}
-          >
-            {item.username}
-          </Text>
-        </View>
-
-        <View style={{ marginLeft: wp(1) }}>
-          <NonVerified />
-        </View>
-      </View>
-
-    {/* <Text  ellipsizeMode="tail"
-              numberOfLines={1} style={styles.text}>{item.name}</Text>
-    <Text  ellipsizeMode="tail"
-              numberOfLines={2} style={styles.text1}>{item.description}</Text> */}
-  </View>
-</TouchableOpacity>
-);
-
-const renderQAFISection = ({ item }) => (
-  <View style={styles.sectionContainer}>
-    <Text style={styles.sectionHeader}>{item.title}</Text>
-    {item.data.length === 0 ? (
-      <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
-    ) : (
-    <FlatList
-      data={item.data}
-      renderItem={renderQAFIItem}
-      keyExtractor={(videoItem) => videoItem.qafi_id.toString()}
-      // keyExtractor={(videoItem, index) => index.toString()}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-    />
-  )}
-  </View>
-);
-
-// ebc api Category and sub 9/9/2024
- // Fetch all data when authToken is set and screen is focused
- const [searchesEBCData, setSearchesEBCData] = useState([]);
-const [EBCsections, setEBCSections] = useState([]);
-const [noEBCData, setNoEBCData] = useState(false);
-const [TopEBCData, setTopEBCData] = useState([]);
-const [EBCLoading, setEBCLoading] = useState(true);
-
- useEffect(() => {
-  if (authToken && isFocused) {
-    fetchAllEBCCategory();
-    fetchTopEBC();
-    fetchSubCategoryEBC(selectedEBCItemId);
-
-  }
-}, [authToken, selectedEBCItemId, isFocused]);
-
-// Fetch categories
-const fetchAllEBCCategory = async () => {
-  setEBCLoading(true)
-  try {
-    const response = await fetch(`${base_url}gebc/category/getAll?page=1&limit=10000`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
-    const result = await response.json();
-    const reverseData = result.AllCategories.reverse();
-    setSearchesEBCData(reverseData);
-    // if (result.AllCategories.length > 0) {
-    //   setSelectedItemId(result.AllCategories[0].id);
-    // }
-    if (selectedEBCItemId === null && result.AllCategories.length > 0) {
-      setSelectedEBCItemId(result.AllCategories[0].id);
+      if (selectedQAFIItemId === null && result.AllCategories.length > 0) {
+        setSelectedQAFIItemId(result.AllCategories[0].id);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
     }
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-  }
-  setEBCLoading(false)
-};
+    setQAFILoading(false)
+  };
 
-// Fetch top sports
-const fetchTopEBC = async () => {
-  setEBCLoading(true)
-  try {
-    const response = await fetch(`${base_url}gebc/getTopGebc`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
-    const result = await response.json();
-    setTopEBCData(result.data);
-  } catch (error) {
-    console.error("Error fetching top sports:", error);
-  }
-  setEBCLoading(false)
-};
-
-// Fetch sub-category sports
-const fetchSubCategoryEBC = async (selectedEBCItemId) => {
-  setEBCLoading(true)
-  try {
-    const response = await fetch(`${base_url}gebc/getAllGEBCsByCategory/${selectedEBCItemId}?page=1&limit=100000`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
-    const result = await response.json();
-    if (Array.isArray(result.data) && result.data.length > 0) {
-      const formattedSections = result.data.map(category => ({
-        title: category.sub_category_name,
-        data: category.GEBC_result.GEBCs,
-      }));
-      setEBCSections(formattedSections);
-      setNoEBCData(formattedSections.every(section => section.data.length === 0));
-    } else {
-      setEBCSections([]);
-      setNoEBCData(true);
+  // Fetch top sports
+  const fetchTopQAFI = async () => {
+    setQAFILoading(true)
+    try {
+      const response = await fetch(`${base_url}qafi/getTopQafi`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      const result = await response.json();
+      setTopQAFIData(result.data);
+    } catch (error) {
+      console.error("Error fetching top sports:", error);
     }
-  } catch (error) {
-    console.error("Error fetching sub-category sports:", error);
-    setNoEBCData(true); // Assume no data on error
-  }
-  setEBCLoading(false)
-};
+    setQAFILoading(false)
+  };
 
-const renderEBCItem = ({ item }) => (
-  // <TouchableOpacity onPress={handle_details}>
-  <TouchableOpacity onPress={() =>  navigation.navigate("ViewGEBC", { picData: item })}>
-  <View style={styles.itemContainer}>
-    {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
-    {/* <Image source={{ uri: item.image }} style={styles.image} /> */}
-          <View
+  // Fetch sub-category sports
+  const fetchSubCategoryQAFI = async (selectedQAFIItemId) => {
+    setQAFILoading(true)
+    try {
+      const response = await fetch(`${base_url}qafi/getAllQafisByCategory/${selectedQAFIItemId}?page=1&limit=100000`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      const result = await response.json();
+
+      if (Array.isArray(result.data) && result.data.length > 0) {
+        const formattedSections = result.data.map(category => ({
+          title: category.sub_category_name,
+          data: category.QAFI_result.QAFIs,
+        }));
+
+        setQAFISections(formattedSections);
+
+        console.log('sub cate hai---', formattedSections)
+        setNoQAFIData(formattedSections.every(section => section.data.length === 0));
+      } else {
+        setQAFISections([]);
+        setNoQAFIData(true);
+      }
+    } catch (error) {
+      console.error("Error fetching sub-category sports:", error);
+      setNoQAFIData(true); // Assume no data on error
+    }
+    setQAFILoading(false)
+  };
+
+  const renderQAFIItem = ({ item }) => (
+    // <TouchableOpacity onPress={handle_details}>
+    <TouchableOpacity onPress={() => navigation.navigate("ViewQAFI", { picData: item })}>
+      <View style={styles.itemContainer}>
+
+        <View>
+          <Image
             style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+
+              zIndex: 1, // Ensure it's on top of other elements
+              //flex: 1,
               width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-              height: hp(10),
+              height: hp(12),
               borderRadius: wp(1),
-              resizeMode: "stretch",
-              borderWidth: 1, // Border width
-              borderColor: "grey", // Border color
+              resizeMode: "cover",
             }}
-          >
-            <Text style={{ fontSize: hp(5) }}>{item.image}</Text>
-          </View>
-    <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          height: hp(7),
-          width: wp(25),
-        }}
-      >
-        {item?.user_image ? (
-          <View
-            style={{
-              width: wp(7),
-              marginLeft: wp(0.5),
-              height: wp(7),
-              overflow: "hidden",
-              borderRadius: wp(7) / 2,
-            }}
-          >
-            <Image
-              source={{ uri: item?.user_image }}
-              style={{ width: "100%", height: "100%", resizeMode: "cover" }}
-            />
-          </View>
-        ) : (
-          <View
-            style={{
-              width: wp(7),
-              marginLeft: wp(0.5),
-              height: wp(7),
-              borderRadius: wp(7) / 2,
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <MaterialCommunityIcons
-              // style={{marginTop: hp(0.5)}}
-              name={"account-circle"}
-              size={24}
-              color={"#FACA4E"}
-            />
-            {/*  <Image
-          source={appImages.profileImg}
-          style={{width: '100%', height: '100%', resizeMode: 'cover'}}
-        /> */}
-          </View>
-        )}
-
-        <View style={{ width: 70 }}>
-          <Text
-            ellipsizeMode="tail"
-            numberOfLines={1}
-            style={{
-              fontSize: hp(1.5),
-              marginLeft: wp(0.7),
-              color: "#000000",
-              fontWeight: "bold",
-              fontFamily: "Inter",
-            }}
-          >
-            {item.username}
-          </Text>
+            source={{ uri: item.image }}
+          />
         </View>
-        <View style={{ marginLeft: wp(1) }}>
-          <NonVerified />
+
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginTop: hp(12),
+            height: hp(7),
+            width: wp(25),
+          }}
+        >
+          {item?.user_image ? (
+            <View
+              style={{
+                width: wp(7),
+                marginLeft: wp(0.5),
+                height: wp(7),
+                overflow: "hidden",
+                borderRadius: wp(7) / 2,
+              }}
+            >
+              <Image
+                source={{ uri: item?.user_image }}
+                style={{ width: "100%", height: "100%", resizeMode: "cover" }}
+              />
+            </View>
+          ) : (
+            <View
+              style={{
+                width: wp(7),
+                marginLeft: wp(0.5),
+                height: wp(7),
+                borderRadius: wp(7) / 2,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <MaterialCommunityIcons
+                // style={{marginTop: hp(0.5)}}
+                name={"account-circle"}
+                size={24}
+                color={"#FACA4E"}
+              />
+
+            </View>
+          )}
+
+          <View style={{ width: 70 }}>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={1}
+              style={{
+                fontSize: hp(1.5),
+                marginLeft: wp(0.7),
+                color: "#000000",
+                fontWeight: "bold",
+                fontFamily: "Inter",
+              }}
+            >
+              {item.username}
+            </Text>
+          </View>
+
+          <View style={{ marginLeft: wp(1) }}>
+            <NonVerified />
+          </View>
         </View>
       </View>
+    </TouchableOpacity>
+  );
+
+  const renderQAFISection = ({ item }) => (
+    <View style={styles.sectionContainer}>
+      <Text style={styles.sectionHeader}>{item.title}</Text>
+      {item.data.length === 0 ? (
+        <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
+      ) : (
+        <FlatList
+          data={item.data}
+          renderItem={renderQAFIItem}
+          keyExtractor={(videoItem) => videoItem.qafi_id.toString()}
+          // keyExtractor={(videoItem, index) => index.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+      )}
+    </View>
+  );
+
+  // ebc api Category and sub 9/9/2024
+  // Fetch all data when authToken is set and screen is focused
+  const [searchesEBCData, setSearchesEBCData] = useState([]);
+  const [EBCsections, setEBCSections] = useState([]);
+  const [noEBCData, setNoEBCData] = useState(false);
+  const [TopEBCData, setTopEBCData] = useState([]);
+  const [EBCLoading, setEBCLoading] = useState(true);
+
+  useEffect(() => {
+    if (authToken && isFocused) {
+      fetchAllEBCCategory();
+      fetchTopEBC();
+      fetchSubCategoryEBC(selectedEBCItemId);
+
+    }
+  }, [authToken, selectedEBCItemId, isFocused]);
+
+  // Fetch categories
+  const fetchAllEBCCategory = async () => {
+    setEBCLoading(true)
+    try {
+      const response = await fetch(`${base_url}gebc/category/getAll?page=1&limit=10000`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      const result = await response.json();
+      const reverseData = result.AllCategories.reverse();
+      setSearchesEBCData(reverseData);
+      // if (result.AllCategories.length > 0) {
+      //   setSelectedItemId(result.AllCategories[0].id);
+      // }
+      if (selectedEBCItemId === null && result.AllCategories.length > 0) {
+        setSelectedEBCItemId(result.AllCategories[0].id);
+      }
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+    setEBCLoading(false)
+  };
+
+  // Fetch top sports
+  const fetchTopEBC = async () => {
+    setEBCLoading(true)
+    try {
+      const response = await fetch(`${base_url}gebc/getTopGebc`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      const result = await response.json();
+      setTopEBCData(result.data);
+    } catch (error) {
+      console.error("Error fetching top sports:", error);
+    }
+    setEBCLoading(false)
+  };
+
+  // Fetch sub-category sports
+  const fetchSubCategoryEBC = async (selectedEBCItemId) => {
+    setEBCLoading(true)
+    try {
+      const response = await fetch(`${base_url}gebc/getAllGEBCsByCategory/${selectedEBCItemId}?page=1&limit=100000`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      const result = await response.json();
+      if (Array.isArray(result.data) && result.data.length > 0) {
+        const formattedSections = result.data.map(category => ({
+          title: category.sub_category_name,
+          data: category.GEBC_result.GEBCs,
+        }));
+        setEBCSections(formattedSections);
+        setNoEBCData(formattedSections.every(section => section.data.length === 0));
+      } else {
+        setEBCSections([]);
+        setNoEBCData(true);
+      }
+    } catch (error) {
+      console.error("Error fetching sub-category sports:", error);
+      setNoEBCData(true); // Assume no data on error
+    }
+    setEBCLoading(false)
+  };
+
+  const renderEBCItem = ({ item }) => (
+    // <TouchableOpacity onPress={handle_details}>
+    <TouchableOpacity onPress={() => navigation.navigate("ViewGEBC", { picData: item })}>
+      <View style={styles.itemContainer}>
+        <View
+          style={{
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+            height: hp(10),
+            borderRadius: wp(1),
+            resizeMode: "stretch",
+            borderWidth: 1, // Border width
+            borderColor: "grey", // Border color
+          }}
+        >
+          <Text style={{ fontSize: hp(5) }}>{item.image}</Text>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            height: hp(7),
+            width: wp(25),
+          }}
+        >
+          {item?.user_image ? (
+            <View
+              style={{
+                width: wp(7),
+                marginLeft: wp(0.5),
+                height: wp(7),
+                overflow: "hidden",
+                borderRadius: wp(7) / 2,
+              }}
+            >
+              <Image
+                source={{ uri: item?.user_image }}
+                style={{ width: "100%", height: "100%", resizeMode: "cover" }}
+              />
+            </View>
+          ) : (
+            <View
+              style={{
+                width: wp(7),
+                marginLeft: wp(0.5),
+                height: wp(7),
+                borderRadius: wp(7) / 2,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <MaterialCommunityIcons
+                // style={{marginTop: hp(0.5)}}
+                name={"account-circle"}
+                size={24}
+                color={"#FACA4E"}
+              />
+
+            </View>
+          )}
+
+          <View style={{ width: 70 }}>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={1}
+              style={{
+                fontSize: hp(1.5),
+                marginLeft: wp(0.7),
+                color: "#000000",
+                fontWeight: "bold",
+                fontFamily: "Inter",
+              }}
+            >
+              {item.username}
+            </Text>
+          </View>
+          <View style={{ marginLeft: wp(1) }}>
+            <NonVerified />
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+
+  const renderEBCSection = ({ item }) => (
+    <View style={styles.sectionContainer}>
+      <Text style={styles.sectionHeader}>{item.title}</Text>
+      {item.data.length === 0 ? (
+        <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
+      ) : (
+        <FlatList
+          data={item.data}
+          renderItem={renderEBCItem}
+          keyExtractor={(videoItem) => videoItem.gebc_id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+      )}
+    </View>
+  );
 
 
-    {/* <Text  ellipsizeMode="tail"
-              numberOfLines={1} style={styles.text}>{item.name}</Text>
-    <Text  ellipsizeMode="tail"
-              numberOfLines={2} style={styles.text1}>{item.description}</Text> */}
-  </View>
-</TouchableOpacity>
-);
-
-const renderEBCSection = ({ item }) => (
-  <View style={styles.sectionContainer}>
-    <Text style={styles.sectionHeader}>{item.title}</Text>
-    {item.data.length === 0 ? (
-      <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
-    ) : (
-    <FlatList
-      data={item.data}
-      renderItem={renderEBCItem}
-      keyExtractor={(videoItem) => videoItem.gebc_id.toString()}
-      horizontal
-      showsHorizontalScrollIndicator={false}
-    />
-  )}
-  </View>
-);
-
-
-
-
-
-
-const [newLoader, setNewLoader] = useState([]);
+  const [newLoader, setNewLoader] = useState([]);
 
   const [opensLettersPublicGeneralData, setOpensLettersPublicGeneralData] =
-  useState([]);
+    useState([]);
 
-const [opensLettersPublicCelebrityData, setOpensLettersPublicCelebrityData] =
-  useState([]);
+  const [opensLettersPublicCelebrityData, setOpensLettersPublicCelebrityData] =
+    useState([]);
 
-const [opensLettersPrivateFriendsData, setOpensLettersPrivateFriendsData] =
-  useState([]);
+  const [opensLettersPrivateFriendsData, setOpensLettersPrivateFriendsData] =
+    useState([]);
 
-const [
-  opensLettersPrivateCelebrityData,
-  setOpensLettersPrivateCelebrityData,
-] = useState([]);
+  const [
+    opensLettersPrivateCelebrityData,
+    setOpensLettersPrivateCelebrityData,
+  ] = useState([]);
 
 
 
@@ -3115,15 +2581,12 @@ const [
         }
       );
 
-      const result = await response.json();
-      // console.log('Resultings of News Celebrity Data', result.AllLetter);
-      //Alert.alert(result)
+
       const formattedLetters = result.AllLetter.map(letter => ({
         ...letter,
         post_date: convertTimeAndDate(letter.post_date),
       })).reverse();
-      // const reversedData = result.AllLetter.reverse();
-      // console.log('Resultings of News Celebrity Data', formattedLetters);
+
       setOpensLettersPublicCelebrityData(formattedLetters); // Update the state with the fetched data
       // setOpensLettersPublicCelebrityData(result.AllLetter); // Update the state with the fetched data
       await fetchLetterPrivateFriendsLetter();
@@ -3152,9 +2615,6 @@ const [
       );
 
       const result = await response.json();
-      // console.log('Resultings of News', result.AllLetter);
-      //Alert.alert(result)
-
       setOpensLettersPrivateFriendsData(result.AllLetter); // Update the state with the fetched data
       await fetchLetterPrivateCelebrityLetter();
     } catch (error) {
@@ -3179,8 +2639,6 @@ const [
       );
 
       const result = await response.json();
-      // console.log('Resultings of News', result.AllLetter);
-      //Alert.alert(result)
 
       setOpensLettersPrivateCelebrityData(result.AllLetter); // Update the state with the fetched data
       // fetchTopNews();
@@ -3196,336 +2654,177 @@ const [
   //DISC
 
   const renderPublicGeneralLetter = (item) => {
-    // const imageUrl =
-    //   item.signature_image && item.signature_image
-    //     ? item.signature_image.startsWith("/fileUpload")
-    //       ? base_url + `${item.signature_image}`
-    //       : item.signature_image
-    //     : null;
     const imageUrl = item.signature_image
-  ? item.signature_image.startsWith('/fileUpload') || item.signature_image.startsWith('/signatureImages')
-    ? base_url + item.signature_image
-    : item.signature_image
-  : null;
+      ? item.signature_image.startsWith('/fileUpload') || item.signature_image.startsWith('/signatureImages')
+        ? base_url + item.signature_image
+        : item.signature_image
+      : null;
 
     const userimageUrl = item.userimage
-  ? item.userimage.startsWith('/userImage')
-    ? base_url + item.userimage
-    : item.userimage
-  : null;
-  // console.log('imeeeeee---', userimageUrl)
-    // const imageUrl =
-    //   item.images && item.images[0]
-    //     ? item.images[0].startsWith("/fileUpload")
-    //       ? base_url + `${item.images[0]}`
-    //       : item.images[0]
-    //     : null;
-
+      ? item.userimage.startsWith('/userImage')
+        ? base_url + item.userimage
+        : item.userimage
+      : null;
     return (
       <TouchableOpacity
-      onPress={() =>
-        navigation.navigate("LetterDetails", {
-          Letters: item,
-          identifier: false,
-        })
-      }
-      style={{
-        width: wp(45),
-        marginHorizontal: wp(2),
-        marginVertical: hp(1),
-        height: "100%",
-      }} // Add margin here
-    >
-      <View
-        style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
-      ></View>
-      <View>
-        <View
-          style={{
-            flexDirection: "row",
-            paddingHorizontal: 2,
-            alignItems: "center",
-            height: hp(4),
-          }}
-        >
-          {item?.userimage !== null || item?.userimage !== undefined || userimageUrl !== null || userimageUrl !== undefined ? (
-            <View
-              style={{
-                height: hp(2),
-                width: wp(4),
-                borderRadius: wp(3),
-              }}
-            >
-              <Image
-                source={{ uri: item?.userimage || userimageUrl }}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: wp(3),
-                  resizeMode: "cover",
-                }}
-              />
-            </View>
-          ) : (
-            <MaterialCommunityIcons
-              style={{ marginTop: hp(0.5) }}
-              name={"account-circle"}
-              size={35}
-              color={"#FACA4E"}
-            />
-          )}
-
-          <View style={{ marginLeft: wp(2.5) }}>
-            <Approved width={10} height={10} />
-          </View>
-        </View>
-
-        <View
-          style={{
-            alignItems: "flex-end",
-            marginTop: hp(-2),
-            marginRight: wp(3),
-          }}
-        >
-          <Text
-            style={{
-              color: "#282828",
-              // marginLeft: wp(3),
-              width: "25%",
-              fontSize: 6,
-              fontFamily: "Inter-Bold",
-            }}
-          >
-            {item.post_date}
-          </Text>
-        </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            height: hp(5),
-paddingTop:6,
-// backgroundColor:'red', width:'60%'
-          }}
-        >
-          <Text
-            style={{
-              color: "#282828",
-              fontSize: 8,
-              textDecorationLine: "underline",
-              fontFamily: "Inter-Bold",
-            }}
-          >
-            {t('Dashboard.Subject')}
-            {/* Subject: */}
-          </Text>
-          <View style={{height:'100%',width:'75%' }}>
-            <Text
-              numberOfLines={3}
-            ellipsizeMode="tail"
-              style={{
-                color: "#595959",
-                marginLeft: wp(1),
-                fontSize: 8,
-                fontFamily: "Inter-Regular",
-              }}
-            >
-              {item.subject_place}
-            </Text>
-          </View>
-        </View>
-
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: 'flex-end',
-            height: hp(6),
-right:10
-          }}
-        >
-          {imageUrl !== null || imageUrl !== undefined || item.signature_image !== undefined || item.signature_image !== null ? (
-            <View
-              style={{
-                height: hp(5),
-                width: wp(10),
-                borderRadius: wp(3),
-              }}
-            >
-              <Image
-                 source={{ uri: imageUrl || item.signature_image }}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: wp(3),
-                  resizeMode: "cover",
-                }}
-              />
-            </View>
-          ) : (
-          null
-          )}
-          {/* <Text
-            numberOfLines={3}
-            ellipsizeMode="tail"
-            style={{
-              color: "#595959",
-              fontSize: 8,
-              fontFamily: "Inter-Regular",
-            }}
-          >
-            {item.body}
-          </Text> */}
-        </View>
+        onPress={() =>
+          navigation.navigate("LetterDetails", {
+            Letters: item,
+            identifier: false,
+          })
+        }
+        style={{
+          width: wp(45),
+          marginHorizontal: wp(2),
+          marginVertical: hp(1),
+          height: "100%",
+        }} // Add margin here
+      >
         <View
           style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
         ></View>
-      </View>
-    </TouchableOpacity>
+        <View>
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 2,
+              alignItems: "center",
+              height: hp(4),
+            }}
+          >
+            {item?.userimage !== null || item?.userimage !== undefined || userimageUrl !== null || userimageUrl !== undefined ? (
+              <View
+                style={{
+                  height: hp(2),
+                  width: wp(4),
+                  borderRadius: wp(3),
+                }}
+              >
+                <Image
+                  source={{ uri: item?.userimage || userimageUrl }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: wp(3),
+                    resizeMode: "cover",
+                  }}
+                />
+              </View>
+            ) : (
+              <MaterialCommunityIcons
+                style={{ marginTop: hp(0.5) }}
+                name={"account-circle"}
+                size={35}
+                color={"#FACA4E"}
+              />
+            )}
+
+            <View style={{ marginLeft: wp(2.5) }}>
+              <Approved width={10} height={10} />
+            </View>
+          </View>
+
+          <View
+            style={{
+              alignItems: "flex-end",
+              marginTop: hp(-2),
+              marginRight: wp(3),
+            }}
+          >
+            <Text
+              style={{
+                color: "#282828",
+                // marginLeft: wp(3),
+                width: "25%",
+                fontSize: 6,
+                fontFamily: "Inter-Bold",
+              }}
+            >
+              {item.post_date}
+            </Text>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              height: hp(5),
+              paddingTop: 6,
+              // backgroundColor:'red', width:'60%'
+            }}
+          >
+            <Text
+              style={{
+                color: "#282828",
+                fontSize: 8,
+                textDecorationLine: "underline",
+                fontFamily: "Inter-Bold",
+              }}
+            >
+              {t('Dashboard.Subject')}
+              {/* Subject: */}
+            </Text>
+            <View style={{ height: '100%', width: '75%' }}>
+              <Text
+                numberOfLines={3}
+                ellipsizeMode="tail"
+                style={{
+                  color: "#595959",
+                  marginLeft: wp(1),
+                  fontSize: 8,
+                  fontFamily: "Inter-Regular",
+                }}
+              >
+                {item.subject_place}
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: 'flex-end',
+              height: hp(6),
+              right: 10
+            }}
+          >
+            {imageUrl !== null || imageUrl !== undefined || item.signature_image !== undefined || item.signature_image !== null ? (
+              <View
+                style={{
+                  height: hp(5),
+                  width: wp(10),
+                  borderRadius: wp(3),
+                }}
+              >
+                <Image
+                  source={{ uri: imageUrl || item.signature_image }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: wp(3),
+                    resizeMode: "cover",
+                  }}
+                />
+              </View>
+            ) : (
+              null
+            )}
+    
+          </View>
+          <View
+            style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
+          ></View>
+        </View>
+      </TouchableOpacity>
     );
   };
 
-
-  // ////Fetch Pics
-  const fetchCategoryPics = async (token) => {
-    // const token = authToken;
-
-    try {
-      const response = await fetch(
-        base_url + "picCategory/getAllPicCategories?page=1&limit=5",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      // console.log('Search fetchCategoryPics-----------', result.AllCategories);
-      return result.AllCategories;
-      // setSearchesPics(result.AllCategories); // Update the state with the fetched data
-    } catch (error) {
-      console.error("Error in fetchCategoryPics :", error);
-    }
-  };
-
-  const fetchTopPics = async (token, id, picId) => {
-    // console.log('picid ---------', picId)
-    try {
-      const response = await fetch(base_url + `top/app/top_tour/${picId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const result = await response.json();
-      // console.log("Top  topTour-----------", result.topTour[0]);
-      return result.topTour;
-      // setSearchesPics(result.AllCategories); // Update the state with the fetched data
-    } catch (error) {
-      console.error("Error in topTour :", error);
-    }
-  };
-
-  const fetchTrendingPics = async (token, id, picId) => {
-    // const token = authToken;
-
-    try {
-      const response = await fetch(
-        base_url +
-          `picTour/getAllTrendingToursByCategory/${picId}?page=1&limit=5`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      // console.log('Resultings Pics Tourzs', result.Tours);
-      return result.Tours;
-      // setDataPics(result.Tours); // Update the state with the fetched data
-    } catch (error) {
-      console.error("Error Trending:", error);
-    }
-  };
-
-  const fetchLatestPics = async (token, id, picId) => {
-    //   console.log('selected id latest videos', authToken);
-
-    // const token = authToken;
-
-    try {
-      const response = await fetch(
-        base_url +
-          `picTour/getAllRecentVideosByCategory/${picId}?page=1&limit=5`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      return result.Tours;
-      // console.log('Resultings', result.Tours);
-      // setDataLatestPics(result.Tours); // Update the state with the fetched data
-    } catch (error) {
-      console.error("Error in fetchLatestPics:", error);
-    }
-  };
-
-  const fetchMostViewedPics = async (token, id, picId) => {
-    try {
-      const response = await fetch(
-        base_url +
-          `picTour/getMostViewedToursByCategory/${picId}?page=1&limit=5`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      // console.log('Resultings Most Viewed', result.Tours);
-      return result.Tours;
-      // setMostViewedPics(result.Tours); // Update the state with the fetched data
-    } catch (error) {
-      console.error("Error in fetchMostViewedPics:", error);
-    }
-  };
-  const fetchMostCommentedPics = async (token, id, picId) => {
-    try {
-      const response = await fetch(
-        base_url +
-          `picTour/getMostCommentedToursByCategory/${picId}?page=1&limit=5`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      return result.Tours;
-    } catch (error) {
-      console.error("Error in fetchMostCommentedPics:", error);
-    }
-  };
-  // ///Fetch Pic end
 
   // fetch Market start
   // console.log('market ki id aaaii-----------', selectedItemIdMarket)
 
   const [selectedItemIdMarket, setSelectedItemIdMarket] = useState(null);
   const [dataElectronics, setDataElectronics] = useState([]);
-  const [allMarket , setAllmarket] = useState([]);
+  const [allMarket, setAllmarket] = useState([]);
   const [dataVehicles, setDataVehicles] = useState([]);
   const [dataClothing, setDataClothing] = useState([]);
   const [marketLoding, setMarketLoading] = useState([]);
@@ -3545,7 +2844,7 @@ right:10
 
       setMarketLoading(false);
     }
-  }, [authToken, selectedItemIdMarket ,isFocused]);
+  }, [authToken, selectedItemIdMarket, isFocused]);
 
   const [DataTopVideosMarket, setDataTopVideosMarket] = useState([]);
   const fetchTopMarket = async () => {
@@ -3601,7 +2900,6 @@ right:10
 
         setCategorySelectMarket(categories);
 
-          // console.log('Data Categories', categories);
       } else {
         console.error(
           // "Failed to fetch categories:",
@@ -3622,7 +2920,7 @@ right:10
     try {
       const response = await fetch(
         base_url +
-          `item/getAllItemByCategory/13?page=1&limit=5&region=${selectedItemIdMarket}`,
+        `item/getAllItemByCategory/13?page=1&limit=5&region=${selectedItemIdMarket}`,
         {
           method: "GET",
           headers: {
@@ -3646,7 +2944,7 @@ right:10
     try {
       const response = await fetch(
         base_url +
-          `item/getAllItemByCategory/12?page=1&limit=5&region=${selectedItemIdMarket}`,
+        `item/getAllItemByCategory/12?page=1&limit=5&region=${selectedItemIdMarket}`,
         {
           method: "GET",
           headers: {
@@ -3670,7 +2968,7 @@ right:10
     try {
       const response = await fetch(
         base_url +
-          `item/getAllItemByCategory/6?page=1&limit=5&region=${selectedItemIdMarket}`,
+        `item/getAllItemByCategory/6?page=1&limit=5&region=${selectedItemIdMarket}`,
         {
           method: "GET",
           headers: {
@@ -3693,7 +2991,7 @@ right:10
     try {
       const response = await fetch(
         base_url +
-          `item/getAllItemByCategory/5?page=1&limit=5&region=${selectedItemIdMarket}`,
+        `item/getAllItemByCategory/5?page=1&limit=5&region=${selectedItemIdMarket}`,
         {
           method: "GET",
           headers: {
@@ -3711,14 +3009,11 @@ right:10
   };
 
 
-
-
-
   const fetchElectronicsMarket = async (token, id, picId, marketId) => {
     try {
       const response = await fetch(
         base_url +
-          `item/getAllItemByCategory/13?page=1&limit=5&region=${marketId}`,
+        `item/getAllItemByCategory/13?page=1&limit=5&region=${marketId}`,
         {
           method: "GET",
           headers: {
@@ -3741,7 +3036,7 @@ right:10
     try {
       const response = await fetch(
         base_url +
-          `item/getAllItemByCategory/12?page=1&limit=5&region=${marketId}`,
+        `item/getAllItemByCategory/12?page=1&limit=5&region=${marketId}`,
         {
           method: "GET",
           headers: {
@@ -3764,7 +3059,7 @@ right:10
     try {
       const response = await fetch(
         base_url +
-          `item/getAllItemByCategory/6?page=1&limit=5&region=${marketId}`,
+        `item/getAllItemByCategory/6?page=1&limit=5&region=${marketId}`,
         {
           method: "GET",
           headers: {
@@ -3775,15 +3070,12 @@ right:10
 
       const result = await response.json();
       return result.AllItems;
-      // console.log('AllItems', result.AllItems);
-      // setDataClothingMarket(result.AllItems);
+
     } catch (error) {
       console.error("Error Trending:", error);
     }
   };
   const fetchAllMarket = async (token, id, picId, marketId) => {
-    // const token = authToken;
-    // console.log('token aya ', token)
 
     try {
       const response = await fetch(
@@ -3809,142 +3101,7 @@ right:10
     }
   };
 
-  // ///////////Trending
-  const renderAvailableAppsVideo = (item) => {
-    // console.log("Itemsss", item);
-    //   console.log('Video Link', item.thumbnail);
-    return (
-      <TouchableOpacity
-        onPress={() => navigation.navigate("ViewVideo", { videoData: item })}
-        style={{ width: wp(27), margin: 5 }}
-      >
-        <View>
-          {item.thumbail === "" ||
-          item.thumbnail === null ||
-          // item.thumbnail.startsWith('/') ||
-          item.thumbnail === undefined ? (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
 
-                zIndex: 1, // Ensure it's on top of other elements
-                //flex: 1,
-                width: "100%",
-                height: hp(12),
-                borderRadius: wp(1),
-                resizeMode: "cover",
-              }}
-              source={appImages.galleryPlaceHolder}
-            />
-          ) : (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-
-                zIndex: 1, // Ensure it's on top of other elements
-                //flex: 1,
-                width: "100%",
-                height: hp(12),
-                borderRadius: wp(1),
-                resizeMode: "cover",
-              }}
-              source={{ uri: item.thumbnail }}
-            />
-          )}
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginLeft: wp(0.5),
-            marginTop: hp(12.5),
-          }}
-        >
-          <Text
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            style={{
-              fontSize: hp(1.5),
-              fontFamily: "Inter-Regular",
-              color: "#000000",
-              width: wp(23),
-            }}
-          >
-            {item.description}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  //////Pics Start
-  const renderAvailableAppsPics = (item) => {
-    //   console.log('Items of Pics', item);
-    return (
-      <TouchableOpacity
-        onPress={() => navigation.navigate("PicDetails", { picData: item })}
-        style={{ width: wp(27), margin: 5 }}
-      >
-        <View>
-          {!item.image ||
-          item.image === "undefined" ||
-          item.image.startsWith("/") ? (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                zIndex: 1,
-                width: "100%",
-                height: hp(12),
-                borderRadius: wp(1),
-                resizeMode: "cover",
-              }}
-              source={appImages.galleryPlaceHolder}
-            />
-          ) : (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                zIndex: 1,
-                width: "100%",
-                height: hp(12),
-                borderRadius: wp(1),
-                resizeMode: "cover",
-              }}
-              source={{ uri: item.image }}
-            />
-          )}
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginLeft: wp(0.5),
-            marginTop: hp(12.5),
-          }}
-        >
-          <Text
-            style={{
-              fontSize: hp(1.5),
-              fontFamily: "Inter-Regular",
-              color: "#000000",
-              width: wp(23),
-            }}
-          >
-            {item.name}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-  ///// Pics End
   // /////Market Start
 
   const renderAvailableAppsMarket = (item) => {
@@ -3958,8 +3115,8 @@ right:10
       >
         <View>
           {!item?.images[0]?.image ||
-          item?.images[0]?.image === "undefined" ||
-          item?.images[0]?.image.startsWith("/") ? (
+            item?.images[0]?.image === "undefined" ||
+            item?.images[0]?.image.startsWith("/") ? (
             <Image
               style={{
                 position: "absolute",
@@ -3996,18 +3153,14 @@ right:10
             position: "absolute",
             top: hp(17),
             left: 3,
-            //height: hp(3),
-            //width: wp(21),
-            //borderRadius: wp(3),
-            //backgroundColor: '#FACA4E',
             justifyContent: "center",
             alignItems: "center",
             zIndex: 2, // Ensure it's on top
           }}
         >
-          <Text 
-           ellipsizeMode="tail"
-           numberOfLines={1}
+          <Text
+            ellipsizeMode="tail"
+            numberOfLines={1}
             style={{
               fontSize: hp(1.7),
               fontFamily: "Inter",
@@ -4623,17 +3776,7 @@ right:10
       console.error("Error saving selected apps to AsyncStorage:", error);
     }
   };
-  // console.log('total saved --------->', savedApps)
-  // const handleSave = () => {
-  //   setSavedApps(selectedApps);
-  //   setSnackbarVisible(true);
-  //   setModalVisible(false);
-  // };
-  // const handleSave_b = () => {
-  //   setSavedApps_b(selectedApps_b);
-  //   setSnackbarVisible(true);
-  //   setModalVisible_b(false);
-  // };
+ 
   const handleSave_sp = () => {
     setSavedApps_sp(selectedApps_sp);
     setSnackbarVisible(true);
@@ -4729,93 +3872,18 @@ right:10
     setcategoryActive(true); //ye old hai jis ko comment kiya tha
   };
 
- 
-  // useEffect(() => {
-  //   if (authToken) {
-  //     if(selectedCinematicItemId == null)
-  //       // console.log('useeffect mein id hai', selectedItemId)
-  //       {
-  //         setSelectedCinematicItemId(29)
-  //       }
-        
-  //     // fetchAllData();
-  //     fetchAllCinematicsCategory();
-  //   }
-  // }, []);
-  // const fetchAllCinematicsCategory = async () => {
-  //   //console.log("Categry in id", selectedItemId)
-  //   const token = authToken;
-
-  //   try {
-  //     const response = await fetch(
-  //       base_url + "cinematics/category/getAll?page=1&limit=100",
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     const result = await response.json();
-  //     // console.log("AllCategories---", result.AllCategories);
-  //     setCinematicData(result.AllCategories); // Update the state with the fetched data
-  //   } catch (error) {
-  //     console.error("Error Trending:", error);
-  //   }
-  // };
-
-
-
-//  const [Cinematicdata, setCinematicData] = useState([]);
-//   const [selectedCinematicItemId, setSelectedCinematicItemId] = useState(null);
-//   const [dataTopVideos, setDataTopVideos] = useState([]);
-//   const [sections, setSections] = useState([]);
-//   const [noData, setNoData] = useState(false);
-
-//   useEffect(() => {
-//     if (selectedCinematicItemId === null) {
-//       setSelectedCinematicItemId(29);
-//     }
-
-//     fetchAllData();
-//   }, []);
-
-//   const fetchAllData = async () => {
-//     setLoading(true);
-//     setNoData(false);
-
-//     try {
-//       const categories = await fetchAllCinematicsCategory();
-//       const topVideos = await fetchCinematicTopVideos();
-//       const { sections, noData } = await fetchSubCategory(selectedCinematicItemId);
-
-//       setCinematicData(categories);
-//       setDataTopVideos(topVideos);
-//       console.log('hoooooooooooooooooooo', sections)
-//       setSections(sections);
-//       setNoData(noData);
-//     } catch (error) {
-//       console.error("Error fetching data:", error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
 
   const renderVideoItem = ({ item }) => (
-    // console.log('itemmmmmmmmmmmmmm', item)
-    // <TouchableOpacity onPress={handle_details}>
-    <TouchableOpacity onPress={() => navigation.navigate('Cinematics_details', {videoData: item, identifier: false})}>
-    <View style={styles.itemContainer}>
-      {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
-      <Image source={{ uri: item.thumbnail }} style={styles.image} />
-      <Text  ellipsizeMode="tail"
-                numberOfLines={1} style={styles.nametext}>{item.name}</Text>
-      <Text  ellipsizeMode="tail"
-                numberOfLines={2} style={styles.text1}>{item.description}</Text>
-    </View>
-  </TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.navigate('Cinematics_details', { videoData: item, identifier: false })}>
+      <View style={styles.itemContainer}>
+        {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
+        <Image source={{ uri: item.thumbnail }} style={styles.image} />
+        <Text ellipsizeMode="tail"
+          numberOfLines={1} style={styles.nametext}>{item.name}</Text>
+        <Text ellipsizeMode="tail"
+          numberOfLines={2} style={styles.text1}>{item.description}</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   const renderSection = ({ item }) => (
@@ -4824,31 +3892,29 @@ right:10
       {item.data.length === 0 ? (
         <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
       ) : (
-      <FlatList
-        data={item.data}
-        renderItem={renderVideoItem}
-        keyExtractor={(videoItem) => videoItem.video_id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-    )}
+        <FlatList
+          data={item.data}
+          renderItem={renderVideoItem}
+          keyExtractor={(videoItem) => videoItem.video_id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 
-  
+
   const renderFanVideoItem = ({ item }) => (
-    // console.log('itemmmmmmmmmmmmmm', item)
-    // <TouchableOpacity onPress={handle_details}>
-    <TouchableOpacity onPress={() => navigation.navigate('Fans_star_details', {videoData: item})}>
-    <View style={styles.itemContainer}>
-      {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
-      <Image source={{ uri: item.thumbnail }} style={styles.image} />
-      <Text  ellipsizeMode="tail"
-                numberOfLines={1} style={styles.nametext}>{item.name}</Text>
-      <Text  ellipsizeMode="tail"
-                numberOfLines={2} style={styles.text1}>{item.description}</Text>
-    </View>
-  </TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.navigate('Fans_star_details', { videoData: item })}>
+      <View style={styles.itemContainer}>
+        {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
+        <Image source={{ uri: item.thumbnail }} style={styles.image} />
+        <Text ellipsizeMode="tail"
+          numberOfLines={1} style={styles.nametext}>{item.name}</Text>
+        <Text ellipsizeMode="tail"
+          numberOfLines={2} style={styles.text1}>{item.description}</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   const renderFanSection = ({ item }) => (
@@ -4857,14 +3923,14 @@ right:10
       {item.data.length === 0 ? (
         <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
       ) : (
-      <FlatList
-        data={item.data}
-        renderItem={renderFanVideoItem}
-        keyExtractor={(videoItem) => videoItem.video_id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-    )}
+        <FlatList
+          data={item.data}
+          renderItem={renderFanVideoItem}
+          keyExtractor={(videoItem) => videoItem.video_id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 
@@ -4873,7 +3939,7 @@ right:10
   const renderCinematicSearches = (item) => {
     // console.log("Regions", item);
     const isSelected = selectedCinematicItemId === item.id;
-// console.log('is selected hai---', isSelected)
+    // console.log('is selected hai---', isSelected)
     return (
       <TouchableOpacity
         style={[
@@ -4902,7 +3968,7 @@ right:10
   const renderFanstartSearches = (item) => {
     // console.log("Regions", item);
     const isSelected = selectedFanstarItemId === item.id;
-// console.log('is selected hai---', isSelected)
+    // console.log('is selected hai---', isSelected)
     return (
       <TouchableOpacity
         style={[
@@ -4996,7 +4062,7 @@ right:10
   const renderLearnSearches = (item) => {
     // console.log("Regions", item);
     const isSelected = selectedlearnItemId === item.id;
-// console.log('is selected hai---', isSelected)
+    // console.log('is selected hai---', isSelected)
     return (
       <TouchableOpacity
         style={[
@@ -5024,16 +4090,16 @@ right:10
 
   const renderLearnVideoItem = ({ item }) => (
     // <TouchableOpacity onPress={handle_details}>
-    <TouchableOpacity onPress={() => navigation.navigate('Learning_details', {videoData: item})}>
-    <View style={styles.itemContainer}>
-      {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
-      <Image source={{ uri: item.thumbnail }} style={styles.image} />
-      <Text  ellipsizeMode="tail"
-                numberOfLines={1} style={styles.nametext}>{item.name}</Text>
-      <Text  ellipsizeMode="tail"
-                numberOfLines={2} style={styles.text1}>{item.description}</Text>
-    </View>
-  </TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.navigate('Learning_details', { videoData: item })}>
+      <View style={styles.itemContainer}>
+        {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
+        <Image source={{ uri: item.thumbnail }} style={styles.image} />
+        <Text ellipsizeMode="tail"
+          numberOfLines={1} style={styles.nametext}>{item.name}</Text>
+        <Text ellipsizeMode="tail"
+          numberOfLines={2} style={styles.text1}>{item.description}</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   const renderLearnSection = ({ item }) => (
@@ -5042,14 +4108,14 @@ right:10
       {item.data.length === 0 ? (
         <Text style={styles.noDataText}>{t('Dashboard.NoDataavailable')}</Text>
       ) : (
-      <FlatList
-        data={item.data}
-        renderItem={renderLearnVideoItem}
-        keyExtractor={(videoItem) => videoItem.video_id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-    )}
+        <FlatList
+          data={item.data}
+          renderItem={renderLearnVideoItem}
+          keyExtractor={(videoItem) => videoItem.video_id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 
@@ -5095,7 +4161,7 @@ right:10
         barStyle="dark-content"
       />
 
-      <View style={{ marginTop: hp(5), width: "100%" }}>
+      <View style={{ marginTop:Platform.OS =="ios"? 0: hp(5), width: "100%" }}>
         {/* {console.log("Navigation object:", navigation)} */}
         <Headers
           showListings={true}
@@ -5160,8 +4226,8 @@ right:10
                 style={styles.overlayButton}
               >
                 <Text style={{ color: "white" }}>
-                {t('Dashboard.RemoveFromWotchaGotchaApp')}
-                
+                  {t('Dashboard.RemoveFromWotchaGotchaApp')}
+
                   {/* Remove From Wotcha Gotcha App */}
                 </Text>
               </TouchableOpacity>
@@ -5236,7 +4302,7 @@ right:10
                 style={styles.overlayButton}
               >
                 <Text style={{ color: "white" }}>
-                {t('Dashboard.RemoveFromWotchaGotchaApp')}
+                  {t('Dashboard.RemoveFromWotchaGotchaApp')}
                   {/* Remove From Wotcha Gotcha App */}
                 </Text>
               </TouchableOpacity>
@@ -5260,263 +4326,237 @@ right:10
         <View style={{ marginTop: hp(1) }}></View>
 
         {/* // start of banner slider */}
-    
+
         <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsData}
-        noDataMessage={t('Dashboard.NoTopBanner')}
-        onBannerPress={handleBannerPress}
-      />
-    {/* <View
-      style={{
-        alignItems: 'center',
-        height: hp(16),
-        // marginLeft: 8,
-        marginVertical: hp(2),
-      }}
-    >
-      {isLoading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : adsData.length === 0 ? (
-        <View style={styles.TopBannerView}>
-          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>No Top Banner</Text>
-        </View>
-      ) : (
-        <Carousel
-          data={adsData}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              key={item.id}
-              onPress={() => Linking.openURL(item.banner_link)}
-              style={{
-                justifyContent: 'center',
-              }}
-            >
-              <Image
-                source={{ uri: item?.image }}
-                style={{
-                  height: hp(15),
-                  width: '100%',
-                  borderWidth: 1,
-                  resizeMode: 'contain',
-                  borderRadius: 10,
-                }}
-              />
-            </TouchableOpacity>
-          )}
-          sliderWidth={Dimensions.get('window').width}
-          itemWidth={Dimensions.get('window').width * 0.9}
-          loop={true}
-          autoplay={true}
+          isLoading={isLoading}
+          adsData={adsData}
+          noDataMessage={t('Dashboard.NoTopBanner')}
+          onBannerPress={handleBannerPress}
         />
-      )}
-    </View> */}
-        {/* ////slider end */}
 
-        {/* //////category ///////////////////////////////////////////////////////////////////////////*/}
+        {Platform.OS != "ios" ?
+          <View style={styles.latestSearchList}>
+            <TouchableOpacity onPress={press_category}>
+              {isSelectedActive ? (
+                <CategoryActive width={23} height={23} />
+              ) : (
+                <CategoryInactive width={23} height={23} />
+              )}
+            </TouchableOpacity>
 
-        <View style={styles.latestSearchList}>
-          <TouchableOpacity onPress={press_category}>
-            {isSelectedActive ? (
-              <CategoryActive width={23} height={23} />
-            ) : (
-              <CategoryInactive width={23} height={23} />
-            )}
-          </TouchableOpacity>
+            <FlatList
+              style={{ flex: 1 }}
+              contentContainerStyle={{ alignItems: "center" }}
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              data={MassApp}
+              renderItem={({ item }) => renderSearches(item)}
+            />
+          </View> : <View>
+            <Text>No MassApps available!</Text>
+          </View>
+        }
 
-          <FlatList
-            style={{ flex: 1 }}
-            contentContainerStyle={{ alignItems: "center" }}
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            //data={regions}
-            data={MassApp}
-            // keyExtractor={item => item.id.toString()}
-            renderItem={({ item }) => renderSearches(item)}
-          />
-        </View>
+
         {categoryActive ? (
-          <>
-            <View
-              style={{
-                marginTop: hp(2),
-                marginLeft: wp(-1),
-                height: hp(23),
-                width: wp(60),
-              }}
-            >
-              {isLoading === true ? (
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <ActivityIndicator size="large" color="#FACA4E" />
-                </View>
-              ) : (
-                <>
-                  {topData?.length === 0 ? (
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                        {/* No Top Apps */}
-                        {t('Dashboard.NoTopApps')}
-                      </Text>
-                    </View>
-                  ) : (
-                    <FlatList
-                      style={{ margin: 8, flex: 1 }}
-                      //contentContainerStyle={{marginBottom:hp(5)}}
-                      showsVerticalScrollIndicator={false}
-                      data={topData}
-                      //keyExtractor={item => item.id.toString()}
-                      numColumns={3} // Set the number of columns to 3
-                      renderItem={({ item }) => renderAvailableApps(item)}
-                    />
-                  )}
-                </>
-              )}
-            </View>
-
-            <View style={{ marginTop: hp(-3), height: hp(25) }}>
-              <Text
-                style={{
-                  fontSize: hp(2.3),
-                  marginLeft: wp(3),
-                  fontFamily: "Inter-Bold",
-                  color: "#4A4A4A",
-                  fontWeight: "bold",
-                }}
-              > 
-               {t('Dashboard.PhoneBasedApps')}
-                {/* Phone Based Apps */}
-              </Text>
-
-              {isLoading ? (
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <ActivityIndicator size="large" color="#FACA4E" />
-                </View>
-              ) : (
-                <View style={{ flex: 1 }}>
-                  <FlatList
-                    data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                    renderItem={({ item }) => renderApps(item)}
-                    contentContainerStyle={{
-                      borderWidth: 1,
-                      marginRight: wp(2.3),
-                      marginTop: hp(3),
-                      borderColor: "#00000017",
-                      borderRadius: wp(3),
-                    }}
-                  />
-
-                  <FlatList
-                    data={dataApps.slice(Math.ceil(dataApps.length / 2))}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                    renderItem={({ item }) => renderApps(item)}
-                    contentContainerStyle={{
-                      borderWidth: 1,
-                      marginRight: wp(2.3),
-                      marginTop: hp(3),
-                      borderColor: "#00000017",
-                      borderRadius: wp(3),
-                    }}
-                  />
-                </View>
-              )}
-            </View>
-
-            <View style={{ height: hp(8), justifyContent: "center" }}>
+          Platform.OS != "ios" && (
+            <>
               <View
                 style={{
-                  height: hp(7),
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                  //borderWidth: 1,
-                  marginHorizontal: wp(12),
-                }}
-              ></View>
-            </View>
-
-            <View style={{ marginTop: hp(-5), height: hp(28) }}>
-              <Text
-                style={{
-                  fontSize: hp(2.3),
-                  marginLeft: wp(3),
-                  fontFamily: "Inter-Bold",
-                  color: "#4A4A4A",
-                  fontWeight: "bold",
+                  marginTop: hp(2),
+                  marginLeft: wp(-1),
+                  height: hp(0),
+                  width: wp(60),
                 }}
               >
-                {t('Dashboard.FavouriteApps')}
-                {/* Favourite Apps */}
-              </Text>
-              {isLoading ? (
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <ActivityIndicator size="large" color="#FACA4E" />
-                </View>
-              ) : (
-                <>
-                  {favouriteData?.length === 0 ? (
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Text
+                {isLoading === true ? (
+                  <View
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <ActivityIndicator size="large" color="#FACA4E" />
+                  </View>
+                ) : (
+
+
+                  <>
+                    {topData?.length === 0 ? (
+                      <View
                         style={{
-                          fontWeight: "bold",
-                          fontSize: hp(2.1),
+                          flex: 1,
                           justifyContent: "center",
+                          alignItems: "center",
                         }}
                       >
-                        {t('Dashboard.NoFavouriteApps')}
-                        {/* No Favourite Apps */}
-                      </Text>
-                    </View>
-                  ) : (
+                        <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                          {t('Dashboard.NoTopApps')}
+                        </Text>
+                      </View>
+                    ) : (
+                      <FlatList
+                        style={{ margin: 8, flex: 1 }}
+                        showsVerticalScrollIndicator={false}
+                        data={topData}
+                        numColumns={3} // Set the number of columns to 3
+                        renderItem={({ item }) => renderAvailableApps(item)}
+                      />
+                    )}
+                  </>
+
+
+
+                )}
+              </View>
+
+              <View style={{ marginTop: hp(-3), height: hp(25) }}>
+                <Text
+                  style={{
+                    fontSize: hp(2.3),
+                    marginLeft: wp(3),
+                    fontFamily: "Inter-Bold",
+                    color: "#4A4A4A",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {t('Dashboard.PhoneBasedApps')}
+                </Text>
+
+                {isLoading ? (
+                  <View
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <ActivityIndicator size="large" color="#FACA4E" />
+                  </View>
+                ) : (
+                  <View style={{ flex: 1 }}>
+                    <FlatList
+                      data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      keyExtractor={(item, itemIndex) => `${itemIndex}`}
+                      renderItem={({ item }) => renderApps(item)}
+                      contentContainerStyle={{
+                        borderWidth: 1,
+                        marginRight: wp(2.3),
+                        marginTop: hp(3),
+                        borderColor: "#00000017",
+                        borderRadius: wp(3),
+                      }}
+                    />
+
+                    <FlatList
+                      data={dataApps.slice(Math.ceil(dataApps.length / 2))}
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      keyExtractor={(item, itemIndex) => `${itemIndex}`}
+                      renderItem={({ item }) => renderApps(item)}
+                      contentContainerStyle={{
+                        borderWidth: 1,
+                        marginRight: wp(2.3),
+                        marginTop: hp(3),
+                        borderColor: "#00000017",
+                        borderRadius: wp(3),
+                      }}
+                    />
+                  </View>
+                )}
+              </View>
+
+              <View style={{ height: hp(8), justifyContent: "center" }}>
+                <View
+                  style={{
+                    height: hp(7),
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    //borderWidth: 1,
+                    marginHorizontal: wp(12),
+                  }}
+                ></View>
+              </View>
+
+              <View style={{ marginTop: hp(-5), height: hp(28) }}>
+                <Text
+                  style={{
+                    fontSize: hp(2.3),
+                    marginLeft: wp(3),
+                    fontFamily: "Inter-Bold",
+                    color: "#4A4A4A",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {t('Dashboard.FavouriteApps')}
+                </Text>
+                {isLoading ? (
+                  <View
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <ActivityIndicator size="large" color="#FACA4E" />
+                  </View>
+                ) : (
+                  <>
+                    {favouriteData?.length === 0 ? (
+                      <View
+                        style={{
+                          flex: 1,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: hp(2.1),
+                            justifyContent: "center",
+                          }}
+                        >
+                          {t('Dashboard.NoFavouriteApps')}
+                        </Text>
+                      </View>
+                    ) : (
+                      <FlatList
+                        data={favouriteData.slice(
+                          0,
+                          Math.ceil(favouriteData.length / 2)
+                        )}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        keyExtractor={(item, itemIndex) => `${itemIndex}`}
+                        renderItem={({ item }) => renderFavouritesApps(item)}
+                        contentContainerStyle={{
+                          borderWidth: 1,
+                          marginRight: wp(2.3),
+                          marginTop: hp(3),
+                          borderColor: "#00000017",
+                          borderRadius: wp(3),
+                        }}
+                      />
+                    )}
                     <FlatList
                       data={favouriteData.slice(
-                        0,
                         Math.ceil(favouriteData.length / 2)
                       )}
                       horizontal
@@ -5531,92 +4571,76 @@ right:10
                         borderRadius: wp(3),
                       }}
                     />
-                  )}
-                  <FlatList
-                    data={favouriteData.slice(
-                      Math.ceil(favouriteData.length / 2)
-                    )}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                    renderItem={({ item }) => renderFavouritesApps(item)}
-                    contentContainerStyle={{
-                      borderWidth: 1,
-                      marginRight: wp(2.3),
-                      marginTop: hp(3),
-                      borderColor: "#00000017",
-                      borderRadius: wp(3),
-                    }}
-                  />
-                </>
-              )}
-            </View>
+                  </>
+                )}
+              </View>
 
-            <View
-              style={{ marginTop: hp(1), marginBottom: hp(5), height: hp(25) }}
-            >
-              <Text
-                style={{
-                  fontSize: hp(2.3),
-                  marginLeft: wp(3),
-                  fontFamily: "Inter-Bold",
-                  color: "#4A4A4A",
-                  fontWeight: "bold",
-                }}
+              <View
+                style={{ marginTop: hp(1), marginBottom: hp(5), height: hp(25) }}
               >
-                {t('Dashboard.UnusedApps')}
-                {/* Unused Apps */}
-              </Text>
-
-              {isLoading ? (
-                <View
+                <Text
                   style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
+                    fontSize: hp(2.3),
+                    marginLeft: wp(3),
+                    fontFamily: "Inter-Bold",
+                    color: "#4A4A4A",
+                    fontWeight: "bold",
                   }}
                 >
-                  <ActivityIndicator size="large" color="#FACA4E" />
-                </View>
-              ) : (
-                <View style={{ flex: 1 }}>
-                  <FlatList
-                    data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                    renderItem={({ item }) => renderApps(item)}
-                    contentContainerStyle={{
-                      borderWidth: 1,
-                      marginRight: wp(2.3),
-                      marginTop: hp(3),
-                      borderColor: "#00000017",
-                      borderRadius: wp(3),
-                    }}
-                  />
+                  {t('Dashboard.UnusedApps')}
+                </Text>
 
-                  <FlatList
-                    data={dataApps.slice(Math.ceil(dataApps.length / 2))}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                    renderItem={({ item }) => renderApps(item)}
-                    contentContainerStyle={{
-                      borderWidth: 1,
-                      marginRight: wp(2.3),
-                      marginTop: hp(3),
-                      borderColor: "#00000017",
-                      borderRadius: wp(3),
+                {isLoading ? (
+                  <View
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
-                  />
-                </View>
-              )}
-            </View>
-          </>
+                  >
+                    <ActivityIndicator size="large" color="#FACA4E" />
+                  </View>
+                ) : (
+                  <View style={{ flex: 1 }}>
+                    <FlatList
+                      data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      keyExtractor={(item, itemIndex) => `${itemIndex}`}
+                      renderItem={({ item }) => renderApps(item)}
+                      contentContainerStyle={{
+                        borderWidth: 1,
+                        marginRight: wp(2.3),
+                        marginTop: hp(3),
+                        borderColor: "#00000017",
+                        borderRadius: wp(3),
+                      }}
+                    />
+
+                    <FlatList
+                      data={dataApps.slice(Math.ceil(dataApps.length / 2))}
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      keyExtractor={(item, itemIndex) => `${itemIndex}`}
+                      renderItem={({ item }) => renderApps(item)}
+                      contentContainerStyle={{
+                        borderWidth: 1,
+                        marginRight: wp(2.3),
+                        marginTop: hp(3),
+                        borderColor: "#00000017",
+                        borderRadius: wp(3),
+                      }}
+                    />
+                  </View>
+                )}
+              </View>
+            </>
+          )
+
         ) : (
           <>
             {ecommerance && selectedCategory === "E-commerce" && (
@@ -5705,8 +4729,8 @@ right:10
                             top: "40%",
                           }}
                         >
-                           {t('Dashboard.addEcommernceapps')}
-                          
+                          {t('Dashboard.addEcommernceapps')}
+
                           {/* Your can add E-commernce apps here */}
                         </Text>
                       </View>
@@ -5803,7 +4827,7 @@ right:10
                             top: "40%",
                           }}
                         >
-                         {t('Dashboard.addBussinessapps')}
+                          {t('Dashboard.addBussinessapps')}
                           {/* Your can add Bussiness apps here */}
                         </Text>
                       </View>
@@ -6475,7 +5499,7 @@ right:10
                             top: "40%",
                           }}
                         >
-                            {t('Dashboard.addGroceryapps')}
+                          {t('Dashboard.addGroceryapps')}
                           {/* You can add Grocery apps here */}
                         </Text>
                       </View>
@@ -6571,7 +5595,7 @@ right:10
                             top: "40%",
                           }}
                         >
-                           {t('Dashboard.addEmploymentapps')}
+                          {t('Dashboard.addEmploymentapps')}
                           {/* Your can add Employment apps here */}
                         </Text>
                       </View>
@@ -6587,266 +5611,34 @@ right:10
             )}
           </>
         )}
-
-        {/*   category ///////////////////////////////////////////////////////////////////////////////////////////////////////*/}
-
-        {/* <View
-          style={{
-            marginTop: hp(2),
-            marginLeft: wp(-1),
-            height: hp(23),
-            width: wp(60),
-          }}>
-          <FlatList
-            style={{margin: 8, flex: 1}}
-            showsVerticalScrollIndicator={false}
-            data={topData}
-            numColumns={3} // Set the number of columns to 3
-            renderItem={({item}) => renderAvailableApps(item)}
-          />
-        </View>
-
-        <View style={{marginTop: hp(-3), height: hp(25)}}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              marginLeft: wp(3),
-              fontFamily: 'Inter-Bold',
-              color: '#4A4A4A',
-              fontWeight: 'bold',
-            }}>
-            Phone Based Apps
-          </Text>
-
-          {isLoading ? (
-            <View
-              style={{
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <ActivityIndicator size="large" color="#FACA4E" />
-            </View>
-          ) : (
-            <View style={{flex: 1}}>
-              <FlatList
-                data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                renderItem={({item}) => renderApps(item)}
-                contentContainerStyle={{
-                  borderWidth: 1,
-                  marginRight: wp(2.3),
-                  marginTop: hp(3),
-                  borderColor: '#00000017',
-                  borderRadius: wp(3),
-                }}
-              />
-
-              <FlatList
-                data={dataApps.slice(Math.ceil(dataApps.length / 2))}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                renderItem={({item}) => renderApps(item)}
-                contentContainerStyle={{
-                  borderWidth: 1,
-                  marginRight: wp(2.3),
-                  marginTop: hp(3),
-                  borderColor: '#00000017',
-                  borderRadius: wp(3),
-                }}
-              />
-            </View>
-          )}
-        </View>
-
-        <View style={{height: hp(8), justifyContent: 'center'}}>
-          <View
-            style={{
-              height: hp(7),
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-              //borderWidth: 1,
-              marginHorizontal: wp(12),
-            }}>
-          </View>
-        </View>
-        <View style={{marginTop: hp(-5), height: hp(28)}}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              marginLeft: wp(3),
-              fontFamily: 'Inter-Bold',
-              color: '#4A4A4A',
-              fontWeight: 'bold',
-            }}>
-            Favourite Apps
-          </Text>
-          {isLoading ? (
-            <View
-              style={{
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <ActivityIndicator size="large" color="#FACA4E" />
-            </View>
-          ) : (
-            <>
-              {favouriteData?.length === 0 ? (
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                           <Text
-                      style={{
-                        fontWeight: "bold",
-                        fontSize: hp(2.1),
-                        justifyContent: "center",
-                      }}
-                    >
-                      No Favourite Apps
-                    </Text>
-                  </View>
-              ) : (
-                <FlatList
-                  data={favouriteData.slice(
-                    0,
-                    Math.ceil(favouriteData.length / 2),
-                  )}
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                  renderItem={({item}) => renderFavouritesApps(item)}
-                  contentContainerStyle={{
-                    borderWidth: 1,
-                    marginRight: wp(2.3),
-                    marginTop: hp(3),
-                    borderColor: '#00000017',
-                    borderRadius: wp(3),
-                  }}
-                />
-              )}
-              <FlatList
-                data={favouriteData.slice(Math.ceil(favouriteData.length / 2))}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                renderItem={({item}) => renderFavouritesApps(item)}
-                contentContainerStyle={{
-                  borderWidth: 1,
-                  marginRight: wp(2.3),
-                  marginTop: hp(3),
-                  borderColor: '#00000017',
-                  borderRadius: wp(3),
-                }}
-              />
-            </>
-          )}
-        </View>
-
-        <View style={{marginTop: hp(1.8), marginBottom: hp(5), height: hp(25)}}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              marginLeft: wp(3),
-              fontFamily: 'Inter-Bold',
-              color: '#4A4A4A',
-              fontWeight: 'bold',
-            }}>
-            Unused Apps
-          </Text>
-
-          {isLoading ? (
-            <View
-              style={{
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <ActivityIndicator size="large" color="#FACA4E" />
-            </View>
-          ) : (
-            <View style={{flex: 1}}>
-              <FlatList
-                data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                renderItem={({item}) => renderApps(item)}
-                contentContainerStyle={{
-                  borderWidth: 1,
-                  marginRight: wp(2.3),
-                  marginTop: hp(3),
-                  borderColor: '#00000017',
-                  borderRadius: wp(3),
-                }}
-              />
-
-              <FlatList
-                data={dataApps.slice(Math.ceil(dataApps.length / 2))}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                renderItem={({item}) => renderApps(item)}
-                contentContainerStyle={{
-                  borderWidth: 1,
-                  marginRight: wp(2.3),
-                  marginTop: hp(3),
-                  borderColor: '#00000017',
-                  borderRadius: wp(3),
-                }}
-              />
-            </View>
-          )}
-        </View> */}
         {/* //////////////// ///////////////////////////////////////////////////////////////////////abouve for comments */}
         {/* // start of banner slider */}
         <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsInActiveData} 
-        noDataMessage={t('Dashboard.NoBanner')}
-        onBannerPress={handleBannerPress}
-      />
+          isLoading={isLoading}
+          adsData={adsInActiveData}
+          noDataMessage={t('Dashboard.NoBanner')}
+          onBannerPress={handleBannerPress}
+        />
         {/* ////slider end */}
-       
-  {/* Video Mania */}
 
+        {/* Video Mania */}
+        <View style={styles.latestSearchList}>
+          <View>
 
-  <View style={styles.latestSearchList}>
-        <View>
-
-              <VideoActive width={23} height={23} />
+            <VideoActive width={23} height={23} />
           </View>
           <FlatList
-            style={{flex: 1}}
-            contentContainerStyle={{alignItems: 'center'}}
+            style={{ flex: 1 }}
+            contentContainerStyle={{ alignItems: 'center' }}
             showsHorizontalScrollIndicator={false}
             horizontal
             data={Xpisearches}
             keyExtractor={item => item.id.toString()}
-            renderItem={({item}) => renderSearchesVideo(item)}
+            renderItem={({ item }) => renderSearchesVideo(item)}
           />
         </View>
         <View
-          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(16), marginBottom:30 }}
+          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(16), marginBottom: 30 }}
         >
           <View style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
             {DataTopXpiData === undefined ? (
@@ -6860,28 +5652,28 @@ right:10
                   width: "100%",
                   height: "100%",
                   borderRadius: wp(3),
-                  resizeMode: "cover",
+                  resizeMode: "contain",
                 }}
                 source={appImages.galleryPlaceHolder}
               />
-            ) : ( 
-              <TouchableOpacity style={{ width: '100%', height: "100%", borderRadius: wp(5) }} onPress={() => navigation.navigate('VideoPlayerScreen', {videoUri: DataTopXpiData.video , identifier: false})}>
-              <Image
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  zIndex: 1, // Ensure it's on top of other elements
-                  //flex: 1,
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: wp(3),
-                  resizeMode: "cover",
-                }}
-                source={appImages.videoPlaceHolder}
+            ) : (
+              <TouchableOpacity style={{ width: '100%', height: "100%", borderRadius: wp(5) }} onPress={() => navigation.navigate('VideoPlayerScreen', { videoUri: DataTopXpiData.video, identifier: false })}>
+                <Image
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    zIndex: 1, // Ensure it's on top of other elements
+                    //flex: 1,
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: wp(3),
+                    resizeMode: "contain",
+                  }}
+                  source={appImages.videoPlaceHolder}
                 // source={{ uri: DataTopXpiData?.thumbnail }}
-              />
-                </TouchableOpacity>
+                />
+              </TouchableOpacity>
             )}
             <View
               style={{
@@ -6901,7 +5693,7 @@ right:10
                   fontFamily: "Inter-Medium",
                   color: "black",
                   fontWeight: "700",
-                  marginLeft:12
+                  marginLeft: 12
                 }}
               >
                 {DataTopXpiData?.name}
@@ -6909,10 +5701,10 @@ right:10
             </View>
           </View>
 
-          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop:2 }}>
-            <Text 
-             ellipsizeMode="tail"
-             numberOfLines={7}
+          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop: 2 }}>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={7}
               style={{
                 fontSize: hp(1.5),
                 marginLeft: wp(1),
@@ -6929,205 +5721,178 @@ right:10
           </View>
         </View>
 
-        <View style={{  flex: 1, marginTop:hp(2),
-    marginBottom: hp(5)}}>
-      {isXpiLoading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : noXpiData ? (
-        <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-         <Text style={{ fontFamily: "Inter-Regular",}}>{t('Dashboard.NoDataavailable')}</Text>
-      </View>
-       
-      ) : (
-        <FlatList
-          data={Xpisections}
-          renderItem={renderXpiVideoSection}
-          keyExtractor={(item) => item.title}
-        />
-      )}
-    </View>
-
-{/* /////////////////////////////////////////////////////////////// */}
-    
-        {/* {loading[1] && <ActivityIndicator size="large" color="#FACA4E" />}
-        {!loading[1] && data[1] && (
-          <View style={{ marginVertical: hp(2) , marginBottom:10, backgroundColor:'red' }}>
-            <FlatList
-              data={data[1]}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={(item, idx) => idx.toString()}
-              renderItem={({ item }) => {
-                // console.log("top Item:-----------", item); // Corrected console.log syntax
-                return (
-                  <View
-                    style={{
-                      marginTop: hp(1.5),
-                      marginLeft: wp(2.5),
-                      flexDirection: "row",
-                      height: hp(17),
-                    }}
-                  >
-                    <View
-                      onPress={() => navigation.navigate("ViewVideo")}
-                      style={{
-                        width: wp(39),
-                        height: "100%",
-                        borderRadius: wp(5),
-                      }}
-                    >
-                      <Image
-                        style={{
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          zIndex: 1, // Ensure it's on top of other elements
-                          //flex: 1,
-                          width: "100%",
-                          height: "100%",
-                          borderRadius: wp(3),
-                          resizeMode: "cover",
-                        }}
-                        source={appImages.videoPlaceHolder}
-                      />
-                      <View
-                        style={{
-                          position: "absolute",
-                          top: hp(10),
-                          left: 10,
-                          //height: hp(3),
-                          //width: wp(21),
-                          //borderRadius: wp(3),
-                          //backgroundColor: '#FACA4E',
-                          justifyContent: "center",
-                          alignItems: "center",
-                          zIndex: 2, // Ensure it's on top
-                        }}
-                      >
-                        <Text
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
-                          style={{
-                            fontSize: hp(2.1),
-                            fontFamily: "Inter",
-                            color: "black",
-                            fontWeight: "700",
-                          }}
-                        >
-                          {item?.name}
-                        </Text>
-                      </View>
-                    </View>
-
-                    <View
-                      style={{
-                        marginTop: hp(3),
-                        height: hp(12.8),
-                        width: "45%",
-                        marginHorizontal: wp(1.5),
-                      }}
-                    >
-                      <Text
-                        numberOfLines={5}
-                        ellipsizeMode="tail"
-                        style={{
-                          fontSize: hp(1.5),
-                          //marginLeft: wp(1),
-                          lineHeight: hp(2),
-                          fontFamily: "Inter-Regular",
-                          color: "#000000",
-                          //fontWeight: '700',
-                        }}
-                      >
-                        {item?.description}
-                      </Text>
-                    </View>
-                  </View>
-                );
+        <View style={{
+          flex: 1, marginTop: hp(2),
+          marginBottom: hp(5)
+        }}>
+          {isXpiLoading ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : noXpiData ? (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
               }}
-              //   renderItem={({ item }) => <Text>{item.name}</Text>}
+            >
+              <Text style={{ fontFamily: "Inter-Regular", }}>{t('Dashboard.NoDataavailable')}</Text>
+            </View>
+
+          ) : (
+            <FlatList
+              data={Xpisections}
+              renderItem={renderXpiVideoSection}
+              keyExtractor={(item) => item.title}
             />
-          </View>
-        )} */}
-        {/* Top end */}
+          )}
+        </View>
 
-        {/* Treding Start */}
-
-        {/* treding End */}
-      
-        {/* //-------------------------------------------------------------\\ */}
-
+        {/* /////////////////////////////////////////////////////////////// */}
         {/* // start of banner slider */}
         <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsInActiveData}
-        noDataMessage={t('Dashboard.NoBanner')}
-        onBannerPress={handleBannerPress}
-      />
-        {/* <View
-          style={{
-            alignItems: "center",
-            height: hp(16),
-            marginLeft: 8,
-            marginVertical: hp(2),
-          }}
-        >
-          {isLoading ? (
-            <ActivityIndicator size="large" color="#FACA4E" />
-          ) : adsinActiveData.length === 0 ? (
-           <View style={styles.TopBannerView}>
-            <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                        No Banner
-                      </Text>
-            </View>
-          ) : (
-            <Swiper autoplay={true} loop={true}>
-              {adsinActiveData.map((banner) => (
-                <View
-                  key={banner.id}
-                  style={{
-                    justifyContent: "center",
-                  }}
-                >
-                  <Image
-                    source={{ uri: banner?.image }}
-                    style={{
-                      height: hp(15),
-                      width: "100%",
-                      borderWidth: 1,
-                      resizeMode: "contain",
-                      borderRadius: 10,
-                    }}
-                  />
-                </View>
-              ))}
-            </Swiper>
-          )}
-        </View> */}
-        {/* ////slider end */}
-        {/* Disc */}
+          isLoading={isLoading}
+          adsData={adsInActiveData}
+          noDataMessage={t('Dashboard.NoBanner')}
+          onBannerPress={handleBannerPress}
+        />
+      
+        {/* //////////////////////////////////////////////////////////// */}
 
-        {/* DISC Combine module start */}
-        {/* <View style={styles.latestSearchListDisc}>
-        <View>
-              <MailActive width={23} height={23} />
+        <View style={[styles.latestSearchList, { marginLeft: wp(1) }]}>
+          <View>
+            <ProfileActive width={23} height={23} />
           </View>
           <FlatList
             style={{ flex: 1 }}
             contentContainerStyle={{ alignItems: "center" }}
             showsHorizontalScrollIndicator={false}
             horizontal
-            data={searchesDisc}
-            renderItem={({ item }) => renderDiscSearches(item)}
-            // renderItem={({ item }) => {
-            //   console.log("DISC ITEM:", item);}}
-            // renderItem={({item}) => renderDiscSearches(item)}
+            data={Picsearches}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => renderSearchesPic(item)}
+          />
+        </View>
+
+        <View
+
+          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(15) }}
+        >
+          <View
+            onPress={() => console.log("TOP DETAILS", DataTopPicData)}
+            style={{
+              width: wp(35),
+              marginLeft: wp(2.5),
+              height: "100%",
+              borderRadius: wp(5),
+            }}
+          >
+            {!DataTopPicData?.image ||
+              DataTopPicData?.image === "undefined" ||
+              DataTopPicData?.image.startsWith("/") ? (
+              <Image
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  zIndex: 1, // Ensure it's on top of other elements
+                  //flex: 1,
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: wp(3),
+                  resizeMode: "cover",
+                }}
+                source={appImages?.galleryPlaceHolder}
+              />
+            ) : (
+              <TouchableOpacity style={{ width: "100%", height: "100%", borderRadius: wp(3) }}
+                onPress={() => navigation.navigate("TopPicView", { picData: DataTopPicData })}>
+                <Image
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    zIndex: 1, // Ensure it's on top of other elements
+                    //flex: 1,
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: wp(3),
+                    resizeMode: "cover",
+                  }}
+                  source={{ uri: DataTopPicData?.image }}
+                />
+              </TouchableOpacity>
+            )}
+
+          </View>
+
+          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop: 2, marginLeft: '2%' }}>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={7}
+              style={{
+                fontSize: hp(1.5),
+                lineHeight: hp(2),
+                fontFamily: "Inter-Regular",
+                color: "#000000",
+                //fontWeight: '700',
+              }}
+            >
+              {DataTopPicData === 0 === undefined || DataTopPicData === 0
+                ? "No Top Pic Shown"
+                : DataTopPicData?.description}
+            </Text>
+          </View>
+        </View>
+
+        <View style={{
+          flex: 1, marginTop: hp(2),
+          marginBottom: hp(5)
+        }}>
+          {isPicLoading ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : noPicData ? (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ fontFamily: "Inter-Regular", }}>{t('Dashboard.NoDataavailable')}</Text>
+            </View>
+
+          ) : (
+            <FlatList
+              data={Picsections}
+              renderItem={renderPicsSection}
+              keyExtractor={(item) => item.title}
+            />
+          )}
+        </View>
+
+        {/* /////////////////////////////////////////////////////////////// */}
+        {/* // start of banner slider */}
+        <BannerCarousel
+          isLoading={isLoading}
+          adsData={adsInActiveData}
+          noDataMessage={t('Dashboard.NoBanner')}
+          onBannerPress={handleBannerPress}
+        />
+        {/* ////slider end */}
+
+        {/* News module start */}
+        <View style={styles.latestSearchList}>
+          <View>
+            <News name="news" size={28} color="#FACA4E" />
+          </View>
+          <FlatList
+            style={{ flex: 1 }}
+            contentContainerStyle={{ alignItems: "center" }}
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            data={searchesNewsData}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => renderNewsSearches(item)}
           />
         </View>
 
@@ -7140,18 +5905,14 @@ right:10
           }}
         >
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("ViewNews", {
-                News: topNewsData,
-              })
-            }
+            onPress={() => navigation.navigate("ViewNews", { picData: topNewsData })}
           >
             {topNewsData === undefined ||
-            topNewsData.length === 0 ||
-            topNewsData.image === undefined ||
-            topNewsData.image === null ||
-            topNewsData.image === "" ||
-            topNewsData.image === "0" ? (
+              topNewsData.length === 0 ||
+              topNewsData.image === undefined ||
+              topNewsData.image === null ||
+              topNewsData.image === "" ||
+              topNewsData.image === "0" ? (
               <View
                 //onPress={() => navigation.navigate('News')}
                 style={{ width: wp(35), height: "100%", borderRadius: wp(5) }}
@@ -7193,624 +5954,10 @@ right:10
               </View>
             )}
           </TouchableOpacity>
-          <View style={{ justifyContent: "center", flex: 1 }}>
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                height: hp(7),
-                width: wp(35),
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: hp(1.5),
-                  marginLeft: wp(2.5),
-                  fontFamily: "Inter-Regular",
-                  color: "#000000",
-                }}
-              >
-                {topNewsData === undefined || topNewsData.length === 0
-                  ? "Does not contain any top news"
-                  : topNewsData?.description}
-              </Text>
-            </View>
-          </View>
-        </View>
-        <View></View>
-        {selectedItemId === 1 ? (
-          <DiscScreen />
-        ) : selectedItemId === 2 ? (
-          <OpenLetters />
-        ) : selectedItemId === 3 ? (
-          <QAFI />
-        ) : selectedItemId === 4 ? (
-          <GEBC />
-        ) : null} */}
-        {/* {selectedItemDiscId === 1 ? (
-          <DiscScreen />
-        ) : selectedItemDiscId === 2 ? (
-          <OpenLetters />
-        ) : selectedItemDiscId === 3 ? (
-          <QAFI />
-        ) : selectedItemDiscId === 4 ? (
-          <GEBC />
-        ) : null} */}
-        {/* ////////DISC Combine module End */}
-
-
-        {/* Pic Tours */}
-
-      
-
-        {/* <View style={[styles.latestSearchListPicss, { marginLeft: wp(1) }]}>
-        <View>
-              <ProfileActive width={23} height={23} />
-          </View>
-          {loading[6] && <ActivityIndicator size="large" color="#FACA4E" />}
-          {!loading[6] && data[6] && (
-            <View>
-           
-              <FlatList
-                data={data[6]}
-                // style={{flex: 1}}
-                contentContainerStyle={{ alignItems: "center" }}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                renderItem={({ item }) => renderSearchesPic(item)}
-              />
-            </View>
-          )}
-        </View> */}
-
-
-
-
-  {/* //////////////////////////////////////////////////////////// */}
-
-  <View style={[styles.latestSearchList, { marginLeft: wp(1) }]}>
-        <View>
-              <ProfileActive width={23} height={23} />
-          </View>
-          <FlatList
-            style={{ flex: 1 }}
-            contentContainerStyle={{ alignItems: "center" }}
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            data={Picsearches}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => renderSearchesPic(item)}
-          />
-        </View>
-
-        <View
-     
-          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(15) }}
-        >
-          <View
-            onPress={() => console.log("TOP DETAILS", DataTopPicData)}
-            style={{
-              width: wp(35),
-              marginLeft: wp(2.5),
-              height: "100%",
-              borderRadius: wp(5),
-            }}
-          >
-            {!DataTopPicData?.image ||
-            DataTopPicData?.image === "undefined" ||
-            DataTopPicData?.image.startsWith("/") ? (
-              <Image
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  zIndex: 1, // Ensure it's on top of other elements
-                  //flex: 1,
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: wp(3),
-                  resizeMode: "cover",
-                }}
-                source={appImages?.galleryPlaceHolder}
-              />
-            ) : (
-              <TouchableOpacity   style={{ width: "100%", height: "100%", borderRadius: wp(3) }}
-              onPress={() => navigation.navigate("TopPicView", { picData: DataTopPicData })}>
-              <Image
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  zIndex: 1, // Ensure it's on top of other elements
-                  //flex: 1,
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: wp(3),
-                  resizeMode: "cover",
-                }}
-                source={{ uri: DataTopPicData?.image }}
-              />
-              </TouchableOpacity>
-            )}
-          
-          </View>
-
-              <View style={{ justifyContent: "flex-start", width: "50%", paddingTop:2 , marginLeft:'2%'}}>
+          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop: 2 }}>
             <Text
-             ellipsizeMode="tail"
-             numberOfLines={7}
-              style={{
-                fontSize: hp(1.5),
-                lineHeight: hp(2),
-                fontFamily: "Inter-Regular",
-                color: "#000000",
-                //fontWeight: '700',
-              }}
-            >
-              {DataTopPicData === 0 === undefined || DataTopPicData === 0
-                ? "No Top Pic Shown"
-                : DataTopPicData?.description}
-            </Text>
-          </View>
-        </View>
-
-  <View style={{  flex: 1, marginTop:hp(2),
-    marginBottom: hp(5)}}>
-      {isPicLoading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : noPicData ? (
-        <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-         <Text style={{ fontFamily: "Inter-Regular",}}>{t('Dashboard.NoDataavailable')}</Text>
-      </View>
-       
-      ) : (
-        <FlatList
-          data={Picsections}
-          renderItem={renderPicsSection}
-          keyExtractor={(item) => item.title}
-        />
-      )}
-    </View>
-
-{/* /////////////////////////////////////////////////////////////// */}
-
-
-
-
-
-
-
-
-
-
-        {/* {loading[7] && <ActivityIndicator size="large" color="#FACA4E" />}
-        {!loading[7] && data[7] && (
-          <FlatList
-            data={data[7]}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(item, idx) => idx.toString()}
-            renderItem={({ item }) => {
-              // console.log("top Item in ui:-----------", item); // Corrected console.log syntax
-              return (
-                <View
-                  style={{
-                    marginTop: hp(1.5),
-                    flexDirection: "row",
-                    height: hp(18),
-                  }}
-                >
-                  <View
-                    style={{
-                      width: wp(35),
-                      marginLeft: wp(2.5),
-                      height: "100%",
-                      borderRadius: wp(5),
-                    }}
-                  >
-                    {!item?.image ||
-                    item?.image === "undefined" ||
-                    item?.image.startsWith("/") ? (
-                      <Image
-                        style={{
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          zIndex: 1, // Ensure it's on top of other elements
-                          //flex: 1,
-                          width: "100%",
-                          height: "100%",
-                          borderRadius: wp(3),
-                          resizeMode: "cover",
-                        }}
-                        source={appImages?.galleryPlaceHolder}
-                      />
-                    ) : (
-                      <Image
-                        style={{
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          zIndex: 1, // Ensure it's on top of other elements
-                          //flex: 1,
-                          width: "100%",
-                          height: "100%",
-                          borderRadius: wp(3),
-                          resizeMode: "cover",
-                        }}
-                        source={{ uri: item.image }}
-                      />
-                    )}
-                    <View
-                      style={{
-                        position: "absolute",
-                        top: hp(14),
-                        left: 7,
-                        justifyContent: "center",
-                        alignItems: "center",
-                        zIndex: 2, // Ensure it's on top
-                      }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: hp(1.6),
-                          fontFamily: "Inter",
-                          // color: 'red',
-                          fontWeight: "700",
-                        }}
-                      >
-                        {item?.username}
-                      </Text>
-                    </View>
-                  </View>
-
-                  <View
-                    style={{
-                      marginTop: hp(0.8),
-                      marginLeft: wp(3),
-                      width: "35%",
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: hp(1.6),
-                        marginLeft: wp(1),
-                        lineHeight: 15.5,
-                        marginTop: hp(5),
-                        fontFamily: "Inter-Regular",
-                        color: "#000000",
-                        //fontWeight: '700',
-                      }}
-                    >
-                      {item.length === 0
-                        ? "No Top Pic Shown"
-                        : item?.description}
-                    </Text>
-                  </View>
-                </View>
-              );
-            }}
-            //   renderItem={({ item }) => <Text>{item.name}</Text>}
-          />
-        )} */}
-
-        {/* treding End */}
-        {/* <View style={{ marginTop: hp(2), height: hp(23) }}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              fontFamily: "Inter",
-              color: "#4A4A4A",
-              marginLeft: wp(1),
-              fontWeight: "bold",
-            }}
-          >
-             Trending
-          </Text>
-
-          <View style={{ marginTop: hp(1), height: "100%" }}>
-            {loading[8] ? (
-              <ActivityIndicator size="large" color="#FACA4E" />
-            ) : data[8]?.length === 0 ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No data available
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                data={data[8]}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                keyExtractor={(item, idx) => idx.toString()}
-                renderItem={({ item }) => renderAvailableAppsPics(item)}
-              />
-            )}
-          </View>
-        </View> */}
-        {/* {loading[10] && <ActivityIndicator size="large" color="#FACA4E" />}
-        {!loading[10] && data[10] && (
-         <View style={{marginBottom:10, marginTop:10}}>
-            <Text
-              style={{
-                fontSize: hp(2.3),
-                marginLeft: wp(3),
-                fontFamily: "Inter",
-                color: "#4A4A4A",
-                fontWeight: "bold",
-              }}
-            >
-              Trending
-            </Text>
-            <FlatList
-              data={data[10]}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              horizontal
-              keyExtractor={(item, idx) => idx.toString()}
-              renderItem={({ item }) => renderAvailableAppsPics(item)}
-            />
-          </View>
-        )} */}
-
-        {/* ////////// Latest */}
-        {/* <View style={{ marginTop: hp(2), height: hp(23) }}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              fontFamily: "Inter",
-              color: "#4A4A4A",
-              marginLeft: wp(1),
-              fontWeight: "bold",
-            }}
-          >
-             Latest Video
-          </Text>
-
-          <View style={{ marginTop: hp(1), height: "100%" }}>
-            {loading[9] ? (
-              <ActivityIndicator size="large" color="#FACA4E" />
-            ) : data[9]?.length === 0 ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No data available
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                data={data[9]}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                keyExtractor={(item, idx) => idx.toString()}
-                renderItem={({ item }) => renderAvailableAppsPics(item)}
-              />
-            )}
-          </View>
-        </View> */}
-
-  {/* ////////// Most Viewed */}
-  {/* <View style={{ marginTop: hp(2), height: hp(23) }}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              fontFamily: "Inter",
-              color: "#4A4A4A",
-              marginLeft: wp(1),
-              fontWeight: "bold",
-            }}
-          >
-             Most Viewed
-          </Text>
-
-          <View style={{ marginTop: hp(1), height: "100%" }}>
-            {loading[10] ? (
-              <ActivityIndicator size="large" color="#FACA4E" />
-            ) : data[10]?.length === 0 ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No data available
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                data={data[10]}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                keyExtractor={(item, idx) => idx.toString()}
-                renderItem={({ item }) => renderAvailableAppsPics(item)}
-              />
-            )}
-          </View>
-        </View> */}
-
-        {/* ///  Most Commented */}
-  
-  {/* ////////// Most Viewed */}
-  {/* <View style={{ marginTop: hp(2), height: hp(23) }}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              fontFamily: "Inter",
-              color: "#4A4A4A",
-              marginLeft: wp(1),
-              fontWeight: "bold",
-            }}
-          >
-             Most Commented
-          </Text>
-
-          <View style={{ marginTop: hp(1), height: "100%" }}>
-            {loading[11] ? (
-              <ActivityIndicator size="large" color="#FACA4E" />
-            ) : data[11]?.length === 0 ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No data available
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                data={data[11]}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                keyExtractor={(item, idx) => idx.toString()}
-                renderItem={({ item }) => renderAvailableAppsPics(item)}
-              />
-            )}
-          </View>
-        </View> */}
-        {/* {loading[13] && <ActivityIndicator size="large" color="#FACA4E" />}
-        {!loading[13] && data[13] && (
-     <View style={{marginBottom:10}}>
-            <Text
-              style={{
-                fontSize: hp(2.3),
-                marginLeft: wp(3),
-                fontFamily: "Inter",
-                color: "#4A4A4A",
-                fontWeight: "bold",
-              }}
-            >
-              Most Commented
-            </Text>
-            <FlatList
-              data={data[13]}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              horizontal
-              keyExtractor={(item, idx) => idx.toString()}
-              renderItem={({ item }) => renderAvailableAppsPics(item)}
-            />
-          </View>
-        )} */}
-
-        {/* //-------------------------------------------------------------\\ */}
-
-        {/* //-------------\\ */}
-
-     
-
-        {/* // start of banner slider */}
-        <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsInActiveData}
-        noDataMessage={t('Dashboard.NoBanner')}
-        onBannerPress={handleBannerPress}
-      />
-        {/* ////slider end */}
-
-{/* News module start */}
-          <View style={styles.latestSearchList}>
-            <View>
-            <News name="news" size={28} color="#FACA4E"/>
-            </View>
-            <FlatList
-              style={{ flex: 1 }}
-              contentContainerStyle={{ alignItems: "center" }}
-              showsHorizontalScrollIndicator={false}
-              horizontal
-              data={searchesNewsData}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => renderNewsSearches(item)}
-            />
-          </View>
-
-          <View
-            style={{
-              marginTop: hp(1.5),
-              marginBottom: hp(1),
-              flexDirection: "row",
-              height: hp(18),
-            }}
-          >
-            <TouchableOpacity
-            onPress={() => navigation.navigate("ViewNews", { picData: topNewsData })}
-            >
-              {topNewsData === undefined ||
-              topNewsData.length === 0 ||
-              topNewsData.image === undefined ||
-              topNewsData.image === null ||
-              topNewsData.image === "" ||
-              topNewsData.image === "0" ? (
-                <View
-                  //onPress={() => navigation.navigate('News')}
-                  style={{ width: wp(35), height: "100%", borderRadius: wp(5) }}
-                >
-                  <Image
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      zIndex: 1, // Ensure it's on top of other elements
-                      //flex: 1,
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: wp(3),
-                      resizeMode: "cover",
-                    }}
-                    source={appImages.galleryPlaceHolder}
-                  />
-                </View>
-              ) : (
-                <View
-                  style={{ width: wp(35), height: "100%", borderRadius: wp(5) }}
-                >
-                  <Image
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-  
-                      zIndex: 1, // Ensure it's on top of other elements
-                      //flex: 1,
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: wp(3),
-                      resizeMode: "cover",
-                    }}
-                    source={{ uri: topNewsData.image }}
-                  />
-                </View>
-              )}
-            </TouchableOpacity>
-            <View style={{ justifyContent: "flex-start", width: "50%", paddingTop:2 }}>
-            <Text 
-             ellipsizeMode="tail"
-             numberOfLines={7}
+              ellipsizeMode="tail"
+              numberOfLines={7}
               style={{
                 fontSize: hp(1.5),
                 marginLeft: wp(1),
@@ -7825,47 +5972,49 @@ right:10
                 : topNewsData?.description}
             </Text>
           </View>
-          </View>
+        </View>
 
-     {/* //////////////////////////////////////////////////////////// */}
-  <View style={{  flex: 1, marginTop:hp(2),
-    marginBottom: hp(5)}}>
-      {newLoader ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : noNewData ? (
-        <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-         <Text style={{ fontFamily: "Inter-Regular",}}>{t('Dashboard.NoDataavailable')}</Text>
-      </View>
-       
-      ) : (
-        <FlatList
-          data={Newsections}
-          renderItem={renderNewsSection}
-          keyExtractor={(item) => item.title}
+        {/* //////////////////////////////////////////////////////////// */}
+        <View style={{
+          flex: 1, marginTop: hp(2),
+          marginBottom: hp(5)
+        }}>
+          {newLoader ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : noNewData ? (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ fontFamily: "Inter-Regular", }}>{t('Dashboard.NoDataavailable')}</Text>
+            </View>
+
+          ) : (
+            <FlatList
+              data={Newsections}
+              renderItem={renderNewsSection}
+              keyExtractor={(item) => item.title}
+            />
+          )}
+        </View>
+
+        {/* /////////////////////////////////////////////////////////////// */}
+
+        {/* // start of banner slider */}
+        <BannerCarousel
+          isLoading={isLoading}
+          adsData={adsInActiveData}
+          noDataMessage={t('Dashboard.NoBanner')}
+          onBannerPress={handleBannerPress}
         />
-      )}
-    </View>
+        {/* ////slider end */}
+        {/* News module end */}
 
-{/* /////////////////////////////////////////////////////////////// */}
-
-              {/* // start of banner slider */}
-              <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsInActiveData}
-        noDataMessage={t('Dashboard.NoBanner')}
-        onBannerPress={handleBannerPress}
-      />
-              {/* ////slider end */}
-{/* News module end */}
-
-{/* Post letter module start */}
-       <View style={styles.latestSearchList}>
+        {/* Post letter module start */}
+        <View style={styles.latestSearchList}>
           <View>
             <LetterIcon name="newsletter" size={30} color="#FACA4E" />
           </View>
@@ -7888,127 +6037,128 @@ right:10
             height: hp(18),
           }}
         >
-            <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("LetterDetails", {
-            Letters: topLetterData,
-            identifier: false,
-          })
-        }
-        style={{
-          width: wp(45),
-          marginHorizontal: wp(2),
-        }} // Add margin here
-      >
-        <View
-          style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
-        ></View>
-        <View>
-          <View
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("LetterDetails", {
+                Letters: topLetterData,
+                identifier: false,
+              })
+            }
             style={{
-              flexDirection: "row",
-              paddingHorizontal: 2,
-              alignItems: "center",
-              height: hp(4),
-            }}
+              width: wp(45),
+              marginHorizontal: wp(2),
+            }} // Add margin here
           >
-            {topLetterData?.userimage !== null ||
-            topLetterData?.userimage !== undefined ? (
+            <View
+              style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
+            ></View>
+            <View>
               <View
                 style={{
-                  height: hp(2),
-                  width: wp(4),
-                  borderRadius: wp(3),
+                  flexDirection: "row",
+                  paddingHorizontal: 2,
+                  alignItems: "center",
+                  height: hp(4),
                 }}
               >
-                <Image
-                  source={{ uri: topLetterData?.userimage}}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: wp(3),
-                    resizeMode: "cover",
-                  }}
-                />
+                {topLetterData?.userimage !== null ||
+                  topLetterData?.userimage !== undefined ? (
+                  <View
+                    style={{
+                      height: hp(2),
+                      width: wp(4),
+                      borderRadius: wp(3),
+                    }}
+                  >
+                    <Image
+                      source={{ uri: topLetterData?.userimage }}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: wp(3),
+                        resizeMode: "cover",
+                      }}
+                    />
+                  </View>
+                ) : (
+                  <MaterialCommunityIcons
+                    style={{ marginTop: hp(0.5) }}
+                    name={"account-circle"}
+                    size={35}
+                    color={"#FACA4E"}
+                  />
+                )}
+
+                <View style={{ marginLeft: wp(2.5) }}>
+                  <Approved width={10} height={10} />
+                </View>
               </View>
-            ) : (
-              <MaterialCommunityIcons
-                style={{ marginTop: hp(0.5) }}
-                name={"account-circle"}
-                size={35}
-                color={"#FACA4E"}
-              />
-            )}
 
-            <View style={{ marginLeft: wp(2.5) }}>
-              <Approved width={10} height={10} />
-            </View>
-          </View>
-
-          <View
-            style={{
-              alignItems: "flex-end",
-              height: 10,
-              // marginRight: wp(1),
-            }}
-          >
-            <Text
-              style={{
-                color: "#282828",
-                // marginLeft: wp(3),
-                width: "25%",
-                fontSize: 6,
-                fontFamily: "Inter-Bold",
-              }}
-            >
-              {topLetterData.post_date}
-            </Text>
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              height: hp(5),
-              paddingTop: 6,
-              // backgroundColor:'red', width:'60%'
-            }}
-          >
-            <Text
-              style={{
-                color: "#282828",
-                fontSize: 8,
-                textDecorationLine: "underline",
-                fontFamily: "Inter-Bold",
-              }}
-            >
-              Subject:
-            </Text>
-            <View style={{ height: "100%", width: "75%" }}>
-              <Text
-                numberOfLines={3}
-                ellipsizeMode="tail"
+              <View
                 style={{
-                  color: "#595959",
-                  marginLeft: wp(1),
-                  fontSize: 8,
-                  fontFamily: "Inter-Regular",
+                  alignItems: "flex-end",
+                  height: 10,
+                  // marginRight: wp(1),
                 }}
               >
-                {topLetterData.subject_place}
-              </Text>
+                <Text
+                  style={{
+                    color: "#282828",
+                    // marginLeft: wp(3),
+                    width: "25%",
+                    fontSize: 6,
+                    fontFamily: "Inter-Bold",
+                  }}
+                >
+                  {topLetterData.post_date}
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  height: hp(5),
+                  paddingTop: 6,
+                  // backgroundColor:'red', width:'60%'
+                }}
+              >
+                <Text
+                  style={{
+                    color: "#282828",
+                    fontSize: 8,
+                    textDecorationLine: "underline",
+                    fontFamily: "Inter-Bold",
+                  }}
+                >
+                  {/* Subject: */}
+                  {t('Dashboard.Subject')}
+                </Text>
+                <View style={{ height: "100%", width: "75%" }}>
+                  <Text
+                    numberOfLines={3}
+                    ellipsizeMode="tail"
+                    style={{
+                      color: "#595959",
+                      marginLeft: wp(1),
+                      fontSize: 8,
+                      fontFamily: "Inter-Regular",
+                    }}
+                  >
+                    {topLetterData.subject_place}
+                  </Text>
+                </View>
+              </View>
+              <View
+                style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
+              ></View>
             </View>
-          </View>
-          <View
-            style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
-          ></View>
-        </View>
-      </TouchableOpacity>
+          </TouchableOpacity>
         </View>
 
 
 
 
-          <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
           <View style={{ marginTop: hp(5), height: hp(21) }}>
             <Text
               style={{
@@ -8022,15 +6172,15 @@ right:10
               {/* Public (general) */}
             </Text>
             {newLoader ? (
-                  <View style={styles.NoDataView}>
-                 <ActivityIndicator size="large" color="#FACA4E" />
-                 </View>
+              <View style={styles.NoDataView}>
+                <ActivityIndicator size="large" color="#FACA4E" />
+              </View>
             ) : opensLettersPublicGeneralData.length === 0 ? (
               <View
                 style={styles.NoDataView}
               >
                 <Text style={styles.NoDataText}>
-                {t('Dashboard.NoDataavailable')}
+                  {t('Dashboard.NoDataavailable')}
                   {/* No data available */}
                 </Text>
               </View>
@@ -8055,35 +6205,35 @@ right:10
                 fontSize: hp(2),
               }}
             >
-               {t('Dashboard.Publiccelebrities')}
+              {t('Dashboard.Publiccelebrities')}
               {/* Public (to authorities, celebrities, leaders) */}
             </Text>
 
             {newLoader ? (
-               <View
-               style={styles.NoDataView}
-             >
-              <ActivityIndicator size="large" color="#FACA4E" />
+              <View
+                style={styles.NoDataView}
+              >
+                <ActivityIndicator size="large" color="#FACA4E" />
               </View>
             ) : opensLettersPublicCelebrityData.length === 0 ? (
               <View
                 style={styles.NoDataView}
               >
                 <Text style={styles.NoDataText}>
-                {t('Dashboard.NoDataavailable')}
+                  {t('Dashboard.NoDataavailable')}
                 </Text>
               </View>
             ) : (
-            <FlatList
-              style={{ flex: 1 }}
-              contentContainerStyle={{ alignItems: "center" }}
-              showsHorizontalScrollIndicator={false}
-              horizontal
-              data={opensLettersPublicCelebrityData}
-              keyExtractor={(item) => item?.post_id.toString()}
-              renderItem={({ item }) => renderPublicGeneralLetter(item)}
-            />
-          )}
+              <FlatList
+                style={{ flex: 1 }}
+                contentContainerStyle={{ alignItems: "center" }}
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                data={opensLettersPublicCelebrityData}
+                keyExtractor={(item) => item?.post_id.toString()}
+                renderItem={({ item }) => renderPublicGeneralLetter(item)}
+              />
+            )}
           </View>
 
           <View style={{ marginTop: hp(5), height: hp(21) }}>
@@ -8098,13 +6248,13 @@ right:10
               {/* Private (to friends, peers, followers) */}
             </Text>
             <View
-                style={styles.NoDataView}
-              >
-                <Text style={styles.NoDataText}>
+              style={styles.NoDataView}
+            >
+              <Text style={styles.NoDataText}>
                 {t('Dashboard.NoDataavailable')}
 
-                </Text>
-              </View>
+              </Text>
+            </View>
             {/* <FlatList
             style={{flex: 1}}
             contentContainerStyle={{alignItems: 'center'}}
@@ -8136,7 +6286,7 @@ right:10
               }}
             >
               <Text style={{ fontWeight: "500", fontSize: hp(2.1) }}>
-              {t('Dashboard.NoDataavailable')}
+                {t('Dashboard.NoDataavailable')}
               </Text>
             </View>
             {/*  <FlatList
@@ -8151,21 +6301,21 @@ right:10
           </View>
         </View>
 
-          {/* // start of banner slider */}
-          <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsInActiveData}
-        noDataMessage={t('Dashboard.NoBanner')}
-        onBannerPress={handleBannerPress}
-      />
+        {/* // start of banner slider */}
+        <BannerCarousel
+          isLoading={isLoading}
+          adsData={adsInActiveData}
+          noDataMessage={t('Dashboard.NoBanner')}
+          onBannerPress={handleBannerPress}
+        />
         {/* ////slider end */}
 
-{/* Post letter module end */}
+        {/* Post letter module end */}
 
-{/* QAFI Module start */}
+        {/* QAFI Module start */}
         <View style={styles.latestSearchList}>
           <View>
-          <QafiIcon name="people-arrows" size={22} color="#FACA4E" />
+            <QafiIcon name="people-arrows" size={22} color="#FACA4E" />
           </View>
           <FlatList
             style={{ flex: 1 }}
@@ -8179,68 +6329,68 @@ right:10
         </View>
 
         <View
-            style={{
-              marginTop: hp(1.5),
-              marginBottom: hp(1),
-              flexDirection: "row",
-              height: hp(18),
-            }}
-          >
-            <TouchableOpacity
+          style={{
+            marginTop: hp(1.5),
+            marginBottom: hp(1),
+            flexDirection: "row",
+            height: hp(18),
+          }}
+        >
+          <TouchableOpacity
             onPress={() => navigation.navigate("ViewQAFI", { picData: TopQAFIData })}
-            >
-              {TopQAFIData === undefined ||
+          >
+            {TopQAFIData === undefined ||
               TopQAFIData.length === 0 ||
               TopQAFIData.image === undefined ||
               TopQAFIData.image === null ||
               TopQAFIData.image === "" ||
               TopQAFIData.image === "0" ? (
-                <View
-                  //onPress={() => navigation.navigate('News')}
-                  style={{ width: wp(35), height: "100%", borderRadius: wp(5) }}
-                >
-                  <Image
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      zIndex: 1, // Ensure it's on top of other elements
-                      //flex: 1,
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: wp(3),
-                      resizeMode: "cover",
-                    }}
-                    source={appImages.galleryPlaceHolder}
-                  />
-                </View>
-              ) : (
-                <View
-                  style={{ width: wp(35), height: "100%", borderRadius: wp(5) }}
-                >
-                  <Image
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-  
-                      zIndex: 1, // Ensure it's on top of other elements
-                      //flex: 1,
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: wp(3),
-                      resizeMode: "cover",
-                    }}
-                    source={{ uri: TopQAFIData.image }}
-                  />
-                </View>
-              )}
-            </TouchableOpacity>
+              <View
+                //onPress={() => navigation.navigate('News')}
+                style={{ width: wp(35), height: "100%", borderRadius: wp(5) }}
+              >
+                <Image
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    zIndex: 1, // Ensure it's on top of other elements
+                    //flex: 1,
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: wp(3),
+                    resizeMode: "cover",
+                  }}
+                  source={appImages.galleryPlaceHolder}
+                />
+              </View>
+            ) : (
+              <View
+                style={{ width: wp(35), height: "100%", borderRadius: wp(5) }}
+              >
+                <Image
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
 
-            <View style={{ justifyContent: "flex-start", width: "50%", paddingTop:2 }}>
-            <Text 
-             ellipsizeMode="tail"
-             numberOfLines={7}
+                    zIndex: 1, // Ensure it's on top of other elements
+                    //flex: 1,
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: wp(3),
+                    resizeMode: "cover",
+                  }}
+                  source={{ uri: TopQAFIData.image }}
+                />
+              </View>
+            )}
+          </TouchableOpacity>
+
+          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop: 2 }}>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={7}
               style={{
                 fontSize: hp(1.5),
                 marginLeft: wp(1),
@@ -8255,50 +6405,52 @@ right:10
                 : TopQAFIData?.description}
             </Text>
           </View>
-          </View>
+        </View>
 
-           {/* //////////////////////////////////////////////////////////// */}
-  <View style={{  flex: 1, marginTop:hp(2),
-    marginBottom: hp(5)}}>
-      {QAFILoading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : noQAFIData ? (
-        <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-         <Text style={{ fontFamily: "Inter-Medium",}}>{t('Dashboard.NoDataavailable')}</Text>
-      </View>
-       
-      ) : (
-        <FlatList
-          data={QAFIsections}
-          renderItem={renderQAFISection}
-          keyExtractor={(item) => item.title}
+        {/* //////////////////////////////////////////////////////////// */}
+        <View style={{
+          flex: 1, marginTop: hp(2),
+          marginBottom: hp(5)
+        }}>
+          {QAFILoading ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : noQAFIData ? (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ fontFamily: "Inter-Medium", }}>{t('Dashboard.NoDataavailable')}</Text>
+            </View>
+
+          ) : (
+            <FlatList
+              data={QAFIsections}
+              renderItem={renderQAFISection}
+              keyExtractor={(item) => item.title}
+            />
+          )}
+        </View>
+
+        {/* /////////////////////////////////////////////////////////////// */}
+
+        {/* // start of banner slider */}
+        <BannerCarousel
+          isLoading={isLoading}
+          adsData={adsInActiveData}
+          noDataMessage={t('Dashboard.NoBanner')}
+          onBannerPress={handleBannerPress}
         />
-      )}
-    </View>
-
-{/* /////////////////////////////////////////////////////////////// */}
-
-          {/* // start of banner slider */}
-          <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsInActiveData}
-        noDataMessage={t('Dashboard.NoBanner')}
-        onBannerPress={handleBannerPress}
-      />
         {/* ////slider end */}
-{/* QAFI Module end*/}
+        {/* QAFI Module end*/}
 
-{/* EBC Module start */}
+        {/* EBC Module start */}
 
-       <View style={styles.latestSearchList}>
+        <View style={styles.latestSearchList}>
           <View>
-           <EBC name="sticker-emoji" size={30} color="#FACA4E" />
+            <EBC name="sticker-emoji" size={30} color="#FACA4E" />
           </View>
           <FlatList
             style={{ flex: 1 }}
@@ -8311,82 +6463,68 @@ right:10
           />
         </View>
         <View
-            style={{
-              marginTop: hp(1.5),
-              marginBottom: hp(1),
-              flexDirection: "row",
-              height: hp(18),
-            }}
+          style={{
+            marginTop: hp(1.5),
+            marginBottom: hp(1),
+            flexDirection: "row",
+            height: hp(18),
+          }}
+        >
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("ViewGEBC", { picData: TopEBCData })}
           >
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("ViewGEBC", { picData: TopEBCData })}
-            >
-              {TopEBCData === undefined ||
+            {TopEBCData === undefined ||
               TopEBCData.length === 0 ||
               TopEBCData.image === undefined ||
               TopEBCData.image === null ||
               TopEBCData.image === "" ||
               TopEBCData.image === "0" ? (
+              <View
+                //onPress={() => navigation.navigate('News')}
+                style={{ width: wp(35), height: "100%", borderRadius: wp(5) }}
+              >
+                <Image
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    zIndex: 1, // Ensure it's on top of other elements
+                    //flex: 1,
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: wp(3),
+                    resizeMode: "cover",
+                  }}
+                  source={appImages.galleryPlaceHolder}
+                />
+              </View>
+            ) : (
+              <View
+                style={{ width: wp(35), height: "100%", borderRadius: wp(5) }}
+              >
                 <View
-                  //onPress={() => navigation.navigate('News')}
-                  style={{ width: wp(35), height: "100%", borderRadius: wp(5) }}
+                  style={{
+                    width: "100%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: hp(10),
+                    borderRadius: wp(1),
+                    resizeMode: "stretch",
+                    borderWidth: 1, // Border width
+                    borderColor: "grey", // Border color
+                  }}
                 >
-                  <Image
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      zIndex: 1, // Ensure it's on top of other elements
-                      //flex: 1,
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: wp(3),
-                      resizeMode: "cover",
-                    }}
-                    source={appImages.galleryPlaceHolder}
-                  />
+                  <Text style={{ fontSize: hp(5) }}>{TopEBCData.image}</Text>
                 </View>
-              ) : (
-                <View
-                  style={{ width: wp(35), height: "100%", borderRadius: wp(5) }}
-                >
-                                   <View
-              style={{
-                width: "100%",
-                justifyContent: "center",
-                alignItems: "center",
-                height: hp(10),
-                borderRadius: wp(1),
-                resizeMode: "stretch",
-                borderWidth: 1, // Border width
-                borderColor: "grey", // Border color
-              }}
-            >
-              <Text style={{ fontSize: hp(5) }}>{TopEBCData.image}</Text>
-            </View>
-                  {/* <Image
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-  
-                      zIndex: 1, // Ensure it's on top of other elements
-                      //flex: 1,
-                      width: "100%",
-                      height: "100%",
-                      borderRadius: wp(3),
-                      resizeMode: "cover",
-                    }}
-                    source={{ uri: TopEBCData.image }}
-                  /> */}
-                </View>
-              )}
-            </TouchableOpacity>
-            <View style={{ justifyContent: "flex-start", width: "50%", paddingTop:2 , marginLeft:'2%'}}>
+               
+              </View>
+            )}
+          </TouchableOpacity>
+          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop: 2, marginLeft: '2%' }}>
             <Text
-             ellipsizeMode="tail"
-             numberOfLines={7}
+              ellipsizeMode="tail"
+              numberOfLines={7}
               style={{
                 fontSize: hp(1.5),
                 lineHeight: hp(2),
@@ -8400,66 +6538,65 @@ right:10
                 : TopEBCData?.description}
             </Text>
           </View>
-          </View>
+        </View>
 
-          {/* //////////////////////////////////////////////////////////// */}
-  <View style={{  flex: 1, marginTop:hp(2),
-    marginBottom: hp(5)}}>
-      {EBCLoading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : noEBCData ? (
-        <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-         <Text style={{ fontFamily: "Inter-Medium",}}>{t('Dashboard.NoDataavailable')}</Text>
-      </View>
-       
-      ) : (
-        <FlatList
-          data={EBCsections}
-          renderItem={renderEBCSection}
-          keyExtractor={(item) => item.title}
+        {/* //////////////////////////////////////////////////////////// */}
+        <View style={{
+          flex: 1, marginTop: hp(2),
+          marginBottom: hp(5)
+        }}>
+          {EBCLoading ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : noEBCData ? (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ fontFamily: "Inter-Medium", }}>{t('Dashboard.NoDataavailable')}</Text>
+            </View>
+
+          ) : (
+            <FlatList
+              data={EBCsections}
+              renderItem={renderEBCSection}
+              keyExtractor={(item) => item.title}
+            />
+          )}
+        </View>
+
+        {/* /////////////////////////////////////////////////////////////// */}
+
+        {/* // start of banner slider */}
+        <BannerCarousel
+          isLoading={isLoading}
+          adsData={adsInActiveData}
+          noDataMessage={t('Dashboard.NoBanner')}
+          onBannerPress={handleBannerPress}
         />
-      )}
-    </View>
-
-{/* /////////////////////////////////////////////////////////////// */}
-
-            {/* // start of banner slider */}
-            <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsInActiveData}
-        noDataMessage={t('Dashboard.NoBanner')}
-        onBannerPress={handleBannerPress}
-      />
         {/* ////slider end */}
-{/* EBC Module End */}
+        {/* EBC Module End */}
 
-{/* Cinematics Moodule Start */}
-         <View style={styles.latestSearchList}>
+        {/* Cinematics Moodule Start */}
+        <View style={styles.latestSearchList}>
           <View>
-              <Cinematiceactive width={23} height={23} />
+            <Cinematiceactive width={23} height={23} />
           </View>
           <FlatList
             style={{ flex: 1 }}
             contentContainerStyle={{ alignItems: "center" }}
             showsHorizontalScrollIndicator={false}
             horizontal
-            //data={regions}
             data={Cinematicdata}
             //keyExtractor={item => item.id.toString()}
             renderItem={({ item }) => renderCinematicSearches(item)}
           />
         </View>
 
-        <View
-          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(16), marginBottom:30 }}
-        >
-          <TouchableOpacity onPress={() => navigation.navigate('Cinematics_details', {videoData: dataTopVideos, identifier: false})} style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
+        <View style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(16), marginBottom: 30 }}>
+          <TouchableOpacity onPress={() => navigation.navigate('Cinematics_details', { videoData: dataTopVideos, identifier: false })} style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
             {dataTopVideos === 0 ? (
               <Image
                 style={{
@@ -8516,10 +6653,10 @@ right:10
             </View>
           </TouchableOpacity>
 
-          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop:2 }}>
-            <Text 
-             ellipsizeMode="tail"
-             numberOfLines={7}
+          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop: 2 }}>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={7}
               style={{
                 fontSize: hp(1.5),
                 marginLeft: wp(1),
@@ -8529,9 +6666,7 @@ right:10
                 //fontWeight: '700',
               }}
             >
-              {/*  Explore the intricate web of global politics in this
-              thought-provoking video as we delve into the ever-shifting
-              landscape of international diplomacy...... */}
+  
 
               {dataTopVideos === undefined || dataTopVideos === 0
                 ? "No Top Pic Shown"
@@ -8540,49 +6675,50 @@ right:10
           </View>
         </View>
 
-        <View style={{  flex: 1,
-    paddingTop: 20}}>
-      {cinLoading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : (
-        <FlatList
-          data={sections}
-          renderItem={renderSection}
-          keyExtractor={(item) => item.title}
-        />
-      )}
-    </View>
-{/* Cinematics Moodule end */}
+        <View style={{
+          flex: 1,
+          paddingTop: 20
+        }}>
+          {cinLoading ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : (
+            <FlatList
+              data={sections}
+              renderItem={renderSection}
+              keyExtractor={(item) => item.title}
+            />
+          )}
+        </View>
+        {/* Cinematics Moodule end */}
 
-  {/* // start of banner slider */}
-  <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsInActiveData}
-        noDataMessage={t('Dashboard.NoBanner')}
-        onBannerPress={handleBannerPress}
-      />
+        {/* // start of banner slider */}
+        <BannerCarousel
+          isLoading={isLoading}
+          adsData={adsInActiveData}
+          noDataMessage={t('Dashboard.NoBanner')}
+          onBannerPress={handleBannerPress}
+        />
         {/* ////slider end */}
 
-{/* Fan star zone start */}
-      <View style={styles.latestSearchList}>
-        <View>
-              <FansActive width={23} height={23} />
+        {/* Fan star zone start */}
+        <View style={styles.latestSearchList}>
+          <View>
+            <FansActive width={23} height={23} />
           </View>
           <FlatList
             style={{ flex: 1 }}
             contentContainerStyle={{ alignItems: "center" }}
             showsHorizontalScrollIndicator={false}
             horizontal
-            //data={regions}
             data={fandata}
             //keyExtractor={item => item.id.toString()}
             renderItem={({ item }) => renderFanstartSearches(item)}
           />
         </View>
         <View
-          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(16), marginBottom:30 }}
+          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(16), marginBottom: 30 }}
         >
-          <TouchableOpacity onPress={() => navigation.navigate('Fans_star_details', {videoData: dataTopFanVideos})} style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
+          <TouchableOpacity onPress={() => navigation.navigate('Fans_star_details', { videoData: dataTopFanVideos })} style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
             {dataTopFanVideos === 0 ? (
               <Image
                 style={{
@@ -8639,10 +6775,10 @@ right:10
             </View>
           </TouchableOpacity>
 
-          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop:2 }}>
+          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop: 2 }}>
             <Text
-                  ellipsizeMode="tail"
-                  numberOfLines={7}
+              ellipsizeMode="tail"
+              numberOfLines={7}
               style={{
                 fontSize: hp(1.5),
                 marginLeft: wp(1),
@@ -8659,35 +6795,37 @@ right:10
           </View>
         </View>
 
-<View style={{  flex: 1,
-    paddingTop: 20}}>
-      {fanLoading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : (
-        <FlatList
-          data={fansections}
-          renderItem={renderFanSection}
-          keyExtractor={(item) => item.title}
+        <View style={{
+          flex: 1,
+          paddingTop: 20
+        }}>
+          {fanLoading ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : (
+            <FlatList
+              data={fansections}
+              renderItem={renderFanSection}
+              keyExtractor={(item) => item.title}
+            />
+          )}
+        </View>
+
+        {/* /////////////////////////////////////////////////////////////// */}
+        {/* fan star zone end */}
+
+        {/* // start of banner slider */}
+        <BannerCarousel
+          isLoading={isLoading}
+          adsData={adsInActiveData}
+          noDataMessage={t('Dashboard.NoBanner')}
+          onBannerPress={handleBannerPress}
         />
-      )}
-    </View>
-
-{/* /////////////////////////////////////////////////////////////// */}
-{/* fan star zone end */}
-
-  {/* // start of banner slider */}
-  <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsInActiveData}
-        noDataMessage={t('Dashboard.NoBanner')}
-        onBannerPress={handleBannerPress}
-      />
         {/* ////slider end */}
 
-{/* Kids Vid Start */}
-<View style={styles.latestSearchList}>
-        <View>
-              <KidsActive width={23} height={23} />
+        {/* Kids Vid Start */}
+        <View style={styles.latestSearchList}>
+          <View>
+            <KidsActive width={23} height={23} />
           </View>
           <FlatList
             style={{ flex: 1 }}
@@ -8792,9 +6930,7 @@ right:10
                 //fontWeight: '700',
               }}
             >
-              {/*  Explore the intricate web of global politics in this
-              thought-provoking video as we delve into the ever-shifting
-              landscape of international diplomacy...... */}
+   
 
               {dataKidTopVideos === undefined || dataKidTopVideos === 0
                 ? "No Top Pic Shown"
@@ -8817,20 +6953,20 @@ right:10
         </View>
 
         {/* /////////////////////////////////////////////////////////////// */}
-{/* Kids Vid End */}
+        {/* Kids Vid End */}
 
-  {/* // start of banner slider */}
-  <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsInActiveData}
-        noDataMessage={t('Dashboard.NoBanner')}
-        onBannerPress={handleBannerPress}
-      />
+        {/* // start of banner slider */}
+        <BannerCarousel
+          isLoading={isLoading}
+          adsData={adsInActiveData}
+          noDataMessage={t('Dashboard.NoBanner')}
+          onBannerPress={handleBannerPress}
+        />
         {/* ////slider end */}
 
         <View style={styles.latestSearchList}>
-        <View>
-              <PuzzleActive width={23} height={23} />
+          <View>
+            <PuzzleActive width={23} height={23} />
           </View>
           <FlatList
             style={{ flex: 1 }}
@@ -8844,9 +6980,9 @@ right:10
           />
         </View>
         <View
-          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(16), marginBottom:30 }}
+          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(16), marginBottom: 30 }}
         >
-          <TouchableOpacity onPress={() => navigation.navigate('Learning_details', {videoData: datalearnTopVideos})} style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
+          <TouchableOpacity onPress={() => navigation.navigate('Learning_details', { videoData: datalearnTopVideos })} style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
             {datalearnTopVideos === 0 ? (
               <Image
                 style={{
@@ -8903,10 +7039,10 @@ right:10
             </View>
           </TouchableOpacity>
 
-          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop:2 }}>
-            <Text 
-             ellipsizeMode="tail"
-             numberOfLines={7}
+          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop: 2 }}>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={7}
               style={{
                 fontSize: hp(1.5),
                 marginLeft: wp(1),
@@ -8923,34 +7059,36 @@ right:10
           </View>
         </View>
 
-{/* //////////////////////////////////////////////////////////// */}
-<View style={{  flex: 1,
-    paddingTop: 20}}>
-      {learnLoading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : (
-        <FlatList
-          data={learnsections}
-          renderItem={renderLearnSection}
-          keyExtractor={(item) => item.title}
-        />
-      )}
-    </View>
+        {/* //////////////////////////////////////////////////////////// */}
+        <View style={{
+          flex: 1,
+          paddingTop: 20
+        }}>
+          {learnLoading ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : (
+            <FlatList
+              data={learnsections}
+              renderItem={renderLearnSection}
+              keyExtractor={(item) => item.title}
+            />
+          )}
+        </View>
 
-{/* /////////////////////////////////////////////////////////////// */}
-              {/* // start of banner slider */}
-              <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsInActiveData}
-        noDataMessage={t('Dashboard.NoBanner')}
-        onBannerPress={handleBannerPress}
-      />
+        {/* /////////////////////////////////////////////////////////////// */}
+        {/* // start of banner slider */}
+        <BannerCarousel
+          isLoading={isLoading}
+          adsData={adsInActiveData}
+          noDataMessage={t('Dashboard.NoBanner')}
+          onBannerPress={handleBannerPress}
+        />
         {/* ////slider end */}
 
 
         <View style={styles.latestSearchList}>
-        <View>
-              <TVpromaxActive width={23} height={23} />
+          <View>
+            <TVpromaxActive width={23} height={23} />
           </View>
           <FlatList
             style={{ flex: 1 }}
@@ -8964,9 +7102,9 @@ right:10
           />
         </View>
         <View
-          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(16), marginBottom:30 }}
+          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(16), marginBottom: 30 }}
         >
-          <TouchableOpacity onPress={() => navigation.navigate('Tv_Promax_details', {videoData: datatvTopVideos})} style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
+          <TouchableOpacity onPress={() => navigation.navigate('Tv_Promax_details', { videoData: datatvTopVideos })} style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
             {datatvTopVideos === undefined ? (
               <Image
                 style={{
@@ -9023,10 +7161,10 @@ right:10
             </View>
           </TouchableOpacity>
 
-          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop:2 }}>
-            <Text 
-             ellipsizeMode="tail"
-             numberOfLines={7}
+          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop: 2 }}>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={7}
               style={{
                 fontSize: hp(1.5),
                 marginLeft: wp(1),
@@ -9043,38 +7181,37 @@ right:10
           </View>
         </View>
 
-{/* //////////////////////////////////////////////////////////// */}
-<View style={{  flex: 1,
-    paddingTop: 20}}>
-      {tvLoading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : (
-        <FlatList
-          data={tvsections}
-          renderItem={renderTvSection}
-          keyExtractor={(item) => item.title}
+        {/* //////////////////////////////////////////////////////////// */}
+        <View style={{
+          flex: 1,
+          paddingTop: 20
+        }}>
+          {tvLoading ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : (
+            <FlatList
+              data={tvsections}
+              renderItem={renderTvSection}
+              keyExtractor={(item) => item.title}
+            />
+          )}
+        </View>
+
+        {/* /////////////////////////////////////////////////////////////// */}
+        <BannerCarousel
+          isLoading={isLoading}
+          adsData={adsInActiveData}
+          noDataMessage={t('Dashboard.NoBanner')}
+          onBannerPress={handleBannerPress}
         />
-      )}
-    </View>
-
-{/* /////////////////////////////////////////////////////////////// */}
-
-{/* market zone Start */}
-   {/* // start of banner slider */}
-   <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsInActiveData}
-        noDataMessage={t('Dashboard.NoBanner')}
-        onBannerPress={handleBannerPress}
-      />
         {/* ////slider end */}
 
 
         {/* Market Zone */}
 
         <View style={styles.latestSearchListMarket}>
-        <View>
-              <MarketActive width={23} height={23} />
+          <View>
+            <MarketActive width={23} height={23} />
           </View>
           <FlatList
             style={{ flex: 1 }}
@@ -9087,147 +7224,52 @@ right:10
             renderItem={({ item }) => renderSearchesMarket(item)}
           />
         </View>
-        {/* top marcket start */}
-        {/* {loading[0] && <ActivityIndicator size="large" color="#FACA4E" />}
-        {!loading[0] && data[0] && (
-          <View>
-            <FlatList
-              data={data[0]}
-              showsVerticalScrollIndicator={false}
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={(item, idx) => idx.toString()}
-              renderItem={({ item }) => {
-                // console.log("top Item:-----------", item); // Corrected console.log syntax
-                return (
-                  <View
-                    style={{
-                      marginTop: hp(1.5),
-                      flexDirection: "row",
-                      height: hp(18),
-                    }}
-                  >
-                    <View
-                      style={{
-                        width: wp(35),
-                        marginLeft: wp(2.5),
-                        height: "100%",
-                        borderRadius: wp(5),
-                      }}
-                    >
-                         <TouchableOpacity
-                        onPress={() =>
-                          navigation.navigate("ProductDetails", { ProductDetails: item })
-                        }>
-                      {!item?.image ||
-                      item?.image === "undefined" ||
-                      item?.image.startsWith("/") ? (
-                     
-                        <Image
-                          style={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            zIndex: 1, // Ensure it's on top of other elements
-                            //flex: 1,
-                            width: "100%",
-                            height: "100%",
-                            borderRadius: wp(3),
-                            resizeMode: "cover",
-                          }}
-                          source={appImages?.galleryPlaceHolder}
-                        />
-                      ) : (
-                        <Image
-                          style={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            zIndex: 1, // Ensure it's on top of other elements
-                            //flex: 1,
-                            width: "100%",
-                            height: "100%",
-                            borderRadius: wp(3),
-                            resizeMode: "cover",
-                          }}
-                          source={{ uri: item?.image }}
-                        />
-                      )}
-                    
-                  </TouchableOpacity>
-                    </View>
-                  
-                    <View style={{  width: "50%",}}>
-            <Text  
-                ellipsizeMode="tail"
-                numberOfLines={7}
-              style={{
-                fontSize: hp(1.5),
-                marginLeft: wp(1),
-                lineHeight: hp(2),
-                fontFamily: "Inter-Regular",
-                color: "#000000",
-                //fontWeight: '700',
-              }}
-            >
-             {item.length === 0
-                          ? "No Top Market Shown"
-                          : item?.description}
-            </Text>
-          </View>
-                  </View>
-                );
-              }}
-            />
-          </View>
-        )} */}
 
-
-
-<View
+        <View
           style={{ marginTop: hp(2), flexDirection: "row", height: hp(16) }}
         >
-           <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("ProductDetails", { ProductDetails: DataTopVideosMarket })
-        }>
-          <View style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
-            {firstImageUrl === 0 ? (
-              <Image
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  zIndex: 1, // Ensure it's on top of other elements
-                  //flex: 1,
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: wp(3),
-                  resizeMode: "cover",
-                }}
-                source={appImages.galleryPlaceHolder}
-              />
-            ) : (
-              <Image
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  zIndex: 1, // Ensure it's on top of other elements
-                  //flex: 1,
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: wp(3),
-                  resizeMode: "cover",
-                }}
-                source={{ uri: firstImageUrl }}
-              />
-            )}
-          </View>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("ProductDetails", { ProductDetails: DataTopVideosMarket })
+            }>
+            <View style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
+              {firstImageUrl === 0 ? (
+                <Image
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    zIndex: 1, // Ensure it's on top of other elements
+                    //flex: 1,
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: wp(3),
+                    resizeMode: "cover",
+                  }}
+                  source={appImages.galleryPlaceHolder}
+                />
+              ) : (
+                <Image
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    zIndex: 1, // Ensure it's on top of other elements
+                    //flex: 1,
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: wp(3),
+                    resizeMode: "cover",
+                  }}
+                  source={{ uri: firstImageUrl }}
+                />
+              )}
+            </View>
           </TouchableOpacity>
-          <View style={{  width: "50%",}}>
-            <Text  
-                ellipsizeMode="tail"
-                numberOfLines={7}
+          <View style={{ width: "50%", }}>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={7}
               style={{
                 fontSize: hp(1.5),
                 marginLeft: wp(1),
@@ -9243,11 +7285,6 @@ right:10
             </Text>
           </View>
         </View>
-
-
-
-
-
         <View style={{ marginTop: hp(4), height: hp(23) }}>
           <Text
             style={{
@@ -9286,7 +7323,7 @@ right:10
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                    {t('Dashboard.NoDataavailable')}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -9342,7 +7379,7 @@ right:10
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                    {t('Dashboard.NoDataavailable')}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -9399,7 +7436,7 @@ right:10
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                    {t('Dashboard.NoDataavailable')}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -9455,7 +7492,7 @@ right:10
                     }}
                   >
                     <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                    {t('Dashboard.NoDataavailable')}
+                      {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
                 ) : (
@@ -9472,206 +7509,17 @@ right:10
             )}
           </View>
         </View>
+        {/* market zone end */}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        {/* Market Lable start */}
-        {/* <View style={{ marginTop: hp(2), height: hp(23) }}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              fontFamily: "Inter",
-              color: "#4A4A4A",
-              fontWeight: "bold",
-            }}
-          >
-            {categoriesSelectMarket[0]?.label}
-          </Text>
-
-          <View style={{ marginTop: hp(1), height: "100%" }}>
-            {loading[1] ? (
-              <ActivityIndicator size="large" color="#FACA4E" />
-            ) : data[1]?.length === 0 ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No data available
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                data={data[1]}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                keyExtractor={(item, idx) => idx.toString()}
-                renderItem={({ item }) => renderAvailableAppsMarket(item)}
-              />
-            )}
-          </View>
-        </View> */}
-        {/* market lable two */}
-        {/* <View style={{ marginTop: hp(2), height: hp(23) }}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              fontFamily: "Inter",
-              color: "#4A4A4A",
-              fontWeight: "bold",
-            }}
-          >
-            {categoriesSelectMarket[1]?.label}
-          </Text>
-
-          <View style={{ marginTop: hp(1), height: "100%" }}>
-            {loading[2] ? (
-              <ActivityIndicator size="large" color="#FACA4E" />
-            ) : data[2]?.length === 0 ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No data available
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                data={data[2]}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                keyExtractor={(item, idx) => idx.toString()}
-                renderItem={({ item }) => renderAvailableAppsMarket(item)}
-              />
-            )}
-          </View>
-        </View> */}
-        {/*  Market lable three */}
-        {/* <View style={{ marginTop: hp(2), height: hp(23) }}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              fontFamily: "Inter",
-              color: "#4A4A4A",
-              fontWeight: "bold",
-            }}
-          >
-            {categoriesSelectMarket[2]?.label}
-          </Text>
-
-          <View style={{ marginTop: hp(1), height: "100%" }}>
-            {loading[3] ? (
-              <ActivityIndicator size="large" color="#FACA4E" />
-            ) : data[3]?.length === 0 ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No data available
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                data={data[3]}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                keyExtractor={(item, idx) => idx.toString()}
-                renderItem={({ item }) => renderAvailableAppsMarket(item)}
-              />
-            )}
-          </View>
-        </View> */}
-        {/*  market lable four start */}
-        {/* <View style={{ marginTop: hp(2), height: hp(23) }}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              fontFamily: "Inter",
-              color: "#4A4A4A",
-              fontWeight: "bold",
-            }}
-          >
-            {categoriesSelectMarket[3]?.label}
-          </Text>
-
-          <View style={{ marginTop: hp(1), height: "100%" }}>
-            {loading[4] ? (
-              <ActivityIndicator size="large" color="#FACA4E" />
-            ) : data[4]?.length === 0 ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No data available
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                data={data[4]}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                keyExtractor={(item, idx) => idx.toString()}
-                renderItem={({ item }) => renderAvailableAppsMarket(item)}
-              />
-            )}
-          </View>
-        </View> */}
-
-{/* market zone end */}
-
-              {/* // start of banner slider */}
-              <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsInActiveData}
-        noDataMessage={t('Dashboard.NoBanner')}
-        onBannerPress={handleBannerPress}
-      />
+        {/* // start of banner slider */}
+        <BannerCarousel
+          isLoading={isLoading}
+          adsData={adsInActiveData}
+          noDataMessage={t('Dashboard.NoBanner')}
+          onBannerPress={handleBannerPress}
+        />
         {/* ////slider end */}
-        
+
       </ScrollView>
 
       <RBSheet
@@ -9817,7 +7665,7 @@ right:10
                 </View>
               ) : (
                 <>
-                  <View style={styles.leftContent1}> 
+                  <View style={styles.leftContent1}>
                     <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
                     <View style={{ left: "100%" }}>
                       <TouchableOpacity
@@ -10535,64 +8383,66 @@ right:10
                 >
                   <ActivityIndicator size="large" color="#FACA4E" />
                 </View>
-              ) : (
-                <>
-                  <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
-                    <View style={{ left: "100%" }}>
-                      <TouchableOpacity
-                        onPress={handleSave_em}
-                        style={{ height: 30, width: 30, paddingLeft: 4 }}
-                      >
-                        <Ionicons
-                          name="checkmark-sharp"
-                          size={24}
-                          color="#FACA4E"
+              ) :
+                (
+                  <>
+                    <View style={styles.leftContent1}>
+                      <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
+                      <View style={{ left: "100%" }}>
+                        <TouchableOpacity
+                          onPress={handleSave_em}
+                          style={{ height: 30, width: 30, paddingLeft: 4 }}
+                        >
+                          <Ionicons
+                            name="checkmark-sharp"
+                            size={24}
+                            color="#FACA4E"
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                    <View style={{ flex: 1, bottom: "15%" }}>
+                      <View style={{ top: "5%" }}>
+                        <FlatList
+                          data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
+                          horizontal
+                          showsHorizontalScrollIndicator={false}
+                          keyExtractor={(item, itemIndex) => `${itemIndex}`}
+                          renderItem={({ item }) => renderAppsFav_em(item)}
+                          contentContainerStyle={{
+                            borderWidth: 1,
+                            marginRight: wp(2.3),
+                            // marginTop: hp(3),
+                            borderColor: "#00000017",
+                            borderRadius: wp(3),
+                          }}
                         />
-                      </TouchableOpacity>
+                      </View>
+                      <View style={{ top: "5%" }}>
+                        <FlatList
+                          data={dataApps.slice(Math.ceil(dataApps.length / 2))}
+                          horizontal
+                          showsHorizontalScrollIndicator={false}
+                          keyExtractor={(item, itemIndex) => `${itemIndex}`}
+                          renderItem={({ item }) => renderAppsFav_em(item)}
+                          contentContainerStyle={{
+                            borderWidth: 1,
+                            marginRight: wp(2.3),
+                            // marginBottom: hp(3),
+                            borderColor: "#00000017",
+                            borderRadius: wp(3),
+                          }}
+                        />
+                      </View>
                     </View>
-                  </View>
-                  <View style={{ flex: 1, bottom: "15%" }}>
-                    <View style={{ top: "5%" }}>
-                      <FlatList
-                        data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                        renderItem={({ item }) => renderAppsFav_em(item)}
-                        contentContainerStyle={{
-                          borderWidth: 1,
-                          marginRight: wp(2.3),
-                          // marginTop: hp(3),
-                          borderColor: "#00000017",
-                          borderRadius: wp(3),
-                        }}
-                      />
-                    </View>
-                    <View style={{ top: "5%" }}>
-                      <FlatList
-                        data={dataApps.slice(Math.ceil(dataApps.length / 2))}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                        renderItem={({ item }) => renderAppsFav_em(item)}
-                        contentContainerStyle={{
-                          borderWidth: 1,
-                          marginRight: wp(2.3),
-                          // marginBottom: hp(3),
-                          borderColor: "#00000017",
-                          borderRadius: wp(3),
-                        }}
-                      />
-                    </View>
-                  </View>
-                </>
-              )}
+                  </>
+                )
+              }
             </View>
           </View>
         </View>
       </Modal>
-       <CustomSnackbar
+      <CustomSnackbar
         message={"Success"}
         messageDescription={"Apps added in category"}
         onDismiss={dismissSnackbar} // Make sure this function is defined
@@ -10618,8 +8468,8 @@ const styles = StyleSheet.create({
     borderRadius: wp(2),
     paddingHorizontal: wp(5),
   },
-  TopBannerView:{
-    height:'100%', width:'100%', borderWidth:1, borderColor:'gray',  borderRadius: 10, flex: 1,
+  TopBannerView: {
+    height: '100%', width: '100%', borderWidth: 1, borderColor: 'gray', borderRadius: 10, flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -10640,11 +8490,6 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: "#00000017",
   },
-  // latestSearchList: {
-  //   // marginTop: hp(2.1),
-  //   height: hp(7),
-  //   marginLeft: wp(5),
-  // },
 
   searchHeader: {
     flexDirection: "row",
@@ -10663,11 +8508,7 @@ const styles = StyleSheet.create({
     marginLeft: wp(10),
     color: "#595959",
   },
-  // latestSearchList: {
-  //   marginTop: hp(2.1),
-  //   height: hp(7),
-  //   //marginLeft: wp(5),
-  // },
+
   searchesDetails: {
     flexDirection: "row",
     marginLeft: wp(3),
@@ -10855,9 +8696,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: hp(2.1),
     height: hp(7),
-    // marginHorizontal: wp(2),
-    //marginLeft: wp(5),
-    //borderWidth: 3,
   },
 
   //---------------\\
@@ -10873,9 +8711,6 @@ const styles = StyleSheet.create({
     //borderWidth: 3,
   },
 
-  //----------------\\
-  //Market Zone
-
   latestSearchListMarket: {
     flexDirection: "row",
     alignItems: "center",
@@ -10889,7 +8724,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // marginTop: hp(1),
     height: hp(7),
-    
+
   },
   searchesDetailsCategory: {
     flexDirection: "row",
@@ -10911,11 +8746,6 @@ const styles = StyleSheet.create({
   },
 
   modalContent: {
-    //   width: '80%',
-    //justifyContent:'center',
-    //alignItems:'center',
-    //borderWidth:3,
-    //backgroundColor: 'rgba(0, 0, 0, 0.7)',
     backgroundColor: "transparent",
     borderRadius: 10,
     padding: 20,
@@ -10954,13 +8784,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "center",
     top: "10%",
-   
+
   },
   leftText1: {
     fontSize: 18,
     fontWeight: "bold",
     color: "black",
-    marginRight:20
+    marginRight: 20
   },
   rightContent1: {
     marginLeft: 20,
@@ -11004,8 +8834,6 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
 
   },
-  
-
 
   image: {
     width: wp(35),
@@ -11029,13 +8857,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sectionHeader: {
- 
-              color: "#4A4A4A",
-              fontSize: hp(2.3),
-              textAlign: "left",
-              fontFamily: "Inter-SemiBold",
-              marginBottom:6
-              // top: "6%",
+
+    color: "#4A4A4A",
+    fontSize: hp(2.3),
+    textAlign: "left",
+    fontFamily: "Inter-SemiBold",
+    marginBottom: 6
+    // top: "6%",
   },
   videoItem: {
     marginRight: 15,
@@ -11047,12 +8875,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'gray',
   },
-  NoDataView:{
+  NoDataView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  NoDataText:{
+  NoDataText: {
     fontWeight: "500", fontSize: hp(2.1)
   }
 });

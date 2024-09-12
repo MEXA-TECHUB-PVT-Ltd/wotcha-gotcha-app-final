@@ -19,12 +19,14 @@ import {
   import AsyncStorage from '@react-native-async-storage/async-storage';
   import Fontiso from 'react-native-vector-icons/Fontisto';
   import { base_url } from '../../../../../baseUrl';
-  
+import Loader from '../../../assets/Custom/Loader';
+import { useTranslation } from 'react-i18next';
+
   export default function SearchNews({navigation, route}) {
     const index = route?.params?.selectedItemId
     console.log('index---------', index)
     const [selectedItemId, setSelectedItemId] = useState(null);
-  
+    const { t } = useTranslation();
     const [authToken, setAuthToken] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
   
@@ -329,7 +331,7 @@ import {
             />
             <TextInput
               style={{flex: 1, marginLeft: wp(3)}}
-              placeholder="Search here"
+              placeholder={t('SearchHere')}
               value={searchTerm}
               onChangeText={text => {
                 setSearchTerm(text);
@@ -345,7 +347,7 @@ import {
           </View>
         </View>
   
-        <Text style={styles.latestSearch}>Latest Search</Text>
+        <Text style={styles.latestSearch}>{t('LatestSearch')}</Text>
   
         <View style={styles.latestSearchList}>
           <FlatList
@@ -360,10 +362,10 @@ import {
           />
         </View>
   
-        <Text style={styles.latestSearch}>Top Searches</Text>
+        <Text style={styles.latestSearch}>{t('TopSearches')}</Text>
   
         {data && data.length === 0 ? (
-          <Text style={styles.noDataText}>No data available</Text>
+          <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
         ) : (
           <FlatList
             style={{ marginTop: hp(3), marginHorizontal: wp(5), flex: 1 }}
@@ -380,7 +382,7 @@ import {
           numColumns={3} // Set the number of columns to 3
           renderItem={({item}) => renderAvailableApps(item)}
         /> */}
-          <View
+          {/* <View
           style={{
             position: "absolute",
             top: 0,
@@ -392,7 +394,8 @@ import {
           }}
         >
           {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-        </View>
+        </View> */}
+        {loading && <Loader />}
       </View>
     );
   }

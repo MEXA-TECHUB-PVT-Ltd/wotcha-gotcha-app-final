@@ -30,7 +30,7 @@ import DownArrowComments from "../../assets/svg/DownArrowComments.svg";
 import UpArrowComments from "../../assets/svg/UpArrowComments.svg";
 
 import SmileEmoji from "../../assets/svg/SmileEmoji.svg";
-
+import { useTranslation } from 'react-i18next';
 import Share from "react-native-share";
 
 import axios from "axios";
@@ -52,6 +52,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { base_url } from "../../../../baseUrl";
 import RBSheet from "react-native-raw-bottom-sheet";
 import CustomSnackbar from "../../assets/Custom/CustomSnackBar";
+import Loader from "../../assets/Custom/Loader";
 export default function ViewVideo({ navigation, route }) {
   const [showFullContent, setShowFullContent] = useState(false);
 
@@ -90,7 +91,7 @@ export default function ViewVideo({ navigation, route }) {
   const [snackbarVisible, setsnackbarVisible] = useState(false);
 
   const [commentText, setCommentText] = useState(null); // State variable to hold the text
-
+  const { t } = useTranslation();
   const [showLikes, setShowLikes] = useState(false);
   const refCommentsSheet = useRef();
   const [isOpen, setIsOpen] = useState(false);
@@ -702,6 +703,7 @@ export default function ViewVideo({ navigation, route }) {
   };
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      {loading && <Loader />}
       <ImageBackground
         source={{ uri: receivedData?.image }}
         style={{ flex: 1 }}
@@ -948,7 +950,8 @@ export default function ViewVideo({ navigation, route }) {
               fontSize: hp(2.3),
             }}
           >
-            Comments
+            {t('Comments')}
+            
           </Text>
         </View>
 
@@ -961,7 +964,7 @@ export default function ViewVideo({ navigation, route }) {
                 alignItems: "center",
               }}
             >
-              <Text>No Comments Yet</Text>
+              <Text>{t('NoCommentsYet')}</Text>
             </View>
           ) : (
             <FlatList
@@ -973,7 +976,7 @@ export default function ViewVideo({ navigation, route }) {
           )}
         </View>
 
-        {loading && (
+        {/* {loading && (
           <View
             style={{
               position: "absolute",
@@ -984,7 +987,7 @@ export default function ViewVideo({ navigation, route }) {
           >
             <ActivityIndicator size="large" color="#FACA4E" />
           </View>
-        )}
+        )} */}
 
         {isBottomSheetExpanded === false ? (
           <View
@@ -1015,7 +1018,7 @@ export default function ViewVideo({ navigation, route }) {
               value={commentText} // Bind the value to the state variable
               onChangeText={(text) => setCommentText(text)} // Update state on text change
               placeholderTextColor={"#848484"}
-              placeholder="Write Comment Here"
+              placeholder={t('WriteCommentHere')}
               style={{ flex: 1, marginLeft: wp(1) }}
             />
 
@@ -1054,7 +1057,7 @@ export default function ViewVideo({ navigation, route }) {
                 onChangeText={(text) => setCommentText(text)} // Update state on text change
                 placeholderTextColor={"#848484"}
                 // placeholder="Add a reply"
-                placeholder="Write Comment Here"
+                placeholder={t('WriteCommentHere')}
                 style={{ flex: 1, marginLeft: wp(1) }}
               />
               <TouchableOpacity
@@ -1268,7 +1271,7 @@ export default function ViewVideo({ navigation, route }) {
         )
       )} */}
       {/* ////////////////// sheet end */}
-      <View
+      {/* <View
         style={{
           position: "absolute",
           top: 0,
@@ -1280,10 +1283,10 @@ export default function ViewVideo({ navigation, route }) {
         }}
       >
         {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
+      </View> */}
       <CustomSnackbar
-        message={"success"}
-        messageDescription={"Pic downloaded successfully"}
+        message={t('Success')}
+        messageDescription={t('PicDownloadedSuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />

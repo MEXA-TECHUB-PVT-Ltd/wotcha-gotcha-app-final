@@ -9,7 +9,8 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  Modal
+  Modal,
+  Platform
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import Back from '../../../assets/svg/back.svg';
@@ -20,16 +21,11 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import {Button, Divider, TextInput} from 'react-native-paper';
-import Fontiso from 'react-native-vector-icons/Fontisto';
 import Headers from '../../../assets/Custom/Headers';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import Entypo from 'react-native-vector-icons/Entypo';
 import CustomButton from '../../../assets/Custom/Custom_Button';
-import User from '../../../assets/svg/User.svg';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {SelectCountry, Dropdown} from 'react-native-element-dropdown';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import CPaperInput from './../../../assets/Custom/CPaperInput';
@@ -37,6 +33,7 @@ import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
 import { base_url } from '../../../../../baseUrl';
 import { CLOUD_NAME, CLOUDINARY_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
 import { useTranslation } from 'react-i18next';
+import Loader from '../../../assets/Custom/Loader';
 
 export default function UpdateProfile({navigation}) {
   const [selectedItem, setSelectedItem] = useState('');
@@ -46,8 +43,6 @@ export default function UpdateProfile({navigation}) {
   const [userName, setUserName] = useState('');
 
   const [email, setEmail] = useState('');
-
-  const [price, setPrice] = useState('');
 
   const [snackbarVisible, setsnackbarVisible] = useState(false);
 
@@ -62,15 +57,9 @@ export default function UpdateProfile({navigation}) {
 
   const [isChecked, setIsChecked] = useState(false);
 
-  const [category, setCategory] = useState('');
-
-  const [description, setDescription] = useState('');
-
   const [imageUri, setImageUri] = useState(null);
 
   const [isFocus, setIsFocus] = useState(false);
-
-  //------------------------------------\\
 
   const [showFullContent, setShowFullContent] = useState(false);
 
@@ -78,27 +67,9 @@ export default function UpdateProfile({navigation}) {
     'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
   );
 
-  const [comments, setComments] = useState([]);
-
-  const [snackbarDeleteVisible, setsnackbarDeleteVisible] = useState(false);
-
-  const [likes, setLikes] = useState(null);
-
-  const [commentsCount, setCommentsCount] = useState(null);
-
-  const [showReply, setShowReply] = useState(false);
-
   const [loading, setLoading] = useState(false);
 
   const [userId, setUserId] = useState('');
-
-  const [showMenu, setShowMenu] = useState(true);
-
-  const [progress, setProgress] = useState(0);
-
-  const [isBottomSheetExpanded, setIsBottomSheetExpanded] = useState(false);
-
-  const ref_Comments = useRef(null);
 
   const [authToken, setAuthToken] = useState([]);
 
@@ -119,51 +90,35 @@ export default function UpdateProfile({navigation}) {
   }, []);
 
   const fetchVideos = async () => {
-    // Simulate loading
-
-    // Fetch data one by one
     await getUserID();
-    //await fetchUser();
-    // Once all data is fetched, set loading to false
   };
 
   const getUserID = async () => {
-    console.log('AT User Id');
-
     setLoading(true);
     try {
       const result = await AsyncStorage.getItem('authToken ');
       if (result !== null) {
         setAuthToken(result);
         await fetchUserId(result);
-        // console.log('UpdateProfile screen user token retrieved of profile :', result);
       }
-
-      /* console.log("User Id", userId);
-      console.log("authToken", authToken); */
     } catch (error) {
-      // Handle errors here
       setLoading(false);
       console.error('Error retrieving user ID:', error);
     }
   };
 
   const fetchUserId = async tokens => {
-    console.log('Token', tokens);
+
     const result3 = await AsyncStorage.getItem('userId ');
     if (result3 !== null) {
       setUserId(result3);
-
-      console.log('user id retrieved:', result3);
       fetchUser(tokens, result3);
     } else {
       setLoading(false);
-      console.log('result is null', result3);
     }
   };
 
   const fetchUser = async (tokens, user) => {
-    console.log('Came to fetch Id');
     const token = tokens;
 
     try {
@@ -178,9 +133,6 @@ export default function UpdateProfile({navigation}) {
       );
 
       const result = await response.json();
-      console.log('Resultings', result.user);
-      
-      // setUserName(result.user.image);
       setUserImage(result?.user?.image || "");
       setUserName(result.user.username);
       setEmail(result.user.email);
@@ -194,53 +146,12 @@ export default function UpdateProfile({navigation}) {
   //-------------------------------------\\
 
   const ref_RBSheetCamera = useRef(null);
-
-  const handleFocus = () => {
-    setIsTextInputActive(true);
-  };
-
-  const handleBlur = () => {
-    setIsTextInputActive(false);
-  };
-
-  const handleFocusPrice = () => {
-    setIsTextInputActivePrice(true);
-  };
-
-  const handleBlurPrice = () => {
-    setIsTextInputActivePrice(false);
-  };
-
-  const handleFocusDescription = () => {
-    setIsTextInputActiveDescription(true);
-  };
-
-  const handleBlurDescription = () => {
-    setIsTextInputActiveDescription(false);
-  };
-
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
-  };
-
-  const Category = [
-    {label: 'Item 1', value: '1'},
-    {label: 'Item 2', value: '2'},
-    {label: 'Item 3', value: '3'},
-  ];
-
   const dismissSnackbar = () => {
     setsnackbarVisible(false);
   };
 
   const handleUpdatePasswordAlert = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setsnackbarVisibleAlert(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisibleAlert(false);
       navigation.navigate('ViewProfile');
@@ -259,17 +170,17 @@ export default function UpdateProfile({navigation}) {
         photoQuality: 'medium',
       },
       response => {
-        console.log('image here', response);
+
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setImageUri(response.assets[0].uri);
-            console.log('response', response.assets[0].uri);
+
             setImageInfo(response.assets[0]);
             handle(response.assets[0]);
           } else if (response.uri) {
             // Handle the case when no assets are present (e.g., for videos)
             setImageUri(response.uri);
-            console.log('response', response.uri);
+
           }
         }
       },
@@ -279,28 +190,21 @@ export default function UpdateProfile({navigation}) {
   const choosePhotoFromLibrary = value => {
     setSelectedItem(value);
     launchImageLibrary({mediaType: 'photo'}, response => {
-      console.log('image here', response);
+
       if (!response.didCancel && response.assets.length > 0) {
-        console.log('Response', response.assets[0]);
         setImageUri(response.assets[0].uri);
         setImageInfo(response.assets[0]);
         handle(response.assets[0]);
       }
-      console.log('response', imageInfo);
+
     });
   };
 
   const handle = imageInfo => {
     ref_RBSheetCamera.current.close();
-    console.log('Image Infosssssssssss', imageInfo);
+
     handleUploadVideoC(imageInfo);
-    /*  if(imageInfo!==null){
-      console.log("Not Null");
-      handleUploadVideoC();
-    }else{
-      console.log("Null");
-    } */
-    /*  handleUploadVideoC() */
+
   };
 
   const handleUploadVideoC = data1 => {
@@ -310,7 +214,6 @@ export default function UpdateProfile({navigation}) {
     const type = data1.type;
     const name = data1.fileName;
     const sourceImage = {uri, type, name};
-    console.log('Source Image', sourceImage);
     const dataImage = new FormData();
     dataImage.append('file', sourceImage);
     dataImage.append('upload_preset', UPLOAD_PRESET); // Use your Cloudinary upload preset
@@ -326,18 +229,12 @@ export default function UpdateProfile({navigation}) {
     })
       .then(res => res.json())
       .then(data => {
-        // Update the image at the selected index in your state
         uploadImage(data.url);
-        // Update the image of the first object
-
-        // Set the state with the updated array
-
         setLoading(false);
         ref_RBSheetCamera.current.close();
       })
       .catch(err => {
         setLoading(false);
-        console.log('Error While Uploading Video', err);
       });
   };
 
@@ -365,8 +262,6 @@ export default function UpdateProfile({navigation}) {
         console.log('API Response:', data);
         setLoading(false);
         handleUpdatePassword();
-
-        // Handle the response data as needed
       } else {
         setLoading(false);
 
@@ -375,13 +270,9 @@ export default function UpdateProfile({navigation}) {
           response.status,
           response.statusText,
         );
-        // Handle the error
       }
     } catch (error) {
-      console.error('API Request Error:', error);
       setLoading(false);
-
-      // Handle the error
     }
   };
 
@@ -395,7 +286,6 @@ export default function UpdateProfile({navigation}) {
 
   const updateUserName = async () => {
     setLoading(true);
-    console.log('TOKEN', authToken);
     const token = authToken;
     const apiUrl = base_url + 'user/updateUserProfile';
 
@@ -416,11 +306,8 @@ export default function UpdateProfile({navigation}) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('API Response:', data);
         setLoading(false);
         handleUpdatePassword();
-
-        // Handle the response data as needed
       } else {
         setLoading(false);
 
@@ -429,23 +316,17 @@ export default function UpdateProfile({navigation}) {
           response.status,
           response.statusText,
         );
-        // Handle the error
+
       }
     } catch (error) {
       console.error('API Request Error:', error);
       setLoading(false);
-      // Handle the error
+
     }
   };
 
   const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setsnackbarVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisible(false);
       navigation.navigate('ViewProfile');
@@ -461,7 +342,7 @@ export default function UpdateProfile({navigation}) {
         backgroundColor="transparent"
         barStyle="dark-content" // You can set the StatusBar text color to dark or light
       />
-      <View style={{marginTop: hp(5)}}>
+      <View style={{marginTop:Platform.OS =="ios" ? 0 : hp(5)}}>
         <Headers
           onPress={() => navigation.goBack()}
           showBackIcon={true}
@@ -478,10 +359,10 @@ export default function UpdateProfile({navigation}) {
           {userimage ? (
              <Image
              style={{
-               flex: 1,
+              //  flex: 1,
                width: '100%',
                height: '100%',
-               borderRadius: wp(25) / 2, // Half of the width (25/2)
+               borderRadius: wp(50) / 2, // Half of the width (25/2)
                resizeMode: 'cover',
              }}
              source={{uri: userimage}}
@@ -489,30 +370,16 @@ export default function UpdateProfile({navigation}) {
           ) : (
             <Image
                 style={{
-                  flex: 1,
                   width: '100%',
                   height: '100%',
-                  borderRadius: wp(25) / 2, // Half of the width (25/2)
-                  resizeMode: 'contain',
+                  borderRadius: wp(50) / 2, // Half of the width (25/2)
+                  resizeMode:Platform.OS =="ios" ? "cover" : 'contain',
                 }}
                 source={{uri: imageUri}}
               />
           )}
 
-            {/* {imageUri == null ? (
-              <User width={30} height={30} />
-            ) : (
-              <Image
-                style={{
-                  flex: 1,
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: wp(25) / 2, // Half of the width (25/2)
-                  resizeMode: 'contain',
-                }}
-                source={{uri: imageUri}}
-              />
-            )} */}
+      
           </TouchableOpacity>
         </View>
 
@@ -537,8 +404,6 @@ export default function UpdateProfile({navigation}) {
         </TouchableOpacity>
 
         <CPaperInput
-          //multiline={true}
-          //placeholder={'Description'}
           heading={t('Settings.UserName')}
           placeholderTextColor="#121420"
           value={userName}
@@ -547,8 +412,7 @@ export default function UpdateProfile({navigation}) {
         />
 
         <CPaperInput
-          //multiline={true}
-          //placeholder={'Description'}
+
           editable={false}
           heading={t('signin.EmailAddress')}
           placeholderTextColor="#121420"
@@ -573,14 +437,7 @@ export default function UpdateProfile({navigation}) {
             title={t('UpdatePassword.Update')}
             customClick={() => {
               handleUpdateUser(); // Call your password update function here
-
-              //setsnackbarVisible(true);
-
-              //navigation.goBack();
-              //ref_RBSendOffer.current.close();
-              //navigation.navigate('ResetPassword');
             }}
-            //style={{width: wp(59)}}
           />
         </View>
 
@@ -617,7 +474,7 @@ export default function UpdateProfile({navigation}) {
           container: {
             borderTopLeftRadius: wp(10),
             borderTopRightRadius: wp(10),
-            height: hp(25),
+            // height: hp(25),
           },
         }}>
         <View
@@ -692,19 +549,7 @@ export default function UpdateProfile({navigation}) {
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackbarVisibleAlert}
       />
-
-      <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
+      {loading && <Loader />}
     </KeyboardAvoidingView>
   );
 }
@@ -818,7 +663,7 @@ const styles = StyleSheet.create({
   },
   circleBox: {
     width: wp(28),
-    height: hp(14),
+    height: hp(13),
     borderWidth: 1,
     overflow: 'hidden',
     borderColor: '#0000001F',

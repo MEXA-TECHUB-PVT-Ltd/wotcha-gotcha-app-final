@@ -31,8 +31,6 @@ import Download from '../../../assets/svg/Download.svg';
 import DownArrowComments from '../../../assets/svg/DownArrowComments.svg';
 import UpArrowComments from '../../../assets/svg/UpArrowComments.svg';
 
-import BottomSheet, {BottomSheetFlatList} from '@gorhom/bottom-sheet';
-
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -44,8 +42,6 @@ import {
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-
-import Fontiso from 'react-native-vector-icons/Fontisto';
 
 import FontAwsome from 'react-native-vector-icons/FontAwesome';
 
@@ -69,8 +65,10 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { base_url } from '../../../../../baseUrl';
+import { useTranslation } from 'react-i18next';
 
 export default function Cinematics_details({navigation, route}) {
+  const { t } = useTranslation();
   const [showFullContent, setShowFullContent] = useState(false);
   const identifier  = route.params.identifier;
   const [pastedURL, setPastedURL] = useState(
@@ -128,17 +126,11 @@ export default function Cinematics_details({navigation, route}) {
     if (progress && progress.seekableDuration !== undefined) {
       // Assuming progress.seekableDuration is the duration in seconds
       const formattedDuration = formatDuration(progress.seekableDuration);
-      // Do something with formattedDuration, such as setting it in another state
-      // setFormattedDuration(formattedDuration);
-      // console.log('Formatted Duration:', formattedDuration);
-
       setTotalDuration(formattedDuration);
     }
   }, [progress]); // The effect will re-run whenever the progress state changes
 
   const receivedData = route.params?.videoData;
-
-  // console.log('Data Recieved on', receivedData);
 
   var details = receivedData.description;
   /* 'Hold onto your seats and get ready to be mesmerized by the beauty and grandeur of the Hold onto your seats'; */
@@ -180,9 +172,7 @@ export default function Cinematics_details({navigation, route}) {
     }
   };
 
-  // useEffect(() => {
-  //   fetchAll();
-  // }, []);
+
   useEffect(() => {
     if(isFocused){
     //  console.log('isfucesd')
@@ -193,24 +183,19 @@ export default function Cinematics_details({navigation, route}) {
   const fetchAll = async () => {
     // Simulate loading
     setLoading(true);
-    // Fetch data one by one
 
     await getUserID();
-    //await fetchComments();
-    //await fetchLikes();
-    //await fetchCommentsCounts();
 
-    // Once all data is fetched, set loading to false
     setLoading(false);
   };
 
   const getUserID = async () => {
-    // console.log("Id's");
+
     try {
       const result = await AsyncStorage.getItem('userId ');
       if (result !== null) {
         setUserId(result);
-        // console.log('user id retrieved:', result);
+
       } else {
         console.log('user id null:', result);
       }
@@ -219,7 +204,6 @@ export default function Cinematics_details({navigation, route}) {
       if (result1 !== null) {
         setAuthToken(result1);
 
-        // console.log('user token retrieved:', result1);
         await fetchComments(result1);
       } else {
         console.log('result is null', result);
@@ -262,68 +246,6 @@ export default function Cinematics_details({navigation, route}) {
     }
   };
 
-  const fetchLikes = async result => {
-    const token = result;
-
-    try {
-      const response = await fetch(
-        base_url + `xpi/getAllLikesByVideo/${receivedData.video_id}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log('All Likes', data.totalLikes);
-        setLikes(data.totalLikes);
-        // await fetchCommentsCounts(result);
-      } else {
-        console.error(
-          'Failed to fetch categories:',
-          response.status,
-          response.statusText,
-        );
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
-  const fetchCommentsCounts = async value => {
-    const token = value;
-
-    try {
-      const response = await fetch(
-        base_url + `xpi/getAllCommentsByVideo/${receivedData.video_id}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        //console.log("All Comments", data.totalComments);
-        // setCommentsCount(data.totalComments);
-
-        // await fetchSpecificVideo(value);
-      } else {
-        console.error(
-          'Failed to fetch categories:',
-          response.status,
-          response.statusText,
-        );
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
 
   const changeModal = () => {
     ref_RBSheetCamera.current.close();
@@ -385,37 +307,6 @@ export default function Cinematics_details({navigation, route}) {
   };
   //----------------------------------\\
 
-  const fetchSpecificVideo = async result => {
-    console.log('GET SPECIFIC VIDEO CALLED', result);
-    const token = result;
-
-    try {
-      const response = await fetch(
-        base_url + `xpi/getSpecificVideo/${receivedData?.video_id}?user_id=${userId}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        //console.log("All Comments of usersssss", data.AllComents)
-        console.log('video Is liked or not>>>>>>>>', data.Video);
-        // setShowLikes(data?.Video?.is_liked)
-      } else {
-        console.error(
-          'Failed to fetch categories:',
-          response.status,
-          response.statusText,
-        );
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
 
   //------------------------------------\\
 
@@ -424,13 +315,6 @@ export default function Cinematics_details({navigation, route}) {
   };
 
   const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
-    // setsnackbarVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisible(false);
 
@@ -445,77 +329,15 @@ export default function Cinematics_details({navigation, route}) {
   };
 
   const clearTextInput = () => {
-    //console.log('came to logssssss', commentText);
-    // Clear the text in the TextInput
     setCommentText(null); 
     sendComment();
   };
 
-  const copyAssetVideo = async () => {
-    try {
-      const videoAssetPath = '../../../assets/images/DummyVideo.mp4'; // Adjust the path to your asset
-      const videoFileName = 'CopiedVideo.mp4'; // Choose a name for the copied video
-
-      const assetData = RNFetchBlob.asset(videoAssetPath);
-      const destinationPath = `${RNFetchBlob.fs.dirs.DownloadDir}/${videoFileName}`;
-
-      await assetData.copyFile(destinationPath);
-
-      //ToastAndroid.show('Video copied successfully', ToastAndroid.SHORT);
-      //console.log('Copied video path:', destinationPath);
-    } catch (error) {
-      console.error('Error copying asset video:', error);
-      //ToastAndroid.show('Failed to copy video', ToastAndroid.LONG);
-    }
-  };
-
-  const chats = [
-    {
-      id: 1,
-      name: 'John Doe',
-      message: 'The laughter in this video is contagious!',
-      reply: false,
-    },
-    {
-      id: 2,
-      name: 'Olivia Bennett',
-      message: 'I wish I had a friend group like this. You all are incredible!',
-      reply: false,
-    },
-    {
-      id: 3,
-      name: 'Ethan Rodriguez',
-      message:
-        'This video just made my day! Thanks for sharing your awesome moments.',
-      reply: false,
-    },
-    {
-      id: 4,
-      name: 'Mia Bennett',
-      message: 'Friendship goals right there! Love how close you all are',
-      reply: false,
-    },
-    {
-      id: 5,
-      name: 'Liam Sullivan',
-      message:
-        'Looks like you guys are having an absolute blast! Wish I could join in on the fun',
-      reply: false,
-    },
-  ];
 
   const handlePick = emojiObject => {
     console.log('Emoji Object', emojiObject);
     //setIsOpen(false)
     setCommentText(emojiObject.emoji);
-
-    /* example emojiObject = {
-        "emoji": "❤️",
-        "name": "red heart",
-        "slug": "red_heart",
-        "unicode_version": "0.6",
-      }
-    */
   };
 
   const sendComment = async () => {
@@ -546,7 +368,6 @@ export default function Cinematics_details({navigation, route}) {
 
       if (response.status === 200) {
         setLoading(false);
-        console.log('Comment sent successfully');
         fetchAll();
       } else {
         setLoading(false);
@@ -586,11 +407,9 @@ export default function Cinematics_details({navigation, route}) {
         axiosConfig,
       );
 
-      console.log('Response', response);
 
       if (response.status === 200) {
         setLoading(false);
-        console.log('Video Liked  successfully');
         fetchAll();
       } else {
         setLoading(false);
@@ -608,7 +427,6 @@ export default function Cinematics_details({navigation, route}) {
   };
 
   const renderComments = item => {
-    console.log('Items of comments', item);
     return (
       <View>
      
@@ -649,17 +467,7 @@ export default function Cinematics_details({navigation, route}) {
                     color={"#FACA4E"}
                   />
                 )}
-            {/* <MaterialCommunityIcons
-              style={{marginTop: hp(0.5)}}
-              name={'account-circle'}
-              size={50}
-              color={'#FACA4E'}
-            /> */}
-
-            {/* <Image
-              style={{width: '100%', borderRadius: wp(2.1), height: '100%'}}
-              source={appImages.profileImg}
-            /> */}
+    
           </View>
 
           <View
@@ -831,7 +639,6 @@ export default function Cinematics_details({navigation, route}) {
     );
   };
 
-  const videos = require('../../../assets/images/DummyVideo.mp4'); // Reference your asset file here
 
   const requestStoragePermission = async () => {
     try {
@@ -871,10 +678,6 @@ export default function Cinematics_details({navigation, route}) {
     setIsBottomSheetExpanded(!isBottomSheetExpanded);
     refCommentsSheet.current.open();
   };
-  // const openComments = () => {
-  //   setPaused(true);
-  //   setIsBottomSheetExpanded(!isBottomSheetExpanded);
-  // };
 
   const downloadFile = () => {
     const {config, fs} = RNFetchBlob;
@@ -913,11 +716,6 @@ export default function Cinematics_details({navigation, route}) {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <View style={{flex: 1}}>
-        {/* Add a parent View */}
-
-        {/* Existing components go here */}
-
-        {/* Add the play button View */}
         {!isBottomSheetExpanded && paused === true && (
           <View
             style={{
@@ -965,10 +763,6 @@ export default function Cinematics_details({navigation, route}) {
             resizeMode="contain"
           />
 
-          {/* {identifier && (
-           
-          )} */}
-
 {identifier ? ( 
         // Render specific content if identifier is true
         <TouchableOpacity
@@ -977,11 +771,13 @@ export default function Cinematics_details({navigation, route}) {
               <Entypo name={'dots-three-vertical'} size={18} color={'white'} />
             </TouchableOpacity>
       ) : (
-        // Render nothing if identifier is false or undefined
      <View/>
       )}
+
+      {/* This is end */}
         </View>
 
+{/* Comment 2 by me */}
         <View style={styles.bottomView}>
           <View style={{height: hp(30), marginHorizontal: wp(8)}}>
           <View
@@ -1206,76 +1002,17 @@ export default function Cinematics_details({navigation, route}) {
           </View>
         </View>
 
+        {/* End====== */}
+
         <CustomSnackbar
-          message={'success'}
-          messageDescription={'Video downloaded successfully'}
+          message={t('Success')} 
+          messageDescription={t('VideoDownloadedSuccessfully')}
           onDismiss={dismissSnackbar} // Make sure this function is defined
           visible={snackbarVisible}
         />
 
-        {/* <RBSheet
-        ref={ref_Comments}
-        height={330}
-        openDuration={250}
-        enableOverDrag={false}
-        enabledGestureInteraction={false}
-        closeOnDragDown={false}
-        closeOnPressMask={false}
-        customStyles={{
-          container: {
-            borderTopLeftRadius: 30,
-            borderTopRightRadius: 30,
-            paddingTop: 0,
-            padding: 20,
-            zIndex: 999,
-          },
-          draggableIcon: {
-            backgroundColor: 'transparent',
-          },
-        }}>
-        <View
-          style={{
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: hp(5),
-          }}>
-          <Text
-            style={{
-              color: '#000000',
-              fontFamily: 'Inter-Bold',
-              fontSize: hp(2.3),
-            }}>
-            Comments
-          </Text>
-        </View>
 
-        <View style={{marginTop: hp(1),flex:1}}>
-        <FlatList
-          style={{flexGrow:1}}
-          showsVerticalScrollIndicator={false}
-          data={chats}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({item}) => renderComments(item)}
-        />
-      </View>
-
-      <View style={{width:'100%', flexDirection:'row', alignItems:'center', height:hp(8)}}>
-      <TouchableOpacity style={{height:hp(8), justifyContent:'center', alignItems:'center', width:wp(14),}}>
-        <SmileEmoji/>
-      </TouchableOpacity>
-
-      <TextInput placeholderTextColor={'#848484'} placeholder='Write Comment Here' style={{flex:1, marginLeft:wp(1),}}/>
-
-      <TouchableOpacity>
-        <ButtonSend/>
-      </TouchableOpacity>
-      </View>
-
-        
-      </RBSheet> */}
-
-
+{/* Comment 3 by me */}
 <RBSheet
           ref={refCommentsSheet}
           height={450}
@@ -1307,7 +1044,8 @@ export default function Cinematics_details({navigation, route}) {
                 fontSize: hp(2.3),
               }}
             >
-              Comments
+              {t('Comments')}
+              {/* Comments */}
             </Text>
           </View>
 
@@ -1318,9 +1056,9 @@ export default function Cinematics_details({navigation, route}) {
                   flex: 1,
                   justifyContent: "center",
                   alignItems: "center",
-                }}
+                }} 
               >
-                <Text>No Comments Yet</Text>
+                <Text>{t('NoCommentsYet')}</Text>
               </View>
             ) : (
               <FlatList
@@ -1375,7 +1113,7 @@ export default function Cinematics_details({navigation, route}) {
                 value={commentText} // Bind the value to the state variable
                 onChangeText={(text) => setCommentText(text)} // Update state on text change
                 placeholderTextColor={"#848484"}
-                placeholder="Write Comment Here"
+                placeholder={t('WriteCommentHere')} 
                 style={{ flex: 1, marginLeft: wp(1) }}
               />
 
@@ -1414,7 +1152,7 @@ export default function Cinematics_details({navigation, route}) {
                   onChangeText={(text) => setCommentText(text)} // Update state on text change
                   placeholderTextColor={"#848484"}
                   // placeholder="Add a reply"
-                  placeholder="Write Comment Here"
+                  placeholder={t('WriteCommentHere')} 
                   style={{ flex: 1, marginLeft: wp(1) }}
                 />
                 <TouchableOpacity style={{ marginRight: wp(3) }} onPress={() => clearTextInput()}>
@@ -1423,210 +1161,11 @@ export default function Cinematics_details({navigation, route}) {
               </View>
             )
           )}
-
-          {/* ///////////////////////// */}
-
-          {/* {showReply === false ? (
-            <View
-              style={{
-                width: "100%",
-                flexDirection: "row",
-                alignItems: "center",
-                height: hp(8),
-              }}
-            >
-              <View
-                style={{
-                  height: hp(8),
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: wp(14),
-                }}
-              >
-                <SmileEmoji />
-              </View>
-
-              <TextInput
-                value={commentText} // Bind the value to the state variable
-                onChangeText={(text) => setCommentText(text)} // Update state on text change
-                placeholderTextColor={"#848484"}
-                placeholder="Write Comment Heressssss"
-                style={{ flex: 1, marginLeft: wp(1) }}
-              />
-
-              <TouchableOpacity onPress={() => clearTextInput}>
-                <ButtonSend />
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <View
-              style={{
-                width: "100%",
-                flexDirection: "row",
-                alignItems: "center",
-                height: hp(8),
-              }}
-            >
-              <View
-                onpress={() => setIsOpen(true)}
-                style={{
-                  height: hp(8),
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: wp(14),
-                }}
-              >
-                <SmileEmoji />
-              </View>
-
-              <TextInput
-                value={commentText} // Bind the value to the state variable
-                onChangeText={(text) => setCommentText(text)} // Update state on text change
-                placeholderTextColor={"#848484"}
-                placeholder="Add a reply"
-                style={{ flex: 1, marginLeft: wp(1) }}
-              />
-
-              <TouchableOpacity onPress={() => clearTextInput()}>
-                <ButtonSend />
-              </TouchableOpacity>
-            </View>
-          )} */}
         </RBSheet>
 
-        {/* <BottomSheet
-          ref={ref_Comments}
-          index={isBottomSheetExpanded ? 0 : -1} // Set to -1 to start with collapsed state
-          snapPoints={['65%', '90%']} // Adjust snap points as needed
-          onScroll={event => {
-            console.log('Event', event);
-            const offsetY = event.nativeEvent.contentOffset.y;
-            if (isBottomSheetExpanded && offsetY === 0) {
-              setIsBottomSheetExpanded(false);
-            } else if (!isBottomSheetExpanded && offsetY > 0) {
-              setIsBottomSheetExpanded(true);
-            }
-          }}
-          //snapPoints={snapPoints}
-          //onChange={handleSheetChange}
-          height={210}
-          openDuration={250}
-          closeOnDragDown={true}
-          draggableIcon={false}
-          closeOnPressMask={true}
-          customStyles={{
-            container: {
-              borderTopLeftRadius: 100,
-              borderTopRightRadius: 100,
-              paddingTop: 0,
-              padding: 20,
-              zIndex: 999,
-              backgroundColor: 'white',
-            },
-            draggableIcon: {
-              backgroundColor: 'white',
-            },
-          }}>
-          <View
-            style={{
-              width: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: hp(5),
-            }}>
-            <Text
-              style={{
-                color: '#000000',
-                fontFamily: 'Inter-Bold',
-                fontSize: hp(2.3),
-              }}>
-              Comments
-            </Text>
-          </View>
+        {/* End====== */}
 
-          <View style={{marginTop: hp(1), flex: 1}}>
-            {comments.length === 0 || comments === null ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <Text>No Comments Yet</Text>
-              </View>
-            ) : (
-              <BottomSheetFlatList
-                data={comments}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({item}) => renderComments(item)}
-                extraData={loading}
-              />
-            )}
-          </View>
-
-          {showReply === false ? (
-            <View
-              style={{
-                width: '100%',
-                flexDirection: 'row',
-                alignItems: 'center',
-                height: hp(8),
-              }}>
-              <View
-                style={{
-                  height: hp(8),
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: wp(14),
-                }}>
-                <SmileEmoji />
-              </View>
-
-              <TextInput
-                value={commentText} // Bind the value to the state variable
-                onChangeText={text => setCommentText(text)} // Update state on text change
-                placeholderTextColor={'#848484'}
-                placeholder="Write Comment Heressssss"
-                style={{flex: 1, marginLeft: wp(1)}}
-              />
-
-              <TouchableOpacity onPress={() => clearTextInput}>
-                <ButtonSend />
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <View
-              style={{
-                width: '100%',
-                flexDirection: 'row',
-                alignItems: 'center',
-                height: hp(8),
-              }}>
-              <View
-                onpress={() => setIsOpen(true)}
-                style={{
-                  height: hp(8),
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: wp(14),
-                }}>
-                <SmileEmoji />
-              </View>
-
-              <TextInput
-                value={commentText} // Bind the value to the state variable
-                onChangeText={text => setCommentText(text)} // Update state on text change
-                placeholderTextColor={'#848484'}
-                placeholder="Add a reply"
-                style={{flex: 1, marginLeft: wp(1)}}
-              />
-
-              <TouchableOpacity onPress={() => clearTextInput()}>
-                <ButtonSend />
-              </TouchableOpacity>
-            </View>
-          )}
-        </BottomSheet> */}
+        {/* Comment 4 by me */}
         {isOpen === true ? (
           <EmojiPicker
             onEmojiSelected={handlePick}
@@ -1634,94 +1173,9 @@ export default function Cinematics_details({navigation, route}) {
             onClose={() => setIsOpen(false)}
           />
         ) : null}
-
-        {/* {isBottomSheetExpanded && showReply === false ? (
-          <View
-            style={{
-              width: '100%',
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              backgroundColor: 'white',
-              flexDirection: 'row',
-              alignItems: 'center',
-              height: hp(8),
-            }}>
-            <TouchableOpacity
-              onPress={() => openEmoji()}
-              style={{
-                height: hp(8),
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: wp(14),
-              }}>
-              <SmileEmoji />
-            </TouchableOpacity>
-
-            <TextInput
-              value={commentText} // Bind the value to the state variable
-              onChangeText={text => setCommentText(text)} // Update state on text change
-              placeholderTextColor={'#848484'}
-              placeholder="Write Comment Here"
-              style={{flex: 1, marginLeft: wp(1)}}
-            />
-
-            <TouchableOpacity
-              style={{marginRight: wp(3)}}
-              onPress={() => clearTextInput()}>
-              <ButtonSend />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          isBottomSheetExpanded && (
-            <View
-              style={{
-                width: '100%',
-                backgroundColor: 'white',
-                flexDirection: 'row',
-                alignItems: 'center',
-                height: hp(8),
-              }}>
-              <View
-                style={{
-                  height: hp(8),
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  width: wp(14),
-                }}>
-                <SmileEmoji />
-              </View>
-
-              <TextInput
-                value={commentText} // Bind the value to the state variable
-                onChangeText={text => setCommentText(text)} // Update state on text change
-                placeholderTextColor={'#848484'}
-                placeholder="Add a reply"
-                style={{flex: 1, marginLeft: wp(1)}}
-              />
-
-              <TouchableOpacity onPress={() => clearTextInput()}>
-                <ButtonSend />
-              </TouchableOpacity>
-            </View>
-          )
-        )} */}
+        {/* End===== */}
       </View>
 
-      <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
-
-       {/* //-----------------\\ */}
        <RBSheet
         ref={ref_RBSheetCamera}
         closeOnDragDown={true}
@@ -1754,7 +1208,8 @@ export default function Cinematics_details({navigation, route}) {
               color: '#303030',
               fontSize: hp(2.3),
             }}>
-            Select an option
+              {t('SelectAnOption')}
+            {/* Select an option */}
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <IonIcons
@@ -1770,8 +1225,6 @@ export default function Cinematics_details({navigation, route}) {
           style={{
             //flexDirection: 'row',
             justifyContent: 'space-evenly',
-            //alignItems: 'center',
-            //borderWidth: 3,
             marginTop: hp(3),
           }}>
           <TouchableOpacity
@@ -1786,7 +1239,9 @@ export default function Cinematics_details({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Update Video
+
+                {t('UpdateVideo')}
+              {/* Update Video */}
             </Text>
           </TouchableOpacity>
 
@@ -1814,15 +1269,16 @@ export default function Cinematics_details({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Delete Video
+                {t('DeleteVideo')}
+              {/* Delete Video */}
             </Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
       <CustomSnackbar
-          message={'success'}
-          messageDescription={'Video deleted successfully'}
+          message={t('Success')}
+          messageDescription={t('VideoDeletedSuccessfully')}
           onDismiss={dismissDeleteSnackbar} // Make sure this function is defined
           visible={snackbarDeleteVisible}
         />
@@ -1845,8 +1301,9 @@ const styles = StyleSheet.create({
     marginHorizontal: wp(8),
   },
   bottomView: {
-    flex: 1,
-    justifyContent: 'flex-end',
+  position:'absolute',
+  bottom:0,
+    // justifyContent: 'flex-end',
     // You can add padding or content to this view as needed.
   },
   textProfileName: {

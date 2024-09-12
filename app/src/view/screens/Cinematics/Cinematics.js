@@ -10,7 +10,8 @@ import {
   Text,
   View,
   SectionList,
-  Dimensions
+  Dimensions,
+  Platform
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import {
@@ -18,8 +19,7 @@ import {
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import Fontiso from "react-native-vector-icons/Fontisto";
-import Entypo from "react-native-vector-icons/Entypo";
+
 import Ionicons from "react-native-vector-icons/Ionicons";
 import RBSheet from "react-native-raw-bottom-sheet";
 import Camera from "../../../assets/svg/Camera.svg";
@@ -32,55 +32,18 @@ import { appImages } from "../../../assets/utilities";
 import Add from "../../../assets/svg/AddMainScreen.svg";
 import { base_url } from "../../../../../baseUrl";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import Swiper from "react-native-swiper";
 import Carousel from 'react-native-snap-carousel';
 import Cinematiceactive from "../../../assets/svg/Cinematiceactive";
-const bannerAds = [
-  {
-    id: 1,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-  {
-    id: 2,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-  {
-    id: 3,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-  {
-    id: 4,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-];
-export default function Cinematics({  route }) {
+import { useTranslation } from 'react-i18next';
+
+export default function Cinematics({ route }) {
+  const { t } = useTranslation();
   const navigation = useNavigation();
-  // const { identifier } = route.params;
-  // console.log("identifier from cinematices ", identifier)
   const [data, setData] = useState([]);
-
   const [authToken, setAuthToken] = useState("");
-
-  const [dataElectronics, setDataElectronics] = useState(null);
-
   const isFocused = useIsFocused();
-
-  const [dataVehicles, setDataVehicles] = useState(null);
-
-  const [dataClothing, setDataClothing] = useState(null);
-
-  //const [regions, setRegions] = useState(null);
-
-  const [regions, setRegions] = useState(null);
-
   const [loading, setLoading] = useState(false);
-
-  const [categoriesSelect, setCategorySelect] = useState([]);
-
-  const [snackBarVisible, setSnackbarVisible] = useState(false);
-
   const [dataTopVideos, setDataTopVideos] = useState([]);
-
   const ref_RBSheetCamera = useRef(null);
   const [imageUri, setImageUri] = useState(null);
   const [imageInfo, setImageInfo] = useState(null);
@@ -109,12 +72,12 @@ export default function Cinematics({  route }) {
 
   useEffect(() => {
     if (authToken && isFocused) {
-      if(selectedItemId == null)
-        // console.log('useeffect mein id hai', selectedItemId)
-        {
-          setSelectedItemId(29)
-        }
-        
+      if (selectedItemId == null)
+      // console.log('useeffect mein id hai', selectedItemId)
+      {
+        setSelectedItemId(29)
+      }
+
       // fetchAllData();
       fetchAllCinematicsCategory();
     }
@@ -164,31 +127,31 @@ export default function Cinematics({  route }) {
   };
 
   const fetchTopVideos = async () => {
-     // console.log("Categry in id", selectedItemId);
-     const token = authToken;
+    // console.log("Categry in id", selectedItemId);
+    const token = authToken;
 
-     try {
-       const response = await fetch(
-         base_url + "cinematics/getTopVideo",
-         {
-           method: "GET",
-           headers: {
-             Authorization: `Bearer ${token}`,
-           },
-         }
-       );
- 
-       const result = await response.json();
+    try {
+      const response = await fetch(
+        base_url + "cinematics/getTopVideo",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
       //  console.log("getTopVideo------..", result.data);
-       setDataTopVideos(result.data);
-     } catch (error) {
-       console.error("Error Trending:", error);
-     }
+      setDataTopVideos(result.data);
+    } catch (error) {
+      console.error("Error Trending:", error);
+    }
   };
 
   const fetchSubCategory = async (selectedItemId) => {
     const token = authToken;
-  
+
     try {
       const response = await fetch(
         `${base_url}cinematics/getByCategory/${selectedItemId}?page=1&limit=1000`,
@@ -199,18 +162,18 @@ export default function Cinematics({  route }) {
           },
         }
       );
-  
+
       const result = await response.json();
-  
+
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
           title: category.sub_category_name,
           data: category.video_result.videos,
         }));
-  
+
         // console.log('results---', formattedSections);
         setSections(formattedSections);
-  
+
         // Check if there is no data
         const hasNoData = formattedSections.every(section => section.data.length === 0);
         setNoData(hasNoData);
@@ -226,77 +189,77 @@ export default function Cinematics({  route }) {
   const [adsData, setAdsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    if (authToken){
+    if (authToken) {
       fetchBannerConfig();
       fetchBannerInActive()
     }
-    }, [authToken]);
-  
-    const fetchBannerConfig = async () => {
-      const token = authToken;
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          base_url + "banner/getAllActiveBanners?topBanner=true",
-          // base_url + "banner/getAllBannersByUser/97",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        const result = await response.json();
-        // console.log("AllBanners---", result.AllBanners);
-        setAdsData(result.AllBanners);
-      } catch (error) {
-        console.error("Error AllBanners:", error);
-      }
-      setIsLoading(false); 
-    };
-    const fetchBannerInActive = async () => {
-      const token = authToken;
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          base_url + "banner/getAllActiveBanners?topBanner=false",
-          // base_url + "banner/getAllBannersByUser/97",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        const result = await response.json();
-        // setAdsInActiveData(result.AllBanners);
-        const updatedBanners = result.AllBanners.map(banner => {
-          if (banner.image.startsWith('/fileUpload')) {
-            banner.image = `https://watch-gotcha-be.mtechub.com${banner.image}`;
-          }
-          return banner;
-        });
-        // console.log("AllBanners AdsInActiveData---", updatedBanners);
-        setAdsInActiveData(updatedBanners);
-      } catch (error) {
-        console.error("Error AllBanners AdsInActiveData---", error);
-      }
-      setIsLoading(false);
-    };
+  }, [authToken]);
+
+  const fetchBannerConfig = async () => {
+    const token = authToken;
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        base_url + "banner/getAllActiveBanners?topBanner=true",
+        // base_url + "banner/getAllBannersByUser/97",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
+      // console.log("AllBanners---", result.AllBanners);
+      setAdsData(result.AllBanners);
+    } catch (error) {
+      console.error("Error AllBanners:", error);
+    }
+    setIsLoading(false);
+  };
+  const fetchBannerInActive = async () => {
+    const token = authToken;
+    setIsLoading(true);
+    try {
+      const response = await fetch(
+        base_url + "banner/getAllActiveBanners?topBanner=false",
+        // base_url + "banner/getAllBannersByUser/97",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
+      // setAdsInActiveData(result.AllBanners);
+      const updatedBanners = result.AllBanners.map(banner => {
+        if (banner.image.startsWith('/fileUpload')) {
+          banner.image = `https://watch-gotcha-be.mtechub.com${banner.image}`;
+        }
+        return banner;
+      });
+      // console.log("AllBanners AdsInActiveData---", updatedBanners);
+      setAdsInActiveData(updatedBanners);
+    } catch (error) {
+      console.error("Error AllBanners AdsInActiveData---", error);
+    }
+    setIsLoading(false);
+  };
   const renderVideoItem = ({ item }) => (
     // <TouchableOpacity onPress={handle_details}>
-    <TouchableOpacity onPress={() => navigation.navigate('Cinematics_details', {videoData: item, identifier: false})}>
-    <View style={styles.itemContainer}>
-      {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
-      <Image source={{ uri: item.thumbnail }} style={styles.image} />
-      <Text  ellipsizeMode="tail"
-                numberOfLines={1} style={styles.text}>{item.name}</Text>
-      <Text  ellipsizeMode="tail"
-                numberOfLines={2} style={styles.text1}>{item.description}</Text>
-    </View>
-  </TouchableOpacity>
+    <TouchableOpacity onPress={() => navigation.navigate('Cinematics_details', { videoData: item, identifier: false })}>
+      <View style={styles.itemContainer}>
+        {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
+        <Image source={{ uri: item.thumbnail }} style={styles.image} />
+        <Text ellipsizeMode="tail"
+          numberOfLines={1} style={styles.text}>{item.name}</Text>
+        <Text ellipsizeMode="tail"
+          numberOfLines={2} style={styles.text1}>{item.description}</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   const renderSection = ({ item }) => (
@@ -305,158 +268,25 @@ export default function Cinematics({  route }) {
       {item.data.length === 0 ? (
         <Text style={styles.noDataText}>No Data available</Text>
       ) : (
-      <FlatList
-        data={item.data}
-        renderItem={renderVideoItem}
-        keyExtractor={(videoItem) => videoItem.video_id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-    )}
+        <FlatList
+          data={item.data}
+          renderItem={renderVideoItem}
+          keyExtractor={(videoItem) => videoItem.video_id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 
-  // console.log('wow sections data aya data -----', sections)
-  const fetchVehicles = async () => {
-    const token = authToken;
 
-    try {
-      const response = await fetch(
-        base_url +
-          `item/getAllItemByCategory/6?page=1&limit=5&region=${selectedItemId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      // console.log("AllItems", result.AllItems);
-      setDataVehicles(result.AllItems);
-    } catch (error) {
-      console.error("Error Trending:", error);
-    }
-  };
-
- 
-
-  const fetchClothing = async () => {
-    const token = authToken;
-
-    try {
-      const response = await fetch(
-        base_url +
-          `item/getAllItemByCategory/12?page=1&limit=5&region=${selectedItemId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      // console.log("AllItems", result.AllItems);
-      setDataClothing(result.AllItems);
-    } catch (error) {
-      console.error("Error Trending:", error);
-    }
-  };
-  const fetchCategory = async (result) => {
-    // console.log(" Categories Result", result);
-    const token = result;
-
-    try {
-      const response = await fetch(
-        base_url + "itemCategory/getAllItemCategories?page=1&limit=5",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-
-        // console.log("Data ", data);
-
-        // Use the data from the API to set the categories
-        const categories = data.AllCategories.map((category) => ({
-          label: category.name, // Use the "name" property as the label
-          value: category.id.toString(), // Convert "id" to a string for the value
-        }));
-
-        setCategorySelect(categories); // Update the state with the formatted category data
-
-        // console.log("Data Categories", categoriesSelect);
-      } else {
-        console.error(
-          "Failed to fetch categories:",
-          response.status,
-          response.statusText
-        );
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
   const handle_add = () => {
     ref_RBSheetCamera.current.open();
   };
-  const dataCinematics = [
-    {
-      id: 1,
-      image: require("../../../assets/images/img1.png"),
-      title: "Name here",
-      time: "5 days ago",
-    },
-    {
-      id: 2,
-      image: require("../../../assets/images/img2.png"),
-      title: "Name here",
-      time: "5 days ago",
-    },
-    {
-      id: 3,
-      image: require("../../../assets/images/img3.png"),
-      title: "Name here",
-      time: "5 days ago",
-    },
-  ];
+
 
   const handle_details = () => {
     navigation.navigate("Cinematics_details");
-  };
-  const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={handle_details}>
-      <View style={styles.itemContainer}>
-        <Image source={item.image} style={styles.image} />
-        <Text style={styles.text}>{item.title}</Text>
-        <Text style={styles.text1}>{item.time}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-  const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
-    setSnackbarVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
-    setTimeout(() => {
-      setSnackbarVisible(false);
-    }, 3000);
-  };
-
-  const goToScreen = () => {
-    ref_RBSheetCamera.current.close();
-
-    navigation.navigate("Sell");
   };
 
   const takeVideoFromCamera = async () => {
@@ -467,13 +297,11 @@ export default function Cinematics({  route }) {
         mediaType: "video",
       },
       (response) => {
-        console.log("video here from camera", response);
+
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setImageUri(response.assets[0].uri);
             setImageInfo(response.assets[0]);
-
-            console.log("response", response.assets[0].uri);
             navigation.navigate("CameraUpload", {
               imageUri: response.assets[0],
             });
@@ -485,170 +313,25 @@ export default function Cinematics({  route }) {
 
   const chooseVideoFromLibrary = () => {
     ref_RBSheetCamera.current.close();
+    setTimeout(() => {
+      launchImageLibrary({ mediaType: "video" }, (response) => {
 
-    launchImageLibrary({ mediaType: "video" }, (response) => {
-      console.log("video here from gallery", response);
-      if (!response.didCancel && response.assets.length > 0) {
-        setImageUri(response.assets[0].uri);
-        setImageInfo(response.assets[0]);
-        navigation.navigate("CameraUpload", {
-          imageUri: response.assets[0],
-        });
-      }
-    });
-  };
-  const renderAvailableAppsMarket = (item) => {
-    console.log("Items of market zone", item?.images[0]?.image);
-    return (
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("ProductDetails", { ProductDetails: item })
+        if (!response.didCancel && response.assets.length > 0) {
+          setImageUri(response.assets[0].uri);
+          setImageInfo(response.assets[0]);
+          navigation.navigate("CameraUpload", {
+            imageUri: Platform.OS == "ios" ? response.assets[0].uri : response.assets[0],
+          });
         }
-        style={{ width: wp(25.5), margin: 5 }}
-      >
-        <View>
-          {!item?.images[0]?.image ||
-          item?.images[0]?.image === "undefined" ||
-          item?.images[0]?.image.startsWith("/") ? (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                zIndex: 1,
-                width: "100%",
-                height: hp(12),
-                borderRadius: wp(1),
-                resizeMode: "cover",
-              }}
-              source={appImages.galleryPlaceHolder}
-            />
-          ) : (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
+      });
+    }, 500);
 
-                zIndex: 1, // Ensure it's on top of other elements
-                //flex: 1,
-                width: "100%",
-                height: hp(16),
-                borderRadius: wp(2.5),
-                resizeMode: "cover",
-              }}
-              source={{ uri: item?.images[0]?.image }}
-            />
-          )}
-        </View>
-
-        <View
-          style={{
-            position: "absolute",
-            top: hp(12),
-            left: 7,
-            //height: hp(3),
-            //width: wp(21),
-            //borderRadius: wp(3),
-            //backgroundColor: '#FACA4E',
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 2, // Ensure it's on top
-          }}
-        >
-          <Text
-            style={{
-              fontSize: hp(1.7),
-              fontFamily: "Inter",
-              color: "black",
-              fontWeight: "700",
-            }}
-          >
-            {item?.title}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  const renderAvailableApps = (item) => {
-    console.log("Items of market zone", item?.images[0]?.image);
-    return (
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("ProductDetails", { ProductDetails: item })
-        }
-        style={{ width: wp(25.5), margin: 5 }}
-      >
-        <View>
-          {!item?.images[0]?.image ||
-          item?.images[0]?.image === "undefined" ||
-          item?.images[0]?.image.startsWith("/") ? (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                zIndex: 1,
-                width: "100%",
-                height: hp(12),
-                borderRadius: wp(1),
-                resizeMode: "cover",
-              }}
-              source={appImages.galleryPlaceHolder}
-            />
-          ) : (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-
-                zIndex: 1, // Ensure it's on top of other elements
-                //flex: 1,
-                width: "100%",
-                height: hp(16),
-                borderRadius: wp(2.5),
-                resizeMode: "cover",
-              }}
-              source={{ uri: item?.images[0]?.image }}
-            />
-          )}
-        </View>
-
-        <View
-          style={{
-            position: "absolute",
-            top: hp(12),
-            left: 7,
-            //height: hp(3),
-            //width: wp(21),
-            //borderRadius: wp(3),
-            //backgroundColor: '#FACA4E',
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 2, // Ensure it's on top
-          }}
-        >
-          <Text
-            style={{
-              fontSize: hp(1.7),
-              fontFamily: "Inter",
-              color: "black",
-              fontWeight: "700",
-            }}
-          >
-            {item?.title}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
   };
 
   const renderSearches = (item) => {
     // console.log("Regions", item);
     const isSelected = selectedItemId === item.id;
-// console.log('is selected hai---', isSelected)
+    // console.log('is selected hai---', isSelected)
     return (
       <TouchableOpacity
         style={[
@@ -659,7 +342,6 @@ export default function Cinematics({  route }) {
         ]}
         onPress={() => {
           setSelectedItemId(item.id);
-          console.log("Selected item:", item.id);
         }}
       >
         <Text
@@ -673,12 +355,8 @@ export default function Cinematics({  route }) {
       </TouchableOpacity>
     );
   };
-  const goto_camera = () => {
-    navigation.navigate("CameraView");
-  };
 
 
-  // console.log('data for top aa gya ----', dataTopVideos)
   return (
     <View style={styles.container}>
       <StatusBar
@@ -687,7 +365,7 @@ export default function Cinematics({  route }) {
         barStyle="dark-content" // You can set the StatusBar text color to dark or light
       />
 
-      <View style={{ marginTop: hp(5) }}>
+      <View style={{ marginTop: Platform.OS == "ios" ? 0 : hp(5) }}>
         <Headers
           OnpresshowHome={() => {
             navigation.navigate("MoreScreen");
@@ -696,7 +374,7 @@ export default function Cinematics({  route }) {
           showText={true}
           // onPressSearch={() => navigation.navigate("SearchProducts", { apiEndpoint: 'cinematics/searchByTitle' })}
           onPressSearch={() => navigation.navigate("SearchVideo")}
-          text={"Cinematics"}
+          text={t('Drawer.Cinematics')}
           showSearch={true}
         />
       </View>
@@ -710,97 +388,57 @@ export default function Cinematics({  route }) {
         }}
       >
 
-          {/* // */}
-         {/* // start of banner slider */}
-         <View
-      style={{
-        alignItems: 'center',
-        height: hp(16),
-        // marginLeft: 8,
-        marginVertical: hp(2),
-      }}
-    >
-      {isLoading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : adsData.length === 0 ? (
-        <View style={styles.TopBannerView}>
-          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>No Top Banner</Text>
-        </View>
-      ) : (
-        <Carousel
-          data={adsData}
-          renderItem={({ item }) => (
-            <View
-              key={item.id}
-              style={{
-                justifyContent: 'center',
-              }}
-            >
-              <Image
-                source={{ uri: item?.image }}
-                style={{
-                  height: hp(15),
-                  width: '100%',
-                  borderWidth: 1,
-                  resizeMode: 'contain',
-                  borderRadius: 10,
-                }}
-              />
-            </View>
-          )}
-          sliderWidth={Dimensions.get('window').width}
-          itemWidth={Dimensions.get('window').width * 0.86}
-          loop={true}
-          autoplay={true}
-        />
-      )}
-    </View>
-         {/* <View
+        {/* // */}
+        {/* // start of banner slider */}
+        <View
           style={{
-            alignItems: "center",
-            height: hp(14),
-            marginLeft: 8,
+            alignItems: 'center',
+            height: hp(16),
+            // marginLeft: 8,
             marginVertical: hp(2),
           }}
         >
-            {isLoading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : adsData.length === 0 ? (
-        <Image
-          source={require('../../../assets/images/BannerAds.png')} // Replace with your default image URL
-          style={styles.defaultImage}
-        />
-      
-       ) : (
-          <Swiper autoplay={true} loop={true}>
-            {adsData.map((banner) => (
-              <View
-                key={banner.id}
-                style={{
-                  justifyContent: "center",
-                }}
-              >
-                <Image
-                   source={{ uri: banner?.image }}
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : adsData.length === 0 ? (
+            <View style={styles.TopBannerView}>
+              <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>{t('NoTopBanner')}</Text>
+            </View>
+          ) : (
+            <Carousel
+              data={adsData}
+              renderItem={({ item }) => (
+                <View
+                  key={item.id}
                   style={{
-                    height: hp(13),
-                    width: wp(83),
-                    borderWidth: 1,
-                    resizeMode:'contain',
-                    borderRadius: 10,
+                    justifyContent: 'center',
                   }}
-                />
-              </View>
-            ))}
-          </Swiper>
-           )
-          }
-        </View> */}
+                >
+                  <Image
+                    source={{ uri: item?.image }}
+                    style={{
+                      height: hp(15),
+                      width: '100%',
+                      borderWidth: 1,
+                      resizeMode: Platform.OS == "ios" ? "cover" : 'contain',
+                      borderRadius: 10,
+                    }}
+                  />
+                </View>
+              )}
+              sliderWidth={Dimensions.get('window').width}
+              itemWidth={Dimensions.get('window').width * 0.86}
+              loop={true}
+              autoplay={true}
+            />
+          )}
+        </View>
+    
         {/* ////slider end */}
 
         <View style={styles.latestSearchList}>
-        <View>
-              <Cinematiceactive width={23} height={23} />
+          <View>
+            <Cinematiceactive width={23} height={23} />
           </View>
           <FlatList
             style={{ flex: 1 }}
@@ -814,9 +452,9 @@ export default function Cinematics({  route }) {
           />
         </View>
         <View
-          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(16), marginBottom:30 }}
+          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(16), marginBottom: 30 }}
         >
-          <TouchableOpacity onPress={() => navigation.navigate('Cinematics_details', {videoData: dataTopVideos, identifier: false})} style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
+          <TouchableOpacity onPress={() => navigation.navigate('Cinematics_details', { videoData: dataTopVideos, identifier: false })} style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
             {dataTopVideos === 0 ? (
               <Image
                 style={{
@@ -873,10 +511,10 @@ export default function Cinematics({  route }) {
             </View>
           </TouchableOpacity>
 
-          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop:2 }}>
-            <Text 
-             ellipsizeMode="tail"
-             numberOfLines={7}
+          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop: 2 }}>
+            <Text
+              ellipsizeMode="tail"
+              numberOfLines={7}
               style={{
                 fontSize: hp(1.5),
                 marginLeft: wp(1),
@@ -886,169 +524,77 @@ export default function Cinematics({  route }) {
                 //fontWeight: '700',
               }}
             >
-              {/*  Explore the intricate web of global politics in this
-              thought-provoking video as we delve into the ever-shifting
-              landscape of international diplomacy...... */}
 
               {dataTopVideos === undefined || dataTopVideos === 0
-                ? "No Top Cinematics Shown"
+                ? t('NoTopCinematixShown') 
                 : dataTopVideos?.description}
             </Text>
           </View>
         </View>
 
-{/* //////////////////////////////////////////////////////////// */}
-<View style={{  flex: 1,
-    paddingTop: 20}}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : (
-        <FlatList
-          data={sections}
-          renderItem={renderSection}
-          keyExtractor={(item) => item.title}
-        />
-      )}
-    </View>
-
-{/* /////////////////////////////////////////////////////////////// */}
-
-        {/* <View>
-          <Text
-            style={{
-              fontWeight: "bold",
-              color: "#4A4A4A",
-              fontSize: hp(2),
-              textAlign: "left",
-              fontFamily: "Inter",
-              top: "5%",
-            }}
-          >
-            Hollywood European Latin - American movies
-          </Text>
-          <View style={{ margin: "4%" }}></View>
-          <FlatList
-            data={dataCinematics}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.flatListContent}
-          />
-        </View>
-        <View>
-          <Text
-            style={{
-              fontWeight: "bold",
-              color: "#4A4A4A",
-              fontSize: hp(1.9),
-              textAlign: "left",
-              fontFamily: "Inter",
-              top: "5%",
-            }}
-          >
-            Bollywood Chinese Japanese and Asian movies
-          </Text>
-          <View style={{ margin: "4%" }}></View>
-          <FlatList
-            data={dataCinematics}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.flatListContent}
-          />
-        </View>
-        <View>
-          <Text
-            style={{
-              fontWeight: "bold",
-              color: "#4A4A4A",
-              fontSize: hp(2),
-              textAlign: "left",
-              fontFamily: "Inter",
-              top: "6%",
-            }}
-          >
-            Nollywood and African movies
-          </Text>
-          <View style={{ margin: "4%" }}></View>
-          <FlatList
-            data={dataCinematics}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.flatListContent}
-          />
-        </View>
-        <View>
-          <Text
-            style={{
-              fontWeight: "bold",
-              color: "#4A4A4A",
-              fontSize: hp(1.7),
-              textAlign: "left",
-              fontFamily: "Inter",
-              top: "6%",
-            }}
-          >
-            Arabic, Persian Turkish, and Middle Eastern movies
-          </Text>
-          <View style={{ margin: "4%" }}></View>
-          <FlatList
-            data={dataCinematics}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.flatListContent}
-          />
-        </View> */}
-              {/* // start of banner slider */}
-  <View
-      style={{
-        alignItems: 'center',
-        height: hp(16),
-        // marginLeft: 8,
-        marginVertical: hp(2),
-      }}
-    >
-      {isLoading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : adsinActiveData.length === 0 ? (
-        <View style={styles.TopBannerView}>
-          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>No Banner</Text>
-        </View>
-      ) : (
-        <Carousel
-          data={adsinActiveData}
-          renderItem={({ item }) => (
-            <View
-              key={item.id}
-              style={{
-                justifyContent: 'center',
-              }}
-            >
-              <Image
-                source={{ uri: item?.image }}
-                style={{
-                  height: hp(15),
-                  width: '100%',
-                  borderWidth: 1,
-                  resizeMode: 'contain',
-                  borderRadius: 10,
-                }}
-              />
-            </View>
+        {/* //////////////////////////////////////////////////////////// */}
+        <View style={{
+          flex: 1,
+          paddingTop: 20
+        }}>
+          {loading ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : (
+            <FlatList
+              data={sections}
+              renderItem={renderSection}
+              keyExtractor={(item) => item.title}
+            />
           )}
-          sliderWidth={Dimensions.get('window').width}
-          itemWidth={Dimensions.get('window').width * 0.9}
-          loop={true}
-          autoplay={true}
-        />
-      )}
-    </View>
+        </View>
+
+        {/* /////////////////////////////////////////////////////////////// */}
+
+        {/* // start of banner slider */}
+        <View
+          style={{
+            alignItems: 'center',
+            height: hp(16),
+            // marginLeft: 8,
+            marginVertical: hp(2),
+          }}
+        >
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : adsinActiveData.length === 0 ? (
+            <View style={styles.TopBannerView}>
+              <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>{t('NoBanner')}</Text>
+            </View>
+          ) : (
+            <Carousel
+              data={adsinActiveData}
+              renderItem={({ item }) => (
+                <View
+                  key={item.id}
+                  style={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Image
+                    source={{ uri: item?.image }}
+                    style={{
+                      height: hp(15),
+                      width: '100%',
+                      borderWidth: 1,
+                      resizeMode: Platform.OS == "ios" ? "cover" : 'contain',
+                      borderRadius: 10,
+                    }}
+                  />
+                </View>
+              )}
+              sliderWidth={Dimensions.get('window').width}
+              itemWidth={Dimensions.get('window').width * 0.9}
+              loop={true}
+              autoplay={true}
+            />
+          )}
+        </View>
         {/* ////slider end */}
       </ScrollView>
 
@@ -1094,7 +640,9 @@ export default function Cinematics({  route }) {
               fontSize: hp(2.3),
             }}
           >
-            Select an option
+            {t('SelectAnOption')}
+           
+            {/* Select an option */}
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
@@ -1106,119 +654,6 @@ export default function Cinematics({  route }) {
           </TouchableOpacity>
         </View>
 
-        <View
-          style={{
-            //flexDirection: 'row',
-            justifyContent: "space-evenly",
-            //alignItems: 'center',
-            //borderWidth: 3,
-            marginTop: hp(3),
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{ flexDirection: "row", marginHorizontal: wp(7) }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              Phones And Electronics
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              height: hp(0.1),
-              marginHorizontal: wp(8),
-              marginTop: hp(3),
-              backgroundColor: "#00000012",
-            }}
-          ></View>
-
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{
-              flexDirection: "row",
-              marginTop: hp(1.8),
-              marginHorizontal: wp(7),
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              Vehicle Parts
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              height: hp(0.1),
-              marginHorizontal: wp(8),
-              marginTop: hp(3),
-              backgroundColor: "#00000012",
-            }}
-          ></View>
-
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{
-              flexDirection: "row",
-              marginTop: hp(1.8),
-              marginHorizontal: wp(7),
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              Clothing and Related item
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              height: hp(0.1),
-              marginTop: hp(1.8),
-              marginHorizontal: wp(8),
-              marginTop: hp(3),
-              backgroundColor: "#00000012",
-            }}
-          ></View>
-
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{
-              flexDirection: "row",
-              marginTop: hp(1.8),
-              marginHorizontal: wp(7),
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              All other items
-            </Text>
-          </TouchableOpacity>
-        </View>
       </RBSheet>
 
       <RBSheet
@@ -1237,7 +672,9 @@ export default function Cinematics({  route }) {
           container: {
             borderTopLeftRadius: wp(10),
             borderTopRightRadius: wp(10),
-            height: hp(25),
+            paddingVertical: 30,
+            paddingBottom: Platform.OS == "ios" ? 40 : 0
+            // height: hp(25),
           },
         }}
       >
@@ -1246,6 +683,7 @@ export default function Cinematics({  route }) {
             flexDirection: "row",
             justifyContent: "space-between", // Set to space between to separate text and icon
             marginHorizontal: wp(8),
+
             alignItems: "center",
           }}
         >
@@ -1257,7 +695,8 @@ export default function Cinematics({  route }) {
               fontSize: hp(2.1),
             }}
           >
-            Select an option
+            {t('SelectAnOption')}
+      
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
@@ -1268,10 +707,10 @@ export default function Cinematics({  route }) {
             />
           </TouchableOpacity>
         </View>
+        <View style={{ height: 20 }} />
 
         <View
           style={{
-            top: "1%",
             flex: 1,
             marginHorizontal: wp(8),
             marginBottom: hp(1),
@@ -1291,24 +730,26 @@ export default function Cinematics({  route }) {
               borderWidth: 1,
             }}
           >
-            <View style={{ marginLeft: wp(3) }}>
+            <View>
               <Camera width={21} height={21} />
             </View>
 
             <Text
               style={{
                 color: "grey",
-                marginLeft: wp(3),
+                // marginLeft: wp(3),
                 // fontWeight: "600",
                 fontSize: hp(2.1),
               }}
             >
-              Take a Video
+              {t('TakeAVideo')}
+              {/* Take a Video */}
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => chooseVideoFromLibrary("gallery")}
+            onPress={() =>
+              chooseVideoFromLibrary("gallery")}
             style={{
               alignItems: "center",
               justifyContent: "center", // Center the icon and text vertically
@@ -1319,20 +760,20 @@ export default function Cinematics({  route }) {
               marginLeft: wp(8), // Add margin to separate the options
             }}
           >
-            <View style={{ marginLeft: wp(3) }}>
+            <View>
               <Gallery width={21} height={21} />
             </View>
 
             <Text
               style={{
                 color: "grey",
-                marginLeft: wp(3),
                 fontWeight: "600",
                 fontFamily: "BebasNeue-Regular",
                 fontSize: hp(2.1),
               }}
             >
-              Choose a Video
+              {t('ChooseAVideo')}
+              {/* Choose a Video */}
             </Text>
           </TouchableOpacity>
         </View>
@@ -1363,8 +804,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: hp(2.1),
     height: hp(7),
-    // marginLeft: wp(1),
-    //borderWidth: 3,
+
   },
   searchHeader: {
     flexDirection: "row",
@@ -1373,7 +813,6 @@ const styles = StyleSheet.create({
     marginTop: hp(5),
     marginHorizontal: wp(8),
     height: hp(8),
-    //borderWidth: 3,
   },
   latestSearch: {
     fontFamily: "Inter",
@@ -1426,14 +865,10 @@ const styles = StyleSheet.create({
     // right: "20%",
   },
   text1: {
-    // fontWeight: 'bold',
     color: "#4A4A4A",
     fontSize: hp(1.5),
     // textAlign: 'left',
     fontFamily: "Inter",
-    
-    // marginTop: 5,
-    // right: "20%",
   },
   flatListContent: {
     paddingHorizontal: wp(2),
@@ -1442,13 +877,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sectionHeader: {
- 
-              color: "#4A4A4A",
-              fontSize: hp(2.3),
-              textAlign: "left",
-              fontFamily: "Inter-SemiBold",
-              marginBottom:6
-              // top: "6%",
+
+    color: "#4A4A4A",
+    fontSize: hp(2.3),
+    textAlign: "left",
+    fontFamily: "Inter-SemiBold",
+    marginBottom: 6
+    // top: "6%",
   },
   videoItem: {
     marginRight: 15,

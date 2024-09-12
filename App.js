@@ -1,10 +1,10 @@
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import React, {useState, useEffect} from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import React, { useState, useEffect } from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import messaging from '@react-native-firebase/messaging';
 LogBox.ignoreAllLogs();
 
@@ -20,6 +20,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  SafeAreaView,
 } from 'react-native';
 //Screens
 import Signin_signup from './app/src/view/screens/Signin_signup/Signin_signup';
@@ -187,787 +188,790 @@ const App = () => {
     getToken();
   }, []);
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="SpashScreen"
-          component={SplashScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="InstlApps"
-          component={InstlApps}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ResetPassword"
-          component={ResetPassword}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="Profile_image"
-          component={Profile_image}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="UpdateVideoProfile"
-          component={UpdateVideoProfile}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="UpdateContent"
-          component={UpdateContent}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ViewAllCategoriesGEBC"
-          component={ViewAllCategoriesGEBC}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ViewGEBC"
-          component={ViewGEBC}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ViewQAFI"
-          component={ViewQAFI}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ViewNews"
-          component={ViewNews}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ViewUpdateNews"
-          component={ViewUpdateNews}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="UpdatePostOnNews"
-          component={UpdatePostOnNews}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ViewUpdateGEBC"
-          component={ViewUpdateGEBC}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="UpdateGEBC"
-          component={UpdateGEBC}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ViewUpdateQAFI"
-          component={ViewUpdateQAFI}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="UpdateQAFI"
-          component={UpdateQAFI}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ViewAllCategoriesQAFI"
-          component={ViewAllCategoriesQAFI}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="RateApp"
-          component={RateApp}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="Signin_signup"
-          component={Signin_signup}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="HelpScreen"
-          component={HelpScreen}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="Notification"
-          component={Notification}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ViewElseProfile"
-          component={ViewElseProfile}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="Conversation"
-          component={Conversation}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="SearchAppsDisc"
-          component={SearchAppsDisc}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="PicTours"
-          component={PicTours}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ViewVideo"
-          component={ViewVideo}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="UploadUpdateVideoScreen"
-          component={UploadUpdateVideoScreen}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="BannerDetails"
-          component={BannerDetails}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="AddBanner"
-          component={AddBanner}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ViewBanners"
-          component={ViewBanners}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ViewAllBlogs"
-          component={ViewAllBlogs}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="BlogDetails"
-          component={BlogDetails}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ChatScreen"
-          component={ChatScreen}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ProfileSettings"
-          component={ProfileSettings}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="UploadScreenPic"
-          component={UploadScreenPic}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ViewVideoPicProfile"
-          component={ViewVideoPicProfile}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="ViewVideoProfile"
-          component={ViewVideoProfile}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="PostLetterEditSignature"
-          component={PostLetterEditSignature}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="PostLetterEditSignaturePics"
-          component={PostLetterEditSignaturePics}
-          options={{headerShown: false}}
-        />
-
-        <Stack.Screen
-          name="PostLetterSignature"
-          component={PostLetterSignature}
-          options={{headerShown: false}}
-        />
-           <Stack.Screen
-          name="Cinematics"
-          component={Cinematics}
-          options={{headerShown: false}}
-        />
+    <SafeAreaView style={{flex:1}}>
+      <NavigationContainer>
+        <Stack.Navigator>
           <Stack.Screen
-          name="Tv_Promax"
-          component={Tv_Promax}
-          options={{headerShown: false}}
-        />
-         <Stack.Screen
-          name="Kids_vid"
-          component={Kids_vid}
-          options={{headerShown: false}}
-        />
-                  <Stack.Screen
-          name="Learning"
-          component={Learning}
-          options={{headerShown: false}}
-        />
+            name="SpashScreen"
+            component={SplashScreen}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
-          name="Fans_star"
-          component={Fans_star}
-          options={{headerShown: false}}
-        />
-           <Stack.Screen
-          name="Fans_star_details"
-          component={Fans_star_details}
-          options={{headerShown: false}}
-        />
-         <Stack.Screen
-          name="Fans_star_upload"
-          component={Fans_star_upload}
-          options={{headerShown: false}}
-        />
+            name="InstlApps"
+            component={InstlApps}
+            options={{ headerShown: false }}
+          />
+
           <Stack.Screen
-          name="Live_upload"
-          component={Live_upload}
-          options={{headerShown: false}}
-        />
-        < Stack.Screen name='Live' component={Live} options={{headerShown:false}}/>
-        <Stack.Screen name='Going_live' component={Going_live} options={{headerShown: false}}/>
+            name="ResetPassword"
+            component={ResetPassword}
+            options={{ headerShown: false }}
+          />
+
           <Stack.Screen
-          name="CameraView"
-          component={CameraView}
-          options={{headerShown: false}}
-        />
+            name="Profile_image"
+            component={Profile_image}
+            options={{ headerShown: false }}
+          />
+
           <Stack.Screen
-          name="CameraUpload"
-          component={CameraUpload}
-          options={{headerShown: false}}
-        />
-                  <Stack.Screen
-          name="Tv_promax_upload"
-          component={Tv_promax_upload}
-          options={{headerShown: false}}
-        />
-                          <Stack.Screen
-          name="VideoPlayerScreen"
-          component={VideoPlayerScreen}
-          options={{headerShown: false}}
-        />
+            name="UpdateVideoProfile"
+            component={UpdateVideoProfile}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
-          name="Learning_upload"
-          component={Learning_upload}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Cinematics_details"
-          component={Cinematics_details}
-          options={{headerShown: false}}
-        />
-         <Stack.Screen
-          name="Tv_Promax_details"
-          component={Tv_Promax_details}
-          options={{headerShown: false}}
-        />
-         <Stack.Screen
-          name="Learning_details"
-          component={Learning_details}
-          options={{headerShown: false}}
-        />
-                 <Stack.Screen
-          name="Kids_vid_details"
-          component={Kids_vid_details}
-          options={{headerShown: false}}
-        />
-                         <Stack.Screen
-          name="Kids_vid_upload"
-          component={Kids_vid_upload}
-          options={{headerShown: false}}
-        />
+            name="UpdateContent"
+            component={UpdateContent}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="PostLetterInfo"
-          component={PostLetterInfo}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ViewAllCategoriesGEBC"
+            component={ViewAllCategoriesGEBC}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="PostLetter"
-          component={PostLetter}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ViewGEBC"
+            component={ViewGEBC}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="PostLetterAllUserName"
-          component={PostLetterAllUserName}
-          options={{headerShown: false}}
-        />
-{/* //// */}
-   <Stack.Screen
-          name="UpdatePostLetterAllUserName"
-          component={UpdatePostLetterAllUserName}
-          options={{headerShown: false}}
-        />
-   <Stack.Screen
-          name="UpdatePtLetter"
-          component={UpdatePtLetter}
-          options={{headerShown: false}}
-        />
-   <Stack.Screen
-          name="UpdatePostLetterInfo"
-          component={UpdatePostLetterInfo}
-          options={{headerShown: false}}
-        />
-   <Stack.Screen
-          name="UpdatePostLetterEditSignature"
-          component={UpdatePostLetterEditSignature}
-          options={{headerShown: false}}
-        />
-   <Stack.Screen
-          name="UpdatePostLetterEditSignaturePics"
-          component={UpdatePostLetterEditSignaturePics}
-          options={{headerShown: false}}
-        />
-   <Stack.Screen
-          name="UpdatePostLetterSignature"
-          component={UpdatePostLetterSignature}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ViewQAFI"
+            component={ViewQAFI}
+            options={{ headerShown: false }}
+          />
 
-        {/* ///////////////////////////////////////////////////////////// */}
-        <Stack.Screen
-          name="ViewProfile"
-          component={ViewProfile}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ViewNews"
+            component={ViewNews}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="ProductDetailsProfile"
-          component={ProductDetailsProfile}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ViewUpdateNews"
+            component={ViewUpdateNews}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="UpdatePassword"
-          component={UpdatePassword}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="UpdatePostOnNews"
+            component={UpdatePostOnNews}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="UpdateProfile"
-          component={UpdateProfile}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ViewUpdateGEBC"
+            component={ViewUpdateGEBC}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="Dashboard"
-          component={Dashboard}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="UpdateGEBC"
+            component={UpdateGEBC}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="Categories"
-          component={Categories}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ViewUpdateQAFI"
+            component={ViewUpdateQAFI}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="PrivateLetterDetails"
-          component={PrivateLetterDetails}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="UpdateQAFI"
+            component={UpdateQAFI}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="LetterDetails"
-          component={LetterDetails}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ViewAllCategoriesQAFI"
+            component={ViewAllCategoriesQAFI}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="GEBC"
-          component={GEBC}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="RateApp"
+            component={RateApp}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="QAFI"
-          component={QAFI}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="QAFIUpload"
-          component={QAFIUpload}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="Signin_signup"
+            component={Signin_signup}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="LetterDisc"
-          component={LetterDisc}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="HelpScreen"
+            component={HelpScreen}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="BottomTabNavigation"
-          component={DrawerNavigation}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="Notification"
+            component={Notification}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="ViewElseProfile"
+            component={ViewElseProfile}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="Conversation"
+            component={Conversation}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="SearchAppsDisc"
+            component={SearchAppsDisc}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="PicTours"
+            component={PicTours}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="ViewVideo"
+            component={ViewVideo}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="UploadUpdateVideoScreen"
+            component={UploadUpdateVideoScreen}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="BannerDetails"
+            component={BannerDetails}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="AddBanner"
+            component={AddBanner}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="ViewBanners"
+            component={ViewBanners}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="ViewAllBlogs"
+            component={ViewAllBlogs}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="BlogDetails"
+            component={BlogDetails}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="ChatScreen"
+            component={ChatScreen}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="ProfileSettings"
+            component={ProfileSettings}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="UploadScreenPic"
+            component={UploadScreenPic}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="ViewVideoPicProfile"
+            component={ViewVideoPicProfile}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="ViewVideoProfile"
+            component={ViewVideoProfile}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="PostLetterEditSignature"
+            component={PostLetterEditSignature}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="PostLetterEditSignaturePics"
+            component={PostLetterEditSignaturePics}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="PostLetterSignature"
+            component={PostLetterSignature}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Cinematics"
+            component={Cinematics}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Tv_Promax"
+            component={Tv_Promax}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Kids_vid"
+            component={Kids_vid}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Learning"
+            component={Learning}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Fans_star"
+            component={Fans_star}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Fans_star_details"
+            component={Fans_star_details}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Fans_star_upload"
+            component={Fans_star_upload}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Live_upload"
+            component={Live_upload}
+            options={{ headerShown: false }}
+          />
+          < Stack.Screen name='Live' component={Live} options={{ headerShown: false }} />
+          <Stack.Screen name='Going_live' component={Going_live} options={{ headerShown: false }} />
+          <Stack.Screen
+            name="CameraView"
+            component={CameraView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="CameraUpload"
+            component={CameraUpload}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Tv_promax_upload"
+            component={Tv_promax_upload}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="VideoPlayerScreen"
+            component={VideoPlayerScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Learning_upload"
+            component={Learning_upload}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Cinematics_details"
+            component={Cinematics_details}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Tv_Promax_details"
+            component={Tv_Promax_details}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Learning_details"
+            component={Learning_details}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Kids_vid_details"
+            component={Kids_vid_details}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Kids_vid_upload"
+            component={Kids_vid_upload}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="PostLetterInfo"
+            component={PostLetterInfo}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="PostLetter"
+            component={PostLetter}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="PostLetterAllUserName"
+            component={PostLetterAllUserName}
+            options={{ headerShown: false }}
+          />
+          {/* //// */}
+          <Stack.Screen
+            name="UpdatePostLetterAllUserName"
+            component={UpdatePostLetterAllUserName}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="UpdatePtLetter"
+            component={UpdatePtLetter}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="UpdatePostLetterInfo"
+            component={UpdatePostLetterInfo}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="UpdatePostLetterEditSignature"
+            component={UpdatePostLetterEditSignature}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="UpdatePostLetterEditSignaturePics"
+            component={UpdatePostLetterEditSignaturePics}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="UpdatePostLetterSignature"
+            component={UpdatePostLetterSignature}
+            options={{ headerShown: false }}
+          />
+
+          {/* ///////////////////////////////////////////////////////////// */}
+          <Stack.Screen
+            name="ViewProfile"
+            component={ViewProfile}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="ProductDetailsProfile"
+            component={ProductDetailsProfile}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="UpdatePassword"
+            component={UpdatePassword}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="UpdateProfile"
+            component={UpdateProfile}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="Dashboard"
+            component={Dashboard}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="Categories"
+            component={Categories}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="PrivateLetterDetails"
+            component={PrivateLetterDetails}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="LetterDetails"
+            component={LetterDetails}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="GEBC"
+            component={GEBC}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="QAFI"
+            component={QAFI}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="QAFIUpload"
+            component={QAFIUpload}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="LetterDisc"
+            component={LetterDisc}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="BottomTabNavigation"
+            component={DrawerNavigation}
+            options={{ headerShown: false }}
+          />
           {/* <Stack.Screen
           name="DrawerNavigation"
           component={DrawerNavigation}
           options={{headerShown: false}}
         /> */}
 
-        <Stack.Screen
-          name="PostOnNews"
-          component={PostOnNews}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="PostOnNews"
+            component={PostOnNews}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="SavedItems"
-          component={SavedItems}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="SavedItems"
+            component={SavedItems}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="ChangeImageScreen"
-          component={ChangeImageScreen}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ChangeImageScreen"
+            component={ChangeImageScreen}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="ViewAllCategories"
-          component={ViewAllCategories}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ViewAllCategories"
+            component={ViewAllCategories}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="News"
-          component={News}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="News"
+            component={News}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="Disc"
-          component={Disc}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="Disc"
+            component={Disc}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="MarketZone"
-          component={MarketZone}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="MarketZone"
+            component={MarketZone}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="Video"
-          component={Video}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="Video"
+            component={Video}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="VerifyAccount"
-          component={VerifyAccount}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="VerifyAccount"
+            component={VerifyAccount}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="UpdateSellProduct"
-          component={UpdateSellProduct}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="UpdateSellProduct"
+            component={UpdateSellProduct}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="Sell"
-          component={Sell}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="Sell"
+            component={Sell}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="ProductDetails"
-          component={ProductDetails}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ProductDetails"
+            component={ProductDetails}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="SearchProducts"
-          component={SearchProducts}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="SearchProducts"
+            component={SearchProducts}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="UploadUpdatePicScreen"
-          component={UploadUpdatePicScreen}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="UploadUpdatePicScreen"
+            component={UploadUpdatePicScreen}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="UploadUpdatePic"
-          component={UploadUpdatePic}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="UploadUpdatePic"
+            component={UploadUpdatePic}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="UploadUpdateVideo"
-          component={UploadUpdateVideo}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="UploadUpdateVideo"
+            component={UploadUpdateVideo}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="UploadUpdateScreen"
-          component={UploadUpdateScreen}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="UploadUpdateScreen"
+            component={UploadUpdateScreen}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="SubscriptionPayment"
-          component={SubscriptionPayment}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="SubscriptionPayment"
+            component={SubscriptionPayment}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="ContactUs"
-          component={ContactUs}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ContactUs"
+            component={ContactUs}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="TermsAndCondition"
-          component={TermsAndCondition}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="TermsAndCondition"
+            component={TermsAndCondition}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="PrivacyPolicy"
-          component={PrivacyPolicy}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="PrivacyPolicy"
+            component={PrivacyPolicy}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="SearchScreenPicTours"
-          component={SearchScreenPicTours}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="SearchScreenPicTours"
+            component={SearchScreenPicTours}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="SearchScreen"
-          component={SearchScreen}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="SearchScreen"
+            component={SearchScreen}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="PicDetails"
-          component={PicDetails}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="PicDetails"
+            component={PicDetails}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="UploadScreen"
-          component={UploadScreen}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="UploadScreen"
+            component={UploadScreen}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="UploadVideo"
-          component={UploadVideo}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="UploadVideo"
+            component={UploadVideo}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="SearchApps"
-          component={SearchApps}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="SearchApps"
+            component={SearchApps}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="PhoneBase"
-          component={PhoneBase}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="PhoneBase"
+            component={PhoneBase}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="ForgetPassword"
-          component={ForgetPassword}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ForgetPassword"
+            component={ForgetPassword}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="ViewAllCategoriesDashboard"
-          component={ViewAllCategoriesDashboard}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ViewAllCategoriesDashboard"
+            component={ViewAllCategoriesDashboard}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="ViewAllCategoriesGEBCDashboard"
-          component={ViewAllCategoriesGEBCDashboard}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ViewAllCategoriesGEBCDashboard"
+            component={ViewAllCategoriesGEBCDashboard}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="ViewAllCategoriesQAFIDashboard"
-          component={ViewAllCategoriesQAFIDashboard}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="SearchVideo"
-          component={SearchVideo}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Fans_Search_Video"
-          component={Fans_Search_Video}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Kid_Search_Video"
-          component={Kid_Search_Video}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Leaning_Search_Video"
-          component={Leaning_Search_Video}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Tv_Search_Video"
-          component={Tv_Search_Video}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="ViewImage"
-          component={ViewImage}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="SearchNews"
-          component={SearchNews}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="SearchPostLetter"
-          component={SearchPostLetter}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="SearchGEBC"
-          component={SearchGEBC}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="TopPicView"
-          component={TopPicView}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="ViewTopVideo"
-          component={ViewTopVideo}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="PaymentScreen"
-          component={PaymentScreen}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="ViewAllCategoriesQAFIDashboard"
+            component={ViewAllCategoriesQAFIDashboard}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SearchVideo"
+            component={SearchVideo}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Fans_Search_Video"
+            component={Fans_Search_Video}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Kid_Search_Video"
+            component={Kid_Search_Video}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Leaning_Search_Video"
+            component={Leaning_Search_Video}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Tv_Search_Video"
+            component={Tv_Search_Video}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ViewImage"
+            component={ViewImage}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SearchNews"
+            component={SearchNews}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SearchPostLetter"
+            component={SearchPostLetter}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SearchGEBC"
+            component={SearchGEBC}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TopPicView"
+            component={TopPicView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ViewTopVideo"
+            component={ViewTopVideo}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PaymentScreen"
+            component={PaymentScreen}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="Sports"
-          component={Sports}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="SportsDetails"
-          component={SportsDetails}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="UploadUpdateSports"
-          component={UploadUpdateSports}
-          options={{headerShown: false}}
-        />
-  
-        <Stack.Screen
-          name="UploadScreenSports"
-          component={UploadScreenSports}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="SearchScreenSports"
-          component={SearchScreenSports}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="TopSportsView"
-          component={TopSportsView}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="NewsScreen"
-          component={NewsScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="OpenLetterScreen"
-          component={OpenLetterScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="QAFIScreen"
-          component={QAFIScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="EBCScreen"
-          component={EBCScreen}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="ViewSportsProfile"
-          component={ViewSportsProfile}
-          options={{headerShown: false}}
-        />
+          <Stack.Screen
+            name="Sports"
+            component={Sports}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SportsDetails"
+            component={SportsDetails}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="UploadUpdateSports"
+            component={UploadUpdateSports}
+            options={{ headerShown: false }}
+          />
 
-        <Stack.Screen
-          name="UpdateSportsScreen"
-          component={UpdateSportsScreen}
-          options={{headerShown: false}}
-        />
-  
-      </Stack.Navigator>
-    </NavigationContainer>
+          <Stack.Screen
+            name="UploadScreenSports"
+            component={UploadScreenSports}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SearchScreenSports"
+            component={SearchScreenSports}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TopSportsView"
+            component={TopSportsView}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="NewsScreen"
+            component={NewsScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="OpenLetterScreen"
+            component={OpenLetterScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="QAFIScreen"
+            component={QAFIScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EBCScreen"
+            component={EBCScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ViewSportsProfile"
+            component={ViewSportsProfile}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="UpdateSportsScreen"
+            component={UpdateSportsScreen}
+            options={{ headerShown: false }}
+          />
+
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaView>
+
   );
 
   //   function Tabb() {

@@ -12,7 +12,8 @@ import {
   View,
   Alert,
   Dimensions,
-  Linking
+  Linking,
+  Platform
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import {
@@ -137,8 +138,6 @@ export default function Categories(identifier) {
   const [grocery, setgrocery] = useState(false);
   const [Employment, setemployment] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  // const [adsData, setAdsData] = useState([]);
-  // const [adsinActiveData, setAdsInActiveData] = useState([]);
   const [adsData, setAdsData] = useState([]);
   const [adsInActiveData, setAdsInActiveData] = useState([]);
   const RegionArea = [
@@ -158,7 +157,6 @@ export default function Categories(identifier) {
 
   useEffect(() => {
     // Check if it's the initial load (selectedItemId is not set yet)
-    // Fetch data based on the updated selectedItemId
     fetchVideos();
   }, [isFocused]);
 
@@ -171,12 +169,10 @@ export default function Categories(identifier) {
   };
 
   const getUserID = async () => {
-    // console.log("AT User Id");
     try {
       const result = await AsyncStorage.getItem("authToken ");
       if (result !== null) {
         setAuthToken(result);
-        // await fetchBanners(result);
         console.log("user id retrieved:", result);
       }
     } catch (error) {
@@ -211,86 +207,6 @@ export default function Categories(identifier) {
     Linking.openURL(link);
   };
 
-    // const fetchBannerConfig = async () => {
-    //   const token = authToken;
-    //   setIsLoading(true);
-    //   try {
-    //     const response = await fetch(
-    //       base_url + "banner/getAllActiveBanners?topBanner=true",
-    //       // base_url + "banner/getAllBannersByUser/97",
-    //       {
-    //         method: "GET",
-    //         headers: {
-    //           Authorization: `Bearer ${token}`,
-    //         },
-    //       }
-    //     );
-  
-    //     const result = await response.json();
-    //     // console.log("AllBanners---", result.AllBanners);
-    //     setAdsData(result.AllBanners);
-    //   } catch (error) {
-    //     console.error("Error AllBanners:", error);
-    //   }
-    //   setIsLoading(false); 
-    // };
-    // const fetchBannerInActive = async () => {
-    //   const token = authToken;
-    //   setIsLoading(true);
-    //   try {
-    //     const response = await fetch(
-    //       base_url + "banner/getAllActiveBanners?topBanner=false",
-    //       // base_url + "banner/getAllBannersByUser/97",
-    //       {
-    //         method: "GET",
-    //         headers: {
-    //           Authorization: `Bearer ${token}`,
-    //         },
-    //       }
-    //     );
-  
-    //     const result = await response.json();
-    //     // setAdsInActiveData(result.AllBanners);
-    //     const updatedBanners = result.AllBanners.map(banner => {
-    //       if (banner.image.startsWith('/fileUpload')) {
-    //         banner.image = `https://watch-gotcha-be.mtechub.com${banner.image}`;
-    //       }
-    //       return banner;
-    //     });
-    //     // console.log("AllBanners AdsInActiveData---", updatedBanners);
-    //     setAdsInActiveData(updatedBanners);
-    //   } catch (error) {
-    //     console.error("Error AllBanners AdsInActiveData---", error);
-    //   }
-    //   setIsLoading(false);
-    // };
-
-  // const fetchBanners = async (tokens) => {
-  //   try {
-  //     const token = tokens; // Replace 'YOUR_BEARER_TOKEN' with your actual token
-  //     const response = await fetch(
-  //       base_url + "banner/getAllBannersByStatus?status=active&page=1&limit=2",
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-  //     const data = await response.json();
-  //     // console.log("API Response:", data?.AllBanners[0]);
-  //     setBanners(data?.AllBanners[0]);
-
-  //     // Handle the response data (e.g., update state)
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //     // Handle errors
-  //   }
-  // };
-
-  //-------------------------------------------------------
-
   useEffect(() => {
     const fetchData = async () => {
       const installedApps = InstalledApps.getSortedApps();
@@ -305,22 +221,9 @@ export default function Categories(identifier) {
 
       setData(packageDataArray);
       setIsLoading(false);
-
-      /* if(packageDataArray.length>0){
-        saveTofavourites()
-
-      }else{
-        console.log("LENGTH IS NULL")
-      } */
     };
 
     fetchData();
-
-    {
-      /* <Text style={{fontWeight: 'bold', fontSize: hp(2.1)}}>
-                    No Favourite Apps
-                  </Text> */
-    }
   }, []);
   useEffect(() => {
     if (isFocused) {
@@ -328,17 +231,9 @@ export default function Categories(identifier) {
       const loadFavouriteData = async () => {
         try {
           const storedData = await AsyncStorage.getItem("favouriteData");
-          // console.log(
-          //   "IS FOCUSED OF FAVOURITE DATA IS CALLED",
-          //   typeof storedData
-          // );
-          // console.log(
-          //   "IS FOCUSED OF FAVOURITE DATA IS CALLED LENGTH",
-          //   storedData.length
-          // );
+        
           // it is conisdering empty array as 2 length thats why i a have added it
           if (storedData.length === 2) {
-            // console.log("FAVOURITE IS NULLl");
             const initialFavouriteData = dataApps.slice(0, 4);
             await AsyncStorage.setItem(
               "favouriteData",
@@ -366,7 +261,6 @@ export default function Categories(identifier) {
     if (isFocused) {
       // Save favouriteData to AsyncStorage whenever it changes
       const saveFavouriteData = async () => {
-        // console.log("FAVOURITE DATA IS CALLED");
         try {
           await AsyncStorage.setItem(
             "favouriteData",
@@ -377,7 +271,7 @@ export default function Categories(identifier) {
         }
       };
       saveFavouriteData();
-      // AsyncStorage.removeItem('topData');
+
     }
   }, [favouriteData, isFocused]); // Run this effect whenever favouriteData changes
 
@@ -478,46 +372,6 @@ export default function Categories(identifier) {
     setSnackbarVisible(false);
   };
 
-  // const filterUnusedApps = async (apps) => {
-  //   const currentDate = new Date();
-  //   const threeWeeksAgo = new Date(currentDate - 21 * 24 * 60 * 60 * 1000); // Three weeks ago
-
-  //   const unusedAppsData = [];
-
-  //   for (const app of apps) {
-  //     const storedAppInfo = await AsyncStorage.getItem(`appInfo_${app}`);
-  //     let appInfo;
-
-  //     if (storedAppInfo) {
-  //       appInfo = JSON.parse(storedAppInfo);
-  //       //console.log("APp Info", appInfo)
-  //     } else {
-  //       // Store app information for the first time
-
-  //       appInfo = {
-  //         label: app, // Assuming app is the package name if not change it to the correct property
-  //         bundle: app,
-  //         image: app.icon, // You might want to fetch and store the icon as well
-  //       };
-
-  //       await AsyncStorage.setItem(`appInfo_${app}`, JSON.stringify(appInfo));
-  //     }
-
-  //     const lastUsageDate = await AsyncStorage.getItem(`lastUsageDate_${app}`);
-
-  //     if (!lastUsageDate || new Date(lastUsageDate) < threeWeeksAgo) {
-  //       unusedAppsData.push({
-  //         label: appInfo.label,
-  //         bundle: appInfo.bundle,
-  //         image: appInfo.image,
-  //       });
-  //     }
-  //   }
-
-  //   //console.log("Unused Apps", unusedAppsData);
-
-  //   return unusedAppsData;
-  // };
   const filterUnusedApps = async (apps) => {
     const currentDate = new Date();
     const threeWeeksAgo = new Date(currentDate - 21 * 24 * 60 * 60 * 1000); // Three weeks ago
@@ -575,32 +429,12 @@ export default function Categories(identifier) {
     }
   };
 
-  // const renderAppItem = ({ item }) => (
-  //   <TouchableOpacity onPress={() => openApp(item)} style={styles.appItem}>
-  //     <Image style={styles.appIcon} source={{ uri: `data:image/png;base64,${item.image}` }} />
-  //     <Text style={styles.appLabel}>{item.label}</Text>
-  //   </TouchableOpacity>
-  // );
-
   //------------------------------------------------------------\\
 
   const itemsPerPage = 10; // Change this to set the number of items per screen
   const screens = Math.ceil(dataApps.length / itemsPerPage);
 
   const screenFavourite = Math.ceil(favouriteData.length / itemsPerPage);
-
-  /* const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
- */
-
-  const [availableApps, setAvailableApps] = useState([
-    { id: 11, title: "SnapChat", image: appImages.snapchat },
-    { id: 21, title: "Gmail", image: appImages.gmail },
-    { id: 31, title: "Pinterest", image: appImages.pinterest },
-    { id: 41, title: "LinkedIn", image: appImages.linkedIn },
-    { id: 51, title: "Calendar", image: appImages.calendar },
-    { id: 61, title: "SnapChat", image: appImages.snapchat },
-  ]);
 
   const [favouriteApps, setFavouriteApps] = useState([
     { id: 1, title: "SnapChat", image: appImages.snapchat },
@@ -615,64 +449,18 @@ export default function Categories(identifier) {
     { id: 10, title: "LinkedIn", image: appImages.linkedIn },
   ]);
 
-  /*  const availableApps = [
-    
-  ]; */
-  const bannerAds = [
-    {
-      id: 1,
-      image: require("../../../assets/images/BannerAds.png"),
-    },
-    {
-      id: 2,
-      image: require("../../../assets/images/BannerAds.png"),
-    },
-    {
-      id: 3,
-      image: require("../../../assets/images/BannerAds.png"),
-    },
-    {
-      id: 4,
-      image: require("../../../assets/images/BannerAds.png"),
-    },
-  ];
-
-  const searches = [
-    { id: 1, title: "Games" },
-    { id: 2, title: "Business" },
-    { id: 3, title: "Education" },
-    { id: 4, title: "Games" },
-    { id: 5, title: "Business" },
-    { id: 6, title: "Education" },
-    { id: 7, title: "Games" },
-    { id: 8, title: "Business" },
-    { id: 9, title: "Education" },
-    { id: 10, title: "Games" },
-  ];
-
-  /* const favouriteApps = [
-    
-  ]; */
 
   const onDragEnd = (data, targetList, item) => {
-    console.log("data list", data);
-    console.log("target list item", item);
-
-    // Handle the item drop here
-    // Update the target list based on the dragged item data
     // You might want to implement your own logic here
     const updatedList = [...targetList, item];
-
     // Update the state and use the callback to log the updated state
     setFavouriteApps(updatedList, () => {
-      console.log("On drag ends FavouriteList", favouriteApps);
     });
 
     setFlatListKey(Date.now()); // Update the key to force re-render
   };
 
   const renderApps = (item) => {
-    //console.log('item at first', item);
     const openApp = async (items) => {
       try {
         // Check if the app is already in the topData array
@@ -750,85 +538,7 @@ export default function Categories(identifier) {
       </TouchableOpacity>
     );
   };
-  const renderunUsedApps = (item) => {
-    //console.log('item at first', item);
-    // const openApp = async (items) => {
-    //   try {
-    //     // Check if the app is already in the topData array
-    //     const appIndex = topData.findIndex((app) => app.bundle === item.bundle);
-
-    //     if (appIndex !== -1) {
-    //       // If the app is already in the array, update the count
-    //       const updatedTopData = [...topData];
-    //       updatedTopData[appIndex] = {
-    //         ...updatedTopData[appIndex],
-    //         count: updatedTopData[appIndex].count + 1,
-    //       };
-
-    //       setTopData(updatedTopData);
-
-    //       await RNLauncherKitHelper.launchApplication(item.bundle);
-
-    //       //----------------------\\
-    //       // Your additional logic here
-    //       //----------------------\\
-    //     } else {
-    //       // If the app is not in the array, add it with count 1
-    //       const randomIndex = Math.floor(Math.random() * 6); // Random index between 0 and 5
-    //       const updatedTopData = [...topData];
-    //       updatedTopData[randomIndex] = {
-    //         label: item.label,
-    //         bundle: item.bundle,
-    //         image: item.image,
-    //         count: 1,
-    //       };
-
-    //       setTopData(updatedTopData);
-
-    //       await RNLauncherKitHelper.launchApplication(item.bundle);
-
-    //       //----------------------\\
-    //       // Your additional logic here
-    //       //----------------------\\
-    //     }
-    //   } catch (error) {
-    //     console.error("Error opening the app:", error);
-    //     await RNLauncherKitHelper.launchApplication(item.bundle);
-    //     // Your additional error handling logic here
-    //   }
-    // };
-
-    return (
-      <TouchableOpacity
-        onLongPress={() => {
-          setIsLongPress(true);
-          setIsCancelModalVisible(true);
-          setFavouriteItem(item);
-        }}
-        onPress={() => openunusedApp(item)}
-        style={styles.items}
-      >
-        <Image
-          style={{ width: 43, height: 43 }}
-          source={{ uri: `data:image/png;base64,${item?.image}` }}
-        />
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
-          <Text
-            style={{
-              color: "#000000",
-              textAlign: "center",
-              fontSize: hp(1.2),
-              fontWeight: "bold",
-            }}
-            ellipsizeMode="tail"
-            numberOfLines={1}
-          >
-            {item?.label}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+ 
 
   // Load saved apps from AsyncStorage when the component mounts
  
@@ -836,7 +546,7 @@ export default function Categories(identifier) {
       try {
         const savedApps = await AsyncStorage.getItem('savedApps');
         if (savedApps) {
-          // console.log('saved apps in useeffect --------->', savedApps)
+
           setSavedApps(JSON.parse(savedApps));
         }
       } catch (error) {
@@ -866,25 +576,17 @@ export default function Categories(identifier) {
       // Update the state
       setSavedApps(updatedSavedApps);
 
-      console.log('saved apps in handleSave --------->', updatedSavedApps);
     } catch (error) {
       console.error('Error saving selected apps to AsyncStorage:', error);
     }
   };
 
 
-  // Business Load saved apps from AsyncStorage when the component mounts
-  // useEffect(() => {
-  //   if (isFocused) {
-  //     BusinessSavedApps()
-  //   }
-  // }, [isFocused]);
-
     const BusinessSavedApps = async () => {
       try {
         const savedApps = await AsyncStorage.getItem('savedApps_b');
         if (savedApps) {
-          // console.log('saved apps in useeffect --------->', savedApps)
+
           setSavedApps_b(JSON.parse(savedApps));
         }
       } catch (error) {
@@ -919,19 +621,6 @@ export default function Categories(identifier) {
     }
   };
 
-  // console.log('total saved --------->', savedApps)
-  // const handleSave = () => {
-  //   setSavedApps(selectedApps);
-  //   setSnackbarVisible(true);
-  //   setModalVisible(false);
-
-  //   // Alert.alert('Selected Apps', selectedApps.join(', '));
-  // };
-  // const handleSave_b = () => {
-  //   setSavedApps_b(selectedApps_b);
-  //   setSnackbarVisible(true);
-  //   setModalVisible_b(false);
-  // };
   const handleSave_sp = () => {
     setSavedApps_sp(selectedApps_sp);
     setSnackbarVisible(true);
@@ -982,39 +671,7 @@ export default function Categories(identifier) {
     });
   };
 
-  //   // Save selected apps to AsyncStorage whenever selectedApps changes
-  //   useEffect(() => {
-  //     const saveSelectedApps = async () => {
-  //       try {
-  //         await AsyncStorage.setItem('selectedApps', JSON.stringify(selectedApps));
-  //       } catch (error) {
-  //         console.error('Error saving selected apps to AsyncStorage:', error);
-  //       }
-  //     };
-  
-  //     saveSelectedApps();
-  //   }, [selectedApps]);
 
-  //     // Load selected apps from AsyncStorage when the component mounts
-  // useEffect(() => {
-  //   const loadSelectedApps = async () => {
-  //     try {
-  //       const savedApps = await AsyncStorage.getItem('selectedApps');
-  //       if (savedApps) {
-  //         setSelectedApps(JSON.parse(savedApps));
-  //       }
-  //     } catch (error) {
-  //       console.error('Error loading selected apps from AsyncStorage:', error);
-  //     }
-  //   };
-
-  //   if (isFocused) {
-  //     loadSelectedApps();
-  //   }
-  // }, [isFocused]);
-
-  // console.log('saved apps --------->', selectedApps)
-  // //////////
   const renderAppsFav = (item) => {
     const isSelected = selectedApps.includes(item);
 
@@ -1504,26 +1161,6 @@ export default function Categories(identifier) {
     );
   };
 
-  const renderFavouriteApps = (item) => {
-    console.log("Items", item);
-    return (
-      <View
-        onDragEnd={({ dragged: data }) => onDragEnd(data, favouriteApps)}
-        style={{
-          height: hp(8),
-          width: wp(15),
-          margin: 2.8,
-        }}
-      >
-        <Image source={item?.image} />
-      </View>
-      /* 
-draggingStyle={{opacity: 0.5}}
-dragReleasedStyle={{opacity: 1}}
-
-onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
-    );
-  };
 
   const renderAvailableApps = (item) => {
     // Render the item only if count is equal to 2
@@ -1550,28 +1187,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
       );
     }
 
-    /* draggingStyle={{opacity: 0.5}}
-    dragReleasedStyle={{opacity: 1}}
-    onDragStart={() => console.log('Drag started for item:', item)}
-    onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps, item)} */
   };
 
-  const onDragOverFlatList = (
-    data,
-    viewMetadata,
-    sourceViewMetadata,
-    touchPosition
-  ) => {
-    // Check if the dragged item is over the FlatList
-    // You can use viewMetadata, sourceViewMetadata, or touchPosition to determine the position
-    // and decide whether it's over the FlatList or not
-    const isOverFlatList = true; // Implement your logic here
-
-    if (isOverFlatList) {
-      // Trigger the logic to update the state or perform other actions
-      console.log("Dragged item is over the FlatList", data);
-    }
-  };
   const handleItemPress = (category) => {
     setSelectedItemId(category);
     setIsSelectedActive(false);///
@@ -1666,8 +1283,6 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
         (item) => item.bundle === removeFavouriteItem.bundle
       );
 
-      console.log("Favourite Item", isItemInFavourites);
-
       if (isItemInFavourites) {
         // Item already exists, remove it from favouriteData
         const updatedFavouriteData = favouriteData.filter(
@@ -1675,13 +1290,10 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
         );
         setFavouriteData(updatedFavouriteData);
 
-        console.log("Item removed from favourites");
-
         setModalDeleteFavouriteApps(false);
       } else {
         // Item doesn't exist, add it to favouriteData
         setFavouriteData((prevData) => [...prevData, favouriteItem]);
-        console.log("Add to Favorites pressed for:");
 
         setModalDeleteFavouriteApps(false);
       }
@@ -1767,13 +1379,7 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
           <View style={styles.modalContent}>
             <TouchableOpacity
               onPress={() => {
-                // Handle your overlay button action (e.g., add to favorites)
 
-                /*  if (favouriteItem) {
-                  setFavouriteData((prevData) => [...prevData, favouriteItem]);
-                  console.log('Add to Favorites pressed for:');
-                  setIsLongPress(false);
-                } */
                 setIsLongPressRemove(false);
                 setModalDeleteFavouriteApps(true);
               }}
@@ -1812,7 +1418,7 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
         barStyle="dark-content" // You can set the StatusBar text color to dark or light
       />
 
-      <View style={{ marginTop: hp(7) }}>
+      <View style={{ marginTop:Platform.OS =="ios"? 0: hp(7) }}>
         <Headers
          OnpresshowHome={() => {
             navigation.navigate("MoreScreen");
@@ -1825,63 +1431,12 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
           onPressSearch={() => navigation.navigate("SearchApps")}
           
         />
-        {/* <Headers
-          showListings={true}
-          navigation={navigation}
-          onPressListings={() => navigation.openDrawer()}
-          showSearch={true}
-          onPressSearch={() => navigation.navigate("SearchApps")}
-          
-        /> */}
       </View>
 
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ flex: 1, marginHorizontal: wp(5) }}
       >
-        {/* <View
-          style={{
-            height: hp(18),
-            marginTop: hp(1),
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Image
-            style={{
-              width: wp(80),
-              height: hp(13),
-              borderWidth: 1,
-              resizeMode: "contain",
-            }}
-            source={{
-              uri: "https://neilpatel.com/wp-content/uploads/2021/02/ExamplesofSuccessfulBannerAdvertising.jpg",
-            }}
-          />
-        </View> */}
-
-        {/* ///slider for banner 24.5.2024 5pm */}
-        {/* <View style={{alignItems: 'center'}}>
-      <SwiperFlatList
-        // autoplay
-        // autoplayDelay={2}
-        // autoplayLoop
-        index={0}
-        // showPagination
-        paginationStyle={styles.pagination}
-        paginationStyleItem={styles.paginationItem}
-        paginationStyleItemActive={styles.paginationItemActive}
-        data={bannerAds}
-        renderItem={({ item }) => (
-          <View style={styles.child}>
-            <Image source={ item.image } style={styles.image} />
-          </View>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-        loop
-      />
-    </View> */}
-        {/* // */}
 
   {/* // start of banner slider */}
   <BannerCarousel
@@ -1890,108 +1445,35 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
         noDataMessage="No Top Banner"
         onBannerPress={handleBannerPress}
       />
-  {/* <View
-      style={{
-        alignItems: 'center',
-        height: hp(16),
-        // marginLeft: 8,
-        marginVertical: hp(2),
-      }}
-    >
-      {isLoading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : adsData.length === 0 ? (
-        <View style={styles.TopBannerView}>
-          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>No Top Banner</Text>
-        </View>
-      ) : (
-        <Carousel
-          data={adsData}
-          renderItem={({ item }) => (
-            <View
-              key={item.id}
-              style={{
-                justifyContent: 'center',
-              }}
-            >
-              <Image
-                source={{ uri: item?.image }}
-                style={{
-                  height: hp(15),
-                  width: '100%',
-                  borderWidth: 1,
-                  resizeMode: 'contain',
-                  borderRadius: 10,
-                }}
-              />
-            </View>
-          )}
-          sliderWidth={Dimensions.get('window').width}
-          itemWidth={Dimensions.get('window').width * 0.9}
-          loop={true}
-          autoplay={true}
-        />
-      )}
-    </View> */}
+ 
         {/* ////slider end */}
+{Platform.OS !="ios" ?
+ <View style={styles.latestSearchList}>
+ <TouchableOpacity onPress={press_category}>
+   {isSelectedActive ? (
+     <CategoryActive width={23} height={23} />
+   ) : (
+     <CategoryInactive width={23} height={23} />
+   )}
+ </TouchableOpacity>
 
-        
-        {/* <View
-          style={{
-          alignItems: 'center',
-          height: hp(14),
-          marginLeft:8,
-          marginVertical:hp(2)
-          }}
-        >
-          <Swiper autoplay={true} loop={true}>
-            {bannerAds.map((banner) => (
-              <View
-                key={banner.id}
-                style={{
-
-                  justifyContent: "center",
-   
-                }}
-              >
-                <Image
-                  source={banner.image}
-                  style={{
-                    height: hp(13),
-                    width: wp(85),
-                    borderWidth: 1,
-                    // resizeMode:'contain',
-                    borderRadius: 10,
-                  }}
-                />
-              </View>
-            ))}
-          </Swiper>
-        </View> */}
-        {/* ////slider end */}
-
-        <View style={styles.latestSearchList}>
-          <TouchableOpacity onPress={press_category}>
-            {isSelectedActive ? (
-              <CategoryActive width={23} height={23} />
-            ) : (
-              <CategoryInactive width={23} height={23} />
-            )}
-          </TouchableOpacity>
-
-          <FlatList
-            style={{ flex: 1 }}
-            contentContainerStyle={{ alignItems: "center" }}
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            //data={regions}
-            data={RegionArea}
-            // keyExtractor={item => item.id.toString()}
-            renderItem={({ item }) => renderSearches(item)}
-          />
-        </View>
+ <FlatList
+   style={{ flex: 1 }}
+   contentContainerStyle={{ alignItems: "center" }}
+   showsHorizontalScrollIndicator={false}
+   horizontal
+   //data={regions}
+   data={RegionArea}
+   // keyExtractor={item => item.id.toString()}
+   renderItem={({ item }) => renderSearches(item)}
+ />
+</View>:
+<Text>{t('Dashboard.NoDataavailable')}</Text>
+}
+       
         {categoryActive ? (
-          <>
+          Platform.OS !="ios" && (
+            <>
             <View
               style={{
                 marginTop: hp(2),
@@ -2272,6 +1754,8 @@ onDragEnd={({dragged: data}) => onDragEnd(data, favouriteApps)} */
               )}
             </View>
           </>
+          )
+        
         ) : (
           <>
             {ecommerance && selectedCategory === "E-commerce" && (
@@ -4270,9 +3754,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////All done before unused app

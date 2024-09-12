@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import Video from "react-native-video";
 import React, { useState, useRef, useEffect } from "react";
-
+import { useTranslation } from 'react-i18next';
 import { Button, Divider, TextInput } from "react-native-paper";
 import AntDesign from "react-native-vector-icons/AntDesign";
 
@@ -54,7 +54,7 @@ export default function Tv_promax_upload({ navigation }) {
   const [showThumbnailContent, setShowThumbnailContent] = useState(false);
   const [thumbnailImageUri, setThumbnailImageUri] = useState(null);
   const [thumbnailImageUritwo, setThumbnailImageUritwo] = useState(null);
-
+  const { t } = useTranslation();
   const [profileName, setProfileName] = useState("");
   const [VedioUri, setImageUri] = useState(null);
   const [isTextInputActive, setIsTextInputActive] = useState(false);
@@ -449,7 +449,7 @@ export default function Tv_promax_upload({ navigation }) {
         >
           <IonIcons name={"chevron-back"} color={"#282828"} size={25} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>Upload Content</Text>
+        <Text style={styles.headerText}>{t('UploadContent')}</Text>
       </View>
 
       <ScrollView
@@ -505,7 +505,8 @@ export default function Tv_promax_upload({ navigation }) {
                       fontWeight: "700",
                     }}
                   >
-                    Change Content
+                    {t('ChangeContent')}
+                    
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -567,7 +568,8 @@ export default function Tv_promax_upload({ navigation }) {
                           fontWeight: "700",
                         }}
                       >
-                        Change Content
+                        {t('ChangeContent')}
+                        {/* Change Content */}
                       </Text>
                     </View>
                   </ImageBackground>
@@ -586,7 +588,8 @@ export default function Tv_promax_upload({ navigation }) {
                       fontWeight: "700",
                     }}
                   >
-                    Upload thumbnail
+                    {t('Uploadthumbnail')}
+                    
                   </Text>
                 </>
               )}
@@ -601,7 +604,7 @@ export default function Tv_promax_upload({ navigation }) {
 
         <TextInput
           mode="outlined"
-          label="My Video"
+          label={t('MyVideo')}
           value={profileName}
           onChangeText={(text) => setProfileName(text)}
           style={styles.ti}
@@ -660,7 +663,7 @@ export default function Tv_promax_upload({ navigation }) {
             maxHeight={200}
             labelField="name"
             valueField="id"
-            placeholder={"Select Category"}
+            placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
@@ -718,7 +721,7 @@ export default function Tv_promax_upload({ navigation }) {
             maxHeight={200}
             labelField="name"
             valueField="id"
-            placeholder={"Select Sub Category"}
+            placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
@@ -752,7 +755,7 @@ export default function Tv_promax_upload({ navigation }) {
         >
           <CPaperInput
             multiline={true}
-            placeholder={"Description"}
+            placeholder={t('Description')}
             placeholderTextColor="#121420"
             value={description}
             onChangeText={(text) => setDescription(text)}
@@ -767,41 +770,41 @@ export default function Tv_promax_upload({ navigation }) {
         <View style={styles.loaderButtonView}>
           <View style={styles.loaderButtonInner}>
             <CustomLoaderButton
-              title={"Upload"}
+              title={t('Upload')}
               load={loading}
               customClick={() => {
                 let hasError = false;
 
                 if (!thumbnailImageUritwo) {
-                  setthumbnailImageUritwoError("Thumbnail is required");
+                  setthumbnailImageUritwoError(t('Thumbnailisrequired'));
                   hasError = true;
                 } else {
                   setthumbnailImageUritwoError("");
                 }
 
                 if (!profileName) {
-                  setProfileNameError("Video title is required");
+                  setProfileNameError(t('Videotitleisrequired'));
                   hasError = true;
                 } else {
                   setProfileNameError("");
                 }
 
                 if (!category) {
-                  setCategoryError("Category is required");
+                  setCategoryError(t('Categoryisrequired'));
                   hasError = true;
                 } else {
                   setCategoryError("");
                 }
 
                 if (!subcategory) {
-                  setSubcategoryError("Subcategory is required");
+                  setSubcategoryError(t('Subcategoryisrequired'));
                   hasError = true;
                 } else {
                   setSubcategoryError("");
                 }
 
                 if (!description) {
-                  setDescriptionError("Description is required");
+                  setDescriptionError(t('Descriptionisrequired'));
                   hasError = true;
                 } else {
                   setDescriptionError("");
@@ -853,7 +856,8 @@ export default function Tv_promax_upload({ navigation }) {
                 fontSize: hp(2.1),
               }}
             >
-              Select an option
+              {t('Selectanoption')}
+              
             </Text>
             <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
               <Ionicons
@@ -899,7 +903,8 @@ export default function Tv_promax_upload({ navigation }) {
                   fontSize: hp(2.1),
                 }}
               >
-                Take a photo
+                {t('Takeaphoto')}
+                {/* Take a photo */}
               </Text>
             </TouchableOpacity>
 
@@ -928,7 +933,8 @@ export default function Tv_promax_upload({ navigation }) {
                   fontSize: hp(2.1),
                 }}
               >
-                Choose a photo
+                {t('Chooseaphoto')}
+                {/* Choose a photo */}
               </Text>
             </TouchableOpacity>
           </View>
@@ -970,7 +976,8 @@ export default function Tv_promax_upload({ navigation }) {
                 fontSize: hp(2.1),
               }}
             >
-              Select an option
+              {t('Selectanoption')}
+              {/* Select an option */}
             </Text>
             <TouchableOpacity
               onPress={() => ref_RBSheetCamera1.current.close()}
@@ -1018,7 +1025,8 @@ export default function Tv_promax_upload({ navigation }) {
                   fontSize: hp(2.1),
                 }}
               >
-                Take a Video
+                {t('TakeaVideo')}
+                {/* Take a Video */}
               </Text>
             </TouchableOpacity>
 
@@ -1047,7 +1055,8 @@ export default function Tv_promax_upload({ navigation }) {
                   fontSize: hp(2.1),
                 }}
               >
-                Choose a Video
+                {t('ChooseaVideo')}
+                {/* Choose a Video */}
               </Text>
             </TouchableOpacity>
           </View>
@@ -1055,8 +1064,8 @@ export default function Tv_promax_upload({ navigation }) {
       </ScrollView>
 
       <CustomSnackbar
-        message={"Alert!"}
-        messageDescription={"Kindly Fill All Fields"}
+        message={t('Alert!')}
+        messageDescription={t('KindlyFillAllFields')}
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackbarVisibleAlert}
       />
@@ -1068,8 +1077,8 @@ export default function Tv_promax_upload({ navigation }) {
       />
 
       <CustomSnackbar
-        message={"Success"}
-        messageDescription={"Content Uploaded Successfully"}
+        message={t('Success')}
+        messageDescription={t('ContentUploadedSuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />

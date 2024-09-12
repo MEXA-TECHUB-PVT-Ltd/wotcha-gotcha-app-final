@@ -21,11 +21,9 @@ import React, {
   useEffect,
 } from "react";
 
-import Back from "../../../assets/svg/back.svg";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { appImages } from "../../../assets/utilities/index";
 import Slider from "@react-native-community/slider";
-import VolumeUp from "../../../assets/svg/VolumeUp.svg";
 import Like from "../../../assets/svg/Like.svg";
 import UnLike from "../../../assets/svg/Unlike.svg";
 import Comment from "../../../assets/svg/Comment.svg";
@@ -35,8 +33,6 @@ import DownArrowComments from "../../../assets/svg/DownArrowComments.svg";
 import UpArrowComments from "../../../assets/svg/UpArrowComments.svg";
 import EditItem from '../../../assets/svg/UpdateItem.svg';
 import Delete from '../../../assets/svg/Delete.svg';
-import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
-
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -48,9 +44,6 @@ import {
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-
-import Fontiso from "react-native-vector-icons/Fontisto";
-
 import FontAwsome from "react-native-vector-icons/FontAwesome";
 
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -73,6 +66,8 @@ import Entypo from "react-native-vector-icons/Entypo";
 import CustomSnackbar from "../../../assets/Custom/CustomSnackBar";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { base_url } from "../../../../../baseUrl";
+import Loader from "../../../assets/Custom/Loader";
+import { useTranslation } from 'react-i18next';
 
 export default function Learning_details({ navigation, route }) {
   const [showFullContent, setShowFullContent] = useState(false);
@@ -80,10 +75,8 @@ export default function Learning_details({ navigation, route }) {
   const [pastedURL, setPastedURL] = useState(
     "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
   );
-
+  const { t } = useTranslation();
   const [comments, setComments] = useState([]);
-
-  const [likes, setLikes] = useState(null);
 
   const [mute, setMute] = useState(false);
 
@@ -103,19 +96,15 @@ export default function Learning_details({ navigation, route }) {
 
   const [showLikes, setShowLikes] = useState(false);
 
-  const [showMenu, setShowMenu] = useState(false);
-
   const [progress, setProgress] = useState(0);
 
   const [totalDuration, setTotalDuration] = useState("");
 
   const [isBottomSheetExpanded, setIsBottomSheetExpanded] = useState(false);
   const isFocused = useIsFocused();
-  const ref_Comments = useRef(null);
 
   const refSlide = useRef();
 
-  const bottomSheetRef = useRef(null);
   // variables
   const snapPoints = useMemo(() => ["25%", "50%"], []);
 
@@ -130,19 +119,13 @@ export default function Learning_details({ navigation, route }) {
   useEffect(() => {
     // This code will run whenever progress state changes
     if (progress && progress.seekableDuration !== undefined) {
-      // Assuming progress.seekableDuration is the duration in seconds
       const formattedDuration = formatDuration(progress.seekableDuration);
       setTotalDuration(formattedDuration);
     }
   }, [progress]); // The effect will re-run whenever the progress state changes
 
   const receivedData = route.params?.videoData;
-
-  // console.log("Data Recieved on learn details", receivedData);
-
   var details = receivedData.description;
-  /* 'Hold onto your seats and get ready to be mesmerized by the beauty and grandeur of the Hold onto your seats'; */
-
   const toggleContent = () => {
     setShowFullContent(!showFullContent);
   };
@@ -153,9 +136,7 @@ export default function Learning_details({ navigation, route }) {
   };
 
   const openEmoji = () => {
-    console.log("Is Open");
     setIsOpen(true);
-    console.log("Is Open", isOpen);
   };
 
   const toggleMute = () => {
@@ -181,9 +162,7 @@ export default function Learning_details({ navigation, route }) {
   };
 
   useEffect(() => {
-    // Make the API request and update the 'data' state
     if (isFocused) {
-      //  console.log('isfucesd')
       fetchAll();
     }
   }, [isFocused]);
@@ -197,12 +176,10 @@ export default function Learning_details({ navigation, route }) {
   };
 
   const getUserID = async () => {
-    // console.log("Id's");
     try {
       const result = await AsyncStorage.getItem("userId ");
       if (result !== null) {
         setUserId(result);
-        // console.log('user id retrieved:', result);
       } else {
         console.log("user id null:", result);
       }
@@ -210,8 +187,6 @@ export default function Learning_details({ navigation, route }) {
       const result1 = await AsyncStorage.getItem("authToken ");
       if (result1 !== null) {
         setAuthToken(result1);
-
-        console.log("user token retrieved:", result1);
         await fetchComments(result1);
       } else {
         console.log("result is null", result);
@@ -239,13 +214,8 @@ export default function Learning_details({ navigation, route }) {
 
       if (response.ok) {
         const data = await response.json();
-        // totalComments
-        // setCommentsCount(data.totalComments)
-        // console.log("All Comments of usersssss", data.totalComments)
-        // console.log("All Comments of usersssss", data.comments)
         setCommentsCount(data.totalComments);
         setComments(data.comments);
-        // await fetchLikes(result);
       } else {
         console.error(
           "Failed to fetch comments:",
@@ -269,23 +239,17 @@ export default function Learning_details({ navigation, route }) {
       if (pastedURL !== "") {
         requestStoragePermission();
       } else {
-        //console.log("Please Add Video Url")
       }
 
-      //navigation.goBack();
     }, 3000);
   };
 
   const clearTextInput = () => {
-    //console.log('came to logssssss', commentText);
-    // Clear the text in the TextInput
     setCommentText(null);
     sendComment();
   };
 
   const handlePick = (emojiObject) => {
-    console.log("Emoji Object", emojiObject);
-    //setIsOpen(false)
     setCommentText(emojiObject.emoji);
   };
 
@@ -313,11 +277,8 @@ export default function Learning_details({ navigation, route }) {
         axiosConfig
       );
 
-      console.log("Response", response);
-
       if (response.status === 200) {
         setLoading(false);
-        console.log("Comment sent successfully");
         fetchAll();
       } else {
         setLoading(false);
@@ -337,9 +298,6 @@ export default function Learning_details({ navigation, route }) {
   const sendLikes = async () => {
     setLoading(true);
     const token = authToken; // Replace with your actual token
-    console.log("authToken----", authToken);
-    console.log("userid---", userId);
-    console.log("video_id---", receivedData.video_id);
     try {
       const axiosConfig = {
         headers: {
@@ -358,12 +316,8 @@ export default function Learning_details({ navigation, route }) {
         commentData,
         axiosConfig
       );
-
-      console.log("Response", response);
-
       if (response.status === 200 || response.status === 201) {
         setLoading(false);
-        console.log("Video liked successfully");
         fetchAll();
       } else {
         setLoading(false);
@@ -382,14 +336,12 @@ export default function Learning_details({ navigation, route }) {
 
   const changeModal = () => {
     ref_RBSheetCamera.current.close();
-    // navigation.replace('UpdateVideoProfile', {Video: receivedData});
     navigation.replace('UpdateContent', {Video: receivedData, apiEndpoint: 'learningHobbies/update'});
   };
 
   const changeDelete = () => {
     ref_RBSheetCamera.current.close();
     handleUpdateDelete();
-    //navigation.goBack()
   };
 
   const handleUpdateDelete = async () => {
@@ -402,26 +354,21 @@ export default function Learning_details({ navigation, route }) {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
-            // Include any additional headers as needed
           },
-          // You may include a request body if required by the server
-          // body: JSON.stringify({}),
+
         },
       );
 
       if (response.ok) {
         handleUpdateDeletePassword();
-        // Optionally handle the response data here
       } else {
         console.error(
           `Error deleting video with ID ${receivedData?.video_id}:`,
           response.status,
         );
-        // Optionally handle the error response here
       }
     } catch (error) {
       console.error('Error:', error);
-      // Handle other errors such as network issues
     }
   };
 
@@ -438,55 +385,9 @@ export default function Learning_details({ navigation, route }) {
       //navigation.goBack();
     }, 3000);
   };
-  //----------------------------------\\
-  // const sendLikes = async () => {
-  //   setLoading(true);
-  //   const token = authToken; // Replace with your actual token
-  //   console.log("authToken----", authToken);
-  //   console.log("userid---", userId);
-  //   console.log("video_id---", receivedData.video_id);
-  //   try {
-  //     const axiosConfig = {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         "Content-Type": "application/json",
-  //       },
-  //     };
-
-  //     const commentData = {
-  //       user_id: userId,
-  //       video_id: receivedData.video_id,
-  //     };
-
-  //     const response = await axios.post(
-  //       base_url + "learningHobbies/toggleLikeVideo",
-  //       commentData,
-  //       axiosConfig
-  //     );
-
-  //     console.log("Response", response);
-
-  //     if (response.status === 200) {
-  //       setLoading(false);
-  //       console.log("Video Liked  successfully");
-  //       fetchAll();
-  //     } else {
-  //       setLoading(false);
-  //       fetchAll();
-  //       console.error(
-  //         "Failed to send likes:",
-  //         response.status,
-  //         response.statusText
-  //       );
-  //     }
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.error("Error:", error);
-  //   }
-  // };
+ 
 
   const renderComments = (item) => {
-    //console.log('Items of comments', item);
     return (
       <View>
         <TouchableOpacity
@@ -527,20 +428,12 @@ export default function Learning_details({ navigation, route }) {
                     color={"#FACA4E"}
                   />
                 )}
-
-            {/* <Image
-              style={{width: '100%', borderRadius: wp(2.1), height: '100%'}}
-              source={appImages.profileImg}
-            /> */}
           </View>
 
           <View
             style={{
-              //flex: 1,
               marginLeft: wp(3),
               height: hp(5),
-              //marginTop: hp(1),
-              //borderWidth:3,
               justifyContent: "space-around",
             }}
           >
@@ -725,9 +618,6 @@ export default function Learning_details({ navigation, route }) {
       </View>
     );
   };
-
-  const videos = require("../../../assets/images/DummyVideo.mp4"); // Reference your asset file here
-
   const requestStoragePermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -761,12 +651,6 @@ export default function Learning_details({ navigation, route }) {
 
     return `${formattedMinutes}:${formattedSeconds}`;
   }
-
-  // const openComments = () => {
-  //   setPaused(true);
-
-  //   setIsBottomSheetExpanded(!isBottomSheetExpanded);
-  // };
   const openComments = () => {
     setIsBottomSheetExpanded(!isBottomSheetExpanded);
     refCommentsSheet.current.open();
@@ -777,8 +661,6 @@ export default function Learning_details({ navigation, route }) {
     const date = new Date();
     const fileDir = fs.dirs.DownloadDir;
     config({
-      // add this option that makes response data to be stored as a file,
-      // this is much more performant.
       fileCache: true,
       addAndroidDownloads: {
         useDownloadManager: true,
@@ -796,9 +678,7 @@ export default function Learning_details({ navigation, route }) {
       })
       .then((res) => {
         setsnackbarVisible(true);
-        // the temp file path
         console.log("The file saved to ", res.path());
-        // alert('file downloaded successfully ');
       })
       .catch((error) => {
         console.error("Error downloading file:", error);
@@ -808,12 +688,8 @@ export default function Learning_details({ navigation, route }) {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      {loading && <Loader />}
       <View style={{ flex: 1 }}>
-        {/* Add a parent View */}
-
-        {/* Existing components go here */}
-
-        {/* Add the play button View */}
         {!isBottomSheetExpanded && paused === true && (
           <View
             style={{
@@ -922,41 +798,6 @@ export default function Learning_details({ navigation, route }) {
                 {receivedData.username}
               </Text>
             </View>
-            {/* <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                height: hp(5),
-              }}
-            >
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("ViewElseProfile", {
-                    id: receivedData?.user_id,
-                  })
-                }
-                style={{
-                  height: hp(10),
-                  width: wp(10),
-                  borderRadius: wp(8),
-                  marginLeft: wp(3),
-                  //borderWidth:1,
-                  justifyContent: "center",
-                  overflow: "hidden",
-                }}
-              >
-                <MaterialCommunityIcons
-                  style={{ marginTop: hp(0.5) }}
-                  name={"account-circle"}
-                  size={30}
-                  color={"#FACA4E"}
-                />
-              </TouchableOpacity>
-
-              <Text style={styles.textProfileName}>
-                {receivedData.username}
-              </Text>
-            </View> */}
 
             <ScrollView
               showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
@@ -1146,8 +987,8 @@ export default function Learning_details({ navigation, route }) {
         </View>
 
         <CustomSnackbar
-          message={"success"}
-          messageDescription={"Video downloaded successfully"}
+          message={t('Success')}
+          messageDescription={t('VideoDownloadedSuccessfully')}
           onDismiss={dismissSnackbar} // Make sure this function is defined
           visible={snackbarVisible}
         />
@@ -1183,7 +1024,8 @@ export default function Learning_details({ navigation, route }) {
                 fontSize: hp(2.3),
               }}
             >
-              Comments
+              {t('Comments')}
+              
             </Text>
           </View>
 
@@ -1196,7 +1038,7 @@ export default function Learning_details({ navigation, route }) {
                   alignItems: "center",
                 }}
               >
-                <Text>No Comments Yet</Text>
+                <Text>{t('NoCommentsYet')}</Text>
               </View>
             ) : (
               <FlatList
@@ -1251,7 +1093,7 @@ export default function Learning_details({ navigation, route }) {
                 value={commentText} // Bind the value to the state variable
                 onChangeText={(text) => setCommentText(text)} // Update state on text change
                 placeholderTextColor={"#848484"}
-                placeholder="Write Comment Here"
+                placeholder={t('WriteCommentHere')}
                 style={{ flex: 1, marginLeft: wp(1) }}
               />
 
@@ -1290,7 +1132,7 @@ export default function Learning_details({ navigation, route }) {
                   onChangeText={(text) => setCommentText(text)} // Update state on text change
                   placeholderTextColor={"#848484"}
                   // placeholder="Add a reply"
-                  placeholder="Write Comment Here"
+                  placeholder={t('WriteCommentHere')}
                   style={{ flex: 1, marginLeft: wp(1) }}
                 />
                 <TouchableOpacity style={{ marginRight: wp(3) }} onPress={() => clearTextInput()}>
@@ -1300,74 +1142,7 @@ export default function Learning_details({ navigation, route }) {
             )
           )}
 
-          {/* ///////////////////////// */}
-
-          {/* {showReply === false ? (
-            <View
-              style={{
-                width: "100%",
-                flexDirection: "row",
-                alignItems: "center",
-                height: hp(8),
-              }}
-            >
-              <View
-                style={{
-                  height: hp(8),
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: wp(14),
-                }}
-              >
-                <SmileEmoji />
-              </View>
-
-              <TextInput
-                value={commentText} // Bind the value to the state variable
-                onChangeText={(text) => setCommentText(text)} // Update state on text change
-                placeholderTextColor={"#848484"}
-                placeholder="Write Comment Heressssss"
-                style={{ flex: 1, marginLeft: wp(1) }}
-              />
-
-              <TouchableOpacity onPress={() => clearTextInput}>
-                <ButtonSend />
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <View
-              style={{
-                width: "100%",
-                flexDirection: "row",
-                alignItems: "center",
-                height: hp(8),
-              }}
-            >
-              <View
-                onpress={() => setIsOpen(true)}
-                style={{
-                  height: hp(8),
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: wp(14),
-                }}
-              >
-                <SmileEmoji />
-              </View>
-
-              <TextInput
-                value={commentText} // Bind the value to the state variable
-                onChangeText={(text) => setCommentText(text)} // Update state on text change
-                placeholderTextColor={"#848484"}
-                placeholder="Add a reply"
-                style={{ flex: 1, marginLeft: wp(1) }}
-              />
-
-              <TouchableOpacity onPress={() => clearTextInput()}>
-                <ButtonSend />
-              </TouchableOpacity>
-            </View>
-          )} */}
+      
         </RBSheet>
         {isOpen === true ? (
           <EmojiPicker
@@ -1377,99 +1152,8 @@ export default function Learning_details({ navigation, route }) {
           />
         ) : null}
 
-        {/* {isBottomSheetExpanded && showReply === false ? (
-          <View
-            style={{
-              width: "100%",
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              backgroundColor: "white",
-              flexDirection: "row",
-              alignItems: "center",
-              height: hp(8),
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => openEmoji()}
-              style={{
-                height: hp(8),
-                justifyContent: "center",
-                alignItems: "center",
-                width: wp(14),
-              }}
-            >
-              <SmileEmoji />
-            </TouchableOpacity>
-
-            <TextInput
-              value={commentText} // Bind the value to the state variable
-              onChangeText={(text) => setCommentText(text)} // Update state on text change
-              placeholderTextColor={"#848484"}
-              placeholder="Write Comment Here"
-              style={{ flex: 1, marginLeft: wp(1) }}
-            />
-
-            <TouchableOpacity
-              style={{ marginRight: wp(3) }}
-              onPress={() => clearTextInput()}
-            >
-              <ButtonSend />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          isBottomSheetExpanded && (
-            <View
-              style={{
-                width: "100%",
-                backgroundColor: "white",
-                flexDirection: "row",
-                alignItems: "center",
-                height: hp(8),
-              }}
-            >
-              <View
-                style={{
-                  height: hp(8),
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: wp(14),
-                }}
-              >
-                <SmileEmoji />
-              </View>
-
-              <TextInput
-                value={commentText} // Bind the value to the state variable
-                onChangeText={(text) => setCommentText(text)} // Update state on text change
-                placeholderTextColor={"#848484"}
-                placeholder="Add a reply"
-                style={{ flex: 1, marginLeft: wp(1) }}
-              />
-
-              <TouchableOpacity onPress={() => clearTextInput()}>
-                <ButtonSend />
-              </TouchableOpacity>
-            </View>
-          )
-        )} */}
       </View>
 
-      <View
-        style={{
-          position: "absolute",
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
-
-       {/* //-----------------\\ */}
        <RBSheet
         ref={ref_RBSheetCamera}
         closeOnDragDown={true}
@@ -1502,7 +1186,8 @@ export default function Learning_details({ navigation, route }) {
               color: '#303030',
               fontSize: hp(2.3),
             }}>
-            Select an option
+              {t('Selectanoption')}
+            
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <IonIcons
@@ -1516,10 +1201,7 @@ export default function Learning_details({ navigation, route }) {
 
         <View
           style={{
-            //flexDirection: 'row',
             justifyContent: 'space-evenly',
-            //alignItems: 'center',
-            //borderWidth: 3,
             marginTop: hp(3),
           }}>
           <TouchableOpacity
@@ -1534,7 +1216,7 @@ export default function Learning_details({ navigation, route }) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Update Video
+                {t('UpdateVideo')}
             </Text>
           </TouchableOpacity>
 
@@ -1562,15 +1244,16 @@ export default function Learning_details({ navigation, route }) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Delete Video
+                {t('DeleteVideo')}
+          
             </Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
       <CustomSnackbar
-          message={'success'}
-          messageDescription={'Video deleted successfully'}
+          message={t('Success')}
+          messageDescription={t('VideoDeletedSuccessfully')}
           onDismiss={dismissDeleteSnackbar} // Make sure this function is defined
           visible={snackbarDeleteVisible}
         />
@@ -1593,9 +1276,8 @@ const styles = StyleSheet.create({
     marginHorizontal: wp(8),
   },
   bottomView: {
-    flex: 1,
-    justifyContent: "flex-end",
-    // You can add padding or content to this view as needed.
+    bottom:0,
+    position:'absolute'
   },
   textProfileName: {
     color: "#FFFFFF",

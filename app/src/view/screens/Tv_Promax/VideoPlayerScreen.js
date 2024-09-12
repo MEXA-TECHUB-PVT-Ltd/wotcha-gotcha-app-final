@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Platform } from 'react-native';
 import Video from 'react-native-video';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: "13%",
+    top:Platform.OS =="ios" ?20 : "13%",
     left: 20,
     zIndex: 1,
   },

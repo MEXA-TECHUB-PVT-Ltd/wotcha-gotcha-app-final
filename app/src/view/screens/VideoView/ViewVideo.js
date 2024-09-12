@@ -14,7 +14,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useState, useRef, useMemo, useCallback, useEffect} from 'react';
-
+import { useTranslation } from 'react-i18next';
 import Back from '../../../assets/svg/back.svg';
 import RBSheet from "react-native-raw-bottom-sheet";
 import {appImages} from '../../../assets/utilities/index';
@@ -68,6 +68,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { base_url } from '../../../../../baseUrl';
 import EditItem from '../../../assets/svg/UpdateItem.svg';
 import Delete from '../../../assets/svg/Delete.svg';
+import Loader from '../../../assets/Custom/Loader';
 
 export default function ViewVideo({navigation, route}) {
   const [showFullContent, setShowFullContent] = useState(false);
@@ -120,7 +121,7 @@ export default function ViewVideo({navigation, route}) {
   const refCommentsSheet = useRef();
   const [snackbarDeleteVisible, setsnackbarDeleteVisible] = useState(false);
   const ref_RBSheetCamera = useRef(null);
-
+  const { t } = useTranslation();
   useEffect(() => {
     // This code will run whenever progress state changes
     if (progress && progress.seekableDuration !== undefined) {
@@ -893,6 +894,7 @@ export default function ViewVideo({navigation, route}) {
   //----------------------------------\\
   return (
     <GestureHandlerRootView style={{flex: 1}}>
+      {loading && <Loader />}
       <View style={{flex: 1}}>
         {/* Add a parent View */}
 
@@ -1186,8 +1188,8 @@ export default function ViewVideo({navigation, route}) {
         </View>
 
         <CustomSnackbar
-          message={'success'}
-          messageDescription={'Video downloaded successfully'}
+          message={t('Success')}
+          messageDescription={t('VideoDownloadedSuccessfully')}
           onDismiss={dismissSnackbar} // Make sure this function is defined
           visible={snackbarVisible}
         />
@@ -1287,7 +1289,8 @@ export default function ViewVideo({navigation, route}) {
                 fontSize: hp(2.3),
               }}
             >
-              Comments
+              {t('Comments')}
+              
             </Text>
           </View>
 
@@ -1300,7 +1303,7 @@ export default function ViewVideo({navigation, route}) {
                   alignItems: "center",
                 }}
               >
-                <Text>No Comments Yet</Text>
+                <Text>{t('NoCommentsYet')}</Text>
               </View>
             ) : (
               <FlatList
@@ -1620,7 +1623,7 @@ export default function ViewVideo({navigation, route}) {
         )} */}
       </View>
 
-      <View
+      {/* <View
         style={{
           position: 'absolute',
           top: 0,
@@ -1631,7 +1634,7 @@ export default function ViewVideo({navigation, route}) {
           alignItems: 'center',
         }}>
         {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
+      </View> */}
 
         {/* //-----------------\\ */}
         <RBSheet
@@ -1666,7 +1669,8 @@ export default function ViewVideo({navigation, route}) {
               color: '#303030',
               fontSize: hp(2.3),
             }}>
-            Select an option
+              {t('Selectanoption')}
+            
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <IonIcons
@@ -1698,7 +1702,8 @@ export default function ViewVideo({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Update Video
+                {t('UpdateVideo')}
+            
             </Text>
           </TouchableOpacity>
 
@@ -1726,15 +1731,16 @@ export default function ViewVideo({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Delete Video
+                {t('DeleteVideo')}
+              
             </Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
       <CustomSnackbar
-          message={'success'}
-          messageDescription={'Video deleted successfully'}
+          message={t('Success')}
+          messageDescription={t('VideoDeletedSuccessfully')}
           onDismiss={dismissDeleteSnackbar} // Make sure this function is defined
           visible={snackbarDeleteVisible}
         />
@@ -1757,8 +1763,10 @@ const styles = StyleSheet.create({
     marginHorizontal: wp(8),
   },
   bottomView: {
-    flex: 1,
-    justifyContent: 'flex-end',
+    position:'absolute',
+    bottom:0
+    // flex: 1,
+    // justifyContent: 'flex-end',
     // You can add padding or content to this view as needed.
   },
   textProfileName: {

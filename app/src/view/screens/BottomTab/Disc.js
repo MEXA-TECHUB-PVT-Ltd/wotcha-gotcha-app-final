@@ -163,61 +163,7 @@ export default function Disc({ route }) {
     }
     setIsLoading(false);
   };
-  // const fetchData = async () => {
-  //   // console.log('Received NewsCategory of:', NewsCategory);
-  //   // console.log('Received Type of:', Type);
-  //   // /*   Toast.show({
-  //   //   type: 'success', // 'success', 'error', 'info', 'warning'
-  //   //   position: 'bottom', // 'top', 'bottom', 'center'
-  //   //   text1: NewsCategory.toString(),
-  //   //   visibilityTime: 3000, // in milliseconds
-  //   //   autoHide: true,
-  //   // }); */
-
-  //   // // Check if 'id' exists before using it
-  //   // if (NewsCategory) {
-  //   //   console.log('Received id:', NewsCategory);
-  //   //   setCategoryIdNews(NewsCategory); // Uncomment this line if you want to use id to set selectedItemId
-
-  //   //   if (Type === 'NEWS') {
-  //   //     setLoading(true);
-  //   //     setSelectedItemId(1);
-  //   //     console.log('Category Id News is ', NewsCategory);
-  //   //     // Fetch data one by one
-  //   //     await fetchNews();
-
-  //   //     // Once all data is fetched, set loading to false
-  //   //     setLoading(false);
-  //   //   } else if (Type === 'QAFI') {
-  //   //     setLoading(true);
-  //   //     setSelectedItemId(3);
-  //   //     console.log('Category Id QAFI is ', NewsCategory);
-  //   //     // Fetch data one by one
-  //   //     await fetchQAFI();
-
-  //   //     // Once all data is fetched, set loading to false
-  //   //     setLoading(false);
-  //   //   } else if (Type === 'GEBC') {
-  //   //     setLoading(true);
-  //   //     setSelectedItemId(4);
-  //   //     console.log('Category Id QAFI is ', NewsCategory);
-  //   //     // Fetch data one by one
-  //   //     await fetchGEBC();
-
-  //   //     // Once all data is fetched, set loading to false
-  //   //     setLoading(false);
-  //   //   }
-  //   // } else {
-  //   //   /*  setLoading(true);
-  //   //   //setSelectedItemId(1)
-  //   //   console.log('Category Id News is ', NewsCategory);
-  //   //   // Fetch data one by one
-  //   //   await fetchNews();
-
-  //   //   // Once all data is fetched, set loading to false
-  //   //   setLoading(false); */
-  //   // }
-  // };
+ 
 
   useEffect(() => {
     if (authToken) {
@@ -412,61 +358,6 @@ export default function Disc({ route }) {
     }
   };
 
-  // const fetchCategoryData = async () => {
-  //   // const value = '16'
-  //   // console.log('value----', value)
-  //   try {
-  //     const response = await fetch(
-  //       base_url + `news/getAllNewsByCategory/${value}?page=1&limit=100`,
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           Authorization: `Bearer ${authToken}`,
-  //         },
-  //       }
-  //     );
-
-  //     if (response.ok) {
-  //       const result = await response.json();
-  //       console.log('result-------------', result)
-  //       setCategoryData(result.AllQAFIs);
-
-  //     } else {
-  //       console.error('Failed to fetch category data:', response.status, response.statusText);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching category data:', error);
-  //   }
-  // };
-  // const fetchNews = async () => {
-  //   console.log('Categry in id', categoryIdNews);
-  //   console.log('News Called');
-  //   const token = authToken;
-  //   // https://watch-gotcha-be.mtechub.com/news/getAllNewsByCategory/7?page=1&limit=5
-  //   try {
-  //     const response = await fetch(
-  //       // base_url + `news/getAllNewsByCategory/${categoryIdNews}?page=1&limit=100`,
-  //       base_url + 'news/getAllNewsByCategory/3?page=1&limit=100',
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-
-  //     const result = await response.json();
-  //     // console.log('Resultings of news', result);
-  //     //Alert.alert(result)
-
-  //     setNewsData(result.AllQAFIs); // Update the state with the fetched data
-
-  //     fetchTopNews();
-  //   } catch (error) {
-  //     console.error('Error Trending:', error);
-  //   }
-  // };
-
   const fetchTopNews = async () => {
     // console.log('Categry in id', categoryIdNews);
     // console.log('News Called');
@@ -496,61 +387,6 @@ export default function Disc({ route }) {
     }
   };
 
-  // const fetchQAFI = async () => {
-  //   console.log(' QAFI in id', categoryIdNews);
-  //   const token = authToken;
-
-  //   try {
-  //     const response = await fetch(
-  //       // base_url + `qafi/getAllQafisByCategory/${categoryIdNews}?page=1&limit=50`,
-  //       base_url + 'qafi/getAllQafisByCategory/3?page=1&limit=50',
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-
-  //     const result = await response.json();
-  //     // console.log('Resultings of QAFI', result.QAFIs);
-  //     //Alert.alert(result)
-
-  //     setQAFIData(result.QAFIs); // Update the state with the fetched data
-
-  //     fetchTopNews();
-  //   } catch (error) {
-  //     console.error('Error Trending:', error);
-  //   }
-  // };
-
-  // const fetchGEBC = async () => {
-  //   console.log('Categry in id', categoryIdNews);
-  //   const token = authToken;
-
-  //   try {
-  //     const response = await fetch(
-  //       // base_url + `gebc/getAllGEBCsByCategory/${categoryIdNews}?page=1&limit=50`,
-  //       base_url + `gebc/getAllGEBCsByCategory/3?page=1&limit=50`,
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-
-  //     const result = await response.json();
-  //     console.log('Resultings of News', result.GEBCs);
-  //     //Alert.alert(result)
-
-  //     setGEBCData(result.GEBCs); // Update the state with the fetched data
-
-  //     fetchTopNews();
-  //   } catch (error) {
-  //     console.error('Error Trending:', error);
-  //   }
-  // };
 
   const fetchLetterPublicGeneral = async () => {
     setLoading(true);

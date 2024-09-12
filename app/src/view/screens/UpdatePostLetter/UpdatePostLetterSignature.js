@@ -13,7 +13,7 @@ import {
   import React, {useState, useRef} from 'react';
   import RBSheet from 'react-native-raw-bottom-sheet';
   import Entypo from 'react-native-vector-icons/Entypo';
-  
+  import { useTranslation } from 'react-i18next';
   import {Button, Divider, TextInput} from 'react-native-paper';
   import AntDesign from 'react-native-vector-icons/AntDesign';
   import PlusPost from '../../../assets/svg/PlusPost.svg';
@@ -92,7 +92,7 @@ export default function UpdatePostLetterSignature({navigation, route}) {
   const receivedDataEmail = route.params?.email;
   const receivedDataCategoryId = route.params?.category_id;
   const receivedDataLetterType = route.params?.letterType;
-
+  const { t } = useTranslation();
   const receivedDataGreetingsTitle = route.params?.greetingsTitle;
 
   const receivedDatasubjectOfLetter = route.params?.subjectOfLetter;
@@ -271,7 +271,7 @@ export default function UpdatePostLetterSignature({navigation, route}) {
         <Headers
           showBackIcon={true}
           showText={true}
-          text={'Post Letter'}
+          text={t('PostLetter')}
           onPress={() => navigation.goBack()}
         />
       </View>
@@ -326,14 +326,15 @@ export default function UpdatePostLetterSignature({navigation, route}) {
           marginTop: hp(3),
           marginLeft: wp(8),
         }}>
-        Signature
+          {t('Signature')}
+        
       </Text>
       
       <View style={{marginLeft:wp(8), marginTop:hp(5)}}>
 
       <CPaperInput
           multiline={true}
-          placeholder={'Description'}
+          placeholder={t('Description')}
           //heading={'Email Address'}
           placeholderTextColor="#121420"
           value={email}
@@ -350,13 +351,14 @@ export default function UpdatePostLetterSignature({navigation, route}) {
           fontFamily: 'Inter-Regular',
           fontSize: hp(1.7)
         }}>
-        Edit Signature
+          {t('EditSignature')}
+        
       </Text>
       </TouchableOpacity>
 
       <View style={{marginTop: '18%', alignSelf: 'center'}}>
         <CustomButton
-          title="Next"
+          title={t('Next')}
           // load={loading}
           // checkdisable={inn == '' && cm == '' ? true : false}
           customClick={() => {
@@ -395,7 +397,7 @@ export default function UpdatePostLetterSignature({navigation, route}) {
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -422,7 +424,7 @@ export default function UpdatePostLetterSignature({navigation, route}) {
             }>
            <Image source={appImages.ArtBoard} style={{ resizeMode:'contain'}}/>
 
-            <Text style={{marginTop:hp(-1.8),color: '#333333'}}>From canvas</Text>
+            <Text style={{marginTop:hp(-1.8),color: '#333333'}}>{t('Fromcanvas')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -438,14 +440,14 @@ export default function UpdatePostLetterSignature({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
       <CustomSnackbar
-        message={'success'}
-        messageDescription={'Letter Posted Successfully'}
+        message={t('Success')}
+        messageDescription={t('LetterPostedSuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />

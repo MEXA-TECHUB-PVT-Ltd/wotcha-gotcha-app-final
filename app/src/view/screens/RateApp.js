@@ -8,6 +8,7 @@ import {
   TextInput,
   Text,
   View,
+  Platform,
 } from 'react-native';
 import React, {useState} from 'react';
 import {
@@ -26,10 +27,10 @@ import CustomButton from '../../assets/Custom/Custom_Button';
 
 import StarRating from 'react-native-star-rating';
 import CustomSnackbar from '../../assets/Custom/CustomSnackBar';
-
+import { useTranslation } from 'react-i18next';
 export default function RateApp({navigation}) {
   const [starCount, setStarCount] = useState(5);
-
+  const { t } = useTranslation();
   const [comment, setComment] = useState('');
 
   const [snackbarVisible, setSnackbarVisible] = useState(false);
@@ -71,7 +72,7 @@ export default function RateApp({navigation}) {
         barStyle="dark-content" // You can set the StatusBar text color to dark or light
       />
 
-      <View style={{marginTop: hp(5)}}>
+      <View style={{marginTop:Platform.OS =="ios" ? 0: hp(5)}}>
         <Headers showBackIcon={true} onPress={() => navigation.goBack()} />
       </View>
       <View
@@ -108,7 +109,7 @@ export default function RateApp({navigation}) {
           }}>
           <CPaperInput
             multiline={true}
-            placeholder={'Add a comment'}
+            placeholder={t('AddAComment')}
             placeholderTextColor="#B0B0B0"
             value={comment}
             onChangeText={text => setComment(text)}
@@ -117,10 +118,13 @@ export default function RateApp({navigation}) {
         </View>
 
 
-        <View style={{flex:1, borderWidth:3, justifyContent:'flex-end'}}>
+        <View style={{flex:1, 
+          
+          borderWidth:3, justifyContent:'flex-end'}}>
         <View style={{marginTop: '2%', alignSelf: 'center'}}>
           <CustomButton
-            title="Submitted"
+            title={t('Submitted')}
+            // title="Submitted"
             load={false}
             // checkdisable={inn == '' && cm == '' ? true : false}
             customClick={() => {
@@ -131,8 +135,8 @@ export default function RateApp({navigation}) {
         </View>
 
         <CustomSnackbar
-        message={'Success'}
-        messageDescription={'Your Ratings Submitted SuccessFully'}
+        message={t('Success')}
+        messageDescription={t('YourRatingsSubmittedSuccessFully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />

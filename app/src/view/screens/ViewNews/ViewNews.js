@@ -11,16 +11,12 @@ import {
   ImageBackground,
   View,
   TouchableOpacity,
-  Modal
+  Modal,
+  Alert,
+  Platform
 } from 'react-native';
 import React, {useState, useRef, useMemo, useEffect} from 'react';
 import {appImages} from '../../../assets/utilities/index';
-import Like from '../../../assets/svg/Like.svg';
-import UnLike from '../../../assets/svg/Unlike.svg';
-import Comment from '../../../assets/svg/Comment.svg';
-import Send from '../../../assets/svg/Send.svg';
-import Download from '../../../assets/svg/Download.svg';
-import BottomSheet, {BottomSheetFlatList} from '@gorhom/bottom-sheet';
 import ButtonSend from '../../../assets/svg/ButtonSend.svg';
 import EmojiPicker from 'rn-emoji-keyboard';
 import DownArrowComments from '../../../assets/svg/DownArrowComments.svg';
@@ -51,13 +47,16 @@ import Headers from '../../../assets/Custom/Headers';
 import { base_url } from '../../../../../baseUrl';
 import RBSheet from "react-native-raw-bottom-sheet";
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
+import Loader from '../../../assets/Custom/Loader';
+
+import { useTranslation } from 'react-i18next';
 export default function ViewNews({navigation, route}) {
   const [showFullContent, setShowFullContent] = useState(false);
 
   const [pastedURL, setPastedURL] = useState(
     'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
   );
-
+  const { t } = useTranslation();
   const [comments, setComments] = useState([]);
 
   const [likes, setLikes] = useState(null);
@@ -114,9 +113,7 @@ export default function ViewNews({navigation, route}) {
   };
 
   const openEmoji = () => {
-    console.log('Is Open');
     setIsOpen(true);
-    console.log('Is Open', isOpen);
   };
 
   const getUserID = async () => {
@@ -731,7 +728,8 @@ export default function ViewNews({navigation, route}) {
     setModalVisible(false);
   };
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
+    <View style={{flex: 1}}>
+      {loading && <Loader />}
       <View style={{flex: 1, backgroundColor: backgroundColor}}>
         <StatusBar
           translucent={true}
@@ -743,7 +741,7 @@ export default function ViewNews({navigation, route}) {
           <Headers
             showBackIcon={true}
             showText={true}
-            text={'On News Details'}
+            text={t('OnNewsDetails')}
             onPress={() => navigation.goBack()}
           />
         </View>
@@ -1037,7 +1035,7 @@ export default function ViewNews({navigation, route}) {
       </Modal>
       <RBSheet
           ref={refCommentsSheet}
-          height={450}
+          // height={450}
           openDuration={250}
           closeOnDragDown={true}
           customStyles={{
@@ -1066,7 +1064,8 @@ export default function ViewNews({navigation, route}) {
                 fontSize: hp(2.3),
               }}
             >
-              Comments
+              {t('Comments')}
+              
             </Text>
           </View>
 
@@ -1079,7 +1078,7 @@ export default function ViewNews({navigation, route}) {
                   alignItems: "center",
                 }}
               >
-                <Text>No Comments Yet</Text>
+                <Text>{t('NoCommentsYet')}</Text>
               </View>
             ) : (
               <FlatList
@@ -1091,7 +1090,7 @@ export default function ViewNews({navigation, route}) {
             )}
           </View>
 
-          {loading && (
+          {/* {loading && (
             <View
               style={{
                 position: "absolute",
@@ -1102,7 +1101,8 @@ export default function ViewNews({navigation, route}) {
             >
               <ActivityIndicator size="large" color="#FACA4E" />
             </View>
-          )}
+          )} */}
+          {loading && <Loader />}
 
           {isBottomSheetExpanded === false ? (
             <View
@@ -1111,10 +1111,12 @@ export default function ViewNews({navigation, route}) {
                 position: "absolute",
                 bottom: 0,
                 left: 0,
-                backgroundColor: "white",
+                backgroundColor: "#fff",
                 flexDirection: "row",
                 alignItems: "center",
-                height: hp(8),
+                height: hp(Platform.OS =="ios"? 16:8),
+                paddingVertical:20
+                
               }}
             >
               <TouchableOpacity
@@ -1133,7 +1135,7 @@ export default function ViewNews({navigation, route}) {
                 value={commentText} // Bind the value to the state variable
                 onChangeText={(text) => setCommentText(text)} // Update state on text change
                 placeholderTextColor={"#848484"}
-                placeholder="Write Comment Here"
+                placeholder={t('WriteCommentHere')}
                 style={{ flex: 1, marginLeft: wp(1) }}
               />
 
@@ -1172,7 +1174,7 @@ export default function ViewNews({navigation, route}) {
                   onChangeText={(text) => setCommentText(text)} // Update state on text change
                   placeholderTextColor={"#848484"}
                   // placeholder="Add a reply"
-                  placeholder="Write Comment Here"
+                  placeholder={t('WriteCommentHere')}
                   style={{ flex: 1, marginLeft: wp(1) }}
                 />
                 <TouchableOpacity
@@ -1388,25 +1390,14 @@ export default function ViewNews({navigation, route}) {
         )
       )} */}
 
-      <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        {loading && <ActivityIndicator size="large" color="#FACA4E" />}
-      </View>
+  
       <CustomSnackbar
-          message={'success'}
-          messageDescription={'News downloaded successfully'}
+          message={t('Success')}
+          messageDescription={t('Newsdownloadedsuccessfully')} 
           onDismiss={dismissSnackbar} // Make sure this function is defined
           visible={snackbarVisible}
         />
-    </GestureHandlerRootView>
+    </View>
   );
 }
 

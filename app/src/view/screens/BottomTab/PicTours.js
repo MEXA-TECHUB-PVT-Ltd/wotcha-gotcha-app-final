@@ -17,21 +17,14 @@ import {
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import Entypo from "react-native-vector-icons/Entypo";
 import Carousel from "react-native-snap-carousel";
-import Fontiso from "react-native-vector-icons/Fontisto";
 import Headers from "../../../assets/Custom/Headers";
-import Approved from "../../../assets/svg/Approved";
-import Chat from "../../../assets/svg/Chat.svg";
-
+import { useTranslation } from 'react-i18next';
 import Add from "../../../assets/svg/AddMainScreen.svg";
-import Swiper from "react-native-swiper";
 import { appImages } from "../../../assets/utilities";
 import ProfileActive from '../../../assets/svg/ProfileActive.svg';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import CategoryInactive from "../../../assets/svg/CategoryInactive";
 import RBSheet from "react-native-raw-bottom-sheet";
-
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import { useIsFocused } from "@react-navigation/native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -41,16 +34,8 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function PicTours() {
   const navigation = useNavigation();
-  const [selectedItemVideoId, setSelectedItemVideoId] = useState(null);
-
-  const [selectedItemDiscId, setSelectedItemDiscId] = useState(null);
-
-  const [selectedItemPicsId, setSelectedItemPicsId] = useState(null);
-
   const [imageInfo, setImageInfo] = useState(null);
-
-  const [selectedItemMarketId, setSelectedItemMarketId] = useState(null);
-
+  const { t } = useTranslation();
   const isFocused = useIsFocused();
   //pic
   const [selectedItemId, setSelectedItemId] = useState(null);
@@ -60,13 +45,6 @@ export default function PicTours() {
   const [searchesData, setSearches] = useState([]);
 
   const [selectedItem, setSelectedItem] = useState("");
-
-  const [data, setData] = useState([]);
-
-  const [dataLatestVideos, setDataLatestVideos] = useState([]);
-
-  const [dataMostViewedVideos, setMostViewedVideos] = useState([]);
-
   const [dataMostCommentedVideos, setMostCommentedVideos] = useState([]);
 
   const [dataTopVideos, setDataTopVideos] = useState([]);
@@ -74,41 +52,6 @@ export default function PicTours() {
   const [authToken, setAuthToken] = useState("");
   const ref_RBSheetCamera = useRef(null);
   const [adsinActiveData, setAdsInActiveData] = useState([]);
-
-  // useEffect(() => {
-  //   // Make the API request and update the 'data' state
-  //   fetchVideos();
-  // }, [selectedItemPicsId, isFocused]);
-
-  // const fetchVideos = async () => {
-  //   // Simulate loading
-  //   setLoading(true);
-
-  //   // Fetch data one by one
-  //   await getUserID();
-  //   await fetchTrendingVideos();
-  //   await fetchTopVideos();
-  //   await fetchLatestVideos();
-  //   await fetchMostViewedVideos();
-  //   await fetchMostCommentedVideos();
-
-  //   // Once all data is fetched, set loading to false
-  //   setLoading(false);
-  // };
-
-  // const getUserID = async () => {
-  //   try {
-  //     const result = await AsyncStorage.getItem("authToken ");
-  //     if (result !== null) {
-  //       setAuthToken(result);
-  //       await fetchCategory(result);
-  //       console.log("user id retrieved:", result);
-  //     }
-  //   } catch (error) {
-  //     // Handle errors here
-  //     console.error("Error retrieving user ID:", error);
-  //   }
-  // };
 
   const [adsData, setAdsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -173,30 +116,6 @@ export default function PicTours() {
     }
   }, [authToken, selectedItemId, isFocused]);
 
-  // Fetch categories
-  const fetchAllCinematicsCategory = async () => {
-    setLoading(true)
-    try {
-      const response = await fetch(`${base_url}picCategory/getAllPicCategories?page=1&limit=10000`, {
-        method: "GET",
-        headers: { Authorization: `Bearer ${authToken}` },
-      });
-      const result = await response.json();
-      // setSearchesData(result.AllCategories);
-      setSearches(result.AllCategories);
-      // if (result.AllCategories.length > 0) {
-      //   setSelectedItemId(result.AllCategories[0].id);
-      // }
-      if (selectedItemId === null && result.AllCategories.length > 0) {
-        setSelectedItemId(result.AllCategories[0].id);
-      }
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-    setLoading(false)
-  };
-
-
     const fetchTopSport = async () => {
     const token = authToken;
     try {
@@ -213,7 +132,6 @@ export default function PicTours() {
       const result = await response.json();
       // Check if result and result.topTour are defined and not null
       if (result && result.topTour && result.topTour.length > 0) {
-        console.log("Response result:", result.topTour[0]);
         setDataTopVideos(result.topTour[0]); // Update the state with the fetched data
       } else {
         // console.error('No topTour data available');
@@ -224,23 +142,6 @@ export default function PicTours() {
       console.error("Error for Top:", error);
     }
   };
-
-  // const fetchTopSport = async () => {
-  //   setLoading(true)
-  //   try {
-  //     const response = await fetch(`${base_url}news/getTopNews`, {
-  //       method: "GET",
-  //       headers: { Authorization: `Bearer ${authToken}` },
-  //     });
-  //     const result = await response.json();
-  //     // console.log('what news top,', result.data)
-  //     // setTopNewsData(result.data);
-  //     setDataTopVideos(result.data);
-  //   } catch (error) {
-  //     console.error("Error fetching top sports:", error);
-  //   }
-  //   setLoading(false)
-  // };
 
  // Fetch sub-category sports
  const fetchSubCategorySport = async (categoryId) => {
@@ -272,37 +173,6 @@ export default function PicTours() {
   }
   setLoading(false)
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   useEffect(() => {
     if (authToken) {
@@ -351,8 +221,6 @@ export default function PicTours() {
       );
 
       const result = await response.json();
-      // console.log("AllBanners AdsInActiveData---", result.AllBanners);
-      // setAdsInActiveData(result.AllBanners);
       const updatedBanners = result.AllBanners.map(banner => {
         if (banner.image.startsWith('/fileUpload')) {
           banner.image = `https://watch-gotcha-be.mtechub.com${banner.image}`;
@@ -366,203 +234,11 @@ export default function PicTours() {
     }
     setIsLoading(false);
   };
-  // const fetchCategory = async (result) => {
-  //   const token = result;
 
-  //   try {
-  //     const response = await fetch(
-  //       base_url + "picCategory/getAllPicCategories",
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     const result = await response.json();
-  //     // console.log('Search Results', result.AllCategories);
-  //     setSearches(result.AllCategories); // Update the state with the fetched data
-  //   } catch (error) {
-  //     console.error("Error for fetch:", error);
-  //   }
-  // };
-
-  // const fetchTrendingVideos = async () => {
-  //   // console.log('selected id trending videos', authToken);
-  //   const token = authToken;
-
-  //   try {
-  //     const response = await fetch(
-  //       base_url +
-  //         `picTour/getAllTrendingToursByCategory/${selectedItemPicsId}?page=1&limit=100000`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     const result = await response.json();
-  //     // console.log('Resultings Pics Tourzs', result.Tours);
-  //     setData(result.Tours); // Update the state with the fetched data
-  //   } catch (error) {
-  //     console.error("Error Trending:", error);
-  //   }
-  // };
-
-  // const fetchLatestVideos = async () => {
-  //   // console.log('selected id latest videos', authToken);
-
-  //   const token = authToken;
-
-  //   try {
-  //     const response = await fetch(
-  //       base_url +
-  //         `picTour/getAllRecentVideosByCategory/${selectedItemPicsId}?page=1&limit=100000`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     const result = await response.json();
-  //     // console.log('Resultings', result.Tours);
-  //     setDataLatestVideos(result.Tours); // Update the state with the fetched data
-  //   } catch (error) {
-  //     console.error("Error for latest:", error);
-  //   }
-  // };
-
-  // const fetchMostViewedVideos = async () => {
-  //   // console.log('selected id most viewed videos', authToken);
-
-  //   const token = authToken;
-
-  //   try {
-  //     const response = await fetch(
-  //       base_url +
-  //         `picTour/getMostViewedToursByCategory/${selectedItemPicsId}?page=1&limit=100000`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     const result = await response.json();
-  //     // console.log('Resultings Most Viewed', result.Tours);
-  //     setMostViewedVideos(result.Tours); // Update the state with the fetched data
-  //   } catch (error) {
-  //     console.error("Error for Most Views:", error);
-  //   }
-  // };
-
-  // const fetchTopVideos = async () => {
-  //   const token = authToken;
-  //   try {
-  //     const response = await fetch(
-  //       base_url + `top/app/top_tour/${selectedItemPicsId}`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-
-  //     const result = await response.json();
-  //     // Check if result and result.topTour are defined and not null
-  //     if (result && result.topTour && result.topTour.length > 0) {
-  //       console.log("Response result:", result.topTour[0]);
-  //       setDataTopVideos(result.topTour[0]); // Update the state with the fetched data
-  //     } else {
-  //       // console.error('No topTour data available');
-  //       setDataTopVideos([]);
-  //       console.log("Response result:", []); // Set to an empty array or handle as needed
-  //     }
-  //   } catch (error) {
-  //     console.error("Error for Top:", error);
-  //   }
-  // };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // const fetchTopVideos = async () => {
-  //   // console.log('Category Top Videos', selectedItemPicsId);
-  //   const token = authToken;
-
-  //   try {
-  //     const response = await fetch(
-  //       base_url + `top/app/top_tour/${selectedItemPicsId}`,
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-
-  //     const result = await response.json();
-  //     // console.log('Resultings of Top Videossss', result);
-  //     setDataTopVideos(result.topTour[0]); // Update the state with the fetched data
-  //   } catch (error) {
-  //     console.error('Error for Top:', error);
-  //   }
-  // };
-
-  const fetchMostCommentedVideos = async () => {
-    // console.log('selected most commented videos', authToken);
-
-    const token = authToken;
-
-    try {
-      const response = await fetch(
-        base_url +
-          `picTour/getMostCommentedToursByCategory/${selectedItemPicsId}?page=1&limit=100000`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      // console.log('Resultings', result.Tours);
-      setMostCommentedVideos(result.Tours); // Update the state with the fetched data
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
 
   //pics search
 
   const renderSearchesPic = (item) => {
-    // console.log('First Id', searchesData[0].id);
-    // let isSelected;
-    // if (selectedItemPicsId === null) {
-    //   isSelected = searchesData[0].id === item.id;
-    //   setSelectedItemPicsId(searchesData[0].id);
-    // } else {
-    //   // console.log('Items', item);
-    // isSelected = selectedItemPicsId === item.id;
-    // }
     const isSelected = selectedItemId === item.id;
     return (
       <TouchableOpacity
@@ -589,107 +265,6 @@ export default function PicTours() {
     );
   };
 
-  const searchesPics = [
-    { id: 1, title: "Funny" },
-    { id: 2, title: "Sports" },
-    { id: 3, title: "Historic" },
-    { id: 4, title: "Technology" },
-    { id: 5, title: "Celebrities" },
-    { id: 6, title: "Animals" },
-    { id: 7, title: "Beauty & Fashion" },
-    { id: 8, title: "People" },
-    { id: 9, title: "Food" },
-    { id: 8, title: "Science" },
-    { id: 9, title: "Nature" },
-    { id: 10, title: "Travel" },
-    { id: 11, title: "Art" },
-  ];
-
-  const renderAvailableAppsVideo = (item) => {
-    // console.log('Items of Pics', item);
-    return (
-      <TouchableOpacity
-        onPress={() => navigation.navigate("PicDetails", { picData: item })}
-        style={{
-          width: wp(35),
-          borderRadius: wp(5),
-          height: hp(25),
-          margin: 5,
-        }}
-      >
-        <View>
-          {!item.image ||
-          item.image === "undefined" ||
-          item.image.startsWith("/") ? (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                zIndex: 1,
-                width: "100%",
-                height: hp(12),
-                borderRadius: wp(1),
-                resizeMode: "cover",
-              }}
-              source={appImages.galleryPlaceHolder}
-            />
-          ) : (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                zIndex: 1,
-                width: "100%",
-                height: hp(12),
-                borderRadius: wp(1),
-                resizeMode: "cover",
-              }}
-              source={{ uri: item.image }}
-            />
-          )}
-
-          {/* <Image
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-
-              zIndex: 1, // Ensure it's on top of other elements
-              //flex: 1,
-              width: '100%',
-              height: hp(12),
-              borderRadius: wp(1),
-              resizeMode: 'cover',
-            }}
-            source={appImages.topSearches1}
-          /> */}
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginLeft: wp(0.5),
-            marginTop: hp(14),
-          }}
-        >
-          <Text
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            style={{
-              fontSize: hp(1.5),
-              fontFamily: "Inter-Regular",
-              color: "#000000",
-              width: wp(23),
-            }}
-          >
-            {item.name}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
 
   const takePhotoFromCamera = async (value) => {
     setSelectedItem(value);
@@ -699,7 +274,7 @@ export default function PicTours() {
         //videoQuality: 'medium',
       },
       (response) => {
-        console.log("image here", response);
+
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setLoading(true);
@@ -711,7 +286,6 @@ export default function PicTours() {
               Video: response.assets[0],
             });
           } else if (response.uri) {
-            console.log("response", imageInfo);
             ref_RBSheetCamera.current.close();
             setLoading(false);
 
@@ -732,11 +306,8 @@ export default function PicTours() {
   const choosePhotoFromLibrary = (value) => {
     setSelectedItem(value);
     launchImageLibrary({ mediaType: "photo" }, (response) => {
-      console.log("image here", response);
+
       if (!response.didCancel && response.assets.length > 0) {
-        /*  console.log('Response', response.assets[0]);
-        setImageUri(response.assets[0].uri);
-        setImageInfo(response.assets[0]); */
         setLoading(true);
         setImageInfo(response.assets[0]);
         ref_RBSheetCamera.current.close();
@@ -745,68 +316,11 @@ export default function PicTours() {
         navigation.navigate("UploadUpdatePic", { Video: response.assets[0] });
       }
 
-      //console.log('response', imageInfo);
       ref_RBSheetCamera.current.close();
       setLoading(false);
 
-      //navigation.navigate('UploadUpdatePic', {Video: response.assets[0]});
     });
   };
-
-  const availableAppsVideo = [
-    {
-      id: 1,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches1,
-    },
-    {
-      id: 2,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches2,
-    },
-    {
-      id: 3,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches3,
-    },
-    {
-      id: 4,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches4,
-    },
-    {
-      id: 5,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches1,
-    },
-    {
-      id: 6,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches2,
-    },
-    {
-      id: 7,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches3,
-    },
-    {
-      id: 8,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches4,
-    },
-    {
-      id: 9,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches1,
-    },
-    {
-      id: 10,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches2,
-    },
-  ];
-
-
 
 
   const renderVideoItem = ({ item }) => (
@@ -855,10 +369,7 @@ export default function PicTours() {
                 size={24}
                 color={"#FACA4E"}
               />
-              {/*  <Image
-            source={appImages.profileImg}
-            style={{width: '100%', height: '100%', resizeMode: 'cover'}}
-          /> */}
+
             </View>
           )}
 
@@ -877,16 +388,9 @@ export default function PicTours() {
               {item.name}
             </Text>
           </View>
-          {/* <View style={{ marginLeft: wp(1) }}>
-            <NonVerified />
-          </View> */}
+      
         </View>
 
-
-      {/* <Text  ellipsizeMode="tail"
-                numberOfLines={1} style={styles.text}>{item.name}</Text>
-      <Text  ellipsizeMode="tail"
-                numberOfLines={2} style={styles.text1}>{item.description}</Text> */}
     </View>
   </TouchableOpacity>
   );
@@ -896,7 +400,7 @@ export default function PicTours() {
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>No Data available</Text>
+        <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
       ) : (
       <FlatList
         data={item.data}
@@ -908,11 +412,6 @@ export default function PicTours() {
     )}
     </View>
   );
-
-
-
-
-
 
   return (
     <View style={styles.container}>
@@ -934,19 +433,9 @@ export default function PicTours() {
           onPressListings={() => navigation.openDrawer()}
           // showListings={true}
           showHome={true}
-          text={"Pic Tours"}
+          text={t('PicTours')}
         />
       </View>
-
-      {/* <Headers
-          onPress={() => navigation.goBack()}
-          showSearch={true}
-          onPressSearch={() => navigation.navigate('SearchScreenPicTours')}
-          showText={true}
-          onPressListings={() => navigation.openDrawer()}
-          showListings={true}
-          text={'Pic Tour'}
-        /> */}
 
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -970,7 +459,7 @@ export default function PicTours() {
           ) : adsData.length === 0 ? (
             <View style={styles.TopBannerView}>
               <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                No Top Banner
+                {t('NoTopBanner')}
               </Text>
             </View>
           ) : (
@@ -1002,47 +491,6 @@ export default function PicTours() {
             />
           )}
         </View>
-        {/* <View
-          style={{
-            alignItems: "center",
-            height: hp(16),
-            marginLeft: 8,
-            marginVertical: hp(2),
-          }}
-        >
-          {isLoading ? (
-            <ActivityIndicator size="large" color="#FACA4E" />
-          ) : adsData.length === 0 ? (
-           <View style={styles.TopBannerView}>
-            <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                        No Top Banner
-                      </Text>
-            </View>
-          ) : (
-            <Swiper autoplay={true} loop={true}>
-              {adsData.map((banner) => (
-                <View
-                  key={banner.id}
-                  style={{
-                    justifyContent: "center",
-                  }}
-                >
-                  <Image
-                    source={{ uri: banner?.image }}
-                    style={{
-                      height: hp(15),
-                      width: "100%",
-                      borderWidth: 1,
-                      resizeMode: "contain",
-                      borderRadius: 10,
-                    }}
-                  />
-                </View>
-              ))}
-            </Swiper>
-          )}
-        </View>  */}
-
 
         <View style={[styles.latestSearchList, { marginLeft: wp(3) }]}>
         <View>
@@ -1108,31 +556,7 @@ export default function PicTours() {
               />
               </TouchableOpacity>
             )}
-            {/* <View
-              style={{
-                position: "absolute",
-                top: hp(14),
-                left: 7,
-                //height: hp(3),
-                //width: wp(21),
-                //borderRadius: wp(3),
-                //backgroundColor: '#FACA4E',
-                justifyContent: "center",
-                alignItems: "center",
-                zIndex: 2, // Ensure it's on top
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: hp(1.6),
-                  fontFamily: "Inter",
-                  color: "black",
-                  fontWeight: "700",
-                }}
-              >
-                {dataTopVideos?.pic_category_name}
-              </Text>
-            </View> */}
+         
           </View>
 
               <View style={{ justifyContent: "flex-start", width: "50%", paddingTop:2 , marginLeft:'2%'}}>
@@ -1148,15 +572,12 @@ export default function PicTours() {
               }}
             >
               {dataTopVideos === 0 === undefined || dataTopVideos === 0
-                ? "No Top Pic Shown"
+                ? t('NoTopPicShown')
                 : dataTopVideos?.description}
             </Text>
           </View>
         </View>
 
-
-
-  {/* //////////////////////////////////////////////////////////// */}
   <View style={{  flex: 1, marginTop:hp(2),
     marginBottom: hp(5)}}>
       {loading ? (
@@ -1169,7 +590,7 @@ export default function PicTours() {
           alignItems: "center",
         }}
       >
-         <Text style={{ fontFamily: "Inter-Medium",}}>No data for this category</Text>
+         <Text style={{ fontFamily: "Inter-Medium",}}>{t('NoDataAvailable')}</Text>
       </View>
        
       ) : (
@@ -1183,230 +604,6 @@ export default function PicTours() {
 
 {/* /////////////////////////////////////////////////////////////// */}
 
-
-
-
-
-
-
-
-
-
-
-{/* 
-
-        <View style={{ marginTop: hp(1.5), height: hp(23) }}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              marginLeft: wp(2.5),
-              fontFamily: "Inter",
-              color: "#4A4A4A",
-              fontWeight: "bold",
-            }}
-          >
-            Trending
-          </Text>
-
-          <View style={{ marginTop: hp(1), height: "100%" }}>
-            {loading === true ? (
-              <View
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <ActivityIndicator size="large" color="#FACA4E" />
-              </View>
-            ) : !data || data.length === 0 ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No data available
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                style={{ flex: 1 }}
-                showsHorizontalScrollIndicator={false}
-                data={data}
-                horizontal
-                //keyExtractor={item => item.id.toString()}
-                renderItem={({ item }) => renderAvailableAppsVideo(item)}
-              />
-            )}
-          </View>
-        </View>
-
-        <View style={{ marginTop: hp(5), height: hp(23) }}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              marginLeft: wp(3),
-              fontFamily: "Inter",
-              color: "#4A4A4A",
-              fontWeight: "bold",
-            }}
-          >
-            Latest Pic
-          </Text>
-
-          <View style={{ marginTop: hp(1), height: "100%" }}>
-            {loading === true ? (
-              <View
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <ActivityIndicator size="large" color="#FACA4E" />
-              </View>
-            ) : !dataLatestVideos || dataLatestVideos.length === 0 ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No data available
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                style={{ flex: 1 }}
-                showsHorizontalScrollIndicator={false}
-                data={dataLatestVideos}
-                horizontal
-                // keyExtractor={item => item.id.toString()}
-                renderItem={({ item }) => renderAvailableAppsVideo(item)}
-              />
-            )}
-          </View>
-        </View>
-
-        <View style={{ marginTop: hp(5), height: hp(23) }}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              marginLeft: wp(3),
-              fontFamily: "Inter",
-              color: "#4A4A4A",
-              fontWeight: "bold",
-            }}
-          >
-            Most Viewed
-          </Text>
-
-          <View style={{ marginTop: hp(1), height: "100%" }}>
-            {loading === true ? (
-              <View
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <ActivityIndicator size="large" color="#FACA4E" />
-              </View>
-            ) : !dataMostViewedVideos || dataMostViewedVideos.length === 0 ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No data available
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                style={{ flex: 1 }}
-                showsHorizontalScrollIndicator={false}
-                data={dataMostViewedVideos}
-                horizontal
-                //keyExtractor={item => item.id.toString()}
-                renderItem={({ item }) => renderAvailableAppsVideo(item)}
-              />
-            )}
-          </View>
-        </View>
-
-        <View style={{ marginTop: hp(5), height: hp(23) }}>
-          <Text
-            style={{
-              fontSize: hp(2.3),
-              marginLeft: wp(3),
-              fontFamily: "Inter",
-              color: "#4A4A4A",
-              fontWeight: "bold",
-            }}
-          >
-            Most Commented
-          </Text>
-
-          <View style={{ marginTop: hp(1), height: "100%" }}>
-            {loading === true ? (
-              <View
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <ActivityIndicator size="large" color="#FACA4E" />
-              </View>
-            ) : !dataMostCommentedVideos ||
-              dataMostCommentedVideos.length === 0 ? (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                  No data available
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                style={{ flex: 1 }}
-                showsHorizontalScrollIndicator={false}
-                data={dataMostCommentedVideos}
-                horizontal
-                //keyExtractor={item => item.id.toString()}
-                renderItem={({ item }) => renderAvailableAppsVideo(item)}
-              />
-            )}
-          </View>
-        </View> */}
         {/* // start of banner slider */}
         <View
           style={{
@@ -1421,7 +618,7 @@ export default function PicTours() {
           ) : adsinActiveData.length === 0 ? (
             <View style={styles.TopBannerView}>
               <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                No Banner
+                {t('NoBanner')}
               </Text>
             </View>
           ) : (
@@ -1471,7 +668,7 @@ export default function PicTours() {
           container: {
             borderTopLeftRadius: wp(10),
             borderTopRightRadius: wp(10),
-            height: hp(25),
+            // height: hp(25),
           },
         }}
       >
@@ -1483,7 +680,7 @@ export default function PicTours() {
             alignItems: "center",
           }}
         >
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -1516,7 +713,7 @@ export default function PicTours() {
               size={25}
             />
 
-            <Text style={{ color: "#333333" }}>From camera</Text>
+            <Text style={{ color: "#333333" }}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -1533,7 +730,7 @@ export default function PicTours() {
               size={25}
             />
 
-            <Text style={{ color: "#333333" }}>From gallery</Text>
+            <Text style={{ color: "#333333" }}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
@@ -1622,14 +819,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-
-
-
-
-
-
-
-  
   itemContainer: {
     marginRight: wp(2),
     width: wp(35),

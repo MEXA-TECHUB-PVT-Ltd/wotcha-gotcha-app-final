@@ -18,8 +18,6 @@ import {
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
-import Fontiso from "react-native-vector-icons/Fontisto";
-import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import RBSheet from "react-native-raw-bottom-sheet";
 import Camera from "../../../assets/svg/Camera.svg";
@@ -34,50 +32,18 @@ import { base_url } from "../../../../../baseUrl";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import Carousel from 'react-native-snap-carousel';
 import FansActive from "../../../assets/svg/FansActive";
-import Swiper from "react-native-swiper";
-const bannerAds = [
-  {
-    id: 1,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-  {
-    id: 2,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-  {
-    id: 3,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-  {
-    id: 4,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-];
 
-
+import { useTranslation } from 'react-i18next';
 export default function Fans_star({  route }) {
+  const { t } = useTranslation();
   const navigation = useNavigation();
-  // const { identifier } = route.params;
-  // console.log("identifier from cinematices ", identifier)
   const [data, setData] = useState([]);
 
   const [authToken, setAuthToken] = useState("");
 
-  const [dataElectronics, setDataElectronics] = useState(null);
-
   const isFocused = useIsFocused();
 
-  const [dataVehicles, setDataVehicles] = useState(null);
-
-  const [dataClothing, setDataClothing] = useState(null);
-
-  //const [regions, setRegions] = useState(null);
-
-  const [regions, setRegions] = useState(null);
-
   const [loading, setLoading] = useState(false);
-
-  const [categoriesSelect, setCategorySelect] = useState([]);
 
   const [snackBarVisible, setSnackbarVisible] = useState(false);
 
@@ -210,13 +176,8 @@ export default function Fans_star({  route }) {
           title: category.sub_category_name,
           data: category.video_result.videos,
         }));
-  
-         // Reverse the titles
       const reversedSections = formattedSections.reverse();
-        // console.log('results---', formattedSections);
         setSections(reversedSections);
-  
-        // Check if there is no data
         const hasNoData = formattedSections.every(section => section.data.length === 0);
         setNoData(hasNoData);
       } else {
@@ -293,51 +254,7 @@ export default function Fans_star({  route }) {
       }
       setIsLoading(false);
     };
-  // const fetchSubCategory = async (selectedItemId) => {
-  //   //  console.log("Categry in id", selectedItemId);
-  //    const token = authToken;
-
-  //    try {
-  //      const response = await fetch(
-  //       base_url +
-  //       `cinematics/getByCategory/${selectedItemId}?page=1&limit=5`,
-  //        {
-  //          method: "GET",
-  //          headers: {
-  //            Authorization: `Bearer ${token}`,
-  //          },
-  //        }
-  //      );
- 
-  //     //  const result = await response.json();
-  //     //  console.log("fetchSubCategory------..", result.data);
-  //     //  setDataTopVideos(result.data);
-
-  //     const result = await response.json();
-  //     const formattedSections = result.data.map(category => ({
-  //       title: category.sub_category_name,
-  //       data: category.video_result.videos,
-  //     }));
-  //     console.log('results---', formattedSections);
-  //     setSections(formattedSections);
-  //     // Check if there is no data
-  //     const hasNoData = formattedSections.every(section => section.data.length === 0);
-  //     setNoData(hasNoData);
-  //   } catch (error) {
-  //     console.error("Error Trending:", error);
-  //     throw error;
-  //   }
-  // };
-
-  // const renderItem = ({ item }) => (
-  //   <TouchableOpacity onPress={handle_details}>
-  //     <View style={styles.itemContainer}>
-  //       <Image source={{ uri: item.thumbnail }} style={styles.image} />
-  //       <Text style={styles.text}>{item.name}</Text>
-  //       <Text style={styles.text1}>{item.description}</Text>
-  //     </View>
-  //   </TouchableOpacity>
-  // );
+  
   const renderVideoItem = ({ item }) => (
     // <TouchableOpacity onPress={handle_details}>
     <TouchableOpacity onPress={() => navigation.navigate('Fans_star_details', {videoData: item})}>
@@ -356,7 +273,7 @@ export default function Fans_star({  route }) {
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>No Data available</Text>
+        <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
       ) : (
       <FlatList
         data={item.data}
@@ -378,56 +295,9 @@ export default function Fans_star({  route }) {
   const handle_add = () => {
     ref_RBSheetCamera.current.open();
   };
-  const dataCinematics = [
-    {
-      id: 1,
-      image: require("../../../assets/images/img1.png"),
-      title: "Name here",
-      time: "5 days ago",
-    },
-    {
-      id: 2,
-      image: require("../../../assets/images/img2.png"),
-      title: "Name here",
-      time: "5 days ago",
-    },
-    {
-      id: 3,
-      image: require("../../../assets/images/img3.png"),
-      title: "Name here",
-      time: "5 days ago",
-    },
-  ];
 
   const handle_details = () => {
     navigation.navigate("Fans_star_details");
-  };
-  const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={handle_details}>
-      <View style={styles.itemContainer}>
-        <Image source={item.image} style={styles.image} />
-        <Text style={styles.text}>{item.title}</Text>
-        <Text style={styles.text1}>{item.time}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-  const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
-    setSnackbarVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
-    setTimeout(() => {
-      setSnackbarVisible(false);
-    }, 3000);
-  };
-
-  const goToScreen = () => {
-    ref_RBSheetCamera.current.close();
-
-    navigation.navigate("");
   };
 
   const takeVideoFromCamera = async () => {
@@ -438,13 +308,11 @@ export default function Fans_star({  route }) {
         mediaType: "video",
       },
       (response) => {
-        console.log("video here", response);
+    
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setImageUri(response.assets[0].uri);
             setImageInfo(response.assets[0]);
-
-            console.log("response", response.assets[0].uri);
             navigation.navigate("Fans_star_upload", {
               imageUri: response.assets[0],
             });
@@ -458,7 +326,7 @@ export default function Fans_star({  route }) {
     ref_RBSheetCamera.current.close();
 
     launchImageLibrary({ mediaType: "video" }, (response) => {
-      console.log("video here", response);
+ 
       if (!response.didCancel && response.assets.length > 0) {
         setImageUri(response.assets[0].uri);
         setImageInfo(response.assets[0]);
@@ -467,153 +335,6 @@ export default function Fans_star({  route }) {
         });
       }
     });
-  };
-  const renderAvailableAppsMarket = (item) => {
-    console.log("Items of market zone", item?.images[0]?.image);
-    return (
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("ProductDetails", { ProductDetails: item })
-        }
-        style={{ width: wp(25.5), margin: 5 }}
-      >
-        <View>
-          {!item?.images[0]?.image ||
-          item?.images[0]?.image === "undefined" ||
-          item?.images[0]?.image.startsWith("/") ? (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                zIndex: 1,
-                width: "100%",
-                height: hp(12),
-                borderRadius: wp(1),
-                resizeMode: "cover",
-              }}
-              source={appImages.galleryPlaceHolder}
-            />
-          ) : (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-
-                zIndex: 1, // Ensure it's on top of other elements
-                //flex: 1,
-                width: "100%",
-                height: hp(16),
-                borderRadius: wp(2.5),
-                resizeMode: "cover",
-              }}
-              source={{ uri: item?.images[0]?.image }}
-            />
-          )}
-        </View>
-
-        <View
-          style={{
-            position: "absolute",
-            top: hp(12),
-            left: 7,
-            //height: hp(3),
-            //width: wp(21),
-            //borderRadius: wp(3),
-            //backgroundColor: '#FACA4E',
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 2, // Ensure it's on top
-          }}
-        >
-          <Text
-            style={{
-              fontSize: hp(1.7),
-              fontFamily: "Inter",
-              color: "black",
-              fontWeight: "700",
-            }}
-          >
-            {item?.title}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
-  const renderAvailableApps = (item) => {
-    console.log("Items of market zone", item?.images[0]?.image);
-    return (
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("ProductDetails", { ProductDetails: item })
-        }
-        style={{ width: wp(25.5), margin: 5 }}
-      >
-        <View>
-          {!item?.images[0]?.image ||
-          item?.images[0]?.image === "undefined" ||
-          item?.images[0]?.image.startsWith("/") ? (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                zIndex: 1,
-                width: "100%",
-                height: hp(12),
-                borderRadius: wp(1),
-                resizeMode: "cover",
-              }}
-              source={appImages.galleryPlaceHolder}
-            />
-          ) : (
-            <Image
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-
-                zIndex: 1, // Ensure it's on top of other elements
-                //flex: 1,
-                width: "100%",
-                height: hp(16),
-                borderRadius: wp(2.5),
-                resizeMode: "cover",
-              }}
-              source={{ uri: item?.images[0]?.image }}
-            />
-          )}
-        </View>
-
-        <View
-          style={{
-            position: "absolute",
-            top: hp(12),
-            left: 7,
-            //height: hp(3),
-            //width: wp(21),
-            //borderRadius: wp(3),
-            //backgroundColor: '#FACA4E',
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 2, // Ensure it's on top
-          }}
-        >
-          <Text
-            style={{
-              fontSize: hp(1.7),
-              fontFamily: "Inter",
-              color: "black",
-              fontWeight: "700",
-            }}
-          >
-            {item?.title}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
   };
 
   const renderSearches = (item) => {
@@ -630,7 +351,7 @@ export default function Fans_star({  route }) {
         ]}
         onPress={() => {
           setSelectedItemId(item.id);
-          console.log("Selected item:", item.id);
+    
         }}
       >
         <Text
@@ -644,12 +365,7 @@ export default function Fans_star({  route }) {
       </TouchableOpacity>
     );
   };
-  const goto_camera = () => {
-    navigation.navigate("CameraView");
-  };
 
-
-  // console.log('data for top aa gya ----', dataTopVideos)
   return (
     <View style={styles.container}>
       <StatusBar
@@ -666,7 +382,7 @@ export default function Fans_star({  route }) {
           showHome={true}
           showText={true}
           onPressSearch={() => navigation.navigate("Fans_Search_Video")}
-          text={"Fans-Stars Zone"}
+          text={t('FansStarsZone')}
           showSearch={true}
         />
       </View>
@@ -681,20 +397,6 @@ export default function Fans_star({  route }) {
       >
 
 
-        {/* <View
-          style={{
-            height: hp(18),
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Image
-            style={{ width: wp(80), resizeMode: "contain" }}
-            source={appImages.bannerAds}
-          />
-        </View> */}
-              {/* // */}
-            {/* // start of banner slider */}
             <View
       style={{
         alignItems: 'center',
@@ -707,7 +409,7 @@ export default function Fans_star({  route }) {
         <ActivityIndicator size="large" color="#FACA4E" />
       ) : adsData.length === 0 ? (
         <View style={styles.TopBannerView}>
-          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>No Top Banner</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>{t('NoTopBanner')}</Text>
         </View>
       ) : (
         <Carousel
@@ -829,7 +531,7 @@ export default function Fans_star({  route }) {
               }}
             >
               {dataTopVideos === undefined || dataTopVideos === 0
-                ? "No Top Fan_star Zone Shown"
+                ? t('NoTopFanstarShown')
                 : dataTopVideos?.description}
             </Text>
           </View>
@@ -863,7 +565,7 @@ export default function Fans_star({  route }) {
         <ActivityIndicator size="large" color="#FACA4E" />
       ) : adsinActiveData.length === 0 ? (
         <View style={styles.TopBannerView}>
-          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>No Banner</Text>
+          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>{t('NoBanner')}</Text>
         </View>
       ) : (
         <Carousel
@@ -939,7 +641,8 @@ export default function Fans_star({  route }) {
               fontSize: hp(2.3),
             }}
           >
-            Select an option
+            {t('Selectanoption')}
+            {/* Select an option */}
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
@@ -951,119 +654,7 @@ export default function Fans_star({  route }) {
           </TouchableOpacity>
         </View>
 
-        <View
-          style={{
-            //flexDirection: 'row',
-            justifyContent: "space-evenly",
-            //alignItems: 'center',
-            //borderWidth: 3,
-            marginTop: hp(3),
-          }}
-        >
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{ flexDirection: "row", marginHorizontal: wp(7) }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              Phones And Electronics
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              height: hp(0.1),
-              marginHorizontal: wp(8),
-              marginTop: hp(3),
-              backgroundColor: "#00000012",
-            }}
-          ></View>
-
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{
-              flexDirection: "row",
-              marginTop: hp(1.8),
-              marginHorizontal: wp(7),
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              Vehicle Parts
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              height: hp(0.1),
-              marginHorizontal: wp(8),
-              marginTop: hp(3),
-              backgroundColor: "#00000012",
-            }}
-          ></View>
-
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{
-              flexDirection: "row",
-              marginTop: hp(1.8),
-              marginHorizontal: wp(7),
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              Clothing and Related item
-            </Text>
-          </TouchableOpacity>
-
-          <View
-            style={{
-              height: hp(0.1),
-              marginTop: hp(1.8),
-              marginHorizontal: wp(8),
-              marginTop: hp(3),
-              backgroundColor: "#00000012",
-            }}
-          ></View>
-
-          <TouchableOpacity
-            onPress={() => goToScreen()}
-            style={{
-              flexDirection: "row",
-              marginTop: hp(1.8),
-              marginHorizontal: wp(7),
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "Inter-Regular",
-                color: "#656565",
-                marginLeft: wp(3),
-                fontSize: hp(2.1),
-              }}
-            >
-              All other items
-            </Text>
-          </TouchableOpacity>
-        </View>
+       
       </RBSheet>
 
       <RBSheet
@@ -1102,7 +693,8 @@ export default function Fans_star({  route }) {
               fontSize: hp(2.1),
             }}
           >
-            Select an option
+             {t('Selectanoption')}
+            
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
@@ -1148,7 +740,8 @@ export default function Fans_star({  route }) {
                 fontSize: hp(2.1),
               }}
             >
-              Take a Video
+              {t('TakeAVideo')}
+              {/* Take a Video */}
             </Text>
           </TouchableOpacity>
 
@@ -1177,7 +770,8 @@ export default function Fans_star({  route }) {
                 fontSize: hp(2.1),
               }}
             >
-              Choose a Video
+              {t('ChooseaVideo')}
+              {/* Choose a Video */}
             </Text>
           </TouchableOpacity>
         </View>
@@ -1208,8 +802,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: hp(2.1),
     height: hp(7),
-    // marginLeft: wp(1),
-    //borderWidth: 3,
   },
   searchHeader: {
     flexDirection: "row",
@@ -1252,7 +844,6 @@ const styles = StyleSheet.create({
   itemContainer: {
     marginRight: wp(2),
     width: wp(35),
-    // alignItems: "center",
   },
   image: {
     width: wp(35),
@@ -1268,17 +859,12 @@ const styles = StyleSheet.create({
     fontFamily: "Inter",
     marginTop: 5,
     fontSize: hp(1.9),
-    // right: "20%",
   },
   text1: {
-    // fontWeight: 'bold',
     color: "#4A4A4A",
     fontSize: hp(1.5),
     // textAlign: 'left',
     fontFamily: "Inter",
-    
-    // marginTop: 5,
-    // right: "20%",
   },
   flatListContent: {
     paddingHorizontal: wp(2),
@@ -1293,7 +879,7 @@ const styles = StyleSheet.create({
               textAlign: "left",
               fontFamily: "Inter-SemiBold",
               marginBottom:6
-              // top: "6%",
+         
   },
   videoItem: {
     marginRight: 15,

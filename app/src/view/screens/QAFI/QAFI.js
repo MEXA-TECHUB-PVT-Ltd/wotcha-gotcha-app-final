@@ -19,54 +19,30 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import PlusPost from '../../../assets/svg/PlusPost.svg';
 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-
-import Back from '../../../assets/svg/back.svg';
 import {appImages} from '../../../assets/utilities/index';
-import Slider from '@react-native-community/slider';
-import VolumeUp from '../../../assets/svg/VolumeUp.svg';
-import Like from '../../../assets/svg/Like.svg';
-import UnLike from '../../../assets/svg/Unlike.svg';
-import Comment from '../../../assets/svg/Comment.svg';
-import Send from '../../../assets/svg/Send.svg';
-import Download from '../../../assets/svg/Download.svg';
 import CustomButton from '../../../assets/Custom/Custom_Button';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import Share from 'react-native-share';
-
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-
-import Fontiso from 'react-native-vector-icons/Fontisto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import IonIcons from 'react-native-vector-icons/Ionicons';
-
 import CPaperInput from '../../../assets/Custom/CPaperInput';
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
 import {SelectCountry, Dropdown} from 'react-native-element-dropdown';
 import CustomDialog from '../../../assets/Custom/CustomDialog';
 import { base_url } from '../../../../../baseUrl';
 import { CLOUD_NAME, CLOUDINARY_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
-
-const Category = [
-  {label: 'Item 1', value: '1'},
-  {label: 'Item 2', value: '2'},
-  {label: 'Item 3', value: '3'},
-];
-
+import { useTranslation } from 'react-i18next';
 export default function QAFI({navigation}) {
   const [selectedItem, setSelectedItem] = useState('');
-
+  const { t } = useTranslation();
   const [snackbarVisible, setsnackbarVisible] = useState(false);
 
   const [snackbarVisibleAlert, setsnackbarVisibleAlert] = useState(false);
-
-  const [profileName, setProfileName] = useState('');
 
   const [userImage, setUserImage] = useState('');
 
@@ -103,7 +79,6 @@ export default function QAFI({navigation}) {
   const ref_RBSheetCamera = useRef(null);
 
   const ref_RBSendOffer = useRef(null);
-  const [categoryError, setCategoryError] = useState("");
   const [subcategoryError, setSubcategoryError] = useState("");
   const [subCate, setSubCate] = useState([]);
   const [subcategory, setSubCategory] = useState("");
@@ -119,47 +94,31 @@ export default function QAFI({navigation}) {
   const fetchVideos = async () => {
     // Simulate loading
     setLoading(true);
-
     await getUserID();
-    // Fetch data one by one
-
-    // Once all data is fetched, set loading to false
     setLoading(false);
   };
 
   const getUserID = async () => {
-    console.log("Id's");
     try {
       const result = await AsyncStorage.getItem('userId ');
       if (result !== null) {
         setUserId(result);
-
-        console.log('user id retrieved:', result);
       }
     } catch (error) {
-      // Handle errors here
-      console.error('Error retrieving user ID:', error);
     }
 
     try {
       const result = await AsyncStorage.getItem('userName');
       if (result !== null) {
         setName(result);
-        console.log('user id retrieved:', result);
       }
     } catch (error) {
-      // Handle errors here
-      console.error('Error retrieving user ID:', error);
     }
 
     const result1 = await AsyncStorage.getItem('authToken ');
     if (result1 !== null) {
       setAuthToken(result1);
-      console.log('user token retrieved:', result1);
-      //await fetchUser(result1);
-      //await fetchCategory(result1);
     } else {
-      console.log('result is null', result1);
     }
 
     await authTokenAndId();
@@ -167,17 +126,12 @@ export default function QAFI({navigation}) {
 
   const authTokenAndId = async () => {
     if (userId !== '' && authToken !== '') {
-      console.log('USER ID', userId);
-      console.log('AUTH TOKEN ', authToken);
       fetchUser(userId, authToken);
     }
   };
 
   const fetchUser = async (id, tokens) => {
-    console.log('USER', id);
-    console.log('TOKEN', tokens);
     const token = tokens;
-
     try {
       const response = await fetch(
         base_url + `user/getUser/${id}`,
@@ -192,8 +146,6 @@ export default function QAFI({navigation}) {
       if (response.ok) {
         const data = await response.json();
         console.log('IMAGE', data);
-
-        // Use the data from the API to set the categories
         setUserImage(data.user.image);
         await fetchCategory(id, tokens);
       } else {
@@ -226,18 +178,12 @@ export default function QAFI({navigation}) {
 
       if (response.ok) {
         const data = await response.json();
-
-        // Use the data from the API to set the categories
         const categories = data.AllCategories.map(category => ({
           label: category.name, // Use the "name" property as the label
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
 
-        console.log('Categories', categories);
-
         setCategorySelect(categories); // Update the state with the formatted category data
-
-        console.log('Data Categories', categoriesSelect);
       } else {
         console.error(
           'Failed to fetch categories:',
@@ -273,7 +219,6 @@ export default function QAFI({navigation}) {
     const type = imageInfo.type;
     const name = imageInfo.fileName;
     const sourceImage = {uri, type, name};
-    console.log('Source Image', sourceImage);
     const dataImage = new FormData();
     dataImage.append('file', sourceImage);
     dataImage.append('upload_preset', UPLOAD_PRESET); // Use your Cloudinary upload preset
@@ -290,10 +235,6 @@ export default function QAFI({navigation}) {
       .then(res => res.json())
       .then(data => {
         setImageUrl(data.url); // Store the Cloudinary video URL in your state
-        //uploadVideo(data.url)
-        //uploadXpiVideo(data.url);
-        console.log('Image Url', data);
-        //uploadXpiVideo(data.url,data)
         uploadVideo(data.url);
       })
       .catch(err => {
@@ -303,11 +244,6 @@ export default function QAFI({navigation}) {
   };
 
   const uploadVideo = async data => {
-    console.log('Image Uri', data);
-    console.log('disc category Id', categoryId);
-    console.log('Description', description);
-    console.log('user id', userId);
-
     const token = authToken;
     const apiUrl = base_url + 'qafi/createQafi';
 
@@ -330,7 +266,6 @@ export default function QAFI({navigation}) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('API Response:', data);
         setLoading(false);
         handleUpdatePassword();
 
@@ -351,43 +286,8 @@ export default function QAFI({navigation}) {
     }
   };
 
-  const handleFocus = () => {
-    setIsTextInputActive(true);
-  };
-
-  const handleBlur = () => {
-    setIsTextInputActive(false);
-  };
-
-  const TakeImageFromCamera = () => {
-    ImageCropPicker.openCamera({
-      width: 300,
-      height: 500,
-    })
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => console.log(error));
-  };
-  const TakeImageFromGallery = () => {
-    ImageCropPicker.openPicker({
-      width: 300,
-      height: 500,
-    })
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => console.log(error));
-  };
-
   const handleUpdatePassword = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setsnackbarVisible(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisible(false);
       navigation.replace('QAFIScreen');
@@ -398,16 +298,8 @@ export default function QAFI({navigation}) {
     setsnackbarVisible(false);
   };
 
-  //---------------------\\
-
   const handleUpdatePasswordAlert = async () => {
-    // Perform the password update logic here
-    // For example, you can make an API request to update the password
-
-    // Assuming the update was successful
     setsnackbarVisibleAlert(true);
-
-    // Automatically hide the Snackbar after 3 seconds
     setTimeout(() => {
       setsnackbarVisibleAlert(false);
     }, 3000);
@@ -417,18 +309,6 @@ export default function QAFI({navigation}) {
     setsnackbarVisibleAlert(false);
   };
 
-  //-----------------------\\
-
-  const Category = [
-    {label: 'Politics', value: 'Politics'},
-    {label: 'Sports', value: 'Sports'},
-    {label: 'Business', value: 'Business'},
-    {label: 'Finance', value: 'Finance'},
-    {label: 'Tech', value: 'Tech'},
-    {label: 'Health', value: 'Health'},
-    {label: 'Culture', value: 'Culture'},
-  ];
-
   const takePhotoFromCamera = async value => {
     setSelectedItem(value);
     launchCamera(
@@ -437,17 +317,13 @@ export default function QAFI({navigation}) {
         //videoQuality: 'medium',
       },
       response => {
-        console.log('image here', response);
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setImageUri(response.assets[0].uri);
-            console.log('response', response.assets[0].uri);
             setImageInfo(response.assets[0]);
             ref_RBSheetCamera.current.close();
           } else if (response.uri) {
-            // Handle the case when no assets are present (e.g., for videos)
             setImageUri(response.uri);
-            console.log('response', response.uri);
             ref_RBSheetCamera.current.close();
           }
         }
@@ -459,15 +335,12 @@ export default function QAFI({navigation}) {
   const choosePhotoFromLibrary = value => {
     setSelectedItem(value);
     launchImageLibrary({mediaType: 'photo'}, response => {
-      console.log('image here', response);
+
       if (!response.didCancel && response.assets.length > 0) {
-        console.log('Response', response.assets[0]);
         setImageUri(response.assets[0].uri);
         setImageInfo(response.assets[0]);
         ref_RBSheetCamera.current.close();
       }
-
-      console.log('response', imageInfo);
 
       ref_RBSheetCamera.current.close();
     });
@@ -502,7 +375,7 @@ export default function QAFI({navigation}) {
           <IonIcons name={'chevron-back'} color={'#282828'} size={25} />
         </TouchableOpacity>
 
-        <Text style={styles.headerText}>Post QAFI</Text>
+        <Text style={styles.headerText}>{t('PostQAFI')}</Text>
       </View>
 
       <ScrollView
@@ -525,10 +398,7 @@ export default function QAFI({navigation}) {
               height: wp(10),
               borderRadius: wp(10) / 2,
             }}>
-            {/* <Image
-              source={appImages.profileImg}
-              style={{width: '100%', height: '100%', resizeMode: 'cover'}}
-            /> */}
+
             {userImage ? (
               <View
                 style={{
@@ -538,10 +408,7 @@ export default function QAFI({navigation}) {
                   overflow: 'hidden',
                   borderRadius: wp(10) / 2,
                 }}>
-                {/*  <Image
-              source={appImages.profileImg}
-              style={{width: '100%', height: '100%', resizeMode: 'cover'}}
-            /> */}
+      
                 <Image
                   source={{uri: userImage}}
                   style={{width: '100%', height: '100%', resizeMode: 'cover'}}
@@ -585,7 +452,7 @@ export default function QAFI({navigation}) {
           }}>
           <CPaperInput
             //multiline={true}
-            placeholder={'Add QAFI'}
+            placeholder={t('AddQAFI')}
             placeholderTextColor="#B0B0B0"
             value={comment}
             onChangeText={text => setComment(text)}
@@ -614,7 +481,8 @@ export default function QAFI({navigation}) {
               fontWeight: 'bold',
               fontFamily: 'Inter',
             }}>
-            Add Image
+              {t('AddImage')}
+            
           </Text>
         </TouchableOpacity>
 
@@ -672,8 +540,7 @@ export default function QAFI({navigation}) {
               borderRadius: wp(3),
               width: '100%',
             }}
-            // dropdownPosition="top"
-            // mode="modal"
+  
             placeholderStyle={{
               color: '#121420',
               //   fontWeight: '400',
@@ -683,20 +550,18 @@ export default function QAFI({navigation}) {
             iconStyle={isFocus ? styles.iconStyle : styles.iconStyleInactive}
             itemTextStyle={{color: '#000000'}}
             selectedTextStyle={{fontSize: 16, color: '#000000'}}
-            // inputSearchStyle={styles.inputSearchStyle}
-            // iconStyle={styles.iconStyle}
+      
             value={category}
             data={categoriesSelect}
             search={false}
             maxHeight={200}
             labelField="label"
             valueField="value"
-            placeholder={'Select Category'}
+            placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
             onFocus={handleCategoryFocus}
             onBlur={handleCategoryBlur}
-            // onFocus={() => setIsFocus(true)}
-            // onBlur={() => setIsFocus(false)}
+
             onChange={item => {
               //setCategory(item.label);
               setCategoryId(item.value);
@@ -726,8 +591,7 @@ export default function QAFI({navigation}) {
               borderRadius: wp(3),
               width: "100%",
             }}
-            // dropdownPosition="top"
-            // mode="modal"
+
             placeholderStyle={{
               color: "#121420",
               //   fontWeight: '400',
@@ -738,22 +602,21 @@ export default function QAFI({navigation}) {
             iconStyle={isFocus ? styles.iconStyle : styles.iconStyleInactive}
             itemTextStyle={{ color: "#000000", }}
             selectedTextStyle={{ fontSize: 16, color: "#000000",   height: 42, textAlignVertical: "center",}}
-            // inputSearchStyle={styles.inputSearchStyle}
-            // iconStyle={styles.iconStyle}
+        
             value={subcategory}
             data={subCate}
             search={false}
             maxHeight={200}
             labelField="name"
             valueField="id"
-            placeholder={"Select Sub Category"}
+            placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             // onFocus={() => setIsFocus(true)}
             // onBlur={() => setIsFocus(false)}
             onFocus={handleSubCategoryFocus}
             onBlur={handleSubCategoryBlur}
             onChange={(item) => {
-              console.log("kon sub category id hai----", item.id);
+  
               setSubCategory(item.id);
               setIsFocus(false);
             }}
@@ -781,7 +644,7 @@ export default function QAFI({navigation}) {
           alignSelf: 'center',
         }}>
         <CustomButton
-          title="Post"
+          title={t('Post')}
           load={false}
           // checkdisable={inn == '' && cm == '' ? true : false}
           customClick={() => {
@@ -820,7 +683,7 @@ export default function QAFI({navigation}) {
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -851,7 +714,7 @@ export default function QAFI({navigation}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -867,7 +730,7 @@ export default function QAFI({navigation}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
@@ -893,15 +756,15 @@ export default function QAFI({navigation}) {
       />
 
       <CustomSnackbar
-        message={'Success'}
-        messageDescription={'QAFI Posted Successfully'}
+        message={t('Success')}
+        messageDescription={t('QAFIPostedSuccessfully')} 
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
 
       <CustomSnackbar
-        message={'Alert!'}
-        messageDescription={'Kindly Fill All Fields'}
+        message={t('Alert!')}
+        messageDescription={t('KindlyFillAllFields')}
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackbarVisibleAlert}
       />

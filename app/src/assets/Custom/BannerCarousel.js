@@ -1,7 +1,7 @@
 // BannerCarousel.js
 
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, ActivityIndicator, Dimensions, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ActivityIndicator, Dimensions, StyleSheet, Platform } from 'react-native';
 import Carousel from 'react-native-snap-carousel'; // Ensure you have this dependency installed
 import {
     heightPercentageToDP as hp,
@@ -42,7 +42,7 @@ const BannerCarousel = ({ isLoading, adsData, noDataMessage, onBannerPress }) =>
                   height: hp(15),
                   width: '100%',
                   borderWidth: 1,
-                  resizeMode: 'contain',
+                  resizeMode:Platform.OS =="ios" ? 'cover':'contain',
                   borderRadius: 10,
                 }}
               />

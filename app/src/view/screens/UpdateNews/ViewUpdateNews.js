@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {appImages} from '../../../assets/utilities/index';
-
+import { useTranslation } from 'react-i18next';
 import EditItem from '../../../assets/svg/UpdateItem.svg';
 
 import Delete from '../../../assets/svg/Delete.svg';
@@ -65,7 +65,7 @@ export default function ViewUpdateNews({navigation, route}) {
   const ref_Comments = useRef(null);
 
   const [authToken, setAuthToken] = useState([]);
-
+  const { t } = useTranslation();
   //------------------------------------\\
 
   //--------------------------\\
@@ -358,7 +358,8 @@ export default function ViewUpdateNews({navigation, route}) {
               color: '#303030',
               fontSize: hp(2.3),
             }}>
-            Select an option
+              {t('SelectAnOption')} 
+            {/* Select an option */}
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <IonIcons
@@ -390,7 +391,8 @@ export default function ViewUpdateNews({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Update News
+                {t('UpdateNews')} 
+              {/* Update News */}
             </Text>
           </TouchableOpacity>
 
@@ -418,15 +420,16 @@ export default function ViewUpdateNews({navigation, route}) {
                 marginLeft: wp(3),
                 fontSize: hp(2.1),
               }}>
-              Delete News
+                {t('DeleteNews')} 
+              {/* Delete News */}
             </Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
       <CustomSnackbar
-        message={'success'}
-        messageDescription={'News deleted successfully'}
+        message={t('Success')} 
+        messageDescription={t('NewsDeletedSuccessfully')}
         onDismiss={dismissDeleteSnackbar} // Make sure this function is defined
         visible={snackbarDeleteVisible}
       />

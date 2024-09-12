@@ -476,7 +476,7 @@ import React, {
 } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-
+import { useTranslation } from 'react-i18next';
 import Back from "../../assets/svg/back.svg";
 
 import { appImages } from "../../assets/utilities/index";
@@ -536,7 +536,7 @@ export default function Conversation({ navigation, route }) {
   const inputRef = useRef(null);
   // console.log("recieved Data in conversation", receivedData);
   // console.log("recieved Data in conversation", receivedofferdata);
-
+  const { t } = useTranslation();
   const [receivedofferdata, setReceivedOfferData] = useState([]);
   // Example of retrieving data from AsyncStorage
 
@@ -586,7 +586,7 @@ export default function Conversation({ navigation, route }) {
   const getUserID = async () => {
     console.log("AT User Id");
     try {
-      const result = await AsyncStorage.getItem("authToken ");
+      const result = await AsyncStorage.getItem("authToken");
       if (result !== null) {
         setAuthToken(result);
         retrieveOfferData();
@@ -928,7 +928,7 @@ export default function Conversation({ navigation, route }) {
           </Text>
           <View>
             <Text style={styles.offerText}>
-              Listed Price:
+              {t('ListedPrice')} 
               <Text
                 style={{
                   fontSize: 15,
@@ -942,7 +942,7 @@ export default function Conversation({ navigation, route }) {
           </View>
           <View>
             <Text style={styles.offerText}>
-              Offered Price:
+            {t('ListedPrice')} 
               <Text
                 style={{
                   fontSize: 15,
@@ -1197,7 +1197,7 @@ export default function Conversation({ navigation, route }) {
           placeholderTextColor={"#848484"}
           value={commentText} // Bind the value to the state variable
           onChangeText={(text) => setCommentText(text)} // Update state on text change
-          placeholder="Write Comment Here"
+          placeholder={t('WriteCommentHere')}  
           style={{ flex: 1 }}
         />
 

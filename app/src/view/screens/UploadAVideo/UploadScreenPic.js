@@ -10,10 +10,11 @@ import {
   ImageBackground,
   View,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
-
+import { useTranslation } from 'react-i18next';
 import {Button, Divider, TextInput} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -61,7 +62,7 @@ const Category = [
 
 export default function UploadScreenPic({navigation, route}) {
   const [selectedItem, setSelectedItem] = useState('');
-
+  const { t } = useTranslation();
   const [profileName, setProfileName] = useState('');
 
   const [loading, setLoading] = useState(false);
@@ -634,7 +635,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
           <IonIcons name={'chevron-back'} color={'#282828'} size={25} />
         </TouchableOpacity>
 
-        <Text style={styles.headerText}>Upload Pic</Text>
+        <Text style={styles.headerText}>{t('UploadPic')}</Text>
       </View>
 
       <ScrollView
@@ -685,7 +686,8 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
                 color: '#232323',
                 fontWeight: '700',
               }}>
-              Change Pic
+                {t('ChangePic')}
+              
             </Text>
           </TouchableOpacity>
           {imageInfo == null && (
@@ -707,7 +709,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
         <View style={{marginRight: wp(2)}}>
           <TextInput
             mode="outlined"
-            label="Pic Name"
+            label={t('PicName')}
             outlineStyle={{borderRadius: wp(3)}}
             onChangeText={text => setProfileName(text)}
             style={[styles.ti, {borderRadius: wp(10)}]}
@@ -755,7 +757,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
             maxHeight={200}
             labelField="label"
             valueField="value"
-            placeholder={'Select Category'}
+            placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
             onFocus={handleCategoryFocus}
             onBlur={handleCategoryBlur}
@@ -814,7 +816,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
             valueField="value"
             onFocus={handleSubCategoryFocus}
             onBlur={handleSubCategoryBlur}
-            placeholder={'Select Sub Category'}
+            placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             // onFocus={() => setIsFocus(true)}
             // onBlur={() => setIsFocus(false)}
@@ -845,7 +847,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
           }}>
           <CPaperInput
             multiline={true}
-            placeholder={'Description'}
+            placeholder={t('Description')}
             placeholderTextColor="#121420"
             value={description}
             onChangeText={text => setDescription(text)}
@@ -863,33 +865,33 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
             alignItems: 'center',
           }}>
               <CustomLoaderButton
-              title={"Upload"}
+              title={t('Upload')}
               load={loading}
               customClick={() => {
                 let hasError = false;
 
         
                 if (!profileName) {
-                  setProfileNameError("Title is required");
+                  setProfileNameError(t('Titleisrequired'));
                   hasError = true;
                 } else {
                   setProfileNameError("");
                 }
                 if (!categoryId) {
-                  setCategoryError("Category is required");
+                  setCategoryError(t('Categoryisrequired'));
                   hasError = true;
                 } else {
                   setCategoryError("");
                 }
 
                 if (!subcategory) {
-                  setSubcategoryError("Subcategory is required");
+                  setSubcategoryError(t('Subcategoryisrequired'));
                   hasError = true;
                 } else {
                   setSubcategoryError("");
                 }
                 if (!description) {
-                  setDescriptionError("description is required");
+                  setDescriptionError(t('Descriptionisrequired'));
                   hasError = true;
                 } else {
                   setDescriptionError("");
@@ -948,7 +950,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -979,7 +981,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -995,14 +997,14 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
       <CustomSnackbar
-        message={'success'}
-        messageDescription={'Upload Pic successfully'}
+        message={t('Success')}
+        messageDescription={t('UploadPicsuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
@@ -1150,7 +1152,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     height: hp(6.2),
-    marginTop: hp(5),
+    marginTop:Platform.OS =="ios"? 0 : hp(5),
     alignItems: 'center',
     marginHorizontal: wp(8),
   },

@@ -6,61 +6,35 @@ import {
     Image,
     KeyboardAvoidingView,
     ScrollView,
-    StatusBar,
-    ImageBackground,
     View,
     TouchableOpacity,
   } from 'react-native';
   import React, {useState, useEffect, useRef} from 'react';
   import RBSheet from 'react-native-raw-bottom-sheet';
-  
+  import { useTranslation } from 'react-i18next';
   import {Button, Divider, TextInput} from 'react-native-paper';
   import AntDesign from 'react-native-vector-icons/AntDesign';
-  
+
   import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-  
-  import Back from '../../../assets/svg/back.svg';
   import {appImages} from '../../../assets/utilities/index';
-  import Slider from '@react-native-community/slider';
-  import VolumeUp from '../../../assets/svg/VolumeUp.svg';
-  import Like from '../../../assets/svg/Like.svg';
-  import UnLike from '../../../assets/svg/Unlike.svg';
-  import Comment from '../../../assets/svg/Comment.svg';
-  import Send from '../../../assets/svg/Send.svg';
-  import Download from '../../../assets/svg/Download.svg';
   import CustomButton from '../../../assets/Custom/Custom_Button';
   import Ionicons from 'react-native-vector-icons/Ionicons';
   import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-  
-  import Share from 'react-native-share';
-  
   import {
     heightPercentageToDP as hp,
     widthPercentageToDP,
     widthPercentageToDP as wp,
   } from 'react-native-responsive-screen';
-  
-  import Fontiso from 'react-native-vector-icons/Fontisto';
-  
   import AsyncStorage from '@react-native-async-storage/async-storage';
-  
   import IonIcons from 'react-native-vector-icons/Ionicons';
-  
   import {SelectCountry, Dropdown} from 'react-native-element-dropdown';
   import CPaperInput from '../../../assets/Custom/CPaperInput';
   import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
   import { base_url } from '../../../../../baseUrl';
   import { CLOUD_NAME, CLOUDINARY_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
-  
-  const Category = [
-    {label: 'Item 1', value: '1'},
-    {label: 'Item 2', value: '2'},
-    {label: 'Item 3', value: '3'},
-  ];
-  
   export default function UpdateSportsScreen({navigation, route}) {
     const [selectedItem, setSelectedItem] = useState('');
-  
+    const { t } = useTranslation();
     const [dataFetched, isDataFetched] = useState(false);
   
     const [userId, setUserId] = useState('');
@@ -102,11 +76,6 @@ import {
     //------------------\\
   
     const receivedData = route.params?.item;
-  
-    console.log('Data Recieved on LAST UpdateSportsScreen', receivedData);
-  
-
-
 
     useEffect(() => {
       if (receivedData) {
@@ -122,38 +91,14 @@ import {
       }
     }, [receivedData]);
 
-
-
-
-
-    // useEffect(() => {
-    //   // Make the API request and update the 'data' state
-    //   const fetchCategory = async () => {
-    //     setProfileName(receivedData?.name);
-    //     setDescription(receivedData?.description);
-    
-    //     // setCategory(receivedData?.category_id);
-    //     setSubCategory(receivedData?.sub_category_id);
-    //     setImageInfo({uri: receivedData?.image});
-    //     isDataFetched(true);
-    //   };
-  
-    //   fetchCategory();
-    // }, []);
-  
     useEffect(() => {
-      // Make the API request and update the 'data' state
       fetchVideos();
     }, []);
   
     const fetchVideos = async () => {
       // Simulate loading
       setLoading(true);
-  
       await getUserID();
-      // Fetch data one by one
-  
-      // Once all data is fetched, set loading to false
       setLoading(false);
     };
   
@@ -163,7 +108,6 @@ import {
         if (result !== null) {
           setUserId(result);
         } else {
-          console.log('result is null', result);
         }
   
         const result1 = await AsyncStorage.getItem('authToken ');
@@ -171,55 +115,12 @@ import {
           setAuthToken(result1);
           fetchCategoryPic(result1);
         } else {
-          console.log('result is null', result);
         }
       } catch (error) {
-        // Handle errors here
+
         console.error('Error retrieving user ID:', error);
       }
     };
-  
-    //---------------------------\\
-  
-    // const fetchCategoryPic = async userToken => {
-    //   const token = userToken;
-  
-    //   try {
-    //     const response = await fetch(
-    //       base_url + 'picCategory/getAllPicCategories',
-    //       {
-    //         method: 'GET',
-    //         headers: {
-    //           Authorization: `Bearer ${token}`,
-    //         },
-    //       },
-    //     );
-  
-    //     if (response.ok) {
-    //       const data = await response.json();
-  
-    //       // console.log('Data ', data);
-  
-    //       // Use the data from the API to set the categories
-    //       const categories = data.AllCategories.map(category => ({
-    //         label: category.name, // Use the "name" property as the label
-    //         value: category.id.toString(), // Convert "id" to a string for the value
-    //       }));
-  
-    //       setCategorySelect(categories); // Update the state with the formatted category data
-  
-    //       // console.log('Data Categories', categoriesSelect);
-    //     } else {
-    //       console.error(
-    //         'Failed to fetch categories:',
-    //         response.status,
-    //         response.statusText,
-    //       );
-    //     }
-    //   } catch (error) {
-    //     console.error('Error:', error);
-    //   }
-    // };
   
     const fetchCategoryPic = async userToken => {
       const token = userToken;
@@ -241,11 +142,8 @@ import {
             label: category.name, // Use the "name" property as the label
             value: category.id.toString(), // Convert "id" to a string for the value
           }));
-          // console.log('categooooooooooooooooooooo', data.AllCategories)
+
         setCategorySelect(data.AllCategories);
-          // setCategorySelect(categories); // Update the state with the formatted category data
-  
-          // console.log('Data main Categories', categoriesSelect);
           setImageInfo(receivedData);
         } else {
           console.error(
@@ -267,7 +165,7 @@ import {
   
    
     const fetchAllSubCategory = async (categoryId) => {
-      console.log("Categry in id--", categoryId)
+
       const token = authToken;
       try {
         const response = await fetch(
@@ -282,11 +180,7 @@ import {
         );
         const result = await response.json();
         setSubCate(result.AllCategories);
-        // const subcategories = result.AllCategories.map(category => ({
-        //   label: category.name, // Use the "name" property as the label
-        //   value: category.id.toString(), // Convert "id" to a string for the value
-        // }));
-        // setSubCate(subcategories);
+
       } catch (error) {
         console.error("Error Trending:", error);
       }
@@ -311,16 +205,16 @@ import {
           photoQuality: 'medium',
         },
         response => {
-          console.log('image here', response);
+         
           if (!response.didCancel) {
             if (response.assets && response.assets.length > 0) {
               setImageUri(response.assets[0].uri);
-              console.log('response', response.assets[0].uri);
+        
               setImageInfo(response.assets[0]);
             } else if (response.uri) {
-              // Handle the case when no assets are present (e.g., for videos)
+       
               setImageUri(response.uri);
-              console.log('response', response.uri);
+          
             }
           }
           ref_RBSheetCamera.current.close();
@@ -331,15 +225,14 @@ import {
     const choosePhotoFromLibrary = value => {
       setSelectedItem(value);
       launchImageLibrary({mediaType: 'photo'}, response => {
-        console.log('image here', response);
+
         if (!response.didCancel && response.assets.length > 0) {
-          console.log('Response', response.assets[0]);
+      
           setImageUri(response.assets[0].uri);
           setImageInfo(response.assets[0]);
         }
   
-        console.log('response', imageInfo);
-  
+
         ref_RBSheetCamera.current.close();
       });
     };
@@ -562,7 +455,7 @@ import {
             <IonIcons name={'chevron-back'} color={'#282828'} size={25} />
           </TouchableOpacity>
   
-          <Text style={styles.headerText}>Update Sports</Text>
+          <Text style={styles.headerText}>{t('UpdateSports')}</Text>
         </View>
   
         <ScrollView
@@ -613,7 +506,8 @@ import {
                   color: '#232323',
                   fontWeight: '700',
                 }}>
-                Change Sports
+                  {t('ChangeSports')}
+                {/* Change Sports */}
               </Text>
             </TouchableOpacity>
             {imageInfo == null && (
@@ -636,7 +530,7 @@ import {
           </View>
           <TextInput
             mode="outlined"
-            label="Title"
+            label={t('Title')}
             value={profileName}
             outlineStyle={{borderRadius: wp(3)}}
             onChangeText={text => setProfileName(text)}
@@ -691,7 +585,7 @@ import {
             valueField="id"
               // labelField="label"
               // valueField="value"
-              placeholder={'Select Category'}
+              placeholder={t('SelectCategory')}
               searchPlaceholder="Search..."
               onFocus={handleCategoryFocus}
               onBlur={handleCategoryBlur}
@@ -746,7 +640,7 @@ import {
             maxHeight={200}
             labelField="name"
             valueField="id"
-            placeholder={"Select Sub Category"}
+            placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             onFocus={handleSubCategoryFocus}
             onBlur={handleSubCategoryBlur}
@@ -778,7 +672,7 @@ import {
             }}>
             <CPaperInput
               multiline={true}
-              placeholder={'Description'}
+              placeholder={t('Description')}
               placeholderTextColor="#121420"
               value={description}
               onChangeText={text => setDescription(text)}
@@ -793,7 +687,7 @@ import {
               alignItems: 'center',
             }}>
             <CustomButton
-              title={'Update'}
+              title={t('Update')}
               load={false}
               // checkdisable={inn == '' && cm == '' ? true : false}
               customClick={() => {
@@ -861,7 +755,7 @@ import {
               marginHorizontal: wp(8),
               alignItems: 'center',
             }}>
-            <Text style={styles.maintext}>Select an option</Text>
+            <Text style={styles.maintext}>{t('Selectanoption')}</Text>
             <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
               <Ionicons
                 name="close"
@@ -892,7 +786,7 @@ import {
                 size={25}
               />
   
-              <Text style={{color: '#333333'}}>From camera</Text>
+              <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
             </TouchableOpacity>
   
             <TouchableOpacity
@@ -908,20 +802,20 @@ import {
                 size={25}
               />
   
-              <Text style={{color: '#333333'}}>From gallery</Text>
+              <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
             </TouchableOpacity>
           </View>
         </RBSheet>
   
         <CustomSnackbar
-          message={'Success'}
-          messageDescription={'Sports updated Successfully'}
+          message={t('Success')}
+          messageDescription={t('SportsupdatedSuccessfully')}
           onDismiss={dismissSnackbar} // Make sure this function is defined
           visible={snackBarVisible}
         />
      <CustomSnackbar
-          message={'Alert!'}
-          messageDescription={'Kindly Fill All Fields'}
+          message={t('Alert!')}
+          messageDescription={t('KindlyFillAllFields')}
           onDismiss={dismissSnackbarAlert} // Make sure this function is defined
           visible={snackbarVisibleAlert}
         />

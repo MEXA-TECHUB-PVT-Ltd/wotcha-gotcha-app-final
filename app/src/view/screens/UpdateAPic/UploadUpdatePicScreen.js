@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
-
+import { useTranslation } from 'react-i18next';
 import {Button, Divider, TextInput} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -60,7 +60,7 @@ const Category = [
 
 export default function UploadUpdatePicScreen({navigation, route}) {
   const [selectedItem, setSelectedItem] = useState('');
-
+  const { t } = useTranslation();
   const [dataFetched, isDataFetched] = useState(false);
 
   const [userId, setUserId] = useState('');
@@ -495,7 +495,7 @@ export default function UploadUpdatePicScreen({navigation, route}) {
           <IonIcons name={'chevron-back'} color={'#282828'} size={25} />
         </TouchableOpacity>
 
-        <Text style={styles.headerText}>Update Pic</Text>
+        <Text style={styles.headerText}>{t('UpdatePic')}</Text>
       </View>
 
       <ScrollView
@@ -546,7 +546,8 @@ export default function UploadUpdatePicScreen({navigation, route}) {
                 color: '#232323',
                 fontWeight: '700',
               }}>
-              Change Pic
+                {t('ChangePic')}
+              {/* Change Pic */}
             </Text>
           </TouchableOpacity>
           {imageInfo == null && (
@@ -569,7 +570,7 @@ export default function UploadUpdatePicScreen({navigation, route}) {
         </View>
         <TextInput
           mode="outlined"
-          label="Pic Name"
+          label={t('PicName')}
           value={profileName}
           outlineStyle={{borderRadius: wp(3)}}
           onChangeText={text => setProfileName(text)}
@@ -622,7 +623,7 @@ export default function UploadUpdatePicScreen({navigation, route}) {
             valueField="id"
             // labelField="label"
             // valueField="value"
-            placeholder={'Select Category'}
+            placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
             onFocus={handleCategoryFocus}
             onBlur={handleCategoryBlur}
@@ -676,7 +677,7 @@ export default function UploadUpdatePicScreen({navigation, route}) {
               maxHeight={200}
               labelField="name"
               valueField="id"
-              placeholder={"Select Sub Category"}
+              placeholder={t('SelectSubCategory')}
               searchPlaceholder="Search..."
               // onFocus={() => setIsFocus(true)}
               // onBlur={() => setIsFocus(false)}
@@ -709,7 +710,7 @@ export default function UploadUpdatePicScreen({navigation, route}) {
           }}>
           <CPaperInput
             multiline={true}
-            placeholder={'Description'}
+            placeholder={t('Description')}
             placeholderTextColor="#121420"
             value={description}
             onChangeText={text => setDescription(text)}
@@ -724,7 +725,7 @@ export default function UploadUpdatePicScreen({navigation, route}) {
             alignItems: 'center',
           }}>
           <CustomButton
-            title={'Update'}
+            title={t('Update')}
             load={false}
             // checkdisable={inn == '' && cm == '' ? true : false}
             customClick={() => {
@@ -792,7 +793,7 @@ export default function UploadUpdatePicScreen({navigation, route}) {
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -823,7 +824,7 @@ export default function UploadUpdatePicScreen({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -839,20 +840,20 @@ export default function UploadUpdatePicScreen({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
       <CustomSnackbar
-        message={'Success'}
-        messageDescription={'Pic updated Successfully'}
+        message={t('Success')}
+        messageDescription={t('PicUpdatedSuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackBarVisible}
       />
    <CustomSnackbar
-        message={'Alert!'}
-        messageDescription={'Kindly Fill All Fields'}
+        message={t('Alert!')}
+        messageDescription={t('KindlyFillAllFields')}
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackbarVisibleAlert}
       />

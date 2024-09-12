@@ -22,7 +22,7 @@ import Send from "../../../assets/svg/Send.svg";
 import Download from "../../../assets/svg/Download.svg";
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import ButtonSend from "../../../assets/svg/ButtonSend.svg";
-
+import { useTranslation } from 'react-i18next';
 import EditItem from "../../../assets/svg/UpdateItem.svg";
 
 import Delete from "../../../assets/svg/Delete.svg";
@@ -68,7 +68,7 @@ export default function ViewVideoPicProfile({ navigation, route }) {
   const [snackbarDeleteVisible, setsnackbarDeleteVisible] = useState(false);
 
   const [likes, setLikes] = useState(null);
-
+  const { t } = useTranslation();
   const [commentsCount, setCommentsCount] = useState(null);
 
   const [showReply, setShowReply] = useState(false);
@@ -1101,7 +1101,8 @@ export default function ViewVideoPicProfile({ navigation, route }) {
                 fontSize: hp(2.3),
               }}
             >
-              Comments
+              {t('Comments')}
+              
             </Text>
           </View>
 
@@ -1114,7 +1115,7 @@ export default function ViewVideoPicProfile({ navigation, route }) {
                   alignItems: "center",
                 }}
               >
-                <Text>No Comments Yet</Text>
+                <Text>{t('NoCommentsYet')}</Text>
               </View>
             ) : (
               <FlatList
@@ -1169,7 +1170,7 @@ export default function ViewVideoPicProfile({ navigation, route }) {
                 value={commentText} // Bind the value to the state variable
                 onChangeText={(text) => setCommentText(text)} // Update state on text change
                 placeholderTextColor={"#848484"}
-                placeholder="Write Comment Here"
+                placeholder={t('WriteCommentHere')}
                 style={{ flex: 1, marginLeft: wp(1) }}
               />
 
@@ -1207,8 +1208,8 @@ export default function ViewVideoPicProfile({ navigation, route }) {
                   value={commentText} // Bind the value to the state variable
                   onChangeText={(text) => setCommentText(text)} // Update state on text change
                   placeholderTextColor={"#848484"}
-                  // placeholder="Add a reply"
-                  placeholder="Write Comment Here"
+                  // placeholder="Add a reply" 
+                  placeholder={t('WriteCommentHere')}
                   style={{ flex: 1, marginLeft: wp(1) }}
                 />
                 <TouchableOpacity style={{ marginRight: wp(3) }} onPress={() => clearTextInput()}>
@@ -1241,8 +1242,8 @@ export default function ViewVideoPicProfile({ navigation, route }) {
       </View>
 
       <CustomSnackbar
-        message={"success"}
-        messageDescription={"Pic deleted successfully"}
+        message={t('Success')}
+        messageDescription={t('PicDownloadedSuccessfully')}
         onDismiss={dismissDeleteSnackbar} // Make sure this function is defined
         visible={snackbarDeleteVisible}
       />
@@ -1282,7 +1283,8 @@ export default function ViewVideoPicProfile({ navigation, route }) {
               fontSize: hp(2.3),
             }}
           >
-            Select an option
+            {t('Selectanoption')}
+            
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <IonIcons
@@ -1317,7 +1319,8 @@ export default function ViewVideoPicProfile({ navigation, route }) {
                 fontSize: hp(2.1),
               }}
             >
-              Update Pic
+              {t('UpdatePic')}
+              
             </Text>
           </TouchableOpacity>
 
@@ -1348,14 +1351,15 @@ export default function ViewVideoPicProfile({ navigation, route }) {
                 fontSize: hp(2.1),
               }}
             >
-              Delete Pic
+               {t('DeletePic')}
+              
             </Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
       <CustomSnackbar
-          message={'success'}
-          messageDescription={'Video downloaded successfully'}
+          message={t('Success')}
+          messageDescription={t('VideoDownloadedSuccessfully')}
           onDismiss={dismissSnackbar} // Make sure this function is defined
           visible={snackbarVisible}
         />

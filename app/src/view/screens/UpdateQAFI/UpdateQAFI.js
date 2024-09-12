@@ -15,7 +15,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import PlusPost from '../../../assets/svg/PlusPost.svg';
-
+import { useTranslation } from 'react-i18next';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import {appImages} from '../../../assets/utilities/index';
@@ -78,7 +78,7 @@ export default function UpdateQAFI({navigation, route}) {
   const [userId, setUserId] = useState('');
 
   const [dataFetched, isDataFetched] = useState(false);
-
+  const { t } = useTranslation();
   const [userName, setName] = useState('');
 
   const [categoriesSelect, setCategorySelect] = useState([]);
@@ -610,7 +610,7 @@ export default function UpdateQAFI({navigation, route}) {
           <IonIcons name={'chevron-back'} color={'#282828'} size={25} />
         </TouchableOpacity>
 
-        <Text style={styles.headerText}>Update QAFI</Text>
+        <Text style={styles.headerText}>{t('UpdateQAFI')}</Text>
       </View>
 
       <ScrollView
@@ -671,7 +671,7 @@ export default function UpdateQAFI({navigation, route}) {
           }}>
           <CPaperInput
             multiline={true}
-            placeholder={'Add QAFI'}
+            placeholder={t('Add QAFI')}
             placeholderTextColor="#B0B0B0"
             value={comment}
             onChangeText={text => setComment(text)}
@@ -701,7 +701,8 @@ export default function UpdateQAFI({navigation, route}) {
               fontWeight: 'bold',
               fontFamily: 'Inter',
             }}>
-            Add Image
+              {t('AddImage')}
+            {/* Add Image */}
           </Text>
         </TouchableOpacity>
 
@@ -778,7 +779,7 @@ export default function UpdateQAFI({navigation, route}) {
             maxHeight={200}
             labelField="name"
             valueField="id"
-            placeholder={'Select Category'}
+            placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
             onFocus={handleCategoryFocus}
             onBlur={handleCategoryBlur}
@@ -834,7 +835,7 @@ export default function UpdateQAFI({navigation, route}) {
               maxHeight={200}
               labelField="name"
               valueField="id"
-              placeholder={"Select Sub Category"}
+              placeholder={t('SelectSubCategory')}
               searchPlaceholder="Search..."
               // onFocus={() => setIsFocus(true)}
               // onBlur={() => setIsFocus(false)}
@@ -868,7 +869,7 @@ export default function UpdateQAFI({navigation, route}) {
           alignSelf: 'center',
         }}>
         <CustomButton
-          title="Update"
+          title={t('Update')}
           load={false}
           // checkdisable={inn == '' && cm == '' ? true : false}
           // customClick={() => {
@@ -921,7 +922,7 @@ export default function UpdateQAFI({navigation, route}) {
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -952,7 +953,7 @@ export default function UpdateQAFI({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -968,7 +969,7 @@ export default function UpdateQAFI({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
@@ -994,8 +995,8 @@ export default function UpdateQAFI({navigation, route}) {
       />
 
       <CustomSnackbar
-        message={'Success'}
-        messageDescription={'QAFI updated Successfully'}
+        message={t('Success')}
+        messageDescription={t('QAFIUpdatedSuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
@@ -1119,8 +1120,8 @@ export default function UpdateQAFI({navigation, route}) {
         </View>
       </RBSheet>
       <CustomSnackbar
-        message={'Alert!'}
-        messageDescription={'Kindly Fill All Fields'}
+        message={t('Alert!')}
+        messageDescription={t('KindlyFillAllFields')}
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackbarVisibleAlert}
       />

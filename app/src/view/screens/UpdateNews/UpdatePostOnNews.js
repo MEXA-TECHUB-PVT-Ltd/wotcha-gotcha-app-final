@@ -15,7 +15,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import PlusPost from '../../../assets/svg/PlusPost.svg';
-
+import { useTranslation } from 'react-i18next';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import {appImages} from '../../../assets/utilities/index';
@@ -54,7 +54,7 @@ export default function UpdatePostOnNews({navigation, route}) {
   const [snackbarVisible, setsnackbarVisible] = useState(false);
   const [snackbarVisibleAlert, setsnackbarVisibleAlert] = useState(false);
   const [profileName, setProfileName] = useState('');
-
+  const { t } = useTranslation();
   const [imageUrl, setImageUrl] = useState('');
 
   const [loading, setLoading] = useState(false);
@@ -600,7 +600,7 @@ export default function UpdatePostOnNews({navigation, route}) {
           <IonIcons name={'chevron-back'} color={'#282828'} size={25} />
         </TouchableOpacity>
 
-        <Text style={styles.headerText}>Update News</Text>
+        <Text style={styles.headerText}>{t('UpdateNews')}</Text>
       </View>
 
       <ScrollView
@@ -690,7 +690,8 @@ export default function UpdatePostOnNews({navigation, route}) {
               fontWeight: 'bold',
               fontFamily: 'Inter',
             }}>
-            Add Image
+              {t('AddImage')}
+            
           </Text>
         </TouchableOpacity>
 
@@ -940,7 +941,7 @@ export default function UpdatePostOnNews({navigation, route}) {
             marginHorizontal: wp(8),
             alignItems: 'center',
           }}>
-          <Text style={styles.maintext}>Select an option</Text>
+          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -971,7 +972,7 @@ export default function UpdatePostOnNews({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From camera</Text>
+            <Text style={{color: '#333333'}}>{t('Fromcamera')}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -987,7 +988,7 @@ export default function UpdatePostOnNews({navigation, route}) {
               size={25}
             />
 
-            <Text style={{color: '#333333'}}>From gallery</Text>
+            <Text style={{color: '#333333'}}>{t('Fromgallery')}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
@@ -1013,8 +1014,8 @@ export default function UpdatePostOnNews({navigation, route}) {
       />
 
       <CustomSnackbar
-        message={'Success'}
-        messageDescription={'News Updated Successfully'}
+        message={t('Success')}
+        messageDescription={t('NewsUpdatedSuccessfully')}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
@@ -1138,8 +1139,8 @@ export default function UpdatePostOnNews({navigation, route}) {
         </View>
       </RBSheet>
       <CustomSnackbar
-        message={'Alert!'}
-        messageDescription={'Kindly Fill All Fields'}
+        message={t('Alert!')}
+        messageDescription={t('KindlyFillAllFields')}
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackbarVisibleAlert}
       />

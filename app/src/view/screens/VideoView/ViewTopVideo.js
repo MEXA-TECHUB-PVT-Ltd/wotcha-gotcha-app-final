@@ -913,8 +913,10 @@ import {
       marginHorizontal: wp(8),
     },
     bottomView: {
-      flex: 1,
-      justifyContent: 'flex-end',
+      position:'absolute',
+      bottom:0
+      // flex: 1,
+      // justifyContent: 'flex-end',
       // You can add padding or content to this view as needed.
     },
     textProfileName: {

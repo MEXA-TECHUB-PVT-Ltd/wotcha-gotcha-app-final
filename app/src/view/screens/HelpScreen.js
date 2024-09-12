@@ -16,7 +16,7 @@ import {
   StatusBar,
   TextInput,
 } from 'react-native';
-
+import { useTranslation } from 'react-i18next';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP,
@@ -31,12 +31,13 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Headers from '../../assets/Custom/Headers';
 
 export default function HelpScreen({navigation}) {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
        <View style={{marginTop: hp(5)}}>
       <Headers
         showText={true}
-        text={'Help'}
+        text={t('Help')}
         onPress={() => navigation.goBack()}
         showBackIcon={true}
       />
@@ -55,7 +56,8 @@ export default function HelpScreen({navigation}) {
             }}>
             <Text
               style={{color: '#000000', fontWeight: 'bold', fontSize: hp(2)}}>
-              How it works
+                {t('Howitworks')}
+              
             </Text>
 
             <Ionicons name={'chevron-forward'} size={20} color={'black'} />
@@ -74,7 +76,7 @@ export default function HelpScreen({navigation}) {
             }}>
             <Text
               style={{color: '#000000', fontWeight: 'bold', fontSize: hp(2)}}>
-             Help Center
+             {t('HelpCenter')}
             </Text>
 
             <Ionicons name={'chevron-forward'} size={20} color={'black'} />
@@ -93,7 +95,8 @@ export default function HelpScreen({navigation}) {
             }}>
             <Text
               style={{color: '#000000', fontWeight: 'bold', fontSize: hp(2)}}>
-             Insurance
+                {t('Insurance')}
+           
             </Text>
 
             <Ionicons name={'chevron-forward'} size={20} color={'black'} />
@@ -113,7 +116,7 @@ export default function HelpScreen({navigation}) {
             }}>
             <Text
               style={{color: '#000000', fontWeight: 'bold', fontSize: hp(2)}}>
-             Contact Us
+              {t('ContactUs')}
             </Text>
 
             <Ionicons name={'chevron-forward'} size={20} color={'black'} />
