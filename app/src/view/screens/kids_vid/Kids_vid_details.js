@@ -27,6 +27,7 @@ import Like from "../../../assets/svg/Like.svg";
 import UnLike from "../../../assets/svg/Unlike.svg";
 import Send from "../../../assets/svg/Send.svg";
 import Download from "../../../assets/svg/Download.svg";
+import Comment from '../../../assets/svg/Comment.svg';
 import DownArrowComments from "../../../assets/svg/DownArrowComments.svg";
 import UpArrowComments from "../../../assets/svg/UpArrowComments.svg";
 import EditItem from '../../../assets/svg/UpdateItem.svg';
@@ -53,7 +54,7 @@ import Video from "react-native-video";
 import SmileEmoji from "../../../assets/svg/SmileEmoji.svg";
 
 import EmojiPicker from "rn-emoji-keyboard";
-
+import Slider from '@react-native-community/slider';
 import axios from "axios";
 
 import RNFetchBlob from "rn-fetch-blob";
@@ -814,6 +815,12 @@ export default function Kids_vid_details({ navigation, route }) {
               </Text>
             </View>
           
+            <View style={{ width: "80%", marginHorizontal: wp(5) }}>
+                  <Text ellipsizeMode="tail"
+                numberOfLines={2} style={[styles.textProfileName, { marginLeft: 0,}]}>
+                    {receivedData.name}
+                  </Text>
+                </View>
 
             <ScrollView
               showsVerticalScrollIndicator={false} // Hide vertical scroll indicator

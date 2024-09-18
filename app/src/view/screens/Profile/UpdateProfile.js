@@ -434,7 +434,7 @@ export default function UpdateProfile({navigation}) {
 
         <View style={{marginTop: hp(18),alignItems:'center'}}>
           <CustomButton
-            title={t('UpdatePassword.Update')}
+            title={t('Update')}
             customClick={() => {
               handleUpdateUser(); // Call your password update function here
             }}

@@ -799,8 +799,10 @@ const getFileDetails = (imageUrl) => {
       // video: '', // you can send one video maximum
       user_id: userId,
       post_type: "public",
-      receiver_type: receivedDataLetterType,
+      receiver_type: "leader",
+      // receiver_type: receivedDataLetterType,
       disc_category: receivedDataCategoryId,
+      // disc_sub_category: receivedDataLetterType,
       name: receivedDataName,
       address: receivedDatAddress,
       email: receivedDataEmail,
@@ -942,8 +944,10 @@ const getFileDetails = (imageUrl) => {
       // video: '', // you can send one video maximum
       user_id: userId,
       post_type: "public",
-      receiver_type: receivedDataLetterType,
+      // receiver_type: receivedDataLetterType,
+      receiver_type: "leader",
       disc_category: receivedDataCategoryId,
+      disc_sub_category: receivedDataLetterType,
       name: receivedDataName,
       address: receivedDatAddress,
       email: receivedDataEmail,

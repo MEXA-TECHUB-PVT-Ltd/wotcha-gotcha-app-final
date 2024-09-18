@@ -883,7 +883,7 @@ export default function Tv_Promax_details({ navigation, route }) {
         </View>
 
         <View style={styles.bottomView}>
-          <View style={{ height: hp(30), marginHorizontal: wp(8) }}>
+          <View style={{ height: hp(32), marginHorizontal: wp(8) }}>
             <View
               style={{
                 flexDirection: "row",
@@ -965,7 +965,15 @@ export default function Tv_Promax_details({ navigation, route }) {
                 {receivedData.username}
               </Text>
             </View> */}
-
+     
+          
+     <View style={{ width: "80%", marginHorizontal: wp(5) }}>
+                  <Text ellipsizeMode="tail"
+                numberOfLines={2} style={[styles.textProfileName, { marginLeft: 0,}]}>
+                    {receivedData.name}
+                  </Text>
+                </View>
+         
             <ScrollView
               showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
               style={{ flex: 1, marginLeft: wp(5), marginTop: hp(1) }}

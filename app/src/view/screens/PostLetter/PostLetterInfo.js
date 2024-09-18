@@ -88,119 +88,172 @@ export default function PostLetterInfo({ navigation }) {
   const [profileNameError, setProfileNameError] = useState("");
   const [imageError, setImageError] = useState("");
 
-  useEffect(() => {
-    fetchVideos();
-  }, []);
+  // useEffect(() => {
+  //   fetchVideos();
+  // }, []);
 
-  const fetchVideos = async () => {
-    setLoading(true);
-    await getUserID();
-    setLoading(false);
-  };
+  // const fetchVideos = async () => {
+  //   setLoading(true);
+  //   await getUserID();
+  //   setLoading(false);
+  // };
 
-  const getUserID = async () => {
-    try {
-      const result = await AsyncStorage.getItem('userId ');
-      if (result !== null) {
-        setUserId(result);
-        userToken(result);
-        userUserName();
-      }
+  // const getUserID = async () => {
+  //   try {
+  //     const result = await AsyncStorage.getItem('userId ');
+  //     if (result !== null) {
+  //       setUserId(result);
+  //       userToken(result);
+  //       userUserName();
+  //     }
 
-    } catch (error) {
-      // Handle errors here
-      console.error('Error retrieving user ID:', error);
-    }
+  //   } catch (error) {
+  //     // Handle errors here
+  //     console.error('Error retrieving user ID:', error);
+  //   }
 
-  };
+  // };
 
-  //--------------------------------\\
+  // //--------------------------------\\
 
-  const userToken = async id => {
-    try {
-      const result3 = await AsyncStorage.getItem('authToken ');
-      if (result3 !== null) {
-        setAuthToken(result3);
-        authTokenAndId(id, result3);
-      }
-    } catch (error) {
-    }
-  };
+  // const userToken = async id => {
+  //   try {
+  //     const result3 = await AsyncStorage.getItem('authToken ');
+  //     if (result3 !== null) {
+  //       setAuthToken(result3);
+  //       authTokenAndId(id, result3);
+  //     }
+  //   } catch (error) {
+  //   }
+  // };
 
-  const userUserName = async id => {
-    try {
-      const result3 = await AsyncStorage.getItem('userName');
-      if (result3 !== null) {
-        setUserName(result3);  
-      }
-    } catch (error) {
-    }
-  };
+  // const userUserName = async id => {
+  //   try {
+  //     const result3 = await AsyncStorage.getItem('userName');
+  //     if (result3 !== null) {
+  //       setUserName(result3);  
+  //     }
+  //   } catch (error) {
+  //   }
+  // };
 
 
-  const authTokenAndId = async (id, token) => {
-    fetchUser(id, token);
-  };
+  // const authTokenAndId = async (id, token) => {
+  //   fetchUser(id, token);
+  // };
 
-  const fetchUser = async (id, tokens) => {
-    const token = tokens;
+  // const fetchUser = async (id, tokens) => {
+  //   const token = tokens;
 
-    try {
-      const response = await fetch(
-        base_url + `user/getUser/${id}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+  //   try {
+  //     const response = await fetch(
+  //       base_url + `user/getUser/${id}`,
+  //       {
+  //         method: 'GET',
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       },
+  //     );
 
-      if (response.ok) {
-        const data = await response.json();
+  //     if (response.ok) {
+  //       const data = await response.json();
 
-        setUserImage(data.user.image);
-        await fetchCategory(id, tokens);
-      } else {
-        console.error(
-          'Failed to fetch user:',
-          response.status,
-          response.statusText,
-        );
-      }
-    } catch (error) {
-      //await fetchCategory(id, tokens);
-      console.error('Errors:', error);
-    }
-  };
+  //       setUserImage(data.user.image);
+  //       await fetchCategory(id, tokens);
+  //     } else {
+  //       console.error(
+  //         'Failed to fetch user:',
+  //         response.status,
+  //         response.statusText,
+  //       );
+  //     }
+  //   } catch (error) {
+  //     //await fetchCategory(id, tokens);
+  //     console.error('Errors:', error);
+  //   }
+  // };
 
   //----------------------------------\\
 
-  const fetchCategory = async (id, tokens) => {
-    const token = tokens;
 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [storedUserId, storedUserName, storedAuthToken] = await Promise.all([
+          AsyncStorage.getItem('userId '),
+          AsyncStorage.getItem('userName'),
+          AsyncStorage.getItem('authToken ')
+        ]);
+
+        if (storedUserId) setUserId(storedUserId);
+        if (storedUserName) setUserName(storedUserName);
+        if (storedAuthToken) setAuthToken(storedAuthToken);
+
+        if (storedUserId && storedAuthToken) {
+          await fetchCategory();
+          await fetchUser(storedUserId, storedAuthToken);
+        }
+      } catch (error) {
+        console.error('Error fetching initial data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+ 
+  const fetchUser = async (id, token) => {
+    try {
+      const response = await fetch(`${base_url}user/getUser/${id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUserImage(data.user.image);
+        
+      } else {
+        console.error('Failed to fetch user:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    }
+  };
+  console.log('user-----------about ----', authToken )
+  const fetchCategory = async (id, token) => {
+    // const token = token;
+    console.log('user-----------', authToken )
     try {
       const response = await fetch(
         base_url + 'discCategory/getAllDiscCategories?page=1&limit=10000',
         {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         },
       );
 
       if (response.ok) {
         const data = await response.json();
+      
         const categories = data.AllCategories.map(category => ({
           label: category.name, // Use the "name" property as the label
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
-
+     
         setCategorySelect(categories); // Update the state with the formatted category data
+        
       } else {
         console.error(
-          'Failed to fetch categories:',
+          'Failed to fetch categ',
           response.status,
           response.statusText,
         );
@@ -210,6 +263,11 @@ export default function PostLetterInfo({ navigation }) {
     }
   };
 
+  useEffect(() => {
+    if (authToken) {
+      fetchCategory();
+    }
+  }, [authToken,]);
   useEffect(() => {
     if (authToken && categoryId) {
       fetchAllSubCategory(categoryId);
@@ -217,8 +275,9 @@ export default function PostLetterInfo({ navigation }) {
   }, [authToken, categoryId]);
 
   const fetchAllSubCategory = async (categoryId) => {
+    console.log('id ahi', categoryId)
     try {
-      const response = await fetch(`${base_url}news/sub_category/getAllByCategory?category_id=${categoryId}`, {
+      const response = await fetch(`${base_url}discSubCategory/get-all?search=Test&category_id=${categoryId}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${authToken}`
@@ -227,7 +286,8 @@ export default function PostLetterInfo({ navigation }) {
 
       if (response.ok) {
         const result = await response.json();
-        const reverseData = result.AllCategories.reverse();
+        const reverseData = result.data
+        console.log('sub cate data for -------', reverseData)
         setSubCate(reverseData);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
@@ -326,8 +386,10 @@ export default function PostLetterInfo({ navigation }) {
         address: address,
         contactNumber: contact,
         email: email,
-        category_id: '3',
-        letterType: 'general',
+        category_id: categoryId,
+        subcategory: subcategory,
+        // category_id: '3',
+        // letterType: 'general',
       });
     } else {
       navigation.replace('PostLetter', {
@@ -335,8 +397,10 @@ export default function PostLetterInfo({ navigation }) {
         address: address,
         contactNumber: contact,
         email: email,
-        category_id: '3',
-        letterType: 'authorities',
+        category_id: categoryId,
+        // category_id: '3',
+        subcategory: subcategory,
+        // letterType: 'authorities',
       });
     }
   };
@@ -556,7 +620,7 @@ export default function PostLetterInfo({ navigation }) {
             iconStyle={isFocus ? styles.iconStyle : styles.iconStyleInactive}
             itemTextStyle={{color: '#000000'}}
             selectedTextStyle={{fontSize: 16, color: '#000000'}}
-            value={category}
+            value={categoryId}
             data={categoriesSelect}
             search={false}
             maxHeight={200}
@@ -692,7 +756,7 @@ export default function PostLetterInfo({ navigation }) {
           />
         </View> */}
 
-        <View style={{ marginTop:Platform.OS =="ios"? "15%" : '30%', alignSelf: 'center' }}>
+        <View style={{ marginTop:Platform.OS =="ios"? "15%" : '20%', alignSelf: 'center' }}>
           <CustomButton
             title={t('Next')}
             customClick={() => {
@@ -700,7 +764,9 @@ export default function PostLetterInfo({ navigation }) {
                 name !== '' &&
                 address !== '' &&
                 contact !== '' &&
-                email !== ''
+                email !== '' &&
+                categoryId !== '' &&
+                subcategory !== '' 
                 // categoryPublicType !== ''
               ) {
                 uploadLetter();

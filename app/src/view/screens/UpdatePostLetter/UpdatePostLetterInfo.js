@@ -125,8 +125,10 @@ export default function UpdatePostLetterInfo({navigation, route}) {
   const [subcategoryError, setSubcategoryError] = useState("");
   const [subCate, setSubCate] = useState([]);
   const [subcategory, setSubCategory] = useState("");
+  
   const [Username, setUserName] = useState('');
-  // console.log('ReceivedData', receivedData);
+  console.log('category_id', receivedData.disc_category);
+  // console.log('sub_category_id', receivedData.sub_category_id);
   // console.log('name', name);
 
   useEffect(() => {
@@ -137,145 +139,235 @@ export default function UpdatePostLetterInfo({navigation, route}) {
       setContact(receivedData?.contact_no)
       setEmail(receivedData?.email)
       setCategoryPublicType(receivedData?.receiver_type)
-      // setCategoryId(receivedData?.disc_category);
-      setImageUrl(receivedData?.image);
+      // setCategoryId(receivedData?.category_id);
+      // setSubCategory(receivedData?.sub_category_id);
+      setCategoryId(receivedData?.disc_category);
+      setImageUrl(receivedData?.image); 
       setImageInfo({uri: receivedData?.image});
     };
 
     fetchCategory();
   }, []);
 
+  // useEffect(() => {
+  //   // Make the API request and update the 'data' state
+  //   fetchVideos();
+  // }, []);
+
+  // const fetchVideos = async () => {
+  //   // Simulate loading
+  //   setLoading(true);
+
+  //   await getUserID();
+  //   // Fetch data one by one
+  //   // Once all data is fetched, set loading to false
+  //   setLoading(false);
+  // };
+
+  // const getUserID = async () => {
+  //   try {
+  //     const result = await AsyncStorage.getItem('userId ');
+  //     if (result !== null) {
+  //       setUserId(result);
+  //       // console.log('user id retrieved:', result);
+
+  //       userToken(result);
+  //     }
+  //   } catch (error) {
+  //     // Handle errors here
+  //     console.error('Error retrieving user ID:', error);
+  //   }
+
+  // };
+
+  // //--------------------------------\\
+
+  // const userToken = async id => {
+  //   try {
+  //     const result3 = await AsyncStorage.getItem('authToken ');
+  //     if (result3 !== null) {
+  //       setAuthToken(result3);
+  //       //await fetchCategory(result3, id);
+  //       authTokenAndId(id, result3);
+  //       userUserName();
+  //     }
+  //   } catch (error) {
+  //     // Handle errors here
+  //     console.error('Error retrieving user ID:', error);
+  //   }
+  // };
+
+  // const userUserName = async id => {
+  //   try {
+  //     const result3 = await AsyncStorage.getItem('userName');
+  //     if (result3 !== null) {
+  //       setUserName(result3);  
+  //     }
+  //   } catch (error) {
+  //   }
+  // };
+
+  // const authTokenAndId = async (id, token) => {
+  //   fetchUser(id, token);
+  // };
+
+  // const fetchUser = async (id, tokens) => {
+  //   // console.log('USER', id);
+  //   // console.log('TOKEN', tokens);
+  //   const token = tokens;
+
+  //   try {
+  //     const response = await fetch(
+  //       base_url + `user/getUser/${id}`,
+  //       {
+  //         method: 'GET',
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       },
+  //     );
+
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       // console.log('IMAGE', data.user.image);
+
+  //       // Use the data from the API to set the categories
+  //       setUserImage(data.user.image);
+  //       await fetchCategory(id, tokens);
+  //     } else {
+  //       console.error(
+  //         'Failed to fetch user:',
+  //         response.status,
+  //         response.statusText,
+  //       );
+  //     }
+  //   } catch (error) {
+  //     //await fetchCategory(id, tokens);
+  //     console.error('Errors:', error);
+  //   }
+  // };
+
+  // //----------------------------------\\
+
+  // const fetchCategory = async (id, tokens) => {
+  //   const token = tokens;
+
+  //   try {
+  //     const response = await fetch(
+  //       base_url + 'discCategory/getAllDiscCategories?page=1&limit=5',
+  //       {
+  //         method: 'GET',
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       },
+  //     );
+
+  //     if (response.ok) {
+  //       const data = await response.json();
+
+  //       // Use the data from the API to set the categories
+  //       const categories = data.AllCategories.map(category => ({
+  //         label: category.name, // Use the "name" property as the label
+  //         value: category.id.toString(), // Convert "id" to a string for the value
+  //       }));
+
+  //       // console.log('Categories', categories);
+
+  //       setCategorySelect(categories); // Update the state with the formatted category data
+
+  //       // console.log('Data Categories', categoriesSelect);
+  //     } else {
+  //       console.error(
+  //         'Failed to fetch categories:',
+  //         response.status,
+  //         response.statusText,
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error('Errors:', error);
+  //   }
+  // };
+
+
+
+
   useEffect(() => {
-    // Make the API request and update the 'data' state
-    fetchVideos();
+    const fetchData = async () => {
+      try {
+        const [storedUserId, storedUserName, storedAuthToken] = await Promise.all([
+          AsyncStorage.getItem('userId '),
+          AsyncStorage.getItem('userName'),
+          AsyncStorage.getItem('authToken ')
+        ]);
+
+        if (storedUserId) setUserId(storedUserId);
+        if (storedUserName) setUserName(storedUserName);
+        if (storedAuthToken) setAuthToken(storedAuthToken);
+
+        if (storedUserId && storedAuthToken) {
+          await fetchUser(storedUserId, storedAuthToken);
+        }
+      } catch (error) {
+        console.error('Error fetching initial data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const fetchVideos = async () => {
-    // Simulate loading
-    setLoading(true);
+ 
 
-    await getUserID();
-    // Fetch data one by one
-    // Once all data is fetched, set loading to false
-    setLoading(false);
-  };
-
-  const getUserID = async () => {
+  const fetchUser = async (id, token) => {
     try {
-      const result = await AsyncStorage.getItem('userId ');
-      if (result !== null) {
-        setUserId(result);
-        // console.log('user id retrieved:', result);
-
-        userToken(result);
-      }
-    } catch (error) {
-      // Handle errors here
-      console.error('Error retrieving user ID:', error);
-    }
-
-  };
-
-  //--------------------------------\\
-
-  const userToken = async id => {
-    try {
-      const result3 = await AsyncStorage.getItem('authToken ');
-      if (result3 !== null) {
-        setAuthToken(result3);
-        //await fetchCategory(result3, id);
-        authTokenAndId(id, result3);
-        userUserName();
-      }
-    } catch (error) {
-      // Handle errors here
-      console.error('Error retrieving user ID:', error);
-    }
-  };
-
-  const userUserName = async id => {
-    try {
-      const result3 = await AsyncStorage.getItem('userName');
-      if (result3 !== null) {
-        setUserName(result3);  
-      }
-    } catch (error) {
-    }
-  };
-
-  const authTokenAndId = async (id, token) => {
-    fetchUser(id, token);
-  };
-
-  const fetchUser = async (id, tokens) => {
-    // console.log('USER', id);
-    // console.log('TOKEN', tokens);
-    const token = tokens;
-
-    try {
-      const response = await fetch(
-        base_url + `user/getUser/${id}`,
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const response = await fetch(`${base_url}user/getUser/${id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
 
       if (response.ok) {
         const data = await response.json();
-        // console.log('IMAGE', data.user.image);
-
-        // Use the data from the API to set the categories
         setUserImage(data.user.image);
-        await fetchCategory(id, tokens);
+        fetchCategory(token);
       } else {
-        console.error(
-          'Failed to fetch user:',
-          response.status,
-          response.statusText,
-        );
+        console.error('Failed to fetch user:', response.status, response.statusText);
       }
     } catch (error) {
-      //await fetchCategory(id, tokens);
-      console.error('Errors:', error);
+      console.error('Error fetching user:', error);
     }
   };
 
-  //----------------------------------\\
-
-  const fetchCategory = async (id, tokens) => {
-    const token = tokens;
-
+  const fetchCategory = async (id, token) => {
+    // const token = token;
+    console.log('user token-----------', authToken )
     try {
       const response = await fetch(
-        base_url + 'discCategory/getAllDiscCategories?page=1&limit=5',
+        base_url + 'discCategory/getAllDiscCategories?page=1&limit=10000',
         {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         },
       );
 
       if (response.ok) {
         const data = await response.json();
-
-        // Use the data from the API to set the categories
+      
         const categories = data.AllCategories.map(category => ({
           label: category.name, // Use the "name" property as the label
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
-
-        // console.log('Categories', categories);
-
+     
         setCategorySelect(categories); // Update the state with the formatted category data
-
-        // console.log('Data Categories', categoriesSelect);
+        
       } else {
         console.error(
-          'Failed to fetch categories:',
+          'Failed to fetch categ',
           response.status,
           response.statusText,
         );
@@ -284,6 +376,39 @@ export default function UpdatePostLetterInfo({navigation, route}) {
       console.error('Errors:', error);
     }
   };
+
+  useEffect(() => {
+    if (authToken && categoryId) {
+      fetchAllSubCategory(categoryId);
+    }
+  }, [authToken, categoryId]);
+
+  const fetchAllSubCategory = async (categoryId) => {
+    console.log('id ahi', categoryId)
+    try {
+      const response = await fetch(`${base_url}discSubCategory/get-all?search=Test&category_id=${categoryId}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${authToken}`
+        }
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        const reverseData = result.data
+        console.log('sub cate data for -------', reverseData)
+        setSubCate(reverseData);
+      } else {
+        console.error('Failed to fetch subcategories:', response.status, response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching subcategories:', error);
+    }
+  };
+////////////////////////////////////////////////////////////////////////
+
+
+
 
   const handleFocus = () => {
     setIsTextInputActive(true);
@@ -375,8 +500,11 @@ export default function UpdatePostLetterInfo({navigation, route}) {
         address: address,
         contactNumber: contact,
         email: email,
-        category_id: '3',
-        letterType: 'general',
+        category_id: categoryId,
+        letterType: subcategory,
+        // letterType: categoryPublicType,
+        // category_id: '3',
+        // letterType: 'general',
         receivedData:receivedData
       });
     } else {
@@ -385,8 +513,11 @@ export default function UpdatePostLetterInfo({navigation, route}) {
         address: address,
         contactNumber: contact,
         email: email,
-        category_id: '3',
-        letterType: 'authorities',
+        category_id: categoryId,
+        letterType: subcategory,
+        // letterType: categoryPublicType,
+        // category_id: '3',
+        // letterType: 'authorities',
         receivedData:receivedData
       });
     }
@@ -705,7 +836,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
 
 
 
-<View style={{ marginHorizontal: wp(7)}}>
+        <View style={{ marginHorizontal: wp(7)}}>
           <Dropdown
             style={
               isCategoryActive
@@ -727,7 +858,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
             iconStyle={isFocus ? styles.iconStyle : styles.iconStyleInactive}
             itemTextStyle={{color: '#000000'}}
             selectedTextStyle={{fontSize: 16, color: '#000000'}}
-            value={category}
+            value={categoryId}
             data={categoriesSelect}
             search={false}
             maxHeight={200}
@@ -822,7 +953,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
 
 
 
-        <View
+        {/* <View
           style={{marginLeft: wp(8), marginTop: hp(1.8), marginRight: wp(8)}}>
           <Dropdown
             style={styles.textInputCategoryNonSelected}
@@ -869,7 +1000,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
               />
             )}
           />
-        </View>
+        </View> */}
 
         <View style={{marginTop: '30%', alignSelf: 'center'}}>
           <CustomButton
@@ -878,11 +1009,19 @@ export default function UpdatePostLetterInfo({navigation, route}) {
             // checkdisable={inn == '' && cm == '' ? true : false}
             customClick={() => {
               if (
+                // name !== '' &&
+                // address !== '' &&
+                // contact !== '' &&
+                // email !== '' &&
+
+
                 name !== '' &&
                 address !== '' &&
                 contact !== '' &&
                 email !== '' &&
-                categoryPublicType !== ''
+                categoryId !== '' &&
+                subcategory !== '' 
+                // categoryPublicType !== ''
               ) {
                 uploadLetter();
               } else {

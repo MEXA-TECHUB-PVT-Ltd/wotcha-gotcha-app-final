@@ -1107,12 +1107,13 @@ export default function Dashboard({ route }) {
       const result = await response.json();
       // console.log('Resultings of TopNews', result.topitem);
       //Alert.alert(result)
-      const formattedLetters = result.topitem.map((letter) => ({
-        ...letter,
-        post_date: convertTimeAndDate(letter.post_date),
-      }));
-      // console.log('Resultings of setLetterLoading', result.topitem);
-      setTopLetterData(formattedLetters[0]); // Update the state with the fetched data
+      setTopLetterData(result.topitem[0]);
+      // const formattedLetters = result.topitem.map((letter) => ({
+      //   ...letter,
+      //   post_date: convertTimeAndDate(letter.post_date),
+      // }));
+      // // console.log('Resultings of setLetterLoading', result.topitem);
+      // setTopLetterData(formattedLetters[0]); // Update the state with the fetched data
       // fetchSpecificSig(formattedLetters[0].signature_id)
     } catch (error) {
       setLetterLoading(false);
@@ -1120,9 +1121,74 @@ export default function Dashboard({ route }) {
     }
   };
 
-  const renderLetterSearches = (item) => {
-    // console.log('Items', item);
-    const isSelected = selectedLetterItemId === item.id;
+//  Post Letter Function Start
+const [letterselectedItemId, setLetterSelectedItemId] = useState(null);
+const [lettersearchesData, setLetterSearchesData] = useState([]);
+const [lettersections, setLetterSections] = useState([]);
+const [noletterData, setNoLetterData] = useState(false);
+const [postletterloading, setPostLetterLoading] = useState(false);
+ // Fetch all data when authToken is set and screen is focused
+ useEffect(() => {
+  if (authToken) {
+    fetchAllLetterCategory();
+    fetchLetterSubCategorySport(letterselectedItemId);
+  }
+}, [authToken, letterselectedItemId]);
+
+    // Fetch categories
+    const fetchAllLetterCategory = async () => {
+      setPostLetterLoading(true)
+      try {
+        const response = await fetch(`${base_url}discCategory/getAllDiscCategories?page=1&limit=100000`, {
+          method: "GET",
+          headers: { Authorization: `Bearer ${authToken}` },
+        });
+        const result = await response.json();
+
+        const reverseData = result.AllCategories;
+        setLetterSearchesData(reverseData);
+
+        if (letterselectedItemId === null && result.AllCategories.length > 0) {
+          setLetterSelectedItemId(result.AllCategories[0].id);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+      setPostLetterLoading(false)
+    };
+
+        // Fetch sub-category sports
+  const fetchLetterSubCategorySport = async (letterselectedItemId) => {
+    setPostLetterLoading(true)
+    try {
+      // const response = await fetch(`${base_url}news/getAllNewsByCategory/${selectedItemId}?page=1&limit=100000`, {
+      const response = await fetch(`${base_url}letter/getAllLetterByCategory/${letterselectedItemId}?page=1&limit=100000`, {
+        method: "GET",
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
+      const result = await response.json();
+      if (Array.isArray(result.data) && result.data.length > 0) {
+        const formattedSections = result.data.map(category => ({
+          title: category.sub_category_name,
+          data: category.total_result.letters,
+        }));
+
+        setLetterSections(formattedSections);
+        console.log('data for sub cater haioiii', formattedSections)
+        setNoLetterData(formattedSections.every(section => section.data.length === 0));
+      } else {
+        setLetterSections([]);
+        setNoLetterData(true);
+      }
+    } catch (error) {
+      console.error("Error fetching sub-category sports:", error);
+      setNoLetterData(true); // Assume no data on error
+    }
+    setPostLetterLoading(false)
+  };
+
+  const renderPostLetterSearches = (item) => {
+    const isSelected = letterselectedItemId === item.id;
 
     return (
       <TouchableOpacity
@@ -1133,7 +1199,7 @@ export default function Dashboard({ route }) {
           },
         ]}
         onPress={() => {
-          setSelectedLetterItemId(item.id);
+          setLetterSelectedItemId(item.id);
         }}
       >
         <Text
@@ -1142,11 +1208,376 @@ export default function Dashboard({ route }) {
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.title}
+          {item.name}
         </Text>
       </TouchableOpacity>
     );
   };
+
+
+  const renderLetterSection = ({ item }) => (
+    <View style={styles.sectionContainer}>
+      <Text style={styles.sectionHeader}>{item.title}</Text>
+      {item.data.length === 0 ? (
+        <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
+      ) : (
+      <FlatList
+        data={item.data}
+        renderItem={renderPublicGeneral}
+        keyExtractor={(videoItem) => videoItem.post_id.toString()}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      />
+    )}
+    </View>
+  );
+
+  const renderPublicGeneral = (item) => {
+    const post_date = convertTimeAndDate(item.item.post_date);
+    // const imageUrl = item.signature_id;
+    const imageUrl = item.item.signature_image
+      ? item.item.signature_image.startsWith("/fileUpload") ||
+      item.item.signature_image.startsWith("/signatureImages")
+        ? base_url + item.item.signature_image
+        : item.item.signature_image
+      : null;
+      // console.log('user data --------item ', imageUrl)
+    const userimageUrl = item.item.user_image
+      ? item.item.userimage.startsWith("/userImage")
+        ? base_url + item.item.user_image
+        : item.item.user_image
+      : null;
+     
+    return (
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("LetterDetails", {
+            Letters: item.item,
+            identifier: false,
+          })
+        }
+        style={{
+          width: wp(45),
+          marginHorizontal: wp(2),
+        }} // Add margin here
+      >
+        <View
+          style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
+        ></View>
+        <View>
+          <View
+            style={{
+              flexDirection: "row",
+              paddingHorizontal: 2,
+              alignItems: "center",
+              height: hp(4),
+            }}
+          >
+            {item.item?.user_image !== null ||
+            item.item?.user_image !== undefined ||
+            userimageUrl !== null ||
+            userimageUrl !== undefined ? (
+              <View
+                style={{
+                  height: hp(2),
+                  width: wp(4),
+                  borderRadius: wp(3),
+                }}
+              >
+                <Image
+                  source={{ uri: item.item?.user_image || userimageUrl }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: wp(3),
+                    resizeMode: "cover",
+                  }}
+                />
+              </View>
+            ) : (
+              <MaterialCommunityIcons
+                style={{ marginTop: hp(0.5) }}
+                name={"account-circle"}
+                size={35}
+                color={"#FACA4E"}
+              />
+            )}
+
+            <View style={{ marginLeft: wp(2.5) }}>
+              <Approved width={10} height={10} />
+            </View>
+          </View>
+
+          <View
+            style={{
+              alignItems: "flex-end",
+              height: 10,
+              // marginRight: wp(1),
+            }}
+          >
+            <Text
+              style={{
+                color: "#282828",
+                // marginLeft: wp(3),
+                width: "25%",
+                fontSize: 6,
+                fontFamily: "Inter-Bold",
+              }}
+            >
+              {post_date}
+            </Text>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              height: hp(5),
+              paddingTop: 6,
+              // backgroundColor:'red', width:'60%'
+            }}
+          >
+            <Text
+              style={{
+                color: "#282828",
+                fontSize: 8,
+                textDecorationLine: "underline",
+                fontFamily: "Inter-Bold",
+              }}
+            >
+              {t('Subject')}
+              {/* Subject: */}
+            </Text>
+            <View style={{ height: "100%", width: "75%" }}>
+              <Text
+                numberOfLines={3}
+                ellipsizeMode="tail"
+                style={{
+                  color: "#595959",
+                  marginLeft: wp(1),
+                  fontSize: 8,
+                  fontFamily: "Inter-Regular",
+                }}
+              >
+                {item.item.subject_place}
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "flex-end",
+              height: hp(6),
+              right: 10,
+            }}
+          >
+            {imageUrl !== null ||
+            imageUrl !== undefined ||
+            item.item.signature_image !== undefined ||
+            item.item.signature_image !== null ? (
+              <View
+                style={{
+                  height: hp(5),
+                  width: wp(9),
+                  borderRadius: wp(3),
+                }}
+              >
+                <Image
+                  source={{ uri: imageUrl || item.item.signature_image }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+
+                    resizeMode: "contain",
+                  }}
+                />
+              </View>
+            ) : null}
+          </View>
+          <View
+            style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
+          ></View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+const convertTimeAndDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    // hour: '2-digit',
+    // minute: '2-digit',
+  });
+};
+
+const renderPublicGeneralLetter = (item) => {
+  const imageUrl = item.signature_image
+    ? item.signature_image.startsWith('/fileUpload') || item.signature_image.startsWith('/signatureImages')
+      ? base_url + item.signature_image
+      : item.signature_image
+    : null;
+
+  const userimageUrl = item.userimage
+    ? item.userimage.startsWith('/userImage')
+      ? base_url + item.userimage
+      : item.userimage
+    : null;
+  return (
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("LetterDetails", {
+          Letters: item,
+          identifier: false,
+        })
+      }
+      style={{
+        width: wp(45),
+        marginHorizontal: wp(2),
+        marginVertical: hp(1),
+        height: "100%",
+      }} // Add margin here
+    >
+      <View
+        style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
+      ></View>
+      <View>
+        <View
+          style={{
+            flexDirection: "row",
+            paddingHorizontal: 2,
+            alignItems: "center",
+            height: hp(4),
+          }}
+        >
+          {item?.userimage !== null || item?.userimage !== undefined || userimageUrl !== null || userimageUrl !== undefined ? (
+            <View
+              style={{
+                height: hp(2),
+                width: wp(4),
+                borderRadius: wp(3),
+              }}
+            >
+              <Image
+                source={{ uri: item?.userimage || userimageUrl }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: wp(3),
+                  resizeMode: "cover",
+                }}
+              />
+            </View>
+          ) : (
+            <MaterialCommunityIcons
+              style={{ marginTop: hp(0.5) }}
+              name={"account-circle"}
+              size={35}
+              color={"#FACA4E"}
+            />
+          )}
+
+          <View style={{ marginLeft: wp(2.5) }}>
+            <Approved width={10} height={10} />
+          </View>
+        </View>
+
+        <View
+          style={{
+            alignItems: "flex-end",
+            marginTop: hp(-2),
+            marginRight: wp(3),
+          }}
+        >
+          <Text
+            style={{
+              color: "#282828",
+              // marginLeft: wp(3),
+              width: "25%",
+              fontSize: 6,
+              fontFamily: "Inter-Bold",
+            }}
+          >
+            {item.post_date}
+          </Text>
+        </View>
+
+        <View
+          style={{
+            flexDirection: "row",
+            height: hp(5),
+            paddingTop: 6,
+            // backgroundColor:'red', width:'60%'
+          }}
+        >
+          <Text
+            style={{
+              color: "#282828",
+              fontSize: 8,
+              textDecorationLine: "underline",
+              fontFamily: "Inter-Bold",
+            }}
+          >
+            {t('Dashboard.Subject')}
+            {/* Subject: */}
+          </Text>
+          <View style={{ height: '100%', width: '75%' }}>
+            <Text
+              numberOfLines={3}
+              ellipsizeMode="tail"
+              style={{
+                color: "#595959",
+                marginLeft: wp(1),
+                fontSize: 8,
+                fontFamily: "Inter-Regular",
+              }}
+            >
+              {item.subject_place}
+            </Text>
+          </View>
+        </View>
+
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: 'flex-end',
+            height: hp(6),
+            right: 10
+          }}
+        >
+          {imageUrl !== null || imageUrl !== undefined || item.signature_image !== undefined || item.signature_image !== null ? (
+            <View
+              style={{
+                height: hp(5),
+                width: wp(10),
+                borderRadius: wp(3),
+              }}
+            >
+              <Image
+                source={{ uri: imageUrl || item.signature_image }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: wp(3),
+                  resizeMode: "cover",
+                }}
+              />
+            </View>
+          ) : (
+            null
+          )}
+  
+        </View>
+        <View
+          style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
+        ></View>
+      </View>
+    </TouchableOpacity>
+  );
+};
+
 
 
   const renderQAFISearches = (item) => {
@@ -1291,7 +1722,7 @@ export default function Dashboard({ route }) {
       fetchBanners();
       fetchCategoryMarket();
       fetchTopLetter()
-      fetchLetterPublicGeneralLetter();
+      // fetchLetterPublicGeneralLetter();
     }
   }, [authToken]);
 
@@ -2506,317 +2937,10 @@ export default function Dashboard({ route }) {
   );
 
 
+
+
   const [newLoader, setNewLoader] = useState([]);
 
-  const [opensLettersPublicGeneralData, setOpensLettersPublicGeneralData] =
-    useState([]);
-
-  const [opensLettersPublicCelebrityData, setOpensLettersPublicCelebrityData] =
-    useState([]);
-
-  const [opensLettersPrivateFriendsData, setOpensLettersPrivateFriendsData] =
-    useState([]);
-
-  const [
-    opensLettersPrivateCelebrityData,
-    setOpensLettersPrivateCelebrityData,
-  ] = useState([]);
-
-
-
-  const fetchLetterPublicGeneralLetter = async () => {
-    setNewLoader(true);
-    // console.log('Categry in id', categoryIdNews);
-    const token = authToken;
-
-    try {
-      const response = await fetch(
-        base_url + `letter/public_general_by_category/3/?page=1&limit=100000`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      const formattedLetters = result.AllLetter.map(letter => ({
-        ...letter,
-        post_date: convertTimeAndDate(letter.post_date),
-      })).reverse();
-      // console.log('Resultings of formattedLetters', formattedLetters);
-      setOpensLettersPublicGeneralData(formattedLetters); // Update the state with the fetched data
-      await fetchLetterPublicCelebrityLetter();
-    } catch (error) {
-      setNewLoader(false);
-      console.error("Error Trending:", error);
-    } finally {
-      setNewLoader(false);
-    }
-  };
-
-  const convertTimeAndDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      // hour: '2-digit',
-      // minute: '2-digit',
-    });
-  };
-  const fetchLetterPublicCelebrityLetter = async () => {
-    setNewLoader(true)
-    const token = authToken;
-
-    try {
-      const response = await fetch(
-        base_url + `letter/public_celebrity_by_category/3/?page=1&limit=10000`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-
-      const formattedLetters = result.AllLetter.map(letter => ({
-        ...letter,
-        post_date: convertTimeAndDate(letter.post_date),
-      })).reverse();
-
-      setOpensLettersPublicCelebrityData(formattedLetters); // Update the state with the fetched data
-      // setOpensLettersPublicCelebrityData(result.AllLetter); // Update the state with the fetched data
-      await fetchLetterPrivateFriendsLetter();
-    } catch (error) {
-      setNewLoader(false);
-
-      console.error("Error Trending:", error);
-    } finally {
-      setNewLoader(false);
-    }
-  };
-
-  const fetchLetterPrivateFriendsLetter = async () => {
-    setNewLoader(true)
-    const token = authToken;
-
-    try {
-      const response = await fetch(
-        base_url + `letter/private_friends_by_category/3/?page=1&limit=100000`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-      setOpensLettersPrivateFriendsData(result.AllLetter); // Update the state with the fetched data
-      await fetchLetterPrivateCelebrityLetter();
-    } catch (error) {
-      setNewLoader(false)
-      console.error("Error Trending:", error);
-    }
-  };
-
-  const fetchLetterPrivateCelebrityLetter = async () => {
-    setNewLoader(true)
-    const token = authToken;
-
-    try {
-      const response = await fetch(
-        base_url + `letter/private_celebrity_by_category/3/?page=1&limit=100000`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      const result = await response.json();
-
-      setOpensLettersPrivateCelebrityData(result.AllLetter); // Update the state with the fetched data
-      // fetchTopNews();
-
-      setNewLoader(false);
-    } catch (error) {
-      setNewLoader(false);
-
-      console.error("Error Trending:", error);
-    }
-  };
-
-  //DISC
-
-  const renderPublicGeneralLetter = (item) => {
-    const imageUrl = item.signature_image
-      ? item.signature_image.startsWith('/fileUpload') || item.signature_image.startsWith('/signatureImages')
-        ? base_url + item.signature_image
-        : item.signature_image
-      : null;
-
-    const userimageUrl = item.userimage
-      ? item.userimage.startsWith('/userImage')
-        ? base_url + item.userimage
-        : item.userimage
-      : null;
-    return (
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("LetterDetails", {
-            Letters: item,
-            identifier: false,
-          })
-        }
-        style={{
-          width: wp(45),
-          marginHorizontal: wp(2),
-          marginVertical: hp(1),
-          height: "100%",
-        }} // Add margin here
-      >
-        <View
-          style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
-        ></View>
-        <View>
-          <View
-            style={{
-              flexDirection: "row",
-              paddingHorizontal: 2,
-              alignItems: "center",
-              height: hp(4),
-            }}
-          >
-            {item?.userimage !== null || item?.userimage !== undefined || userimageUrl !== null || userimageUrl !== undefined ? (
-              <View
-                style={{
-                  height: hp(2),
-                  width: wp(4),
-                  borderRadius: wp(3),
-                }}
-              >
-                <Image
-                  source={{ uri: item?.userimage || userimageUrl }}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: wp(3),
-                    resizeMode: "cover",
-                  }}
-                />
-              </View>
-            ) : (
-              <MaterialCommunityIcons
-                style={{ marginTop: hp(0.5) }}
-                name={"account-circle"}
-                size={35}
-                color={"#FACA4E"}
-              />
-            )}
-
-            <View style={{ marginLeft: wp(2.5) }}>
-              <Approved width={10} height={10} />
-            </View>
-          </View>
-
-          <View
-            style={{
-              alignItems: "flex-end",
-              marginTop: hp(-2),
-              marginRight: wp(3),
-            }}
-          >
-            <Text
-              style={{
-                color: "#282828",
-                // marginLeft: wp(3),
-                width: "25%",
-                fontSize: 6,
-                fontFamily: "Inter-Bold",
-              }}
-            >
-              {item.post_date}
-            </Text>
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              height: hp(5),
-              paddingTop: 6,
-              // backgroundColor:'red', width:'60%'
-            }}
-          >
-            <Text
-              style={{
-                color: "#282828",
-                fontSize: 8,
-                textDecorationLine: "underline",
-                fontFamily: "Inter-Bold",
-              }}
-            >
-              {t('Dashboard.Subject')}
-              {/* Subject: */}
-            </Text>
-            <View style={{ height: '100%', width: '75%' }}>
-              <Text
-                numberOfLines={3}
-                ellipsizeMode="tail"
-                style={{
-                  color: "#595959",
-                  marginLeft: wp(1),
-                  fontSize: 8,
-                  fontFamily: "Inter-Regular",
-                }}
-              >
-                {item.subject_place}
-              </Text>
-            </View>
-          </View>
-
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: 'flex-end',
-              height: hp(6),
-              right: 10
-            }}
-          >
-            {imageUrl !== null || imageUrl !== undefined || item.signature_image !== undefined || item.signature_image !== null ? (
-              <View
-                style={{
-                  height: hp(5),
-                  width: wp(10),
-                  borderRadius: wp(3),
-                }}
-              >
-                <Image
-                  source={{ uri: imageUrl || item.signature_image }}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: wp(3),
-                    resizeMode: "cover",
-                  }}
-                />
-              </View>
-            ) : (
-              null
-            )}
-    
-          </View>
-          <View
-            style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
-          ></View>
-        </View>
-      </TouchableOpacity>
-    );
-  };
 
 
   // fetch Market start
@@ -4150,6 +4274,7 @@ export default function Dashboard({ route }) {
     Linking.openURL(link);
   };
 
+  const top_post_date = convertTimeAndDate(topLetterData.post_date);
   return (
     <View
       pointerEvents="auto"
@@ -6023,18 +6148,18 @@ export default function Dashboard({ route }) {
             contentContainerStyle={{ alignItems: "center" }}
             showsHorizontalScrollIndicator={false}
             horizontal
-            data={lettersearches}
+            data={lettersearchesData}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => renderLetterSearches(item)}
+            renderItem={({ item }) => renderPostLetterSearches(item)}
           />
         </View>
 
         <View
           style={{
             marginTop: hp(1.5),
-            marginBottom: hp(1),
+            marginBottom: hp(.1),
             flexDirection: "row",
-            height: hp(18),
+            height: hp(14),
           }}
         >
           <TouchableOpacity
@@ -6110,7 +6235,7 @@ export default function Dashboard({ route }) {
                     fontFamily: "Inter-Bold",
                   }}
                 >
-                  {topLetterData.post_date}
+                  {top_post_date}
                 </Text>
               </View>
 
@@ -6155,151 +6280,35 @@ export default function Dashboard({ route }) {
           </TouchableOpacity>
         </View>
 
+ {/* //////////////////////////////////////////////////////////// */}
+ <View style={{  flex: 1,
+    marginBottom: hp(5)}}>
+      {postletterloading ? (
+        <ActivityIndicator size="large" color="#FACA4E" />
+      ) : noletterData ? (
+        <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+         <Text style={{ fontFamily: "Inter-Medium",}}>{t('NoDataAvailable')}</Text>
+      </View>
+       
+      ) : (
+        <FlatList
+          data={lettersections}
+          renderItem={renderLetterSection}
+          keyExtractor={(item) => item.title}
+        />
+      )}
+    </View>
+
+{/* /////////////////////////////////////////////////////////////// */}
 
 
-
-        <View style={{ flex: 1 }}>
-          <View style={{ marginTop: hp(5), height: hp(21) }}>
-            <Text
-              style={{
-                color: "#4A4A4A",
-                fontWeight: "bold",
-                fontSize: hp(2),
-                paddingBottom: 5,
-              }}
-            >
-              {t('Dashboard.Publicgeneral')}
-              {/* Public (general) */}
-            </Text>
-            {newLoader ? (
-              <View style={styles.NoDataView}>
-                <ActivityIndicator size="large" color="#FACA4E" />
-              </View>
-            ) : opensLettersPublicGeneralData.length === 0 ? (
-              <View
-                style={styles.NoDataView}
-              >
-                <Text style={styles.NoDataText}>
-                  {t('Dashboard.NoDataavailable')}
-                  {/* No data available */}
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                style={{ flex: 1 }}
-                contentContainerStyle={{ alignItems: "center" }}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                data={opensLettersPublicGeneralData}
-                keyExtractor={(item) => item?.post_id.toString()}
-                renderItem={({ item }) => renderPublicGeneralLetter(item)}
-              />
-            )}
-          </View>
-
-          <View style={{ marginTop: hp(5), height: hp(21) }}>
-            <Text
-              style={{
-                color: "#4A4A4A",
-                fontWeight: "bold",
-                fontSize: hp(2),
-              }}
-            >
-              {t('Dashboard.Publiccelebrities')}
-              {/* Public (to authorities, celebrities, leaders) */}
-            </Text>
-
-            {newLoader ? (
-              <View
-                style={styles.NoDataView}
-              >
-                <ActivityIndicator size="large" color="#FACA4E" />
-              </View>
-            ) : opensLettersPublicCelebrityData.length === 0 ? (
-              <View
-                style={styles.NoDataView}
-              >
-                <Text style={styles.NoDataText}>
-                  {t('Dashboard.NoDataavailable')}
-                </Text>
-              </View>
-            ) : (
-              <FlatList
-                style={{ flex: 1 }}
-                contentContainerStyle={{ alignItems: "center" }}
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                data={opensLettersPublicCelebrityData}
-                keyExtractor={(item) => item?.post_id.toString()}
-                renderItem={({ item }) => renderPublicGeneralLetter(item)}
-              />
-            )}
-          </View>
-
-          <View style={{ marginTop: hp(5), height: hp(21) }}>
-            <Text
-              style={{
-                color: "#4A4A4A",
-                fontWeight: "bold",
-                fontSize: hp(2),
-              }}
-            >
-              {t('Dashboard.Privatefriends')}
-              {/* Private (to friends, peers, followers) */}
-            </Text>
-            <View
-              style={styles.NoDataView}
-            >
-              <Text style={styles.NoDataText}>
-                {t('Dashboard.NoDataavailable')}
-
-              </Text>
-            </View>
-            {/* <FlatList
-            style={{flex: 1}}
-            contentContainerStyle={{alignItems: 'center'}}
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            data={opensLettersPublicCelebrityData}
-            keyExtractor={item => item?.post_id.toString()}
-            renderItem={({item}) => renderPublicGeneral(item)}
-          /> */}
-          </View>
-
-          <View style={{ marginTop: hp(5), height: hp(21) }}>
-            <Text
-              style={{
-                color: "#4A4A4A",
-                fontWeight: "bold",
-                fontSize: hp(2),
-              }}
-            >
-              {t('Dashboard.Privatecelebrities')}
-              {/* Private (to authorities, celebrities, leaders) */}
-            </Text>
-
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text style={{ fontWeight: "500", fontSize: hp(2.1) }}>
-                {t('Dashboard.NoDataavailable')}
-              </Text>
-            </View>
-            {/*  <FlatList
-            style={{flex: 1}}
-            contentContainerStyle={{alignItems: 'center'}}
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            data={opensLettersPublicCelebrityData}
-            keyExtractor={item => item?.post_id.toString()}
-            renderItem={({item}) => renderPublicGeneral(item)}
-          /> */}
-          </View>
-        </View>
+   
 
         {/* // start of banner slider */}
         <BannerCarousel

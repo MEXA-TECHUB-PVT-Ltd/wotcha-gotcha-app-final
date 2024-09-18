@@ -651,14 +651,36 @@ import {
               <IonIcons name={"chevron-back"} color={"white"} size={25} />
             </TouchableOpacity>
   
+            <Image
+            source={appImages.logoTransparent}
+            style={{height: hp(15), width: wp(35), marginLeft: hp(10),}}
+            resizeMode="contain"
+          />
+
+            
+
+            {identifier ? ( 
+          // Render specific content if identifier is true
+          <TouchableOpacity
+                onPress={() => ref_RBSheetCamera.current.open()}
+                style={{position: 'absolute', right: 0}}>
+                <Entypo name={'dots-three-vertical'} size={18} color={'white'} />
+              </TouchableOpacity>
+        ) : (
+       <View/>
+        )}
+          </View>
+  
+          <View style={styles.bottomView}>
+            <View style={{ height: hp(32) }}>
             <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                height: hp(6.5),
-                marginLeft: hp(10),
-              }}
-            >
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              height: hp(6.5),
+              marginHorizontal: wp(7)
+            }}
+          >
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("ViewElseProfile", {
@@ -703,20 +725,12 @@ import {
               </View>
             </View>
 
-            {identifier ? ( 
-          // Render specific content if identifier is true
-          <TouchableOpacity
-                onPress={() => ref_RBSheetCamera.current.open()}
-                style={{position: 'absolute', right: 0}}>
-                <Entypo name={'dots-three-vertical'} size={18} color={'white'} />
-              </TouchableOpacity>
-        ) : (
-       <View/>
-        )}
-          </View>
-  
-          <View style={styles.bottomView}>
-            <View style={{ height: hp(20) }}>
+            <View style={{ width: "80%", marginHorizontal: wp(7) }}>
+                  <Text ellipsizeMode="tail"
+                numberOfLines={2} style={[styles.textProfileName, { marginLeft: wp(1),}]}>
+                    {receivedData.name}
+                  </Text>
+                </View>
               <ScrollView
                 showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
                 style={{ flex: 1 }}
@@ -725,11 +739,11 @@ import {
                   marginHorizontal: wp(8),
                 }}
               >
-                <View style={{ width: "80%" }}>
-                  <Text style={[styles.textProfileName, { marginLeft: -0 }]}>
-                    {receivedData.name}
-                  </Text>
-                </View>
+
+
+
+
+
                 <Text
                   style={{
                     marginTop: hp(1),

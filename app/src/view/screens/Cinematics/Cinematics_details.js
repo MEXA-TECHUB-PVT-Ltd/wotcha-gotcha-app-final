@@ -131,7 +131,7 @@ export default function Cinematics_details({navigation, route}) {
   }, [progress]); // The effect will re-run whenever the progress state changes
 
   const receivedData = route.params?.videoData;
-
+console.log('received data', receivedData)
   var details = receivedData.description;
   /* 'Hold onto your seats and get ready to be mesmerized by the beauty and grandeur of the Hold onto your seats'; */
 
@@ -779,12 +779,13 @@ export default function Cinematics_details({navigation, route}) {
 
 {/* Comment 2 by me */}
         <View style={styles.bottomView}>
-          <View style={{height: hp(30), marginHorizontal: wp(8)}}>
+          <View style={{height: hp(32), marginHorizontal: wp(8)}}>
           <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
                 height: hp(5),
+                marginHorizontal: wp(1)
               }}
             >
               <TouchableOpacity
@@ -797,12 +798,13 @@ export default function Cinematics_details({navigation, route}) {
                   height: '100%',
                   width:'13%',
                   borderRadius: hp(6) / 2,
-                  marginLeft: wp(3),
+                  marginLeft: wp(1),
                   justifyContent: "center",
                   overflow: "hidden",
                 }}
               >
                 {receivedData?.user_image ? (
+                
                   <Image
                     style={{
                       height: "100%",
@@ -828,7 +830,12 @@ export default function Cinematics_details({navigation, route}) {
          
 
             </View>
-
+            <View style={{ width: "80%", marginHorizontal: wp(5) }}>
+                  <Text ellipsizeMode="tail"
+                numberOfLines={2} style={[styles.textProfileName, { marginLeft: 0,}]}>
+                    {receivedData.name}
+                  </Text>
+                </View>
             <ScrollView
               showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
               style={{flex: 1, marginLeft: wp(5), marginTop: hp(1)}}

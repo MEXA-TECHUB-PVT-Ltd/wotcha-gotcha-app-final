@@ -33,7 +33,7 @@ import LetterIcon from "react-native-vector-icons/Entypo";
 import { useTranslation } from 'react-i18next';
 
 export default function OpenLetterScreen({ route }) {
-  const [selectedItemId, setSelectedItemId] = useState(1);
+  const [selectedItemId, setSelectedItemId] = useState(null);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const isFocused = useIsFocused();
@@ -45,7 +45,9 @@ export default function OpenLetterScreen({ route }) {
   const [adsinActiveData, setAdsInActiveData] = useState([]);
   const [adsData, setAdsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [searchesData, setSearchesData] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [noData, setNoData] = useState(false);
   const [opensLettersPublicGeneralData, setOpensLettersPublicGeneralData] =
     useState([]);
 
@@ -83,9 +85,71 @@ export default function OpenLetterScreen({ route }) {
       fetchTopNews();
       fetchBannerConfig();
       fetchBannerInActive();
-      fetchLetterPublicGeneral();
+      // fetchLetterPublicGeneral();
     }
   }, [authToken]);
+
+   // Fetch all data when authToken is set and screen is focused
+   useEffect(() => {
+    if (authToken) {
+      fetchAllCinematicsCategory();
+      fetchSubCategorySport(selectedItemId);
+    }
+  }, [authToken, selectedItemId]);
+
+      // Fetch categories
+      const fetchAllCinematicsCategory = async () => {
+        setLoading(true)
+        try {
+          const response = await fetch(`${base_url}discCategory/getAllDiscCategories?page=1&limit=100000`, {
+            method: "GET",
+            headers: { Authorization: `Bearer ${authToken}` },
+          });
+          const result = await response.json();
+
+          const reverseData = result.AllCategories;
+          setSearchesData(reverseData);
+
+          if (selectedItemId === null && result.AllCategories.length > 0) {
+            setSelectedItemId(result.AllCategories[0].id);
+          }
+        } catch (error) {
+          console.error("Error fetching categories:", error);
+        }
+        setLoading(false)
+      };
+
+          // Fetch sub-category sports
+    const fetchSubCategorySport = async (selectedItemId) => {
+      setLoading(true)
+      try {
+        // const response = await fetch(`${base_url}news/getAllNewsByCategory/${selectedItemId}?page=1&limit=100000`, {
+        const response = await fetch(`${base_url}letter/getAllLetterByCategory/${selectedItemId}?page=1&limit=100000`, {
+          method: "GET",
+          headers: { Authorization: `Bearer ${authToken}` },
+        });
+        const result = await response.json();
+        if (Array.isArray(result.data) && result.data.length > 0) {
+          const formattedSections = result.data.map(category => ({
+            title: category.sub_category_name,
+            data: category.total_result.letters,
+          }));
+
+          setSections(formattedSections);
+          console.log('data for sub cater haioiii', formattedSections)
+          setNoData(formattedSections.every(section => section.data.length === 0));
+        } else {
+          setSections([]);
+          setNoData(true);
+        }
+      } catch (error) {
+        console.error("Error fetching sub-category sports:", error);
+        setNoData(true); // Assume no data on error
+      }
+      setLoading(false)
+    };
+
+
 
   const fetchBannerConfig = async () => {
     const token = authToken;
@@ -102,7 +166,7 @@ export default function OpenLetterScreen({ route }) {
       );
 
       const result = await response.json();
-      setAdsData(result.AllBanners);
+      setAdsData(result.AllBanners || []);
     } catch (error) {
       console.error("Error AllBanners:", error);
     }
@@ -216,7 +280,7 @@ export default function OpenLetterScreen({ route }) {
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.title}
+          {item.name}
         </Text>
       </TouchableOpacity>
     );
@@ -242,6 +306,7 @@ export default function OpenLetterScreen({ route }) {
         ...letter,
         post_date: convertTimeAndDate(letter.post_date),
       })).reverse();
+      // console.log('singature--------', formattedLetters)
       setOpensLettersPublicGeneralData(formattedLetters); // Update the state with the fetched data
       await fetchLetterPublicCelebrity();
     } catch (error) {
@@ -341,24 +406,27 @@ export default function OpenLetterScreen({ route }) {
     }
   };
 
-  const renderPublicGeneral = (item) => {
-    const imageUrl = item.signature_image
-      ? item.signature_image.startsWith("/fileUpload") ||
-        item.signature_image.startsWith("/signatureImages")
-        ? base_url + item.signature_image
-        : item.signature_image
-      : null;
 
-    const userimageUrl = item.userimage
-      ? item.userimage.startsWith("/userImage")
-        ? base_url + item.userimage
-        : item.userimage
+  const renderPublicGeneral = (item) => {
+    const post_date = convertTimeAndDate(item.item.post_date);
+    // const imageUrl = item.signature_id;
+    const imageUrl = item.item.signature_image
+      ? item.item.signature_image.startsWith("/fileUpload") ||
+      item.item.signature_image.startsWith("/signatureImages")
+        ? base_url + item.item.signature_image
+        : item.item.signature_image
+      : null;
+      // console.log('user data --------item ', imageUrl)
+    const userimageUrl = item.item.user_image
+      ? item.item.userimage.startsWith("/userImage")
+        ? base_url + item.item.user_image
+        : item.item.user_image
       : null;
     return (
       <TouchableOpacity
         onPress={() =>
           navigation.navigate("LetterDetails", {
-            Letters: item,
+            Letters: item.item,
             identifier: false,
           })
         }
@@ -379,8 +447,8 @@ export default function OpenLetterScreen({ route }) {
               height: hp(4),
             }}
           >
-            {item?.userimage !== null ||
-            item?.userimage !== undefined ||
+            {item.item?.user_image !== null ||
+            item.item?.user_image !== undefined ||
             userimageUrl !== null ||
             userimageUrl !== undefined ? (
               <View
@@ -391,7 +459,7 @@ export default function OpenLetterScreen({ route }) {
                 }}
               >
                 <Image
-                  source={{ uri: item?.userimage || userimageUrl }}
+                  source={{ uri: item.item?.user_image || userimageUrl }}
                   style={{
                     width: "100%",
                     height: "100%",
@@ -430,7 +498,7 @@ export default function OpenLetterScreen({ route }) {
                 fontFamily: "Inter-Bold",
               }}
             >
-              {item.post_date}
+              {post_date}
             </Text>
           </View>
 
@@ -464,7 +532,7 @@ export default function OpenLetterScreen({ route }) {
                   fontFamily: "Inter-Regular",
                 }}
               >
-                {item.subject_place}
+                {item.item.subject_place}
               </Text>
             </View>
           </View>
@@ -479,8 +547,8 @@ export default function OpenLetterScreen({ route }) {
           >
             {imageUrl !== null ||
             imageUrl !== undefined ||
-            item.signature_image !== undefined ||
-            item.signature_image !== null ? (
+            item.item.signature_image !== undefined ||
+            item.item.signature_image !== null ? (
               <View
                 style={{
                   height: hp(5),
@@ -489,7 +557,7 @@ export default function OpenLetterScreen({ route }) {
                 }}
               >
                 <Image
-                  source={{ uri: imageUrl || item.signature_image }}
+                  source={{ uri: imageUrl || item.item.signature_image }}
                   style={{
                     width: "100%",
                     height: "100%",
@@ -508,6 +576,24 @@ export default function OpenLetterScreen({ route }) {
     );
   };
 
+
+
+  const renderSection = ({ item }) => (
+    <View style={styles.sectionContainer}>
+      <Text style={styles.sectionHeader}>{item.title}</Text>
+      {item.data.length === 0 ? (
+        <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
+      ) : (
+      <FlatList
+        data={item.data}
+        renderItem={renderPublicGeneral}
+        keyExtractor={(videoItem) => videoItem.post_id.toString()}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      />
+    )}
+    </View>
+  );
   const goToScreen = () => {
     navigation.navigate("PostLetterInfo");
   };
@@ -601,7 +687,7 @@ export default function OpenLetterScreen({ route }) {
             contentContainerStyle={{ alignItems: "center" }}
             showsHorizontalScrollIndicator={false}
             horizontal
-            data={searches}
+            data={searchesData}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => renderSearches(item)}
           />
@@ -610,9 +696,9 @@ export default function OpenLetterScreen({ route }) {
         <View
           style={{
             marginTop: hp(1.5),
-            marginBottom: hp(1),
+            marginBottom: hp(.1),
             flexDirection: "row",
-            height: hp(18),
+            height: hp(14),
           }}
         >
             <TouchableOpacity
@@ -735,7 +821,44 @@ export default function OpenLetterScreen({ route }) {
         
         </View>
 
-        <View style={{ flex: 1 }}>
+
+
+
+
+
+  {/* //////////////////////////////////////////////////////////// */}
+  <View style={{  flex: 1,
+    marginBottom: hp(5)}}>
+      {loading ? (
+        <ActivityIndicator size="large" color="#FACA4E" />
+      ) : noData ? (
+        <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+         <Text style={{ fontFamily: "Inter-Medium",}}>{t('NoDataAvailable')}</Text>
+      </View>
+       
+      ) : (
+        <FlatList
+          data={sections}
+          renderItem={renderSection}
+          keyExtractor={(item) => item.title}
+        />
+      )}
+    </View>
+
+{/* /////////////////////////////////////////////////////////////// */}
+
+
+
+
+
+
+        {/* <View style={{ flex: 1 }}>
           <View style={{ marginTop: hp(5), height: hp(21) }}>
             <Text
               style={{
@@ -746,7 +869,7 @@ export default function OpenLetterScreen({ route }) {
               }}
             >
               {t('PublicGeneral')}
-              {/* Public (general) */}
+             
             </Text>
             {loading ? (
                   <View style={styles.NoDataView}>
@@ -758,7 +881,7 @@ export default function OpenLetterScreen({ route }) {
               >
                 <Text style={styles.NoDataText}>
                 {t('NoDataAvailable')}
-                  {/* No data available */}
+              
                 </Text>
               </View>
             ) : (
@@ -783,7 +906,7 @@ export default function OpenLetterScreen({ route }) {
               }}
             >
               {t('PublicToAuthoritiesCelebritiesLeaders')}
-              {/* Public (to authorities, celebrities, leaders) */}
+             
             </Text>
 
             {loading ? (
@@ -798,7 +921,7 @@ export default function OpenLetterScreen({ route }) {
               >
                 <Text style={styles.NoDataText}>
                 {t('NoDataAvailable')}
-                  {/* No data available */}
+             
                 </Text>
               </View>
             ) : (
@@ -823,7 +946,7 @@ export default function OpenLetterScreen({ route }) {
               }}
             >
               {t('PrivateToFriendsPeersFollowers')}
-              {/* Private (to friends, peers, followers) */}
+     
             </Text>
             <View
                 style={styles.NoDataView}
@@ -832,15 +955,15 @@ export default function OpenLetterScreen({ route }) {
                 {t('NoDataAvailable')}
                 </Text>
               </View>
-            {/* <FlatList
-            style={{flex: 1}}
-            contentContainerStyle={{alignItems: 'center'}}
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            data={opensLettersPublicCelebrityData}
-            keyExtractor={item => item?.post_id.toString()}
-            renderItem={({item}) => renderPublicGeneral(item)}
-          /> */}
+              <FlatList
+              style={{ flex: 1 }}
+              contentContainerStyle={{ alignItems: "center" }}
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              data={opensLettersPublicCelebrityData}
+              keyExtractor={(item) => item?.post_id.toString()}
+              renderItem={({ item }) => renderPublicGeneral(item)}
+            />
           </View>
 
           <View style={{ marginTop: hp(5), height: hp(21) }}>
@@ -852,7 +975,7 @@ export default function OpenLetterScreen({ route }) {
               }}
             >
               {t('PrivateToAuthoritiesCelebritiesLeaders')}
-              {/* Private (to authorities, celebrities, leaders) */}
+            
             </Text>
 
             <View
@@ -864,20 +987,20 @@ export default function OpenLetterScreen({ route }) {
             >
               <Text style={{ fontWeight: "Medium", fontSize: hp(2.1) }}>
               {t('NoDataAvailable')}
-                {/* No data available */}
+             
               </Text>
             </View>
-            {/*  <FlatList
-            style={{flex: 1}}
-            contentContainerStyle={{alignItems: 'center'}}
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            data={opensLettersPublicCelebrityData}
-            keyExtractor={item => item?.post_id.toString()}
-            renderItem={({item}) => renderPublicGeneral(item)}
-          /> */}
+            <FlatList
+              style={{ flex: 1 }}
+              contentContainerStyle={{ alignItems: "center" }}
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              data={opensLettersPublicCelebrityData}
+              keyExtractor={(item) => item?.post_id.toString()}
+              renderItem={({ item }) => renderPublicGeneral(item)}
+            />
           </View>
-        </View>
+        </View> */}
 
         {/* // start of banner slider */}
         <View
@@ -994,7 +1117,8 @@ const styles = StyleSheet.create({
     marginLeft: wp(3),
     alignItems: "center",
     justifyContent: "center",
-    width: wp(26),
+    // width: wp(26),
+    padding: 10,
     backgroundColor: "#F2F2F2",
     borderRadius: wp(5),
     height: hp(5),
@@ -1041,5 +1165,66 @@ const styles = StyleSheet.create({
   },
   NoDataText:{
     fontWeight: "Medium", fontSize: hp(2.1)
-  }
+  },
+
+
+
+
+
+
+
+  itemContainer: {
+    marginRight: wp(2),
+    width: wp(35),
+    // alignItems: "center",
+  },
+  image: {
+    width: wp(35),
+    height: hp(12),
+    resizeMode: "cover",
+    borderRadius: 10,
+  },
+  text: {
+    fontWeight: "700",
+    color: "#4A4A4A",
+    fontSize: hp(2),
+    // textAlign: 'left',
+    fontFamily: "Inter",
+    marginTop: 5,
+    fontSize: hp(1.9),
+    // right: "20%",
+  },
+  text1: {
+    color: "#4A4A4A",
+    fontSize: hp(1.5),
+    fontFamily: "Inter",
+  },
+
+  sectionContainer: {
+    marginBottom: 20,
+  },
+  sectionHeader: {
+ 
+              color: "#4A4A4A",
+              fontSize: hp(2.3),
+              textAlign: "left",
+              fontFamily: "Inter-SemiBold",
+              marginBottom:6
+              // top: "6%",
+  },
+  videoItem: {
+    marginRight: 15,
+  },
+  thumbnail: {
+    width: 120,
+    height: 90,
+    borderRadius: 8,
+  },
+  
+  noDataText: {
+    textAlign: 'center',
+    marginVertical: 20,
+    fontSize: 18,
+    color: 'gray',
+  },
 });
