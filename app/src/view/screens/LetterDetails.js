@@ -41,17 +41,11 @@ import Fontiso from "react-native-vector-icons/Fontisto";
 
 import IonIcons from "react-native-vector-icons/Ionicons";
 
-import { SelectCountry, Dropdown } from "react-native-element-dropdown";
-import CPaperInput from "../../assets/Custom/CPaperInput";
 import Headers from "../../assets/Custom/Headers";
 import { base_url } from "../../../../baseUrl";
 import CustomSnackbar from "../../assets/Custom/CustomSnackBar";
 
-const Category = [
-  { label: "Item 1", value: "1" },
-  { label: "Item 2", value: "2" },
-  { label: "Item 3", value: "3" },
-];
+
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 export default function LetterDetails({ navigation, route }) {
   const [loading, setLoading] = useState(false);
@@ -140,6 +134,18 @@ export default function LetterDetails({ navigation, route }) {
       console.error("Error Trending:", error);
     }
   };
+  const convertTimeAndDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+  
+  const post_date = convertTimeAndDate(receivedData.post_date);
+  
+  
 
   const covertTimeAndDate = async (data) => {
     const originalDateString = data;
@@ -167,58 +173,7 @@ export default function LetterDetails({ navigation, route }) {
     setConvertedTime(formattedTimeValue);
   };
 
-  const availableApps = [
-    {
-      id: 1,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches1,
-    },
-    {
-      id: 2,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches2,
-    },
-    {
-      id: 3,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches3,
-    },
-    {
-      id: 4,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches4,
-    },
-    {
-      id: 5,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches1,
-    },
-    {
-      id: 6,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches2,
-    },
-    {
-      id: 7,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches3,
-    },
-    {
-      id: 8,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches4,
-    },
-    {
-      id: 9,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches1,
-    },
-    {
-      id: 10,
-      title: "Explore the intricate web of global pol.....",
-      image: appImages.topSearches2,
-    },
-  ];
+
 
   // const [userimagevisi, setUserImageVisi] = useState("");
   // const [modalVisible, setModalVisible] = useState(false);
@@ -440,7 +395,8 @@ export default function LetterDetails({ navigation, route }) {
               fontWeight: "bold",
             }}
           >
-            {receivedData.post_date}
+            
+            {post_date}
           </Text>
         </View>
 

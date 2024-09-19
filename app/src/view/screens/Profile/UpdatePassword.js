@@ -294,7 +294,7 @@ const UpdatePassword = ({navigation}) => {
       <View style={{marginTop: hp(5),  alignItems:'center'}}>
         <TextInput
           mode="outlined"
-          label={t('UpdatePassword.OldPassword')}
+          label={t('OldPassword')}
           value={OldPassword}
           onChangeText={text => setOldPassword(text)}
           style={styles.ti}
@@ -340,7 +340,7 @@ const UpdatePassword = ({navigation}) => {
       <View style={{ alignItems:'center'}}>
         <TextInput
           mode="outlined"
-          label={t('UpdatePassword.NewPassword')}
+          label={t('NewPassword')}
           value={signin_pass}
           onChangeText={text => setsignin_pass(text)}
           style={styles.ti}
@@ -384,7 +384,7 @@ const UpdatePassword = ({navigation}) => {
       <View style={{ alignItems:'center'}}>
         <TextInput
           mode="outlined"
-          label={t('UpdatePassword.ConfirmPassword')}
+          label={t('ConfirmPassword')}
           value={confirm}
           onChangeText={text => setconfirm_pass(text)}
           style={styles.ti}
@@ -433,7 +433,7 @@ const UpdatePassword = ({navigation}) => {
 
       <View style={{marginTop: '90%', alignSelf: 'center'}}>
         <CustomButton
-          title={t('UpdatePassword.Update')}
+          title={t('Update')}
           customClick={() => {
             checkPassword();
           }}

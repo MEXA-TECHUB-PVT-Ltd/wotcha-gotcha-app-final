@@ -726,7 +726,71 @@ export default function ViewVideo({ navigation, route }) {
               marginLeft: hp(10),
             }}
           >
-            <TouchableOpacity
+             
+          <Image
+            source={appImages.logoTransparent}
+            style={{height: hp(15), width: wp(35)}}
+            resizeMode="contain"
+          />
+
+
+
+            {/* <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("ViewElseProfile", {
+                  id: receivedData?.user_id,
+                })
+              }
+              style={{
+                height: hp(6),
+                width: hp(6), // Use hp here to make it a perfect circle
+                borderRadius: hp(5), // Radius is half of the height/width to make it a circle
+                marginLeft: wp(1),
+                overflow: "hidden",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {receivedData?.user_image === null ? (
+                <MaterialCommunityIcons
+                  name={"account-circle"}
+                  size={hp(5)} // Adjust size to fit within the circle
+                  color={"#FACA4E"}
+                />
+              ) : (
+                <Image
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    resizeMode: "cover",
+                  }}
+                  source={{ uri: receivedData?.user_image }}
+                />
+              )}
+            </TouchableOpacity>
+            <View style={{ width: "75%" }}>
+              <Text
+                ellipsizeMode="tail"
+                numberOfLines={1}
+                style={styles.textProfileName}
+              >
+                {receivedData.username}
+              </Text>
+            </View> */}
+          </View>
+        </View>
+
+        <View style={styles.bottomView}>
+          <View style={{ height: hp(27) ,}}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              height: hp(6.5),
+              marginHorizontal: wp(7)
+            }}
+          >
+                <TouchableOpacity
               onPress={() =>
                 navigation.navigate("ViewElseProfile", {
                   id: receivedData?.user_id,
@@ -768,11 +832,14 @@ export default function ViewVideo({ navigation, route }) {
                 {receivedData.username}
               </Text>
             </View>
-          </View>
-        </View>
+            </View>
 
-        <View style={styles.bottomView}>
-          <View style={{ height: hp(20) }}>
+
+            <View style={{ width: "80%", marginHorizontal: wp(7) }}>
+            <Text style={[styles.textProfileName, { marginLeft: wp(1),}]}>
+                  {receivedData.name}
+                </Text>
+              </View>
             <ScrollView
               showsVerticalScrollIndicator={false} // Hide vertical scroll indicator
               style={{ flex: 1 }}
@@ -781,11 +848,7 @@ export default function ViewVideo({ navigation, route }) {
                 marginHorizontal: wp(8),
               }}
             >
-              <View style={{ width: "80%" }}>
-                <Text style={[styles.textProfileName, { marginLeft: -0 }]}>
-                  {receivedData.name}
-                </Text>
-              </View>
+      
               <Text
                 style={{
                   marginTop: hp(1),

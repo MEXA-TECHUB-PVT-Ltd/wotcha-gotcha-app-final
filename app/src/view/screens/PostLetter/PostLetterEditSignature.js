@@ -102,7 +102,7 @@ export default function PostLetterEditSignature({navigation, route}) {
   const receivedDataSubjectOfLetter = route.params?.subjectOfLetter;
   const receivedDatapostLetter = route.params?.postLetter;
   const receivedDataintroductionOfLetter = route.params?.introductionOfLetter;
-
+ 
   const saveSign = () => {
     signatureRef.current.saveImage(encodedImage => {
     });

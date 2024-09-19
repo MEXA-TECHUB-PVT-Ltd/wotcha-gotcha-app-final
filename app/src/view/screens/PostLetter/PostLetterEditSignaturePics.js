@@ -184,6 +184,22 @@ export default function PostLetterSignature({navigation, route}) {
   const receivedDataSignatureId = route.params?.signatureId;
   const receivedDataSignatureCreatedAt = route.params?.signatureCreatedAt;
 
+
+
+
+
+  console.log('name------', receivedDataName)
+  console.log('receivedDatAddress------', receivedDatAddress)
+  console.log('receivedDataContactNumber------', receivedDataContactNumber)
+  console.log('receivedDataEmail------', receivedDataEmail)
+  console.log('receivedDataCategoryId------', receivedDataCategoryId)
+  console.log('receivedDataLetterType------', receivedDataLetterType)
+  console.log('receivedDataGreetingsTitle------', receivedDataGreetingsTitle)
+  console.log('receivedDatasubjectOfLetter------', receivedDatasubjectOfLetter)
+  console.log('receivedDatapostLetter------', receivedDatapostLetter)
+  console.log('receivedDataintroductionOfLetter------', receivedDataintroductionOfLetter)
+
+
   const takePhotoFromCamera = async value => {
     ref_RBSheetCameraCanvas.current.close();
     setSelectedItem(value);
@@ -293,7 +309,7 @@ export default function PostLetterSignature({navigation, route}) {
   const handleUploadImages = async imageArray => {
 
     setLoading(true);
-
+console.log('images from handleupload image', imageArray)
     const uploadPromises = imageArray.map(async imageInfo => {
       const uri = imageInfo.uri;
       const type = imageInfo.type;
@@ -376,6 +392,7 @@ export default function PostLetterSignature({navigation, route}) {
   };
 
   const createLetterImage = async image => {
+    console.log('image in function of createLetterImage', image)
     const token = authToken;
     const apiUrl = base_url + 'letter/createLetter';
 
@@ -384,8 +401,9 @@ export default function PostLetterSignature({navigation, route}) {
       video: '', // you can send one video maximum
       user_id: userId,
       post_type: 'public',
-      receiver_type: receivedDataLetterType,
+      receiver_type: "leader",
       disc_category: receivedDataCategoryId,
+      disc_sub_category: receivedDataLetterType,
       name: receivedDataName,
       address: receivedDatAddress,
       email: receivedDataEmail,
@@ -403,7 +421,7 @@ export default function PostLetterSignature({navigation, route}) {
     };
 
     try {
-      console.log(requestData);
+      
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -416,6 +434,7 @@ export default function PostLetterSignature({navigation, route}) {
       if (response.ok) {
         const data = await response.json();
         setLoading(false);
+        console.log(' resoposen after ok',requestData);
         handleUpdatePassword();
 
       } else {
@@ -441,8 +460,9 @@ export default function PostLetterSignature({navigation, route}) {
       video: video, // you can send one video maximum
       user_id: userId,
       post_type: 'public',
-      receiver_type: receivedDataLetterType,
+      receiver_type: "leader",
       disc_category: receivedDataCategoryId,
+      disc_sub_category: receivedDataLetterType,
       name: receivedDataName,
       address: receivedDatAddress,
       email: receivedDataEmail,

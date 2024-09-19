@@ -344,7 +344,7 @@ export default function ViewProfile({ navigation }) {
         };
 
       });
-
+// console.log('in profile letter----------', formattedSignatures)
       setLetter(formattedSignatures); // Update the state with the fetched data
       setTotalLetter(result.totalLetters);
       setLoading(false);

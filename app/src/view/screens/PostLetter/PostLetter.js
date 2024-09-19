@@ -140,8 +140,10 @@ export default function PostLetter({ navigation, route }) {
   const receivedDataContactNumber = route.params?.contactNumber;
   const receivedDataEmail = route.params?.email;
   const receivedDataCategoryId = route.params?.category_id;
-  const receivedDataLetterType = route.params?.letterType;
+  const receivedDatasubcategory = route.params?.subcategory;
 
+
+ 
   const searches = [
     { id: 1, title: t("subject") },
     { id: 2, title: t("Introduction") },
@@ -394,7 +396,7 @@ export default function PostLetter({ navigation, route }) {
                   contactNumber: receivedDataContactNumber,
                   email: receivedDataEmail,
                   category_id: receivedDataCategoryId,
-                  letterType: receivedDataLetterType,
+                  letterType: receivedDatasubcategory,
                   formOfApeal: "My appeal",
                 });
               } else {
