@@ -33,6 +33,7 @@ import EBC from "react-native-vector-icons/MaterialCommunityIcons";
 import { useIsFocused } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { appImages } from '../../../assets/utilities';
 // ///////// for defult 27.5.2024
 const defaultCategories = [
   { key: 'one', name: 'Mass Apps', activeIcon: <CategoryActive width={23} height={23} />, inactiveIcon: <CategoryInactive width={23} height={23} />, dropped: false },
@@ -165,7 +166,8 @@ export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynam
       <StatusBar translucent={true} backgroundColor="transparent" barStyle="dark-content" />
       <View style={styles.logoContainer}>
         <Image
-          source={require('../../../assets/images/logowithWBG.jpg')}
+          // source={require('../../../assets/images/logowithWBG.jpg')}
+          source={appImages.logo}
           style={styles.logo}
           resizeMode="contain"
         />
