@@ -71,12 +71,12 @@ export default function UpdatePostLetterEditSignaturePics({
   const [Username, setUserName] = useState('');
   const receivedData = route.params?.receivedData;
   console.log("receivedData-----", receivedData.images);
-  console.log("imageUris--------??????", imageUris);
+  console.log("imageUris--------??????", imageUris.length);
 
   const [imagesWithId, setImagesWithId] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [removedImageIds, setRemovedImageIds] = useState([]);
-  console.log('iimageInfoThumbnail', imageInfoThumbnail)
+  // console.log('iimageInfoThumbnail', imageInfoThumbnail)rr
 //  useEffect(() => {
 //   if (receivedData?.images) {
 //     // Take only the first three images
@@ -224,8 +224,7 @@ const getFileDetails = (imageUrl) => {
   };
 
   const fetchUser = async (id, tokens) => {
-    console.log("USER", id);
-    console.log("TOKEN", tokens);
+
     const token = tokens;
 
     try {
@@ -238,7 +237,7 @@ const getFileDetails = (imageUrl) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("IMAGE", data.user.image);
+        // console.log("IMAGE", data.user.image);
 
         // Use the data from the API to set the categories
         setUserImage(data.user.image);
@@ -414,17 +413,23 @@ const getFileDetails = (imageUrl) => {
   //   }
   // };
 
-
+  console.log(' handleUploadImages single image functiona call----about------', imageUris)
   const checkUpload = () => {
     if (imageUris.length < 3 && videoInfo === null && removedImageIds.length > 0) {
+      console.log('removeExistingImages functiona call----------', removedImageIds)
       removeExistingImages(removedImageIds);
-    } else if (imageUris.length < 3 && videoInfo === null) {
+    } else if (imageUris.length <= 3 && videoInfo === null) {
+      console.log(' handleUploadImages single image functiona call----------')
       handleUploadImages(imageUris);
     } else if (imageUris.length === 0 && videoInfo === null) {
+      console.log('handleUpdatePasswordAlert functiona call----------')
+     
       handleUpdatePasswordAlert();
     } else if (imageUris.length !== 0 && videoInfo !== null) {
+      console.log('handleUpdatePasswordLimitAlert functiona call----------')
       handleUpdatePasswordLimitAlert(); 
     } else if ( imageUris.length === 0 && videoInfo !== null) {
+      console.log('handleUploadVideo  functiona call----------')
       handleUploadVideo();
     }
   };
@@ -500,12 +505,24 @@ const getFileDetails = (imageUrl) => {
 
 
 
-
   const handleUploadImages = async (imageArray) => {
     console.log("ImageArray", imageArray);
     setLoading(true);
-
-    const uploadPromises = imageArray.map(async (imageInfo) => {
+  
+    // Filter out the objects that have full Cloudinary URLs already (i.e., existing images)
+    const existingImages = imageArray
+      .filter(imageInfo => imageInfo.image && typeof imageInfo.image === 'string')
+      .map(imageInfo => imageInfo.image); // Extract the existing Cloudinary URLs
+  
+    // Filter out the images that need to be uploaded (i.e., new local images)
+    const uploadableImages = imageArray.filter(imageInfo =>
+      imageInfo.uri && imageInfo.type && imageInfo.fileName
+    );
+  
+    console.log("Existing Cloudinary URLs:", existingImages);
+    console.log("Images to upload:", uploadableImages);
+  
+    const uploadPromises = uploadableImages.map(async (imageInfo) => {
       const uri = imageInfo.uri;
       const type = imageInfo.type;
       const name = imageInfo.fileName;
@@ -531,62 +548,125 @@ const getFileDetails = (imageUrl) => {
           throw new Error("Image upload failed");
         }
         const data = await response.json();
-        console.log("Image Url", data.url);
-        return data.url;
+        console.log("Image URL", data.url);
+        return data.url; // Return the Cloudinary URL directly
       } catch (error) {
         setLoading(false);
         console.log("Error While Uploading Image", error);
-        throw error; // Rethrow the error so that the Promise.all catches it
+        throw error;
       }
     });
-
+  
     try {
-      const imageUrls = await Promise.all(uploadPromises);
-      console.log("All images uploaded successfully:", imageUrls);
-
-      // if(removedImageIds.length === 0){
-      //   createLetterImageone(imageUrls, removedImageIds);
-      // } 
-
-
-//  // Determine oldImageIds based on conditions
-//  const oldImageIds = removedImageIds.length > 0 ? removedImageIds : undefined;
-
-//  // Call the appropriate function based on conditions
- if (oldImageIds) {
-   createLetterImage(imageUrls, oldImageIds);
- } else if (removedImageIds.length === 0) {
-   createLetterImageone(imageUrls);
- }
-
-
-
-  // Call the appropriate function based on conditions
-  // if (removedImageIds.length > 0) {
-  //   createLetterImage(imageUrls, removedImageIds);
-  // } else {
-  //   createLetterImageone(imageUrls);
-  // }
-
-
-
-          // Call createLetterImageone with proper arguments
-    // if (removedImageIds.length === 0) {
-    //   createLetterImageone(imageUrls, []);
-    // } else {
-    //      // Determine oldImageIds based on conditions
-    // const oldImageIds =
-    // removedImageIds.length > 0 ? removedImageIds : imageUris.length < 3 ? '' : null;
-    // // updateLetterImages(imageUrls, oldImageIds);
-    //   createLetterImage(imageUrls, oldImageIds);
-    // }
-    
+      // Wait for all image uploads to complete
+      const uploadedImageUrls = await Promise.all(uploadPromises);
+      console.log("Uploaded Cloudinary URLs:", uploadedImageUrls);
+  
+      // Combine existing Cloudinary URLs with newly uploaded URLs
+      const finalImageUrls = [...existingImages, ...uploadedImageUrls];
+      
+      console.log("Final Image URL Array:", finalImageUrls);
+  
+      // Pass the final array of URLs to createLetterImageone
+      createLetterImageone(uploadedImageUrls);
+  
     } catch (error) {
-      console.log("Error uploading images:", error);
+      console.error("Error while uploading images:", error);
     } finally {
       setLoading(false);
     }
   };
+  
+  
+  
+
+ // ye 26 ka function hai jis mein image upload ho rahi
+//   const handleUploadImages = async (imageArray) => {
+//     console.log("ImageArray", imageArray);
+//     setLoading(true);
+
+//     const uploadPromises = imageArray.map(async (imageInfo) => {
+//       const uri = imageInfo.uri;
+//       const type = imageInfo.type;
+//       const name = imageInfo.fileName;
+//       const sourceImage = { uri, type, name };
+//       const dataImage = new FormData();
+//       dataImage.append("file", sourceImage);
+//       dataImage.append("upload_preset", UPLOAD_PRESET);
+//       dataImage.append("cloud_name", CLOUD_NAME);
+
+//       try {
+//         const response = await fetch(
+//           CLOUDINARY_URL,
+//           {
+//             method: "POST",
+//             body: dataImage,
+//             headers: {
+//               Accept: "application/json",
+//               "Content-Type": "multipart/form-data",
+//             },
+//           }
+//         );
+//         if (!response.ok) {
+//           throw new Error("Image upload failed");
+//         }
+//         const data = await response.json();
+//         console.log("Image Url", data.url);
+//         return data.url;
+//       } catch (error) {
+//         setLoading(false);
+//         console.log("Error While Uploading Image", error);
+//         throw error; // Rethrow the error so that the Promise.all catches it
+//       }
+//     });
+
+//     try {
+//       const imageUrls = await Promise.all(uploadPromises);
+//       console.log("All images uploaded successfully:", imageUrls);
+//       createLetterImageone(imageUrls);
+//       // if(removedImageIds.length === 0){
+//       //   createLetterImageone(imageUrls, removedImageIds);
+//       // } 
+
+
+// //  // Determine oldImageIds based on conditions
+// //  const oldImageIds = removedImageIds.length > 0 ? removedImageIds : undefined;
+
+// //  // Call the appropriate function based on conditions
+// //  if (oldImageIds) {
+// //    createLetterImage(imageUrls, oldImageIds);
+// //  } else if (removedImageIds.length === 0) {
+// //    createLetterImageone(imageUrls);
+// //  }
+
+
+
+//   // Call the appropriate function based on conditions
+//   // if (removedImageIds.length > 0) {
+//   //   createLetterImage(imageUrls, removedImageIds);
+//   // } else {
+//   //   createLetterImageone(imageUrls);
+//   // }
+
+
+
+//           // Call createLetterImageone with proper arguments
+//     // if (removedImageIds.length === 0) {
+//     //   createLetterImageone(imageUrls, []);
+//     // } else {
+//     //      // Determine oldImageIds based on conditions
+//     // const oldImageIds =
+//     // removedImageIds.length > 0 ? removedImageIds : imageUris.length < 3 ? '' : null;
+//     // // updateLetterImages(imageUrls, oldImageIds);
+//     //   createLetterImage(imageUrls, oldImageIds);
+//     // }
+    
+//     } catch (error) {
+//       console.log("Error uploading images:", error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
 
   // const createLetterImageone = async (imageUrls, removedImageIds) => {
   //   const token = authToken;
@@ -672,6 +752,7 @@ const getFileDetails = (imageUrl) => {
   
 
   const createLetterImageone = async (imageUrls) => {
+    setLoading(true);
     const token = authToken;
     const apiUrl = base_url + "letter/updatePostLetterImages";
     console.log(" createLetterImageone---", imageUrls);
@@ -708,6 +789,7 @@ const getFileDetails = (imageUrl) => {
   
 
   const removeExistingImages = async (removedImageIds) => {
+    setLoading(true);
     const token = authToken;
     const apiUrl = base_url + "letter/updatePostLetterImages";
   console.log('remove in re', removedImageIds)
@@ -741,6 +823,9 @@ const getFileDetails = (imageUrl) => {
       setLoading(false);
     }
   };
+
+
+  
   // const createLetterImage = async (imageUrls, oldImageIds) => {
   //   const token = authToken;
   //   console.log("AUTH TOKEN", token);
@@ -802,7 +887,7 @@ const getFileDetails = (imageUrl) => {
       receiver_type: "leader",
       // receiver_type: receivedDataLetterType,
       disc_category: receivedDataCategoryId,
-      // disc_sub_category: receivedDataLetterType,
+      disc_sub_category: receivedDataLetterType,
       name: receivedDataName,
       address: receivedDatAddress,
       email: receivedDataEmail,
@@ -1078,6 +1163,7 @@ const getFileDetails = (imageUrl) => {
 /////////////////////////////////////////////////////////////////////////////////////
 
   const handleRemoveImage = (index) => {
+    console.log('handle remove image ????????????????', index)
     const removedImageId = imagesWithId[index]?.id;
     setRemovedImageIds([...removedImageIds, removedImageId]);
     // setRemovedImageIds(prevIds => [...prevIds, removedImageId]);
@@ -1159,12 +1245,14 @@ const getFileDetails = (imageUrl) => {
         // console.log('image here', response);
         if (!response.didCancel && response.assets && response.assets.length > 0) {
           const newImageUri = response.assets[0];
+          // setImageUri(response.assets[0])
           // setimageInfoThumbnail(newImageUri)
           console.log('image here', newImageUri);
           if (selectedIndex !== null) {
             updateImageUris(newImageUri, selectedIndex);
           } else if (imageUris.length < 3) {
             setimageInfoThumbnail(newImageUri)
+            // setImageUris(response.assets[0])
             addImageUri(newImageUri);
           } else {
             handleUpdatePasswordExceedsAlert();
@@ -1190,19 +1278,19 @@ const getFileDetails = (imageUrl) => {
 
   const addImageUri = (newUri) => {
   
-    const fileName = newUri.substring(newUri.lastIndexOf('/') + 1);
-    const fileType = fileName.split('.').pop();
-    const newImage = {
-      id: imagesWithId.length + 1,
-      // uri: newUri,
+    // const fileName = newUri.substring(newUri.lastIndexOf('/') + 1);
+    // const fileType = fileName.split('.').pop();
+    // const newImage = {
+    //   id: imagesWithId.length + 1,
+    //   // uri: newUri,
       
-        fileName: fileName,
-        originalPath: newUri, // Use the URI as originalPath
-        type: `image/${fileType}`, // Construct type based on file extension
-        uri: newUri,
+    //     fileName: fileName,
+    //     originalPath: newUri, // Use the URI as originalPath
+    //     type: `image/${fileType}`, // Construct type based on file extension
+    //     uri: newUri,
       
-    };
-    const updatedImages = [...imagesWithId, newImage];
+    // };
+    const updatedImages = [...imagesWithId, newUri];
     console.log('ayyyyyyyyy-------', updatedImages)
     setImagesWithId(updatedImages);
     setImageUris(updatedImages);
@@ -1225,14 +1313,14 @@ const getFileDetails = (imageUrl) => {
   const renderImageItem = ({ item, index }) => (
     <View style={styles.imageContainer}>
       <Image source={{ uri: item.uri ||  item.image}} style={styles.image} />
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.changePicContainer}
         onPress={() => handleImageChange(index)}
       >
         <Text style={{ fontFamily: "Inter-Medium", fontSize: 10 }}>
           {t('ChangePic')}
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <TouchableOpacity
         style={styles.iconContainer}
         onPress={() => handleRemoveImage(index)}
@@ -1459,7 +1547,7 @@ const getFileDetails = (imageUrl) => {
         />
       </View> */}
 
-      {imageUris === null || imageUris === undefined? (
+      {imageUris === null || imageUris === undefined || imageUris.length === 0 ? (
         <TouchableOpacity
           onPress={() => ref_RBSheetVideo.current.open()}
           style={{
@@ -1491,7 +1579,7 @@ const getFileDetails = (imageUrl) => {
         </TouchableOpacity>
       ) : null}
 
-      {/* {videoUri !== null && (
+      {/* {imageUris && (
         <View
           style={{
             height: hp(7),
@@ -1501,7 +1589,7 @@ const getFileDetails = (imageUrl) => {
             justifyContent: "center",
           }}
         >
-          <Text style={{ color: "#FACA4E" }}>{videoInfo?.fileName}</Text>
+          <Image source={{ uri: imageUris.uri}} style={styles.image} />
         </View>
       )} */}
 

@@ -2986,7 +2986,7 @@ const renderPublicGeneralLetter = (item) => {
       }
 
       const result = await response.json();
-      console.log('top market hai--', result.topitem[0])
+      // console.log('top market hai--', result.topitem[0])
       // return result.topitem[0];
       setDataTopVideosMarket(result.topitem[0]);
     } catch (error) {

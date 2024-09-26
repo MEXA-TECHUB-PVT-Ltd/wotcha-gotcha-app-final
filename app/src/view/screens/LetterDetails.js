@@ -540,7 +540,20 @@ export default function LetterDetails({ navigation, route }) {
         }
         style={{ width: wp(40), borderRadius: wp(5) }}
       >
-        <Image
+        
+
+    
+          <Video
+            source={{ uri: receivedData.video }}
+            style={styles.video}
+            // resizeMode="contain"
+            // controls={true} // Show media controls (play, pause, etc.)
+          />
+          {/* <Text style={styles.videoInfo}>{videoInfo?.fileName}</Text> */}
+    
+        
+
+        {/* <Image
           style={{
             width: '100%',
             height: '100%',
@@ -548,7 +561,7 @@ export default function LetterDetails({ navigation, route }) {
             resizeMode: 'contain',
           }}
           source={appImages.videoPlaceHolder} // Placeholder image source
-        />
+        /> */}
       </TouchableOpacity>
     </View>
   )}
@@ -737,6 +750,8 @@ const styles = StyleSheet.create({
   },
   videomaincontainer: {
     flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   videoContainer: {
     height: hp(20),
@@ -744,6 +759,7 @@ const styles = StyleSheet.create({
     // marginHorizontal: wp(10),
     // alignItems: 'center',
     // justifyContent: 'center',
+    
   },
   video: {
     height: '100%',

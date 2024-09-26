@@ -139,9 +139,11 @@ export default function UpdatePostLetterInfo({navigation, route}) {
       setContact(receivedData?.contact_no)
       setEmail(receivedData?.email)
       setCategoryPublicType(receivedData?.receiver_type)
-      // setCategoryId(receivedData?.category_id);
-      // setSubCategory(receivedData?.sub_category_id);
+
       setCategoryId(receivedData?.disc_category);
+      setSubCategory(receivedData?.disc_sub_category);
+
+      // setCategoryId(receivedData?.disc_category);
       setImageUrl(receivedData?.image); 
       setImageInfo({uri: receivedData?.image});
     };
@@ -332,7 +334,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
       if (response.ok) {
         const data = await response.json();
         setUserImage(data.user.image);
-        fetchCategory(token);
+        // fetchCategory(token);
       } else {
         console.error('Failed to fetch user:', response.status, response.statusText);
       }
@@ -341,6 +343,11 @@ export default function UpdatePostLetterInfo({navigation, route}) {
     }
   };
 
+  useEffect(() => {
+    if (authToken) {
+      fetchCategory();
+    }
+  }, [authToken]);
   const fetchCategory = async (id, token) => {
     // const token = token;
     console.log('user token-----------', authToken )
@@ -363,7 +370,9 @@ export default function UpdatePostLetterInfo({navigation, route}) {
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
      
-        setCategorySelect(categories); // Update the state with the formatted category data
+        const reverseData = data.AllCategories.reverse();
+        setCategorySelect(reverseData);
+        // setCategorySelect(categories); // Update the state with the formatted category data
         
       } else {
         console.error(
@@ -476,7 +485,11 @@ export default function UpdatePostLetterInfo({navigation, route}) {
     ref_RBSendOffer.current.open();
   };
 
+
+  
   const uploadLetter = () => {
+    console.log('cate---upload--------------------------', categoryId)
+    console.log('subcategory-----upload------------------------', subcategory)
     if (letterType == 'Public Letter') {
       checkOnPublicAndAuthorities();
     } else if (letterType == 'Private Letter') {
@@ -493,6 +506,8 @@ export default function UpdatePostLetterInfo({navigation, route}) {
   };
 
   const checkOnPublicAndAuthorities = () => {
+    console.log('cate-- second---------------------------', categoryId)
+    console.log('subcategory----second-------------------------', subcategory)
     // console.log('Letter Type', categoryPublicType);
     if (categoryPublicType === 'general') {
       navigation.replace('UpdatePtLetter', {
@@ -508,6 +523,8 @@ export default function UpdatePostLetterInfo({navigation, route}) {
         receivedData:receivedData
       });
     } else {
+      console.log('cate else-----------------------------', categoryId)
+      console.log('subcategory-- else---------------------------', subcategory)
       navigation.replace('UpdatePtLetter', {
         name: name,
         address: address,
@@ -862,14 +879,17 @@ export default function UpdatePostLetterInfo({navigation, route}) {
             data={categoriesSelect}
             search={false}
             maxHeight={200}
-            labelField="label"
-            valueField="value"
+            // labelField="label"
+            // valueField="value"
+             labelField="name"
+            valueField="id"
             placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
             onFocus={handleCategoryFocus}
             onBlur={handleCategoryBlur}
             onChange={item => {
-              setCategoryId(item.value);
+              // setCategoryId(item.value);
+              setCategoryId(item.id);
               setIsFocus(false);
             }}
             renderRightIcon={() => (
