@@ -356,7 +356,7 @@ export default function GEBC({navigation}) {
           <IonIcons name={'chevron-back'} color={'#282828'} size={25} />
         </TouchableOpacity>
 
-        <Text style={styles.headerText}>EBC</Text>
+        <Text style={styles.headerText}>EBIC</Text>
       </View>
 
       <ScrollView

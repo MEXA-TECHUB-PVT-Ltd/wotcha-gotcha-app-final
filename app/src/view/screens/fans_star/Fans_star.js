@@ -109,7 +109,7 @@ export default function Fans_star({  route }) {
 
     try {
       const response = await fetch(
-        base_url + "fanStar/category/getAll?page=1&limit=1000",
+        base_url + "fanStar/category/getAll?page=1&limit=10000",
         {
           method: "GET",
           headers: {
@@ -178,7 +178,7 @@ export default function Fans_star({  route }) {
         }));
       const reversedSections = formattedSections.reverse();
         setSections(reversedSections);
-        const hasNoData = formattedSections.every(section => section.data.length === 0);
+        const hasNoData = formattedSections.every(section => section.title.length === 0);
         setNoData(hasNoData);
       } else {
         setSections([]);

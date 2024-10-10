@@ -884,7 +884,7 @@ export default function Dashboard({ route }) {
       const result = await response.json();
       // Check if result and result.topTour are defined and not null
       if (result && result.topTour && result.topTour.length > 0) {
-        console.log("Response result:", result.topTour[0]);
+        // console.log("Response result:", result.topTour[0]);
         setDataTopPicData(result.topTour[0]); // Update the state with the fetched data
       } else {
         // console.error('No topTour data available');
@@ -1107,7 +1107,7 @@ export default function Dashboard({ route }) {
       const result = await response.json();
       // console.log('Resultings of TopNews', result.topitem);
       //Alert.alert(result)
-      setTopLetterData(result.topitem[0]);
+      setTopLetterData(result.topitem[0] || '');
       // const formattedLetters = result.topitem.map((letter) => ({
       //   ...letter,
       //   post_date: convertTimeAndDate(letter.post_date),
@@ -1413,170 +1413,170 @@ const convertTimeAndDate = (dateString) => {
   });
 };
 
-const renderPublicGeneralLetter = (item) => {
-  const imageUrl = item.signature_image
-    ? item.signature_image.startsWith('/fileUpload') || item.signature_image.startsWith('/signatureImages')
-      ? base_url + item.signature_image
-      : item.signature_image
-    : null;
+// const renderPublicGeneralLetter = (item) => {
+//   const imageUrl = item.signature_image
+//     ? item.signature_image.startsWith('/fileUpload') || item.signature_image.startsWith('/signatureImages')
+//       ? base_url + item.signature_image
+//       : item.signature_image
+//     : null;
 
-  const userimageUrl = item.userimage
-    ? item.userimage.startsWith('/userImage')
-      ? base_url + item.userimage
-      : item.userimage
-    : null;
-  return (
-    <TouchableOpacity
-      onPress={() =>
-        navigation.navigate("LetterDetails", {
-          Letters: item,
-          identifier: false,
-        })
-      }
-      style={{
-        width: wp(45),
-        marginHorizontal: wp(2),
-        marginVertical: hp(1),
-        height: "100%",
-      }} // Add margin here
-    >
-      <View
-        style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
-      ></View>
-      <View>
-        <View
-          style={{
-            flexDirection: "row",
-            paddingHorizontal: 2,
-            alignItems: "center",
-            height: hp(4),
-          }}
-        >
-          {item?.userimage !== null || item?.userimage !== undefined || userimageUrl !== null || userimageUrl !== undefined ? (
-            <View
-              style={{
-                height: hp(2),
-                width: wp(4),
-                borderRadius: wp(3),
-              }}
-            >
-              <Image
-                source={{ uri: item?.userimage || userimageUrl }}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: wp(3),
-                  resizeMode: "cover",
-                }}
-              />
-            </View>
-          ) : (
-            <MaterialCommunityIcons
-              style={{ marginTop: hp(0.5) }}
-              name={"account-circle"}
-              size={35}
-              color={"#FACA4E"}
-            />
-          )}
+//   const userimageUrl = item.userimage
+//     ? item.userimage.startsWith('/userImage')
+//       ? base_url + item.userimage
+//       : item.userimage
+//     : null;
+//   return (
+//     <TouchableOpacity
+//       onPress={() =>
+//         navigation.navigate("LetterDetails", {
+//           Letters: item,
+//           identifier: false,
+//         })
+//       }
+//       style={{
+//         width: wp(45),
+//         marginHorizontal: wp(2),
+//         marginVertical: hp(1),
+//         height: "100%",
+//       }} // Add margin here
+//     >
+//       <View
+//         style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
+//       ></View>
+//       <View>
+//         <View
+//           style={{
+//             flexDirection: "row",
+//             paddingHorizontal: 2,
+//             alignItems: "center",
+//             height: hp(4),
+//           }}
+//         >
+//           {item?.userimage !== null || item?.userimage !== undefined || userimageUrl !== null || userimageUrl !== undefined ? (
+//             <View
+//               style={{
+//                 height: hp(2),
+//                 width: wp(4),
+//                 borderRadius: wp(3),
+//               }}
+//             >
+//               <Image
+//                 source={{ uri: item?.userimage || userimageUrl }}
+//                 style={{
+//                   width: "100%",
+//                   height: "100%",
+//                   borderRadius: wp(3),
+//                   resizeMode: "cover",
+//                 }}
+//               />
+//             </View>
+//           ) : (
+//             <MaterialCommunityIcons
+//               style={{ marginTop: hp(0.5) }}
+//               name={"account-circle"}
+//               size={35}
+//               color={"#FACA4E"}
+//             />
+//           )}
 
-          <View style={{ marginLeft: wp(2.5) }}>
-            <Approved width={10} height={10} />
-          </View>
-        </View>
+//           <View style={{ marginLeft: wp(2.5) }}>
+//             <Approved width={10} height={10} />
+//           </View>
+//         </View>
 
-        <View
-          style={{
-            alignItems: "flex-end",
-            marginTop: hp(-2),
-            marginRight: wp(3),
-          }}
-        >
-          <Text
-            style={{
-              color: "#282828",
-              // marginLeft: wp(3),
-              width: "25%",
-              fontSize: 6,
-              fontFamily: "Inter-Bold",
-            }}
-          >
-            {item.post_date}
-          </Text>
-        </View>
+//         <View
+//           style={{
+//             alignItems: "flex-end",
+//             marginTop: hp(-2),
+//             marginRight: wp(3),
+//           }}
+//         >
+//           <Text
+//             style={{
+//               color: "#282828",
+//               // marginLeft: wp(3),
+//               width: "25%",
+//               fontSize: 6,
+//               fontFamily: "Inter-Bold",
+//             }}
+//           >
+//             {item.post_date}
+//           </Text>
+//         </View>
 
-        <View
-          style={{
-            flexDirection: "row",
-            height: hp(5),
-            paddingTop: 6,
-            // backgroundColor:'red', width:'60%'
-          }}
-        >
-          <Text
-            style={{
-              color: "#282828",
-              fontSize: 8,
-              textDecorationLine: "underline",
-              fontFamily: "Inter-Bold",
-            }}
-          >
-            {t('Dashboard.Subject')}
-            {/* Subject: */}
-          </Text>
-          <View style={{ height: '100%', width: '75%' }}>
-            <Text
-              numberOfLines={3}
-              ellipsizeMode="tail"
-              style={{
-                color: "#595959",
-                marginLeft: wp(1),
-                fontSize: 8,
-                fontFamily: "Inter-Regular",
-              }}
-            >
-              {item.subject_place}
-            </Text>
-          </View>
-        </View>
+//         <View
+//           style={{
+//             flexDirection: "row",
+//             height: hp(5),
+//             paddingTop: 6,
+//             // backgroundColor:'red', width:'60%'
+//           }}
+//         >
+//           <Text
+//             style={{
+//               color: "#282828",
+//               fontSize: 8,
+//               textDecorationLine: "underline",
+//               fontFamily: "Inter-Bold",
+//             }}
+//           >
+//             {t('Dashboard.Subject')}
+//             {/* Subject: */}
+//           </Text>
+//           <View style={{ height: '100%', width: '75%' }}>
+//             <Text
+//               numberOfLines={3}
+//               ellipsizeMode="tail"
+//               style={{
+//                 color: "#595959",
+//                 marginLeft: wp(1),
+//                 fontSize: 8,
+//                 fontFamily: "Inter-Regular",
+//               }}
+//             >
+//               {item.subject_place}
+//             </Text>
+//           </View>
+//         </View>
 
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: 'flex-end',
-            height: hp(6),
-            right: 10
-          }}
-        >
-          {imageUrl !== null || imageUrl !== undefined || item.signature_image !== undefined || item.signature_image !== null ? (
-            <View
-              style={{
-                height: hp(5),
-                width: wp(10),
-                borderRadius: wp(3),
-              }}
-            >
-              <Image
-                source={{ uri: imageUrl || item.signature_image }}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: wp(3),
-                  resizeMode: "cover",
-                }}
-              />
-            </View>
-          ) : (
-            null
-          )}
+//         <View
+//           style={{
+//             justifyContent: "center",
+//             alignItems: 'flex-end',
+//             height: hp(6),
+//             right: 10
+//           }}
+//         >
+//           {imageUrl !== null || imageUrl !== undefined || item.signature_image !== undefined || item.signature_image !== null ? (
+//             <View
+//               style={{
+//                 height: hp(5),
+//                 width: wp(10),
+//                 borderRadius: wp(3),
+//               }}
+//             >
+//               <Image
+//                 source={{ uri: imageUrl || item.signature_image }}
+//                 style={{
+//                   width: "100%",
+//                   height: "100%",
+//                   borderRadius: wp(3),
+//                   resizeMode: "cover",
+//                 }}
+//               />
+//             </View>
+//           ) : (
+//             null
+//           )}
   
-        </View>
-        <View
-          style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
-        ></View>
-      </View>
-    </TouchableOpacity>
-  );
-};
+//         </View>
+//         <View
+//           style={{ backgroundColor: "#77BDF2", height: 2, width: "100%" }}
+//         ></View>
+//       </View>
+//     </TouchableOpacity>
+//   );
+// };
 
 
 
@@ -2986,7 +2986,7 @@ const renderPublicGeneralLetter = (item) => {
       }
 
       const result = await response.json();
-      console.log('top market hai--', result.topitem[0])
+      // console.log('top market hai--', result.topitem[0])
       // return result.topitem[0];
       setDataTopVideosMarket(result.topitem[0]);
     } catch (error) {
@@ -4274,7 +4274,7 @@ const renderPublicGeneralLetter = (item) => {
     Linking.openURL(link);
   };
 
-  const top_post_date = convertTimeAndDate(topLetterData.post_date);
+  const top_post_date = convertTimeAndDate(topLetterData.post_date );
   return (
     <View
       pointerEvents="auto"
@@ -4478,9 +4478,11 @@ const renderPublicGeneralLetter = (item) => {
               renderItem={({ item }) => renderSearches(item)}
             />
           </View> : <View>
-            <Text>No MassApps available!</Text>
+            <Text>{t('NoDataAvailable')}</Text>
           </View>
         }
+
+
 
 
         {categoryActive ? (
@@ -4490,7 +4492,7 @@ const renderPublicGeneralLetter = (item) => {
                 style={{
                   marginTop: hp(2),
                   marginLeft: wp(-1),
-                  height: hp(0),
+                  height: hp(23),
                   width: wp(60),
                 }}
               >

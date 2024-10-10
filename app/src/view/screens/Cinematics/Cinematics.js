@@ -175,7 +175,7 @@ export default function Cinematics({ route }) {
         setSections(formattedSections);
 
         // Check if there is no data
-        const hasNoData = formattedSections.every(section => section.data.length === 0);
+        const hasNoData = formattedSections.every(section => section.title.length === 0);
         setNoData(hasNoData);
       } else {
         setSections([]);
@@ -266,7 +266,7 @@ export default function Cinematics({ route }) {
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>No Data available</Text>
+        <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
       ) : (
         <FlatList
           data={item.data}

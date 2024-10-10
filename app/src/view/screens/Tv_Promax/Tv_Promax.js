@@ -259,11 +259,11 @@ export default function Tv_Promax({  route }) {
   
              // Reverse the titles
       const reversedSections = formattedSections.reverse();
-      console.log('results---', reversedSections);
+      // console.log('results---', reversedSections);
       setSections(reversedSections);
 
         // Check if there is no data
-        const hasNoData = formattedSections.every(section => section.data.length === 0);
+        const hasNoData = formattedSections.every(section => section.title.length === 0);
         setNoData(hasNoData);
       } else {
         setSections([]);

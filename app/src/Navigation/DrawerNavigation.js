@@ -355,7 +355,7 @@ const DrawerNavigation = ({ navigation }) => {
                 icon={(focused) => <QafiIcon name="people-arrows" size={23} color="#FACA4E"/>}
               />
               <DrawerItem
-                label="EBC"
+                label={t('Drawer.EBIC')}
                 labelStyle={{
                   color: "#333333",
                   marginLeft: wp(-5),

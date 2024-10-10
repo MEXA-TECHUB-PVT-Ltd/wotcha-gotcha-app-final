@@ -172,7 +172,7 @@ export default function Kids_vid({ route }) {
         const reversedSections = formattedSections.reverse();
         setSections(reversedSections);
         const hasNoData = formattedSections.every(
-          (section) => section.data.length === 0
+          (section) => section.title.length === 0
         );
         setNoData(hasNoData);
       } else {

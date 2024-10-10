@@ -86,21 +86,25 @@ export default function Tv_promax_upload({ navigation }) {
   const [subcategoryError, setSubcategoryError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const [thumbnailError, setthumbnailImageUritwoError] = useState("");
-  const [iosThumbnail, setiosThumbnail] = useState(imageUri)
+  const [imageUriVideo, setimageUri] = useState(imageUri)
+  // const [iosThumbnail, setiosThumbnail] = useState(imageUri)
   useEffect(() => {
-    handleThumnailCreate();
-  }, [imageUri,iosThumbnail])
+    setimageUri(imageUri);
+  }, [imageUri])
+  // useEffect(() => {
+  //   handleThumnailCreate();
+  // }, [imageUri,iosThumbnail])
 
-  const handleThumnailCreate = () => {
-    createThumbnail({
-      url: imageUri,
-      timeStamp: 10000,  // Set this to the timestamp from which you want the thumbnail (in milliseconds)
-    })
-      .then(response => {
-        setiosThumbnail(response.path); // Set the path of the thumbnail
-      })
-      .catch(err => console.error('Error generating thumbnail', err));
-  }
+  // const handleThumnailCreate = () => {
+  //   createThumbnail({
+  //     url: imageUri,
+  //     timeStamp: 10000,  // Set this to the timestamp from which you want the thumbnail (in milliseconds)
+  //   })
+  //     .then(response => {
+  //       setiosThumbnail(response.path); // Set the path of the thumbnail
+  //     })
+  //     .catch(err => console.error('Error generating thumbnail', err));
+  // }
 
 
   // }
@@ -230,11 +234,11 @@ export default function Tv_promax_upload({ navigation }) {
 
   const upload = async () => {
 
-    if (imageUri.uri || imageInfo.uri !== null) {
+    if (imageUriVideo.uri || imageInfo.uri !== null) {
 
-      const uri = imageUri.uri || imageInfo.uri;
-      const type = imageUri.type || imageInfo.type;
-      const name = imageUri.fileName || imageInfo.fileName;
+      const uri = imageUriVideo.uri || imageInfo.uri;
+      const type = imageUriVideo.type || imageInfo.type;
+      const name = imageUriVideo.fileName || imageInfo.fileName;
       const source = { uri, type, name };
 
       handleUploadVideo(source);
@@ -404,7 +408,7 @@ export default function Tv_promax_upload({ navigation }) {
 
   const handleVideoPress = () => {
     // const videoUri = imageUri;
-    const videoUri = imageUri?.uri || imageInfo?.uri;
+    const videoUri = imageUriVideo?.uri || imageInfo?.uri;
     navigation.navigate("VideoPlayerScreen", { videoUri });
   };
   const takeVideoFromCamera = async () => {
@@ -420,6 +424,8 @@ export default function Tv_promax_upload({ navigation }) {
           if (response.assets && response.assets.length > 0) {
             setImageUri(response.assets[0].uri);
             setImageInfo(response.assets[0]);
+            setimageUri(response.assets[0])
+            console.log('video-----',response.assets[0])
           }
         }
       }
@@ -432,6 +438,8 @@ export default function Tv_promax_upload({ navigation }) {
       launchImageLibrary({ mediaType: "video" }, (response) => {
         if (!response.didCancel && response.assets.length > 0) {
           setImageUri(response.assets[0].uri);
+          setimageUri(response.assets[0])
+          console.log('video-----',response.assets[0])
           setImageInfo(response.assets[0]);
 
         }
@@ -481,7 +489,7 @@ export default function Tv_promax_upload({ navigation }) {
             }}
           >
             <ImageBackground
-              source={{ uri:iosThumbnail ? iosThumbnail : imageUri?.uri || imageInfo?.uri }}
+              source={{ uri: imageUriVideo?.uri || imageInfo?.uri }}
               style={{
                 width: "100%",
                 height: "100%",

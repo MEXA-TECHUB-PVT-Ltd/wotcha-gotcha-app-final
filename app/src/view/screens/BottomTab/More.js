@@ -37,11 +37,11 @@ import { appImages } from '../../../assets/utilities';
 // ///////// for defult 27.5.2024
 const defaultCategories = [
   { key: 'one', name: 'Mass Apps', activeIcon: <CategoryActive width={23} height={23} />, inactiveIcon: <CategoryInactive width={23} height={23} />, dropped: false },
-  { key: 'two', name: 'Videos Mania', activeIcon: <VideoActive width={23} height={23} />, inactiveIcon: <VideoInactive width={23} height={23} />, dropped: false },
+  { key: 'two', name: 'Video Mania', activeIcon: <VideoActive width={23} height={23} />, inactiveIcon: <VideoInactive width={23} height={23} />, dropped: false },
   // { key: 'three', name: 'DISC', activeIcon: <MailActive width={23} height={23} />, inactiveIcon: <MailInActive width={23} height={23} />, dropped: false },
   { key: 'four', name: 'Pic Tours', activeIcon: <ProfileActive width={23} height={23} />, inactiveIcon: <ProfileInActive width={23} height={23} />, dropped: false },
   { key: 'five', name: 'Mondo Market', activeIcon: <MarketActive width={23} height={23} />, inactiveIcon: <MarketZoneInActive width={23} height={23} />, dropped: false },
-  { key: 'six', name: 'Cinematix', activeIcon: <Cinematiceactive width={23} height={23} />, inactiveIcon: <Cinematics width={23} height={23} />, dropped: false },
+  { key: 'six', name: 'Cinematic', activeIcon: <Cinematiceactive width={23} height={23} />, inactiveIcon: <Cinematics width={23} height={23} />, dropped: false },
   { key: 'seven', name: 'Fans Stars Zone', activeIcon: <FansActive width={23} height={23} />, inactiveIcon: <Fans width={23} height={23} />, dropped: false },
   { key: 'eight', name: 'Kid-Vids', activeIcon: <KidsActive width={23} height={23} />, inactiveIcon: <Kids width={23} height={23} />, dropped: false },
   { key: 'nine', name: 'TV ProgMax', activeIcon: <TVpromaxActive width={23} height={23} />, inactiveIcon: <Television width={23} height={23} />, dropped: false },
@@ -50,7 +50,7 @@ const defaultCategories = [
   { key: 'twelve', name: 'On-News', activeIcon: <News name="news" size={26} color="#FACA4E" />, inactiveIcon: <News name="news" size={26} color="#C5C5C5" />, dropped: false },
   { key: 'thirteen', name: 'Open Letters', activeIcon: <LetterIcon name="newsletter" size={26} color="#FACA4E" />, inactiveIcon: <LetterIcon name="newsletter" size={26} color="#C5C5C5" />, dropped: false },
   { key: 'fourteen', name: 'QAFI', activeIcon: <QafiIcon name="people-arrows" size={20} color="#FACA4E" />, inactiveIcon: <QafiIcon name="people-arrows" size={20} color="#C5C5C5" />, dropped: false },
-  { key: 'fifteen', name: 'EBC', activeIcon: <EBC name="sticker-emoji" size={28} color="#FACA4E" />, inactiveIcon: <EBC name="sticker-emoji" size={28} color="#C5C5C5" />, dropped: false },
+  { key: 'fifteen', name: 'EBIC', activeIcon: <EBC name="sticker-emoji" size={28} color="#FACA4E" />, inactiveIcon: <EBC name="sticker-emoji" size={28} color="#C5C5C5" />, dropped: false },
 ];
 
 export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynamicCategories, route }) {
@@ -116,7 +116,7 @@ export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynam
       case 'Mass Apps':
         navigation.navigate('Categories', { identifier });
         break;
-      case 'Videos Mania':
+      case 'Video Mania':
         navigation.navigate('Video', { identifier });
         break;
       // case 'DISC':
@@ -128,7 +128,7 @@ export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynam
       case 'Mondo Market':
         navigation.navigate('MarketZone');
         break;
-      case 'Cinematix':
+      case 'Cinematic':
         navigation.navigate('Cinematics', { identifier });
         break;
       case 'Kid-Vids':
@@ -155,7 +155,7 @@ export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynam
       case 'QAFI':
         navigation.navigate('QAFIScreen');
         break;
-      case 'EBC':
+      case 'EBIC':
         navigation.navigate('EBCScreen');
         break;
     }

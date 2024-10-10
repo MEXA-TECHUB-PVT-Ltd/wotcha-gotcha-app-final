@@ -128,7 +128,7 @@ export default function QAFIScreen() {
         
         const reverseData = formattedSections.reverse();
         setSections(reverseData);
-        setNoData(formattedSections.every(section => section.data.length === 0));
+        setNoData(formattedSections.every(section => section.title.length === 0));
       } else {
         setSections([]);
         setNoData(true);

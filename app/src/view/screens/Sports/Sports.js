@@ -201,9 +201,9 @@ import {
           title: category.sub_category_name,
           data: category.Sport_result.Sports,
         }));
-        const reverseData = formattedSections.reverse();
-        setSections(reverseData);
-        setNoData(formattedSections.every(section => section.data.length === 0));
+        // const reverseData = formattedSections.reverse();
+        setSections(formattedSections);
+        setNoData(formattedSections.every(section => section.title.length === 0));
       } else {
         setSections([]);
         setNoData(true);
@@ -272,7 +272,10 @@ import {
               });
             }
           }
-          ref_RBSheetCamera.current.close();
+          // ref_RBSheetCamera.current.close();
+          if (ref_RBSheetCamera.current) {
+            ref_RBSheetCamera.current.close();
+          }
           setLoading(false);
         }
       );
@@ -289,7 +292,10 @@ import {
           setLoading(false);
           navigation.navigate("UploadUpdateSports", { Video: response.assets[0] });
         }
-        ref_RBSheetCamera.current.close();
+        if (ref_RBSheetCamera.current) {
+          ref_RBSheetCamera.current.close();
+        }
+        // ref_RBSheetCamera.current.close();
         setLoading(false);
 
       });

@@ -143,8 +143,8 @@ export default function UploadScreenSports({navigation, route}) {
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
 
-        setCategorySelect(categories); // Update the state with the formatted category data
-
+        const reverseData = categories.reverse();
+        setCategorySelect(reverseData); // Update the state with the formatted category data
         // console.log('Data main Categories', categoriesSelect);
         setImageInfo(receivedData);
       } else {
@@ -185,7 +185,8 @@ export default function UploadScreenSports({navigation, route}) {
         label: category.name, // Use the "name" property as the label
         value: category.id.toString(), // Convert "id" to a string for the value
       }));
-      setSubCate(subcategories);
+      const reverseData = subcategories.reverse();
+      setSubCate(reverseData);
     } catch (error) {
       console.error("Error Trending:", error);
     }

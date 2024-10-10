@@ -531,7 +531,7 @@ export default function ProfileSettings({ navigation }) {
             backgroundColor: 'transparent',
           },
         }}>
-        <Image source={appImages.alert} style={{ resizeMode: 'contain' }} />
+        <Image source={appImages.alert} style={{ resizeMode: 'contain', height:70, width:70 }}  />
         <Text
           style={[
             styles.txtNotification,

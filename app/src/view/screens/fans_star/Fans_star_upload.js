@@ -88,6 +88,10 @@ export default function Fans_star_upload({ navigation }) {
   const [descriptionError, setDescriptionError] = useState("");
   const [thumbnailError, setthumbnailImageUritwoError] = useState("");
 
+  const [imageUriVideo, setimageUri] = useState(imageUri)
+  useEffect(() => {
+    setimageUri(imageUri);
+  }, [imageUri])
   useEffect(() => {
     const getUserId = async () => {
       try {
@@ -211,11 +215,11 @@ export default function Fans_star_upload({ navigation }) {
   };
 
   const upload = async () => {
-    if (imageUri.uri || imageInfo.uri !== null) {
+    if (imageUriVideo.uri || imageInfo.uri !== null) {
 
-      const uri = imageUri.uri || imageInfo.uri;
-      const type = imageUri.type || imageInfo.type;
-      const name = imageUri.fileName || imageInfo.fileName;
+      const uri = imageUriVideo.uri || imageInfo.uri;
+      const type = imageUriVideo.type || imageInfo.type;
+      const name = imageUriVideo.fileName || imageInfo.fileName;
       const source = { uri, type, name };
       handleUploadVideo(source);
     } else {
@@ -383,7 +387,7 @@ export default function Fans_star_upload({ navigation }) {
 
   const handleVideoPress = () => {
     // const videoUri = imageUri;
-    const videoUri = imageUri?.uri || imageInfo?.uri;
+    const videoUri = imageUriVideo?.uri || imageInfo?.uri;
     navigation.navigate("VideoPlayerScreen", { videoUri });
   };
   const takeVideoFromCamera = async () => {
@@ -398,6 +402,7 @@ export default function Fans_star_upload({ navigation }) {
           if (response.assets && response.assets.length > 0) {
             setImageUri(response.assets[0].uri);
             setImageInfo(response.assets[0]);
+            setimageUri(response.assets[0])
 
           }
         }
@@ -413,6 +418,7 @@ export default function Fans_star_upload({ navigation }) {
       if (!response.didCancel && response.assets.length > 0) {
         setImageUri(response.assets[0].uri);
         setImageInfo(response.assets[0]);
+        setimageUri(response.assets[0])
       }
     });
   };
@@ -459,7 +465,7 @@ export default function Fans_star_upload({ navigation }) {
             }}
           >
             <ImageBackground
-              source={{ uri: imageUri.uri }}
+              source={{ uri: imageUriVideo.uri }}
               style={{
                 width: "100%",
                 height: "100%",
