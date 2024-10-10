@@ -128,7 +128,7 @@ const EBCScreen = () => {
         }));
         const reverseData = formattedSections.reverse();
         setSections(reverseData);
-        setNoData(formattedSections.every(section => section.data.length === 0));
+        setNoData(formattedSections.every(section => section.title.length === 0));
       } else {
         setSections([]);
         setNoData(true);
@@ -355,7 +355,7 @@ const isSelected = selectedItemId === item.id;
           onPressSearch={() => navigation.navigate("SearchGEBC")}
           //   onPressSearch={handleSearchPress}
           showText={true}
-          text={"EBC"} 
+          text={"EBIC"} 
           showSearch={true}
         />
       </View>

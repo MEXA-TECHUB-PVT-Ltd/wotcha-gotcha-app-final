@@ -137,7 +137,7 @@ export default function OpenLetterScreen({ route }) {
 
           setSections(formattedSections);
           console.log('data for sub cater haioiii', formattedSections)
-          setNoData(formattedSections.every(section => section.data.length === 0));
+          setNoData(formattedSections.every(section => section.title.length === 0));
         } else {
           setSections([]);
           setNoData(true);
@@ -223,8 +223,8 @@ export default function OpenLetterScreen({ route }) {
         ...letter,
         post_date: convertTimeAndDate(letter.post_date), 
       }));
-      setTopNewsData(formattedLetters[0]); // Update the state with the fetched data
-      fetchSpecificSig(formattedLetters[0].signature_id)
+      setTopNewsData(formattedLetters[0] || ''); // Update the state with the fetched data
+      fetchSpecificSig(formattedLetters[0].signature_id || '')
     } catch (error) {
       setLoading(false);
       console.error("Error Trending:", error);
@@ -308,7 +308,7 @@ export default function OpenLetterScreen({ route }) {
       })).reverse();
       // console.log('singature--------', formattedLetters)
       setOpensLettersPublicGeneralData(formattedLetters); // Update the state with the fetched data
-      await fetchLetterPublicCelebrity();
+      // await fetchLetterPublicCelebrity();
     } catch (error) {
       setLoading(false);
       console.error("Error Trending:", error);
@@ -347,7 +347,7 @@ export default function OpenLetterScreen({ route }) {
       })).reverse();
 
       setOpensLettersPublicCelebrityData(formattedLetters); // Update the state with the fetched data
-      await fetchLetterPrivateFriends();
+      // await fetchLetterPrivateFriends();
     } catch (error) {
       setLoading(false);
 
@@ -373,7 +373,7 @@ export default function OpenLetterScreen({ route }) {
 
       const result = await response.json();
       setOpensLettersPrivateFriendsData(result.AllLetter); // Update the state with the fetched data
-      await fetchLetterPrivateCelebrity();
+      // await fetchLetterPrivateCelebrity();
     } catch (error) {
       console.error("Error Trending:", error);
     }
@@ -417,10 +417,10 @@ export default function OpenLetterScreen({ route }) {
         : item.item.signature_image
       : null;
       // console.log('user data --------item ', imageUrl)
-    const userimageUrl = item.item.user_image
+    const userimageUrl = item.item.userimage
       ? item.item.userimage.startsWith("/userImage")
-        ? base_url + item.item.user_image
-        : item.item.user_image
+        ? base_url + item.item.userimage
+        : item.item.userimage
       : null;
     return (
       <TouchableOpacity
@@ -447,8 +447,8 @@ export default function OpenLetterScreen({ route }) {
               height: hp(4),
             }}
           >
-            {item.item?.user_image !== null ||
-            item.item?.user_image !== undefined ||
+            {item.item?.userimage !== null ||
+            item.item?.userimage !== undefined ||
             userimageUrl !== null ||
             userimageUrl !== undefined ? (
               <View
@@ -459,7 +459,7 @@ export default function OpenLetterScreen({ route }) {
                 }}
               >
                 <Image
-                  source={{ uri: item.item?.user_image || userimageUrl }}
+                  source={{ uri: item.item?.userimage || userimageUrl }}
                   style={{
                     width: "100%",
                     height: "100%",
@@ -774,7 +774,7 @@ export default function OpenLetterScreen({ route }) {
                 fontFamily: "Inter-Bold",
               }}
             >
-              {topNewsData.post_date}
+              {topNewsData?.post_date}
             </Text>
           </View>
 
@@ -808,7 +808,7 @@ export default function OpenLetterScreen({ route }) {
                   fontFamily: "Inter-Regular",
                 }}
               >
-                {topNewsData.subject_place}
+                {topNewsData?.subject_place}
               </Text>
             </View>
           </View>

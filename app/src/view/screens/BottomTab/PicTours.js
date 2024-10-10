@@ -162,7 +162,7 @@ export default function PicTours() {
       setSections(formattedSections);
 
       // console.log('sub cate hai---', formattedSections)
-      setNoData(formattedSections.every(section => section.data.length === 0));
+      setNoData(formattedSections.every(section => section.title.length === 0));
     } else {
       setSections([]);
       setNoData(true);

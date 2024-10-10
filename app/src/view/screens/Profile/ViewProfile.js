@@ -1273,20 +1273,38 @@ export default function ViewProfile({ navigation }) {
   //---------------------------\\
 
   const data = [
-    { id: "1", total: totalVideos, label: t('MyProfile.VideosMania') },
+    // { id: "1", total: totalVideos, label: t('MyProfile.VideosMania') },
+
+    { id: "1", total: totalVideos, label:  t('Drawer.VideoMania')},
     { id: "2", total: totalPics, label: t('Drawer.PicTours') },
-    { id: "3", total: totalNews, label: t('Drawer.News') },
+    { id: "3", total: totalNews, label:  t('Drawer.News') },
     { id: "4", total: totalLetter, label: t('Drawer.OpenLetter') },
     { id: "5", total: totalQAFI, label: t('Drawer.QAFI') },
-    { id: "6", total: totalGEBC, label: "EBC" },
-    { id: "7", total: totalsports, label: t('Drawer.Sports') },
+    { id: "6", total: totalGEBC, label: t('Drawer.EBIC') },
+    { id: "7", total: totalsports, label: t('Drawer.Sports')},
  
-    { id: "8", total: cinematictotalVideos, label: t('Drawer.Cinematics') },
+    { id: "8", total: cinematictotalVideos, label: t('Drawer.Cinematics')},
+    { id: "12", total: fanStartotalVideos, label: t('Drawer.Fans_star')},
     { id: "9", total: kidstotalVideos, label: t('Drawer.Kid-Vids') },
-    { id: "10", total: tvtotalVideos, label: t('Drawer.TVProgMax') },
+    { id: "10", total: tvtotalVideos, label: t('Drawer.TVProgMax')},
     { id: "11", total: learningtotalVideos, label: t('Drawer.LearningHobbies') },
-    { id: "12", total: fanStartotalVideos, label: t('Drawer.Fans_star') },
     { id: "13", total: totalMarketZone, label: t('Drawer.MarketZone') },
+
+
+    // { id: "1", total: totalVideos, label:  'Video Mania'},
+    // { id: "2", total: totalPics, label: 'Pic Tours' },
+    // { id: "3", total: totalNews, label:  'On-News' },
+    // { id: "4", total: totalLetter, label: 'Open Letters' },
+    // { id: "5", total: totalQAFI, label: 'QAFI' },
+    // { id: "6", total: totalGEBC, label: 'EBIC' },
+    // { id: "7", total: totalsports, label: 'Sports & Sports' },
+ 
+    // { id: "8", total: cinematictotalVideos, label: 'Cinematic' },
+    // { id: "9", total: kidstotalVideos, label: 'Kid-Vids' },
+    // { id: "10", total: tvtotalVideos, label: 'TV ProgMax'},
+    // { id: "11", total: learningtotalVideos, label: 'Learnings and Hobbies' },
+    // { id: "12", total: fanStartotalVideos, label: 'Fans Stars Zone' },
+    // { id: "13", total: totalMarketZone, label: 'Mondo Market' },
 
   ];
   const renderItemforHeading = ({ item }) => (
@@ -1867,6 +1885,69 @@ export default function ViewProfile({ navigation }) {
           </View>
         </View>
 
+
+
+        <View style={{ height: hp(23), marginLeft: wp(8), marginTop: hp(1) }}>
+          <Text
+            style={{
+              fontSize: hp(2.1),
+     
+              color: "#77838F",
+              //fontWeight: 'bold',
+              fontFamily: "Inter-Bold",
+            }}
+          >
+            {t('MyProfile.myFans_star')}
+            {/* My Fan Star Zone */}
+          </Text>
+
+          <View style={{ marginTop: hp(1), height: "100%" }}>
+            {loading ? (
+              <View
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <ActivityIndicator size="large" color="#FACA4E" />
+              </View>
+            ) : (
+              <>
+                {fanStarvideos?.length === 0 ? (
+                  <View
+                    style={{
+                      flex: 1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                      {/* No data available */}
+                      {t('Dashboard.NoDataavailable')}
+                    </Text>
+                  </View>
+                ) : (
+                  <FlatList
+                    style={{ flex: 1, marginLeft: wp(-1.5) }}
+                    showsHorizontalScrollIndicator={false}
+                    data={fanStarvideos}
+                    horizontal
+                    //keyExtractor={item => item.id.toString()}
+                    renderItem={({ item }) => renderFanstarVideo(item)}
+                  />
+                )}
+              </>
+            )}
+          </View>
+        </View>
+
+
+
         <View style={{ height: hp(23), marginLeft: wp(8), marginTop: hp(1) }}>
           <Text
             style={{
@@ -2044,64 +2125,7 @@ export default function ViewProfile({ navigation }) {
           </View>
         </View>
 
-        <View style={{ height: hp(23), marginLeft: wp(8), marginTop: hp(1) }}>
-          <Text
-            style={{
-              fontSize: hp(2.1),
-     
-              color: "#77838F",
-              //fontWeight: 'bold',
-              fontFamily: "Inter-Bold",
-            }}
-          >
-            {t('MyProfile.myFans_star')}
-            {/* My Fan Star Zone */}
-          </Text>
-
-          <View style={{ marginTop: hp(1), height: "100%" }}>
-            {loading ? (
-              <View
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <ActivityIndicator size="large" color="#FACA4E" />
-              </View>
-            ) : (
-              <>
-                {fanStarvideos?.length === 0 ? (
-                  <View
-                    style={{
-                      flex: 1,
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      {/* No data available */}
-                      {t('Dashboard.NoDataavailable')}
-                    </Text>
-                  </View>
-                ) : (
-                  <FlatList
-                    style={{ flex: 1, marginLeft: wp(-1.5) }}
-                    showsHorizontalScrollIndicator={false}
-                    data={fanStarvideos}
-                    horizontal
-                    //keyExtractor={item => item.id.toString()}
-                    renderItem={({ item }) => renderFanstarVideo(item)}
-                  />
-                )}
-              </>
-            )}
-          </View>
-        </View>
+   
 
 
         {/* market zone at bottom */}
@@ -2193,10 +2217,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(2),
   },
   itemContainer: {
-    width: wp(30), // Adjusted width to fit approximately 4 items on the screen
+    // width: wp(30), // Adjusted width to fit approximately 4 items on the screen
     alignItems: "center",
     justifyContent: "center",
     height: hp(9),
+    padding:hp(1),
   },
   boldText: {
     fontSize: hp(2.5),

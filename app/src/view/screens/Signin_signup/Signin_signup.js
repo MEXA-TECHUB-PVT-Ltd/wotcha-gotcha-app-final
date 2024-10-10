@@ -1063,7 +1063,7 @@ const App = ({ navigation }) => {
                   style={{
                     marginTop: heightPercentageToDP(5),
                     height: heightPercentageToDP(78),
-                    marginBottom: heightPercentageToDP(10),
+                    marginBottom: heightPercentageToDP(12),
                     marginHorizontal: widthPercentageToDP(8),
                   }}
                 >
@@ -1073,7 +1073,7 @@ const App = ({ navigation }) => {
                       marginTop: heightPercentageToDP(1),
                       fontFamily: "Inter",
                       fontSize: heightPercentageToDP(1.8),
-                      lineHeight: heightPercentageToDP(2.1),
+                      lineHeight: heightPercentageToDP(2),
                       color: "black",
                     }}
                   >

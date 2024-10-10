@@ -121,7 +121,7 @@ export default function LetterDetails({ navigation, route }) {
       : setSignatureData(`result.Signature.signature_image`); */
 
       if (imageUrl.startsWith("/fileUpload")) {
-        setSignatureData(`https://watch-gotcha-be.mtechub.com/${imageUrl}`);
+        setSignatureData(base_url + `${imageUrl}`);
       } else {
         setSignatureData(`${imageUrl}`);
       }

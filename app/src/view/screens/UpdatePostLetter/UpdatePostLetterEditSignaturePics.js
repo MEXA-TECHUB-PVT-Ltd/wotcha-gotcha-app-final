@@ -70,7 +70,7 @@ export default function UpdatePostLetterEditSignaturePics({
   const [imageInfoThumbnail, setimageInfoThumbnail] = useState(null);
   const [Username, setUserName] = useState('');
   const receivedData = route.params?.receivedData;
-  console.log("receivedData-----", receivedData.images);
+  console.log("receivedData-----", videoUri);
   console.log("imageUris--------??????", imageUris.length);
 
   const [imagesWithId, setImagesWithId] = useState([]);
@@ -109,6 +109,8 @@ useEffect(() => {
           setLetterData(data.postLetter);
           setImagesWithId(data.postLetter.images); 
           setImageUris(data.postLetter.images);
+          setVideoUri(data.postLetter.video);
+          setVideoInfo(data.postLetter.video);
        
         } else {
           console.error(
@@ -413,11 +415,11 @@ const getFileDetails = (imageUrl) => {
   //   }
   // };
 
-  console.log(' handleUploadImages single image functiona call----about------', imageUris)
+  // console.log(' handleUploadImages single image functiona call----about------', imageUris)
   const checkUpload = () => {
     if (imageUris.length < 3 && videoInfo === null && removedImageIds.length > 0) {
       console.log('removeExistingImages functiona call----------', removedImageIds)
-      removeExistingImages(removedImageIds);
+      handleUploadImages(imageUris);
     } else if (imageUris.length <= 3 && videoInfo === null) {
       console.log(' handleUploadImages single image functiona call----------')
       handleUploadImages(imageUris);
@@ -433,6 +435,7 @@ const getFileDetails = (imageUrl) => {
       handleUploadVideo();
     }
   };
+  
   // const checkUpload = () => {
   //   if (imageUris.length < 3 && videoInfo === null && removedImageIds.length > 0) {
   //     removeExistingImages(removedImageIds);
@@ -825,6 +828,59 @@ const getFileDetails = (imageUrl) => {
   };
 
 
+  const handleRemoveImage = (index) => {
+    
+    const removedImageId = imagesWithId[index]?.id;
+    const removedImageIdss = ([...removedImageIds, removedImageId]);
+    setRemovedImageIds([...removedImageIds, removedImageId]);
+    console.log('handle remove image ????????????????', removedImageIds)
+    console.log('removedImageIdssimage ????????????????-------------------------', removedImageIdss)
+    removeExistingImagesonly(removedImageIdss);
+    // setRemovedImageIds(prevIds => [...prevIds, removedImageId]);
+    const updatedImages = imagesWithId.filter((_, i) => i !== index);
+    setImagesWithId(updatedImages);
+    setImageUris(updatedImages);
+
+     // Prepare to update oldImageIds based on removedImageId
+  // updateLetterImages(removedImageId);
+  };
+  const removeExistingImagesonly = async (removedImageIds) => {
+    setLoading(true);
+    const token = authToken;
+    const apiUrl = base_url + "letter/updatePostLetterImages";
+  console.log('remove in re', removedImageIds)
+    const requestData = {
+      letterId: letterId,
+      oldImageIds: removedImageIds,  // Only send oldImageIds
+   
+    };
+  
+    console.log("Request data is---", requestData);
+    try {
+      const response = await fetch(apiUrl, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        console.log("API Response:", data);
+        UpdateLetterImageremove();
+      } else {
+        console.error("Failed to call API for remove image:", response);
+      }
+    } catch (error) {
+      console.error("API Request Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   
   // const createLetterImage = async (imageUrls, oldImageIds) => {
   //   const token = authToken;
@@ -922,6 +978,71 @@ const getFileDetails = (imageUrl) => {
         setLoading(false);
 
         handleUpdatePassword();
+
+        // Handle the response data as needed
+      } else {
+        setLoading(false);
+
+        console.error("Failed call api:", response);
+        // Handle the error
+      }
+    } catch (error) {
+      console.error("API Request Error:", error);
+      setLoading(false);
+
+      // Handle the error
+    }
+  };
+  const UpdateLetterImageremove = async (image) => {
+    const token = authToken;
+    console.log("AUTH TOKEN", token);
+
+    const apiUrl = base_url + "letter/updatePostLetter";
+
+    const requestData = {
+      letterId: letterId,
+      // image: image, //you can send maximum 5 images
+      // video: '', // you can send one video maximum
+      user_id: userId,
+      post_type: "public",
+      receiver_type: "leader",
+      // receiver_type: receivedDataLetterType,
+      disc_category: receivedDataCategoryId,
+      disc_sub_category: receivedDataLetterType,
+      name: receivedDataName,
+      address: receivedDatAddress,
+      email: receivedDataEmail,
+      contact_no: receivedDataContactNumber,
+      subject_place: receivedDatasubjectOfLetter,
+      post_date: receivedDataSignatureCreatedAt,
+      greetings: receivedDataGreetingsTitle,
+      introduction: receivedDataintroductionOfLetter,
+      body: receivedDatapostLetter,
+      form_of_appeal: receivedDataAppealOfLetter,
+      signature_id: receivedDataSignatureId,
+      paid_status: false,
+      receiver_id: "",
+      receiver_address: "receiver_address",
+    };
+
+    try {
+      console.log(requestData);
+      const response = await fetch(apiUrl, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("API Response for UpdateLetterImage---- :", data);
+
+        setLoading(false);
+
+        // handleUpdatePassword();
 
         // Handle the response data as needed
       } else {
@@ -1162,18 +1283,7 @@ const getFileDetails = (imageUrl) => {
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-  const handleRemoveImage = (index) => {
-    console.log('handle remove image ????????????????', index)
-    const removedImageId = imagesWithId[index]?.id;
-    setRemovedImageIds([...removedImageIds, removedImageId]);
-    // setRemovedImageIds(prevIds => [...prevIds, removedImageId]);
-    const updatedImages = imagesWithId.filter((_, i) => i !== index);
-    setImagesWithId(updatedImages);
-    setImageUris(updatedImages);
-
-     // Prepare to update oldImageIds based on removedImageId
-  // updateLetterImages(removedImageId);
-  };
+ 
 
   const updateLetterImages = async (uploadedImageUrls, oldImageIds) => {
     setLoading(true);
@@ -1593,19 +1703,49 @@ const getFileDetails = (imageUrl) => {
         </View>
       )} */}
 
-<View style={styles.videomaincontainer}>
+{/* <View style={styles.videomaincontainer}>
       {videoUri !== null && (
         <View style={styles.videoContainer}>
           <Video
             source={{ uri: videoUri }}
             style={styles.video}
-            // resizeMode="contain"
-            // controls={true} // Show media controls (play, pause, etc.)
+           
           />
-          {/* <Text style={styles.videoInfo}>{videoInfo?.fileName}</Text> */}
+          <Text style={styles.videoInfo}>{videoInfo?.fileName}</Text>
         </View>
       )}
+    </View> */}
+
+
+
+    <View style={styles.videomaincontainer}>
+  {videoUri !== null && (
+    <View style={styles.videoContainer}>
+      <Video
+        source={{ uri: videoUri }}
+        style={styles.video}
+        // resizeMode="contain"
+        // controls={true} // Show media controls (play, pause, etc.)
+      />
+      
+      <TouchableOpacity
+        style={styles.crossIcon}
+        onPress={() => {
+          setVideoUri(null),
+          setVideoInfo(null)
+        }
+        }
+          
+      >
+        <MaterialCommunityIcons name="close-circle" size={40} color="yellow" />
+      </TouchableOpacity>
+      {/* Cross Icon to remove video */}
+      {/* <TouchableOpacity style={styles.crossIcon} onPress={() => setVideoUri(null)}>
+        <Ionicons name="close-circle" size={24} color="red" />
+      </TouchableOpacity> */}
     </View>
+  )}
+</View>
       {/* {imageUri !== null ? (
         <View
           style={{
@@ -2211,6 +2351,12 @@ const styles = StyleSheet.create({
     top: 5,
     right: 1,
   },
+  crossIcon: {
+    position: 'absolute',
+    top: 1,
+    right: 120,
+    // zIndex: 10, // Make sure it appears above the video
+  },
   changePicContainer: {
     position: 'absolute',
     top: 5,
@@ -2231,6 +2377,7 @@ const styles = StyleSheet.create({
     // marginHorizontal: wp(10),
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'relative',
   },
   video: {
     height: '100%',

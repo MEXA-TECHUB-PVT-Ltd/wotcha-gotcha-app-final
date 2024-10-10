@@ -137,7 +137,7 @@ import { useTranslation } from 'react-i18next';
             data: category.news_result.News,
           }));
           setSections(formattedSections);
-          setNoData(formattedSections.every(section => section.data.length === 0));
+          setNoData(formattedSections.every(section => section.title.length === 0));
         } else {
           setSections([]);
           setNoData(true);

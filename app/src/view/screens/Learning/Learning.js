@@ -173,7 +173,7 @@ export default function Learning({ route }) {
         const reversedSections = formattedSections.reverse();
         setSections(reversedSections);
         // Check if there is no data
-        const hasNoData = formattedSections.every(section => section.data.length === 0);
+        const hasNoData = formattedSections.every(section => section.title.length === 0);
         setNoData(hasNoData);
       } else {
         setSections([]);

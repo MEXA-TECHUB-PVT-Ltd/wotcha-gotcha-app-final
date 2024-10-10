@@ -142,7 +142,7 @@ const BottomtabNavigation = () => {
                   case 'Mass Apps':
                     iconComponent = focused ? <CategoryActive size={size} color={color} /> : <CategoryInActive size={size} color={color} />;
                     break;
-                  case 'Videos Mania':
+                  case 'Video Mania':
                     iconComponent = focused ? <VideoActive size={size} color={color} /> : <VideoInActive size={size} color={color} />;
                     break;
                   // case 'DISC':
@@ -154,7 +154,7 @@ const BottomtabNavigation = () => {
                   case 'Mondo Market':
                     iconComponent = focused ? <MarketZoneActive size={size} color={color} /> : <MarketZoneInActive size={size} color={color} />;
                     break;
-                  case 'Cinematix':
+                  case 'Cinematic':
                     iconComponent = focused ? <Cinematiceactive size={size} color={color} /> : <Cinematics_svg size={size} color={color} />;
                     break;
                   case 'Fans Stars Zone':
@@ -181,7 +181,7 @@ const BottomtabNavigation = () => {
                   case 'QAFI':
                     iconComponent = focused ? <QafiIcon name="people-arrows" size={20} color='#FACA4E' /> : <QafiIcon name="people-arrows"  size={20} color={color} />;
                     break;
-                  case 'EBC':
+                  case 'EBIC':
                     iconComponent = focused ? <EBC name="sticker-emoji" size={size} color='#FACA4E' /> : <EBC name="sticker-emoji"  size={size} color={color} />;
                     break;
                   default:
@@ -197,7 +197,7 @@ const BottomtabNavigation = () => {
                 //   return <Dashboard />;
                 case 'Mass Apps':
                   return <Categories />;
-                case 'Videos Mania':
+                case 'Video Mania':
                   return <Video />;
                 // case 'DISC':
                 //   return <Disc />;
@@ -205,7 +205,7 @@ const BottomtabNavigation = () => {
                   return <PicTours />;
                 case 'Mondo Market':
                   return <MarketZone />;
-                case 'Cinematix':
+                case 'Cinematic':
                   return <Cinematics />;
                 case 'Fans Stars Zone':
                   return <Fans_star/>;
@@ -223,7 +223,7 @@ const BottomtabNavigation = () => {
                   return <OpenLetterScreen />;
                 case 'QAFI':
                   return <QAFIScreen/>;
-                case 'EBC':
+                case 'EBIC':
                   return <EBCScreen />;
                 default:
                   return null;

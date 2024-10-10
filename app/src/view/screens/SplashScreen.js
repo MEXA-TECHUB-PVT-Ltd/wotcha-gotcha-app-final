@@ -35,7 +35,6 @@ export default function SplashScreen({navigation}) {
   };
 
   const getUserID = async () => {
-    console.log("Id's");
     try {
       const result = await AsyncStorage.getItem('userId ');
       if (result !== null) {
