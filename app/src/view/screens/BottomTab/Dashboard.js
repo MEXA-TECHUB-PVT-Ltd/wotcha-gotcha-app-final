@@ -4286,7 +4286,7 @@ const renderPublicGeneralLetter = (item) => {
         barStyle="dark-content"
       />
 
-      <View style={{ marginTop:Platform.OS =="ios"? 0: hp(5), width: "100%" }}>
+      <View style={{ marginTop:Platform.OS =="ios"? 0: hp(6), width: "100%" }}>
         {/* {console.log("Navigation object:", navigation)} */}
         <Headers
           showListings={true}
