@@ -150,7 +150,8 @@
         "signIn": "Se connecter",
         "signUp": "S'inscrire"
       },
-      
+    "QAFI" :"QRDI",
+    "EBIC" :"CIBE",
     "password": "mot de passe",
     "goBack": "allerRetour",
     "Takeaphoto": "Prendre une photo",

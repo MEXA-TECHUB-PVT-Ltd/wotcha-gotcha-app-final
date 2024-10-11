@@ -359,7 +359,7 @@ const isSelected = selectedItemId === item.id;
           onPressSearch={() => navigation.navigate("SearchAppsDisc")}
           //   onPressSearch={handleSearchPress}
           showText={true}
-          text={"QAFI"} 
+          text={t('QAFI')}
           showSearch={true}
         />
       </View>

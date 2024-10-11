@@ -355,7 +355,7 @@ const isSelected = selectedItemId === item.id;
           onPressSearch={() => navigation.navigate("SearchGEBC")}
           //   onPressSearch={handleSearchPress}
           showText={true}
-          text={"EBIC"} 
+          text={t('EBIC')}
           showSearch={true}
         />
       </View>
