@@ -1082,10 +1082,10 @@ const App = ({ navigation }) => {
                     2.  {t('signup.point2')}
                     {"\n\n"}
                     3.  {t('signup.point3')}
+                    {/* {"\n\n"} */}
+                    {/* 4.  {t('signup.point4')} */}
                     {"\n\n"}
-                    4.  {t('signup.point4')}
-                    {"\n\n"}
-                    5.  {t('signup.point5')}
+                    4.  {t('signup.point5')}
              
                   </Text>
                   {/* </ScrollView> */}

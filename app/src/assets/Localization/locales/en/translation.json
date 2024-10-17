@@ -18,8 +18,7 @@
         "point1": "'Wotcha Gotcha' is a cutting-edge and highly integrated network attracting millions of users worldwide. Users, referred to as WotchaGotchers, hereby gain access to a range of features designed to enhance their mobile experience.",
         "point2": "WotchaGotchers can optimize their phone screen space by consolidating all other apps into the 'Mass Apps' category within the Wotcha Gotcha app.",
         "point3": "Users have the flexibility to position the Wotcha Gotcha icon/app on the right or left upper corner, right or left lower corner, or at the center of their phone screen, providing a customizable and user-centric experience.",
-        "point4": "Users can explore captivating content across various categories such as Mass Apps, Video Mania, On-News, Pic-Tours, Mondo Market, QAFI, EBIC, Open Letters, Cinematic, Fan-Star Zone, Kid-Vids, Learnings and Hobbies, and Tv ProgMax to come engaging and ensuring a diverse experience.",
-        "point5": "Wotcha Gotchers have the ability to rearrange the positions of Wotcha Gotcha categories, moving them top/down or vice-versa, allowing for personalized and intuitive navigation.",
+        "point5": "Users can explore captivating content across various categories such as Mass Apps, Video Mania, On-News, Pic-Tours, Mondo Market, QAFI, EBIC, Open Letters, Cinematic, Fan-Star Zone, Kid-Vids, Learnings and Hobbies, and Tv ProgMax to come engaging and ensuring a diverse experience",
          "createAccountMessage": "Let's begin by creating your account."
     },
     "ForgotP":{
@@ -162,8 +161,8 @@
         "signUp": "Sign Up"
       },
    
-  
-
+    "EBIC" :"EBIC",
+    "QAFI" :"QAFI",
     "camera": "camera",
     "gallery": "gallery",
     "firstNameLabel": "First Name",
