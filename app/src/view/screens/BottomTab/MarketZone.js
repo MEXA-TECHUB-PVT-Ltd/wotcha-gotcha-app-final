@@ -63,7 +63,14 @@ export default function MarketZone({  }) {
   const [adsinActiveData, setAdsInActiveData] = useState([]);
   const ref_RBSheetCamera = useRef(null);
 
-  const RegionArea = ["Africa", "Europe", "Americas", "Asia", "Middle East"];
+  // const RegionArea = ["Africa", "Europe", "Americas", "Asia", "Middle East"];
+  const RegionArea = [
+    t('Africa'),
+    t('Europe'),
+    t('Americas'),
+    t('Asia'),
+    t('Middle_East')
+  ];
 
 
 
@@ -85,7 +92,23 @@ export default function MarketZone({  }) {
     getAuthToken();
   }, []);
 
+  const [language, setLanguage] = useState(null);
 
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log('lanugage--------', storedLanguage)
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
+
+    fetchLanguage();
+  }, [isFocused]);
 
   useEffect(() => {
     if (authToken && isFocused) {

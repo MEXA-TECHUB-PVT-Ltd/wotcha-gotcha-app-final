@@ -96,39 +96,96 @@ export default function Learning_upload({ navigation }) {
 
 
 
+  // useEffect(() => {
+  //   const getUserId = async () => {
+  //     try {
+  //       const result = await AsyncStorage.getItem("userId ");
+  //       if (result !== null) {
+  //         setUserId(result);
+  //       } else {
+  //       }
+  //     } catch (err) {
+  //       console.error("Error retrieving auth token:", err);
+  //       setError(err);
+  //     }
+  //   };
+
+  //   getUserId();
+  // }, []);
+  // useEffect(() => {
+  //   const getAuthToken = async () => {
+  //     try {
+  //       const token = await AsyncStorage.getItem("authToken ");
+  //       if (token) {
+  //         setAuthToken(token);
+  //       } else {
+  //         throw new Error("No auth token found");
+  //       }
+  //     } catch (err) {
+  //       console.error("Error retrieving auth token:", err);
+  //       setError(err);
+  //     }
+  //   };
+
+  //   getAuthToken();
+  // }, []);
+  const dummyData2 = {
+    AllCategories: [
+      {
+        id: 1,
+        name: "Vehic",
+        french_name: "Véhic",
+      },
+      {
+        id: 2,
+        name: "Tools ",
+        french_name: "Outils ",
+      },
+    ],
+  };
   useEffect(() => {
-    const getUserId = async () => {
+    const fetchData = async () => {
       try {
-        const result = await AsyncStorage.getItem("userId ");
-        if (result !== null) {
-          setUserId(result);
-        } else {
-        }
-      } catch (err) {
-        console.error("Error retrieving auth token:", err);
-        setError(err);
+        const [storedUserId, storedUserName, storedAuthToken] =
+          await Promise.all([
+            AsyncStorage.getItem("userId "),
+            AsyncStorage.getItem("userName"),
+            AsyncStorage.getItem("authToken "),
+          ]);
+
+        if (storedUserId) setUserId(storedUserId);
+        if (storedAuthToken) setAuthToken(storedAuthToken);
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    getUserId();
+    fetchData();
   }, []);
+
+  const [language, setLanguage] = useState(null);
+
   useEffect(() => {
-    const getAuthToken = async () => {
+    const fetchLanguage = async () => {
       try {
-        const token = await AsyncStorage.getItem("authToken ");
-        if (token) {
-          setAuthToken(token);
-        } else {
-          throw new Error("No auth token found");
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log("lanugage--------", storedLanguage);
+          await fetchAllCinematicsCategory(authToken, storedLanguage);
+          
+
+          // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
         }
-      } catch (err) {
-        console.error("Error retrieving auth token:", err);
-        setError(err);
+      } catch (error) {
+        console.error("Error fetching language:", error);
       }
     };
 
-    getAuthToken();
-  }, []);
+    fetchLanguage();
+  }, [isFocused, authToken]);
 
   useEffect(() => {
     if (authToken && isFocused) {
@@ -138,7 +195,7 @@ export default function Learning_upload({ navigation }) {
 
   const fetchAllData = async () => {
     try {
-      await fetchAllCinematicsCategory();
+      // await fetchAllCinematicsCategory();
       await fetchAllSubCategory(category);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -146,9 +203,10 @@ export default function Learning_upload({ navigation }) {
     }
   };
 
-  const fetchAllCinematicsCategory = async () => {
+  // const fetchAllCinematicsCategory = async () => {
+    const fetchAllCinematicsCategory = async (token, lang) => {
     //console.log("Categry in id", selectedItemId)
-    const token = authToken;
+    // const token = authToken;
     try {
       const response = await fetch(
         base_url + "learningHobbies/category/getAll?page=1&limit=10000",
@@ -161,13 +219,30 @@ export default function Learning_upload({ navigation }) {
       );
 
       const result = await response.json();
-      setData(result.AllCategories); // Update the state with the fetched data
+
+      const categories = result.AllCategories.map((category) => ({
+        label:
+          lang === "fr" && category.french_name
+            ? category.french_name
+            : category.name,
+        // label: category.name,
+        value: category.id.toString(),
+      }));
+
+      setData(categories);
+
+
+      // setData(result.AllCategories); // Update the state with the fetched data
     } catch (error) {
     }
   };
 
   const fetchAllSubCategory = async (category) => {
-    const token = authToken;
+
+      console.log("langiuuuuuuuuuuuuuuuuuuuuuuu---------", language);
+
+
+    // const token = authToken;
     try {
       const response = await fetch(
         //
@@ -176,14 +251,32 @@ export default function Learning_upload({ navigation }) {
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         }
       );
 
       const result = await response.json();
+      
+      
+      
+      const subcategories = result.AllCategories.map((category) => ({
+        // label: category.name, // Use the "name" property as the label
+        label:
+        language === "fr" && category.french_name
+            ? category.french_name
+            : category.name,
+        value: category.id.toString(), // Convert "id" to a string for the value
+      }));
+      const reverseData = subcategories.reverse();
+      console.log("result---------", reverseData);
+      setSubCate(reverseData);
+      
+      
+      
+      
       // console.log("AllSub  Categories---", result.AllCategories);
-      setSubCate(result.AllCategories); // Update the state with the fetched data
+      // setSubCate(result.AllCategories); // Update the state with the fetched data
     } catch (error) {
       console.error("Error Trending:", error);
     }
@@ -636,15 +729,17 @@ export default function Learning_upload({ navigation }) {
             data={data}
             search={false}
             maxHeight={200}
-            labelField="name"
-            valueField="id"
+              labelField="label"
+            valueField="value"
+            // labelField="name"
+            // valueField="id"
             placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={(item) => {
-
-              setCategory(item.id);
+              console.log("kon sub category id hai----", item.value);
+              setCategory(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (
@@ -693,15 +788,17 @@ export default function Learning_upload({ navigation }) {
             data={subCate}
             search={false}
             maxHeight={200}
-            labelField="name"
-            valueField="id"
+            labelField="label"
+            valueField="value"
+            // labelField="name"
+            // valueField="id"
             placeholder={t('Select Sub Category')}
             searchPlaceholder="Search..."
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={(item) => {
-              console.log("kon sub category id hai----", item.id);
-              setSubCategory(item.id);
+              console.log("kon sub category id hai----", item.value);
+              setSubCategory(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (

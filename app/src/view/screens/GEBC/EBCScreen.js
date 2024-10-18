@@ -67,6 +67,25 @@ const EBCScreen = () => {
     getAuthToken();
   }, []);
 
+  const [language, setLanguage] = useState(null);
+
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log('lanugage--------', storedLanguage)
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
+
+    fetchLanguage();
+  }, [isFocused]);
+
+
   // Fetch all data when authToken is set and screen is focused
   useEffect(() => {
     if (authToken && isFocused) {
@@ -142,7 +161,7 @@ const EBCScreen = () => {
   const renderSearches = (item) => {
     // console.log('First Id', searchesData[0].id);
 const isSelected = selectedItemId === item.id;
-
+const name = language === "fr" && item.french_name ? item.french_name : item.name;
     return (
       <TouchableOpacity
         style={[
@@ -162,7 +181,8 @@ const isSelected = selectedItemId === item.id;
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.name}
+          {name}
+          {/* {item.name} */}
         </Text>
       </TouchableOpacity>
     );

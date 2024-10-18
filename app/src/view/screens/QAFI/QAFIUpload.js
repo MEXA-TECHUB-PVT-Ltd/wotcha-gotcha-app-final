@@ -34,7 +34,7 @@ import {
   import { CLOUD_NAME, CLOUDINARY_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
 import CustomLoaderButton from '../../../assets/Custom/CustomLoaderButton';
 import { useTranslation } from 'react-i18next';
-  
+import { useIsFocused } from "@react-navigation/native";
   export default function QAFIUpload({navigation}) {
     const [selectedItem, setSelectedItem] = useState('');
     const { t } = useTranslation();
@@ -73,7 +73,7 @@ import { useTranslation } from 'react-i18next';
     const [imageUri, setImageUri] = useState(null);
   
     const [isFocus, setIsFocus] = useState(false);
-  
+    const isFocused = useIsFocused();
     const ref_RBSheetCamera = useRef(null);
   
     const ref_RBSendOffer = useRef(null);
@@ -122,7 +122,7 @@ import { useTranslation } from 'react-i18next';
         if (response.ok) {
           const data = await response.json();
           setUserImage(data.user.image);
-          fetchCategory(token);
+          // fetchCategory(token);
         } else {
           console.error('Failed to fetch user:', response.status, response.statusText);
         }
@@ -131,7 +131,31 @@ import { useTranslation } from 'react-i18next';
       }
     };
   
-    const fetchCategory = async (token) => {
+
+    
+  const [language, setLanguage] = useState(null);
+
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log("lanugage--------", storedLanguage);
+          await fetchCategory(authToken, storedLanguage);
+          
+
+          // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
+
+    fetchLanguage();
+  }, [isFocused, authToken]);
+
+    const fetchCategory = async (token, lang) => {
       try {
         const response = await fetch(`${base_url}qafi/category/getAll?page=1&limit=10000`, {
           method: 'GET',
@@ -143,7 +167,11 @@ import { useTranslation } from 'react-i18next';
         if (response.ok) {
           const data = await response.json();
           const categories = data.AllCategories.map(category => ({
-            label: category.name,
+            // label: category.name,
+            label:
+            lang === "fr" && category.french_name
+              ? category.french_name
+              : category.name,
             value: category.id.toString()
           }));
           const reverseData = categories.reverse();
@@ -163,6 +191,8 @@ import { useTranslation } from 'react-i18next';
     }, [authToken, categoryId]);
   
     const fetchAllSubCategory = async (categoryId) => {
+      console.log("langiuuuuuuuuuuuuuuuuuuuuuuu---------", language);
+      console.log("category---------", categoryId);
       try {
         const response = await fetch(`${base_url}qafi/sub_category/getAllByCategory?category_id=${categoryId}`, {
           method: 'GET',
@@ -173,8 +203,23 @@ import { useTranslation } from 'react-i18next';
   
         if (response.ok) {
           const result = await response.json();
-          const reverseData = result.AllCategories.reverse();
-          setSubCate(reverseData);
+
+          
+      const subcategories = result.AllCategories.map((category) => ({
+        // label: category.name, // Use the "name" property as the label
+        label:
+        language === "fr" && category.french_name
+            ? category.french_name
+            : category.name,
+        value: category.id.toString(), // Convert "id" to a string for the value
+      }));
+      const reverseData = subcategories.reverse();
+      console.log("result---------", reverseData);
+      setSubCate(reverseData);
+
+
+          // const reverseData = result.AllCategories.reverse();
+          // setSubCate(reverseData);
         } else {
           console.error('Failed to fetch subcategories:', response.status, response.statusText);
         }
@@ -561,7 +606,7 @@ import { useTranslation } from 'react-i18next';
               onBlur={handleCategoryBlur}
         
               onChange={item => {
-         
+                console.log("kon sub category id hai----", item.value);
                 setCategoryId(item.value);
                 setIsFocus(false);
               }}
@@ -608,16 +653,18 @@ import { useTranslation } from 'react-i18next';
               data={subCate}
               search={false}
               maxHeight={200}
-              labelField="name"
-              valueField="id"
+              // labelField="name"
+              // valueField="id"
+                    labelField="label"
+              valueField="value"
               placeholder={t('SelectSubCategory')}
               searchPlaceholder="Search..."
       
               onFocus={handleSubCategoryFocus}
               onBlur={handleSubCategoryBlur}
               onChange={(item) => {
-                console.log("kon sub category id hai----", item.id);
-                setSubCategory(item.id);
+                console.log("kon sub category id hai----", item.value);
+                setSubCategory(item.value);
                 setIsFocus(false);
               }}
               renderRightIcon={() => (

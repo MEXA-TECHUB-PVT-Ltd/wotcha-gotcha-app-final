@@ -43,8 +43,13 @@ import { useRoute } from "@react-navigation/native";
 import CustomSnackbar from "../../../assets/Custom/CustomSnackBar";
 import CustomDialog from "../../../assets/Custom/CustomDialog";
 import CustomLoaderButton from "../../../assets/Custom/CustomLoaderButton";
-import { CLOUD_NAME, CLOUDINARY_URL, CLOUDINARY_Video_URL, UPLOAD_PRESET } from "../../../../../cloudinaryConfig";
-import { useTranslation } from 'react-i18next';
+import {
+  CLOUD_NAME,
+  CLOUDINARY_URL,
+  CLOUDINARY_Video_URL,
+  UPLOAD_PRESET,
+} from "../../../../../cloudinaryConfig";
+import { useTranslation } from "react-i18next";
 
 export default function Tv_promax_upload({ navigation }) {
   const { t } = useTranslation();
@@ -80,17 +85,17 @@ export default function Tv_promax_upload({ navigation }) {
   const [authToken, setAuthToken] = useState("");
   const [userId, setUserId] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [userName, setName] = useState("");
   const [profileNameError, setProfileNameError] = useState("");
   const [categoryError, setCategoryError] = useState("");
   const [subcategoryError, setSubcategoryError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const [thumbnailError, setthumbnailImageUritwoError] = useState("");
-  const [imageUriVideo, setimageUri] = useState(imageUri)
+  const [imageUriVideo, setimageUri] = useState(imageUri);
   // const [iosThumbnail, setiosThumbnail] = useState(imageUri)
   useEffect(() => {
     setimageUri(imageUri);
-  }, [imageUri])
+  }, [imageUri]);
   // useEffect(() => {
   //   handleThumnailCreate();
   // }, [imageUri,iosThumbnail])
@@ -106,44 +111,102 @@ export default function Tv_promax_upload({ navigation }) {
   //     .catch(err => console.error('Error generating thumbnail', err));
   // }
 
-
   // }
-  useEffect(() => {
-    const getUserId = async () => {
-      try {
-        const result = await AsyncStorage.getItem("userId ");
-        if (result !== null) {
-          setUserId(result);
+  // useEffect(() => {
+  //   const getUserId = async () => {
+  //     try {
+  //       const result = await AsyncStorage.getItem("userId ");
+  //       if (result !== null) {
+  //         setUserId(result);
 
-        } else {
-          console.log("result is null", result);
-        }
-      } catch (err) {
-        console.error("Error retrieving auth token:", err);
-        setError(err);
+  //       } else {
+  //         console.log("result is null", result);
+  //       }
+  //     } catch (err) {
+  //       console.error("Error retrieving auth token:", err);
+  //       setError(err);
+  //     }
+  //   };
+
+  //   getUserId();
+  // }, []);
+  // useEffect(() => {
+  //   const getAuthToken = async () => {
+  //     try {
+  //       const token = await AsyncStorage.getItem("authToken ");
+  //       if (token) {
+
+  //         setAuthToken(token);
+  //       } else {
+  //         throw new Error("No auth token found");
+  //       }
+  //     } catch (err) {
+  //       console.error("Error retrieving auth token:", err);
+  //       setError(err);
+  //     }
+  //   };
+
+  //   getAuthToken();
+  // }, []);
+  const dummyData = {
+    AllCategories: [
+      {
+        id: 1,
+        name: "Vehicles",
+        french_name: "Véhicules",
+      },
+      {
+        id: 2,
+        name: "Tools & Devices",
+        french_name: "Outils et appareils",
+      },
+    ],
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [storedUserId, storedUserName, storedAuthToken] =
+          await Promise.all([
+            AsyncStorage.getItem("userId "),
+            AsyncStorage.getItem("userName"),
+            AsyncStorage.getItem("authToken "),
+          ]);
+
+        if (storedUserId) setUserId(storedUserId);
+        if (storedUserName) setName(storedUserName);
+        if (storedAuthToken) setAuthToken(storedAuthToken);
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    getUserId();
+    fetchData();
   }, []);
-  useEffect(() => {
-    const getAuthToken = async () => {
-      try {
-        const token = await AsyncStorage.getItem("authToken ");
-        if (token) {
 
-          setAuthToken(token);
-        } else {
-          throw new Error("No auth token found");
+  const [language, setLanguage] = useState(null);
+
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log("lanugage--------", storedLanguage);
+          await fetchAllCinematicsCategory(authToken, storedLanguage);
+          // await fetchAllSubCategory(authToken, storedLanguage, category);
+
+          // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
         }
-      } catch (err) {
-        console.error("Error retrieving auth token:", err);
-        setError(err);
+      } catch (error) {
+        console.error("Error fetching language:", error);
       }
     };
 
-    getAuthToken();
-  }, []);
+    fetchLanguage();
+  }, [isFocused, authToken]);
 
   useEffect(() => {
     if (authToken && isFocused) {
@@ -153,7 +216,7 @@ export default function Tv_promax_upload({ navigation }) {
 
   const fetchAllData = async () => {
     try {
-      await fetchAllCinematicsCategory();
+      // await fetchAllCinematicsCategory();
       await fetchAllSubCategory(category);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -161,9 +224,9 @@ export default function Tv_promax_upload({ navigation }) {
     }
   };
 
-  const fetchAllCinematicsCategory = async () => {
+  const fetchAllCinematicsCategory = async (token, lang) => {
     //console.log("Categry in id", selectedItemId)
-    const token = authToken;
+    // const token = authToken;
     try {
       const response = await fetch(
         base_url + "cinematics/category/getAll?page=1&limit=1000",
@@ -177,19 +240,35 @@ export default function Tv_promax_upload({ navigation }) {
 
       const result = await response.json();
       // console.log("AllCategories---", result.AllCategories);
-      setData(result.AllCategories); // Update the state with the fetched data
+      // const result = dummyData;
+
+      const categories = result.AllCategories.map((category) => ({
+        label:
+          lang === "fr" && category.french_name
+            ? category.french_name
+            : category.name,
+        // label: category.name,
+        value: category.id.toString(),
+      }));
+
+      setData(categories); // Update the state with the fetched data
     } catch (error) {
       console.error("Error Trending:", error);
     }
   };
 
-  const fetchAllSubCategory = async (category) => {
+  // const fetchAllSubCategory = async (token, lang, category) => {
 
+    const fetchAllSubCategory = async (category) => {
+      // console.log("tokenauthToken---------", token);
+      console.log("langiuuuuuuuuuuuuuuuuuuuuuuu---------", language);
+      console.log("category---------", category);
     const token = authToken;
     try {
       const response = await fetch(
         // base_url + "cinematics/sub_category/getAll?page=1&limit=1000",
-        base_url + `cinematics/sub_category/getAllByCategory?category_id=${category}`,
+        base_url +
+          `cinematics/sub_category/getAllByCategory?category_id=${category}`,
         {
           method: "GET",
           headers: {
@@ -200,7 +279,22 @@ export default function Tv_promax_upload({ navigation }) {
 
       const result = await response.json();
       // console.log("AllSub  Categories---", result.AllCategories);
-      setSubCate(result.AllCategories); // Update the state with the fetched data
+
+      // const result = dummyData;
+
+      console.log("result---------", result.AllCategories);
+      const subcategories = result.AllCategories.map((category) => ({
+        // label: category.name, // Use the "name" property as the label
+        label:
+        language === "fr" && category.french_name
+            ? category.french_name
+            : category.name,
+        value: category.id.toString(), // Convert "id" to a string for the value
+      }));
+      const reverseData = subcategories.reverse();
+      setSubCate(reverseData);
+
+      // setSubCate(result.AllCategories); // Update the state with the fetched data
     } catch (error) {
       console.error("Error Trending:", error);
     }
@@ -212,7 +306,7 @@ export default function Tv_promax_upload({ navigation }) {
     setsnackbarVisible(true);
     setTimeout(() => {
       setsnackbarVisible(false);
-      navigation.replace('Cinematics');
+      navigation.replace("Cinematics");
     }, 2000);
   };
 
@@ -231,11 +325,8 @@ export default function Tv_promax_upload({ navigation }) {
     setsnackbarVisibleAlert(false);
   };
 
-
   const upload = async () => {
-
     if (imageUriVideo.uri || imageInfo.uri !== null) {
-
       const uri = imageUriVideo.uri || imageInfo.uri;
       const type = imageUriVideo.type || imageInfo.type;
       const name = imageUriVideo.fileName || imageInfo.fileName;
@@ -243,37 +334,34 @@ export default function Tv_promax_upload({ navigation }) {
 
       handleUploadVideo(source);
     } else {
-      handleUpdatePasswordAlert()
+      handleUpdatePasswordAlert();
     }
-
   };
 
   const handleUploadVideo = (source) => {
     setLoading(true);
     const data = new FormData();
-    data.append('file', source);
-    data.append('upload_preset', UPLOAD_PRESET); // Use your Cloudinary upload preset
-    data.append('cloud_name', CLOUD_NAME); // Use your Cloudinary cloud name
+    data.append("file", source);
+    data.append("upload_preset", UPLOAD_PRESET); // Use your Cloudinary upload preset
+    data.append("cloud_name", CLOUD_NAME); // Use your Cloudinary cloud name
 
     fetch(CLOUDINARY_Video_URL, {
-      method: 'POST',
+      method: "POST",
       body: data,
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'multipart/form-data',
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
       },
     })
-      .then(res => res.json())
-      .then(data => {
-
+      .then((res) => res.json())
+      .then((data) => {
         handleUploadImage(data.url);
-        setVideoURL(data.url)
+        setVideoURL(data.url);
         //uploadXpiVideo(data.url);
-
       })
-      .catch(err => {
+      .catch((err) => {
         //Alert.alert('Error While Uploading Video');
-        console.log('Error While Uploading Video', err);
+        console.log("Error While Uploading Video", err);
         setLoading(false);
       });
   };
@@ -285,33 +373,32 @@ export default function Tv_promax_upload({ navigation }) {
     const name = thumbnailImageUritwo.fileName;
     const sourceImage = { uri, type, name };
     const dataImage = new FormData();
-    dataImage.append('file', sourceImage);
-    dataImage.append('upload_preset', UPLOAD_PRESET); // Use your Cloudinary upload preset
-    dataImage.append('cloud_name', CLOUD_NAME); // Use your Cloudinary cloud name
+    dataImage.append("file", sourceImage);
+    dataImage.append("upload_preset", UPLOAD_PRESET); // Use your Cloudinary upload preset
+    dataImage.append("cloud_name", CLOUD_NAME); // Use your Cloudinary cloud name
 
     fetch(CLOUDINARY_URL, {
-      method: 'POST',
+      method: "POST",
       body: dataImage,
       headers: {
-        Accept: 'application/json',
-        'Content-Type': 'multipart/form-data',
+        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
       },
     })
-      .then(res => res.json())
-      .then(data => {
-        setThumnailUrl(data.url)
-        uploadXpiVideo(data.url, data1,);
+      .then((res) => res.json())
+      .then((data) => {
+        setThumnailUrl(data.url);
+        uploadXpiVideo(data.url, data1);
       })
-      .catch(err => {
+      .catch((err) => {
         setLoading(false);
-        console.log('Error While Uploading Video', err);
+        console.log("Error While Uploading Video", err);
       });
   };
 
   const uploadXpiVideo = async (data, data1) => {
-
     const token = authToken;
-    const apiUrl = base_url + 'cinematics/create';
+    const apiUrl = base_url + "cinematics/create";
 
     const requestData = {
       category_id: category,
@@ -321,15 +408,14 @@ export default function Tv_promax_upload({ navigation }) {
       description: description,
       video: data1,
       thumbnail: data,
-
     };
 
     try {
       const response = await fetch(apiUrl, {
-        method: 'POST',
+        method: "POST",
         headers: {
           Authorization: `Bearer ${token}`, // Use the provided token
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(requestData),
       });
@@ -344,16 +430,15 @@ export default function Tv_promax_upload({ navigation }) {
         setLoading(false);
 
         console.error(
-          'Failed to upload video:',
+          "Failed to upload video:",
           response.status,
-          response.statusText,
+          response.statusText
         );
         // Handle the error
       }
     } catch (error) {
-      console.error('API Request Error:', error);
+      console.error("API Request Error:", error);
       setLoading(false);
-
     }
   };
 
@@ -364,7 +449,6 @@ export default function Tv_promax_upload({ navigation }) {
   const performAction = () => {
     setModalVisible(false);
   };
-
 
   // /////////////////////
   const handleFocus = () => {
@@ -378,7 +462,6 @@ export default function Tv_promax_upload({ navigation }) {
     ref_RBSheetCamera.current.open();
     setShowThumbnailContent(true);
   };
-
 
   const takePhotoFromCamera = async (value) => {
     ref_RBSheetCamera.current.close();
@@ -419,13 +502,12 @@ export default function Tv_promax_upload({ navigation }) {
         mediaType: "video",
       },
       (response) => {
-
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setImageUri(response.assets[0].uri);
             setImageInfo(response.assets[0]);
-            setimageUri(response.assets[0])
-            console.log('video-----',response.assets[0])
+            setimageUri(response.assets[0]);
+            console.log("video-----", response.assets[0]);
           }
         }
       }
@@ -438,10 +520,9 @@ export default function Tv_promax_upload({ navigation }) {
       launchImageLibrary({ mediaType: "video" }, (response) => {
         if (!response.didCancel && response.assets.length > 0) {
           setImageUri(response.assets[0].uri);
-          setimageUri(response.assets[0])
-          console.log('video-----',response.assets[0])
+          setimageUri(response.assets[0]);
+          console.log("video-----", response.assets[0]);
           setImageInfo(response.assets[0]);
-
         }
       });
     }, 300);
@@ -464,7 +545,7 @@ export default function Tv_promax_upload({ navigation }) {
         >
           <IonIcons name={"chevron-back"} color={"#282828"} size={25} />
         </TouchableOpacity>
-        <Text style={styles.headerText}>{t('UploadContent')}</Text>
+        <Text style={styles.headerText}>{t("UploadContent")}</Text>
       </View>
 
       <ScrollView
@@ -521,8 +602,8 @@ export default function Tv_promax_upload({ navigation }) {
                       fontWeight: "700",
                     }}
                   >
-                    {t('ChangeContent')}
-                    
+                    {t("ChangeContent")}
+
                     {/* Change Content */}
                   </Text>
                 </TouchableOpacity>
@@ -563,9 +644,7 @@ export default function Tv_promax_upload({ navigation }) {
                       alignItems: "center",
                       borderRadius: 50,
                     }}
-                  >
-                 
-                  </ImageBackground>
+                  ></ImageBackground>
                 </>
               ) : (
                 <>
@@ -581,22 +660,23 @@ export default function Tv_promax_upload({ navigation }) {
                       fontWeight: "700",
                     }}
                   >
-                    
-                    {t('Uploadthumbnail')}
+                    {t("Uploadthumbnail")}
                     {/* Upload thumbnail */}
                   </Text>
                 </>
               )}
             </View>
             <View>
-              {thumbnailError ? <Text style={styles.errorText}>{thumbnailError}</Text> : null}
+              {thumbnailError ? (
+                <Text style={styles.errorText}>{thumbnailError}</Text>
+              ) : null}
             </View>
           </TouchableOpacity>
         </View>
 
         <TextInput
           mode="outlined"
-          label={t('MyVideo')}
+          label={t("MyVideo")}
           value={profileName}
           onChangeText={(text) => setProfileName(text)}
           style={styles.ti}
@@ -609,16 +689,18 @@ export default function Tv_promax_upload({ navigation }) {
           theme={{
             roundness: 10, // This sets the border radius
             colors: {
-              placeholder: '#646464', // Set the color of the placeholder
-              text: 'black', // Set the text color
-              primary: '#FACA4E', // Set the primary color
-              underlineColor: 'transparent', // Set the underline color
-              background: 'white', // Set the background color
-            }
+              placeholder: "#646464", // Set the color of the placeholder
+              text: "black", // Set the text color
+              primary: "#FACA4E", // Set the primary color
+              underlineColor: "transparent", // Set the underline color
+              background: "white", // Set the background color
+            },
           }}
         />
         <View style={{ marginLeft: 25 }}>
-          {profileNameError ? <Text style={styles.errorText}>{profileNameError}</Text> : null}
+          {profileNameError ? (
+            <Text style={styles.errorText}>{profileNameError}</Text>
+          ) : null}
         </View>
 
         <View style={{ marginHorizontal: wp(7) }}>
@@ -649,15 +731,17 @@ export default function Tv_promax_upload({ navigation }) {
             data={data}
             search={false}
             maxHeight={200}
-            labelField="name"
-            valueField="id"
-            placeholder={t('SelectCategory')}
+            // labelField="name"
+            // valueField="id"
+            labelField="label"
+            valueField="value"
+            placeholder={t("SelectCategory")}
             searchPlaceholder="Search..."
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={(item) => {
-              console.log("kon main category id hai----", item.id);
-              setCategory(item.id);
+              console.log("kon main category id hai----", item.value);
+              setCategory(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (
@@ -669,7 +753,9 @@ export default function Tv_promax_upload({ navigation }) {
               />
             )}
           />
-          {categoryError ? <Text style={styles.errorText}>{categoryError}</Text> : null}
+          {categoryError ? (
+            <Text style={styles.errorText}>{categoryError}</Text>
+          ) : null}
         </View>
 
         <View style={{ marginHorizontal: wp(7) }}>
@@ -692,25 +778,30 @@ export default function Tv_promax_upload({ navigation }) {
               //   fontWeight: '400',
               fontFamily: "Inter",
               fontSize: hp(1.8),
-
             }}
             iconStyle={isFocus ? styles.iconStyle : styles.iconStyleInactive}
-            itemTextStyle={{ color: "#000000", }}
-            selectedTextStyle={{ fontSize: 16, color: "#000000", height: 42, textAlignVertical: "center", }}
-
+            itemTextStyle={{ color: "#000000" }}
+            selectedTextStyle={{
+              fontSize: 16,
+              color: "#000000",
+              height: 42,
+              textAlignVertical: "center",
+            }}
             value={subcategory}
             data={subCate}
             search={false}
             maxHeight={200}
-            labelField="name"
-            valueField="id"
-            placeholder={t('SelectSubCategory')}
+            // labelField="name"
+            // valueField="id"
+            labelField="label"
+            valueField="value"
+            placeholder={t("SelectSubCategory")}
             searchPlaceholder="Search..."
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={(item) => {
-              console.log("kon sub category id hai----", item.id);
-              setSubCategory(item.id);
+              console.log("kon sub category id hai----", item.value);
+              setSubCategory(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (
@@ -723,8 +814,9 @@ export default function Tv_promax_upload({ navigation }) {
             )}
           />
           <View>
-
-            {subcategoryError ? <Text style={styles.errorText}>{subcategoryError}</Text> : null}
+            {subcategoryError ? (
+              <Text style={styles.errorText}>{subcategoryError}</Text>
+            ) : null}
           </View>
         </View>
 
@@ -743,49 +835,50 @@ export default function Tv_promax_upload({ navigation }) {
             onChangeText={(text) => setDescription(text)}
             height={hp(20)}
           />
-
         </View>
         <View style={{ marginLeft: hp(4), marginTop: -10, marginBottom: 15 }}>
-          {descriptionError ? <Text style={styles.errorText}>{descriptionError}</Text> : null}
+          {descriptionError ? (
+            <Text style={styles.errorText}>{descriptionError}</Text>
+          ) : null}
         </View>
         <View style={styles.loaderButtonView}>
           <View style={styles.loaderButtonInner}>
             <CustomLoaderButton
-              title={t('Upload')}
+              title={t("Upload")}
               load={loading}
               customClick={() => {
                 let hasError = false;
 
                 if (!thumbnailImageUritwo) {
-                  setthumbnailImageUritwoError(t('Thumbnailisrequired'));
+                  setthumbnailImageUritwoError(t("Thumbnailisrequired"));
                   hasError = true;
                 } else {
                   setthumbnailImageUritwoError("");
                 }
 
                 if (!profileName) {
-                  setProfileNameError(t('Videotitleisrequired'));
+                  setProfileNameError(t("Videotitleisrequired"));
                   hasError = true;
                 } else {
                   setProfileNameError("");
                 }
 
-                if (!category) { 
-                  setCategoryError(t('Categoryisrequired'));
+                if (!category) {
+                  setCategoryError(t("Categoryisrequired"));
                   hasError = true;
                 } else {
                   setCategoryError("");
                 }
 
-                if (!subcategory) { 
-                  setSubcategoryError(t('Subcategoryisrequired'));
+                if (!subcategory) {
+                  setSubcategoryError(t("Subcategoryisrequired"));
                   hasError = true;
                 } else {
                   setSubcategoryError("");
                 }
 
-                if (!description) { 
-                  setDescriptionError(t('Descriptionisrequired'));
+                if (!description) {
+                  setDescriptionError(t("Descriptionisrequired"));
                   hasError = true;
                 } else {
                   setDescriptionError("");
@@ -817,7 +910,7 @@ export default function Tv_promax_upload({ navigation }) {
             container: {
               borderTopLeftRadius: wp(10),
               borderTopRightRadius: wp(10),
-              paddingVertical: 30
+              paddingVertical: 30,
               // height: hp(25),
             },
           }}
@@ -838,7 +931,7 @@ export default function Tv_promax_upload({ navigation }) {
                 fontSize: hp(2.1),
               }}
             >
-               {t('SelectAnOption')}
+              {t("SelectAnOption")}
               {/* Select an option */}
             </Text>
             <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
@@ -888,8 +981,7 @@ export default function Tv_promax_upload({ navigation }) {
                   fontSize: hp(2.1),
                 }}
               >
-                {t('Takeaphoto')}
-          
+                {t("Takeaphoto")}
               </Text>
             </TouchableOpacity>
 
@@ -918,7 +1010,7 @@ export default function Tv_promax_upload({ navigation }) {
                   fontSize: hp(2.1),
                 }}
               >
-                {t('Chooseaphoto')}
+                {t("Chooseaphoto")}
                 {/* Choose a photo */}
               </Text>
             </TouchableOpacity>
@@ -941,7 +1033,7 @@ export default function Tv_promax_upload({ navigation }) {
             container: {
               borderTopLeftRadius: wp(10),
               borderTopRightRadius: wp(10),
-              paddingVertical: 30
+              paddingVertical: 30,
               // height: hp(25),
             },
           }}
@@ -962,7 +1054,7 @@ export default function Tv_promax_upload({ navigation }) {
                 fontSize: hp(2.1),
               }}
             >
-               {t('SelectAnOption')}
+              {t("SelectAnOption")}
               {/* Select an option */}
             </Text>
             <TouchableOpacity
@@ -1009,7 +1101,7 @@ export default function Tv_promax_upload({ navigation }) {
                   fontSize: hp(2.1),
                 }}
               >
-                {t('TakeAVideo')}
+                {t("TakeAVideo")}
                 {/* Take a Video */}
               </Text>
             </TouchableOpacity>
@@ -1038,20 +1130,17 @@ export default function Tv_promax_upload({ navigation }) {
                   fontSize: hp(2.1),
                 }}
               >
-                {t('ChooseAVideo')}
+                {t("ChooseAVideo")}
                 {/* Choose a Video */}
               </Text>
             </TouchableOpacity>
           </View>
         </RBSheet>
-
-
-
       </ScrollView>
 
       <CustomSnackbar
-        message={t('Alert!')}
-        messageDescription={t('KindlyFillAllFields')}
+        message={t("Alert!")}
+        messageDescription={t("KindlyFillAllFields")}
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackbarVisibleAlert}
       />
@@ -1062,14 +1151,12 @@ export default function Tv_promax_upload({ navigation }) {
         imageURL="URL_TO_YOUR_IMAGE"
       />
 
-
       <CustomSnackbar
-        message={t('Success')}
-        messageDescription={t('ContentUploadedSuccessfully')}
+        message={t("Success")}
+        messageDescription={t("ContentUploadedSuccessfully")}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
-
     </KeyboardAvoidingView>
   );
 }
@@ -1097,7 +1184,7 @@ const styles = StyleSheet.create({
   ti: {
     marginHorizontal: "7%",
     marginTop: "5%",
-    width: '84%',
+    width: "84%",
     backgroundColor: "white",
     fontSize: wp(4),
     paddingLeft: "1%",
@@ -1133,7 +1220,7 @@ const styles = StyleSheet.create({
     color: "#FACA4E",
   },
   errorText: {
-    color: 'red',
+    color: "red",
     fontSize: 12,
     marginTop: 4,
   },
@@ -1148,5 +1235,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
 });

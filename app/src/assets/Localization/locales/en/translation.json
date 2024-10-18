@@ -161,6 +161,15 @@
         "signUp": "Sign Up"
       },
    
+      "new": "New",
+  "used_Like_new": "Used - Like New",
+  "used_Good": "Used - Good",
+  "used_Fair": "Used - Fair",
+  "Africa": "Africa",
+  "Europe": "Europe",
+  "Americas": "Americas",
+  "Asia": "Asia",
+  "Middle_East": "Middle East",
     "EBIC" :"EBIC",
     "QAFI" :"QAFI",
     "camera": "camera",

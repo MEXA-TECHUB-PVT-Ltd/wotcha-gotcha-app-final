@@ -52,6 +52,7 @@ export default function Cinematics({ route }) {
   const [sections, setSections] = useState([]);
   const [noData, setNoData] = useState(false);
   const [adsinActiveData, setAdsInActiveData] = useState([]);
+  const [language, setLanguage] = useState(null);
   useEffect(() => {
     const getAuthToken = async () => {
       try {
@@ -69,6 +70,25 @@ export default function Cinematics({ route }) {
 
     getAuthToken();
   }, []);
+
+  
+
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log('lanugage--------', storedLanguage)
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
+
+    fetchLanguage();
+  }, [isFocused]);
+
 
   useEffect(() => {
     if (authToken && isFocused) {
@@ -331,6 +351,7 @@ export default function Cinematics({ route }) {
   const renderSearches = (item) => {
     // console.log("Regions", item);
     const isSelected = selectedItemId === item.id;
+    const name = language === "fr" && item.french_name ? item.french_name : item.name;
     // console.log('is selected hai---', isSelected)
     return (
       <TouchableOpacity
@@ -350,7 +371,8 @@ export default function Cinematics({ route }) {
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.name}
+          {name}
+          {/* {item.name} */}
         </Text>
       </TouchableOpacity>
     );

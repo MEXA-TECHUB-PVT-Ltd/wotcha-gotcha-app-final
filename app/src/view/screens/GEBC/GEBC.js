@@ -36,7 +36,7 @@ import { CLOUD_NAME, CLOUDINARY_URL, UPLOAD_PRESET } from '../../../../../cloudi
 import CustomLoaderButton from '../../../assets/Custom/CustomLoaderButton';
 import Loader from '../../../assets/Custom/Loader';
 import { useTranslation } from 'react-i18next';
-
+import { useIsFocused } from "@react-navigation/native";
 export default function GEBC({navigation}) {
   const { t } = useTranslation();
   const [selectedItem, setSelectedItem] = useState('');
@@ -80,7 +80,7 @@ export default function GEBC({navigation}) {
   const [isFocus, setIsFocus] = useState(false);
 
   const ref_RBSheetCamera = useRef(null);
-
+  const isFocused = useIsFocused();
   const ref_RBSendOffer = useRef(null);
   const [categoryError, setCategoryError] = useState("");
   const [subcategoryError, setSubcategoryError] = useState("");
@@ -136,7 +136,27 @@ export default function GEBC({navigation}) {
     }
   };
 
-  const fetchCategory = async (token) => {
+
+  const [language, setLanguage] = useState(null);
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log('lanugage--------', storedLanguage)
+          await fetchCategory(authToken,storedLanguage);
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
+
+    fetchLanguage();
+  }, [isFocused, authToken]);
+
+
+  const fetchCategory = async (token,lang) => {
     try {
       const response = await fetch(`${base_url}gebc/category/getAll?page=1&limit=10000`, {
         method: 'GET',
@@ -148,7 +168,10 @@ export default function GEBC({navigation}) {
       if (response.ok) {
         const data = await response.json();
         const categories = data.AllCategories.map(category => ({
-          label: category.name,
+          // label: category.name,
+          label: lang === "fr" && category.french_name
+          ? category.french_name
+          : category.name,
           value: category.id.toString()
         }));
         const reverseData = categories.reverse();
@@ -168,6 +191,9 @@ export default function GEBC({navigation}) {
   }, [authToken, categoryId]);
 
   const fetchAllSubCategory = async (categoryId) => {
+      console.log("langiuuuuuuuuuuuuuuuuuuuuuuu---------", language);
+      console.log("category---------", categoryId);
+  
     try {
       const response = await fetch(`${base_url}gebc/sub_category/getAllByCategory?category_id=${categoryId}`, {
         method: 'GET',
@@ -178,8 +204,23 @@ export default function GEBC({navigation}) {
 
       if (response.ok) {
         const result = await response.json();
-        const reverseData = result.AllCategories.reverse();
+
+        const subcategories = result.AllCategories.map((category) => ({
+          // label: category.name, // Use the "name" property as the label
+          label:
+          language === "fr" && category.french_name
+              ? category.french_name
+              : category.name,
+          value: category.id.toString(), // Convert "id" to a string for the value
+        }));
+        const reverseData = subcategories.reverse();
+        console.log("result---------", reverseData);
         setSubCate(reverseData);
+  
+
+
+        // const reverseData = result.AllCategories.reverse();
+        // setSubCate(reverseData);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
       }
@@ -518,6 +559,7 @@ export default function GEBC({navigation}) {
             onFocus={handleCategoryFocus}
             onBlur={handleCategoryBlur}
             onChange={item => {
+              console.log("kon main category id hai----", item.value);
               //setCategory(item.label);
               setCategoryId(item.value);
               setIsFocus(false);
@@ -566,15 +608,17 @@ export default function GEBC({navigation}) {
             data={subCate}
             search={false}
             maxHeight={200}
-            labelField="name"
-            valueField="id"
+                 labelField="label"
+            valueField="value"
+            // labelField="name"
+            // valueField="id"
             placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             onFocus={handleSubCategoryFocus}
             onBlur={handleSubCategoryBlur}
             onChange={(item) => {
-
-              setSubCategory(item.id);
+              console.log("kon main category id hai----", item.value);
+              setSubCategory(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (
