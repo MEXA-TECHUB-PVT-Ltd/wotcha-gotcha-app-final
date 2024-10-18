@@ -61,7 +61,7 @@ const Category = [
   {label: 'Item 2', value: '2'},
   {label: 'Item 3', value: '3'},
 ];
-
+import { useIsFocused } from "@react-navigation/native";
 export default function UploadUpdateScreen({navigation, route}) {
   const [selectedItem, setSelectedItem] = useState('');
   const { t } = useTranslation();
@@ -116,7 +116,7 @@ export default function UploadUpdateScreen({navigation, route}) {
   const receivedData = route.params?.Video;
 
   console.log('Recieved Data', receivedData);
-
+  const isFocused = useIsFocused();
 
 
   const [subcategoryError, setSubcategoryError] = useState("");
@@ -169,7 +169,7 @@ export default function UploadUpdateScreen({navigation, route}) {
       if (result1 !== null) {
         setAuthToken(result1);
         console.log('user id retrieved:', result1);
-        await fetchCategory(result1);
+        // await fetchCategory(result1);
       } else {
         console.log('result is null', result);
       }
@@ -181,9 +181,73 @@ export default function UploadUpdateScreen({navigation, route}) {
 
 
 
+  const [language, setLanguage] = useState(null);
 
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log("lanugage--------", storedLanguage);
+          await fetchCategory(authToken, storedLanguage);
+          
 
+          // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
 
+    fetchLanguage();
+  }, [isFocused, authToken]);
+
+  const fetchCategory = async (token, lang) => {
+    // const token = userToken;
+
+    try {
+      const response = await fetch(
+        base_url + 'videoCategory/getAllVideoCategories',
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+
+        console.log('Data ', data);
+
+        // Use the data from the API to set the categories
+        const categories = data.AllCategories.map(category => ({
+          // label: category.name, // Use the "name" property as the label
+          label:
+          lang === "fr" && category.french_name
+            ? category.french_name
+            : category.name,
+          value: category.id.toString(), // Convert "id" to a string for the value
+        }));
+
+        setCategorySelect(categories); // Update the state with the formatted category data
+
+        console.log('Data Categories', categoriesSelect);
+
+        setImageInfo(receivedData);
+      } else {
+        console.error(
+          'Failed to fetch categories:',
+          response.status,
+          response.statusText,
+        );
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
 
   const upload = async () => {
@@ -294,6 +358,9 @@ console.log('category id comes from video', categoryId)
   }, [authToken, categoryId]);
 
   const fetchAllSubCategory = async (categoryId) => {
+    console.log("langiuuuuuuuuuuuuuuuuuuuuuuu---------", language);
+    console.log("category---------", categoryId);
+
     try {
       const response = await fetch(`${base_url}video/sub_category/getAllByCategory?category_id=${categoryId}`, {
         method: 'GET',
@@ -304,8 +371,23 @@ console.log('category id comes from video', categoryId)
 
       if (response.ok) {
         const result = await response.json();
-        const receivedData = result.AllCategories.reverse();
-        setSubCate(receivedData);
+
+
+        const subcategories = result.AllCategories.map((category) => ({
+          // label: category.name, // Use the "name" property as the label
+          label:
+          language === "fr" && category.french_name
+              ? category.french_name
+              : category.name,
+          value: category.id.toString(), // Convert "id" to a string for the value
+        }));
+        const reverseData = subcategories.reverse();
+        console.log("result---------", reverseData);
+        setSubCate(reverseData);
+
+
+        // const receivedData = result.AllCategories.reverse();
+        // setSubCate(receivedData);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
       }
@@ -759,47 +841,7 @@ console.log('category id comes from video', categoryId)
     setsnackbarVisibleAlert(false);
   };
 
-  const fetchCategory = async userToken => {
-    const token = userToken;
 
-    try {
-      const response = await fetch(
-        base_url + 'videoCategory/getAllVideoCategories',
-        {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-
-        console.log('Data ', data);
-
-        // Use the data from the API to set the categories
-        const categories = data.AllCategories.map(category => ({
-          label: category.name, // Use the "name" property as the label
-          value: category.id.toString(), // Convert "id" to a string for the value
-        }));
-
-        setCategorySelect(categories); // Update the state with the formatted category data
-
-        console.log('Data Categories', categoriesSelect);
-
-        setImageInfo(receivedData);
-      } else {
-        console.error(
-          'Failed to fetch categories:',
-          response.status,
-          response.statusText,
-        );
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
 
   return (
     <KeyboardAvoidingView
@@ -996,15 +1038,17 @@ console.log('category id comes from video', categoryId)
             data={subCate}
             search={false}
             maxHeight={200}
-            labelField="name"
-            valueField="id"
+            // labelField="name"
+            // valueField="id"
+            labelField="label"
+            valueField="value"
             placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={(item) => {
-              console.log("kon sub category id hai----", item.id);
-              setSubCategory(item.id);
+              console.log("kon sub category id hai----", item.value);
+              setSubCategory(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (

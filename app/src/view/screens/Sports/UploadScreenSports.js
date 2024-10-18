@@ -17,7 +17,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 
 import {Button, Divider, TextInput} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
+import { useIsFocused } from "@react-navigation/native";
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {appImages} from '../../../assets/utilities/index';
 import CustomButton from '../../../assets/Custom/Custom_Button';
@@ -70,7 +70,7 @@ export default function UploadScreenSports({navigation, route}) {
   const [isFocus, setIsFocus] = useState(false);
 
   const ref_RBSheetCamera = useRef(null);
-
+  const isFocused = useIsFocused();
   const ref_RBSendOffer = useRef(null);
   const [categoryError, setCategoryError] = useState("");
   const [subcategoryError, setSubcategoryError] = useState("");
@@ -86,44 +86,102 @@ export default function UploadScreenSports({navigation, route}) {
     navigation.navigate('Signin_signup');
   };
 
+  // useEffect(() => {
+  //   // Make the API request and update the 'data' state
+  //   fetchVideos();
+  // }, []);
+
+  // const fetchVideos = async () => {
+  //   setLoading(true);
+  //   await getUserID();
+  //   setLoading(false);
+  // };
+
+  // const getUserID = async () => {
+ 
+  //   try {
+  //     const result = await AsyncStorage.getItem('userId ');
+  //     if (result !== null) {
+  //       setUserId(result);
+        
+  //     } else {
+         
+  //     }
+
+  //     const result1 = await AsyncStorage.getItem('authToken ');
+  //     if (result1 !== null) {
+  //       setAuthToken(result1);
+       
+  //       await fetchCategory(result1);
+  //     } else {
+         
+  //     }
+  //   } catch (error) {
+  //     // Handle errors here
+  //     console.error('Error retrieving user ID:', error);
+  //   }
+  // };
+  const dummyData2 = {
+    AllCategories: [
+      {
+        id: 1,
+        name: "Vehic",
+        french_name: "Véhic",
+      },
+      {
+        id: 2,
+        name: "Tools ",
+        french_name: "Outils ",
+      },
+    ],
+  };
   useEffect(() => {
-    // Make the API request and update the 'data' state
-    fetchVideos();
+    const fetchData = async () => {
+      try {
+        const [storedUserId, storedUserName, storedAuthToken] =
+          await Promise.all([
+            AsyncStorage.getItem("userId "),
+            AsyncStorage.getItem("userName"),
+            AsyncStorage.getItem("authToken "),
+          ]);
+
+        if (storedUserId) setUserId(storedUserId);
+        if (storedAuthToken) setAuthToken(storedAuthToken);
+      } catch (error) {
+        console.error("Error fetching initial data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const fetchVideos = async () => {
-    setLoading(true);
-    await getUserID();
-    setLoading(false);
-  };
+  const [language, setLanguage] = useState(null);
 
-  const getUserID = async () => {
- 
-    try {
-      const result = await AsyncStorage.getItem('userId ');
-      if (result !== null) {
-        setUserId(result);
-        
-      } else {
-         
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log("lanugage--------", storedLanguage);
+          await fetchCategory(authToken, storedLanguage);
+          
+
+          // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
       }
+    };
 
-      const result1 = await AsyncStorage.getItem('authToken ');
-      if (result1 !== null) {
-        setAuthToken(result1);
-       
-        await fetchCategory(result1);
-      } else {
-         
-      }
-    } catch (error) {
-      // Handle errors here
-      console.error('Error retrieving user ID:', error);
-    }
-  };
+    fetchLanguage();
+  }, [isFocused, authToken]);
 
-  const fetchCategory = async userToken => {
-    const token = userToken;
+
+  const fetchCategory = async (token, lang) => {
+  
 
     try {
       const response = await fetch(
@@ -139,7 +197,11 @@ export default function UploadScreenSports({navigation, route}) {
       if (response.ok) {
         const data = await response.json();
         const categories = data.AllCategories.map(category => ({
-          label: category.name, // Use the "name" property as the label
+          // label: category.name, // Use the "name" property as the label
+          label:
+          lang === "fr" && category.french_name
+            ? category.french_name
+            : category.name,
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
 
@@ -167,8 +229,9 @@ export default function UploadScreenSports({navigation, route}) {
 
  
   const fetchAllSubCategory = async (categoryId) => {
-     
-    const token = authToken;
+    console.log("langiuuuuuuuuuuuuuuuuuuuuuuu---------", language);
+    console.log("category---------", categoryId);
+    // const token = authToken;
     try {
       const response = await fetch(
         
@@ -176,13 +239,17 @@ export default function UploadScreenSports({navigation, route}) {
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         }
       );
       const result = await response.json();
       const subcategories = result.AllCategories.map(category => ({
-        label: category.name, // Use the "name" property as the label
+        // label: category.name, // Use the "name" property as the label
+        label:
+        language === "fr" && category.french_name
+            ? category.french_name
+            : category.name,
         value: category.id.toString(), // Convert "id" to a string for the value
       }));
       const reverseData = subcategories.reverse();
@@ -508,6 +575,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
 
             onChange={item => {
               //setCategory(item.label);
+              console.log("kon main category id hai----", item.value);
               setCategoryId(item.value);
               setIsFocus(false);
             }}
@@ -563,7 +631,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
             // onFocus={() => setIsFocus(true)}
             // onBlur={() => setIsFocus(false)}
             onChange={(item) => {
-   
+              console.log("kon main category id hai----", item.value);
               setSubCategory(item.value);
               setIsFocus(false);
             }}

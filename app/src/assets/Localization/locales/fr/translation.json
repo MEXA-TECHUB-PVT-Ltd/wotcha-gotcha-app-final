@@ -150,6 +150,17 @@
         "signIn": "Se connecter",
         "signUp": "S'inscrire"
       },
+
+
+      "new": "Nouveau",
+      "used_Like_new": "D'occasion - Comme neuf",
+      "used_Good": "D'occasion - Bon état",
+      "used_Fair": "D'occasion - État correct",
+      "Africa": "Afrique",
+      "Europe": "Europe",
+      "Americas": "Amériques",
+      "Asia": "Asie",
+      "Middle_East": "Moyen-Orient",
     "QAFI" :"QRDI",
     "EBIC" :"CIBE",
     "password": "mot de passe",

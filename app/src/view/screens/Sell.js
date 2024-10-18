@@ -31,9 +31,9 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {SelectCountry, Dropdown} from 'react-native-element-dropdown';
-
+import { useIsFocused } from "@react-navigation/native";
 import Geolocation from 'react-native-geolocation-service';
-
+import { useTranslation } from 'react-i18next';
 import Geocoding from 'react-native-geocoding';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -46,7 +46,7 @@ import { CLOUDINARY_URL, UPLOAD_PRESET, CLOUD_NAME } from "../../../../cloudinar
 
 export default function Sell({navigation}) {
   const [userId, setUserId] = useState('');
-
+  const { t } = useTranslation();
   const [imageUris, setImageUris] = useState([]);
 
   const [selectedItem, setSelectedItem] = useState('');
@@ -103,7 +103,7 @@ export default function Sell({navigation}) {
   const [isFocusCondition, setIsFocusCondition] = useState(false);
 
   const ref_RBSheetCamera = useRef(null);
-
+  const isFocused = useIsFocused();
   useEffect(() => {
     // Check and request location permission
 
@@ -157,7 +157,7 @@ export default function Sell({navigation}) {
   };
 
   const getUserID = async () => {
-    console.log("Id's");
+
     try {
       const result = await AsyncStorage.getItem('userId ');
       if (result !== null) {
@@ -171,7 +171,7 @@ export default function Sell({navigation}) {
       if (result1 !== null) {
         setAuthToken(result1);
         console.log('user token retrieved:', result1);
-        await fetchCategory(result1);
+        // await fetchCategory(result1);
       } else {
         console.log('result is null', result);
       }
@@ -181,12 +181,34 @@ export default function Sell({navigation}) {
     }
   };
 
-  const fetchCategory = async userToken => {
-    const token = userToken;
+  const [language, setLanguage] = useState(null);
+
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log("lanugage--------", storedLanguage);
+          await fetchCategory(authToken, storedLanguage);
+          
+
+          // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
+
+    fetchLanguage();
+  }, [isFocused, authToken]);
+
+  const fetchCategory = async (token, lang) => {
+ 
 
     try {
       const response = await fetch(
-        'https://watch-gotcha-be.mtechub.com/itemCategory/getAllItemCategories?page=1&limit=5',
+        base_url + 'itemCategory/getAllItemCategories?page=1&limit=10000',
         {
           method: 'GET',
           headers: {
@@ -202,7 +224,11 @@ export default function Sell({navigation}) {
 
         // Use the data from the API to set the categories
         const categories = data.AllCategories.map(category => ({
-          label: category.name, // Use the "name" property as the label
+          // label: category.name, // Use the "name" property as the label
+          label:
+          lang === "fr" && category.french_name
+            ? category.french_name
+            : category.name,
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
 
@@ -327,19 +353,34 @@ export default function Sell({navigation}) {
     setIsChecked(!isChecked);
   };
 
+  // const Condition = [
+  //   {label: 'new', value: 'new'},
+  //   {label: 'used_Like_new', value: 'used_Like_new'},
+  //   {label: 'used_Good', value: 'used_Good'},
+  //   {label: 'used_Fair', value: 'used_Fair'},
+  // ];
+
+  // const RegionArea = [
+  //   {label: 'Africa', value: 'Africa'},
+  //   {label: 'Europe', value: 'Europe'},
+  //   {label: 'Americas', value: 'Americas'},
+  //   {label: 'Asia', value: 'Asia'},
+  //   {label: 'Middle East', value: 'Middle East'},
+  // ];
+
   const Condition = [
-    {label: 'new', value: 'new'},
-    {label: 'used_Like_new', value: 'used_Like_new'},
-    {label: 'used_Good', value: 'used_Good'},
-    {label: 'used_Fair', value: 'used_Fair'},
+    {label: t('new'), value: 'new'},
+    {label: t('used_Like_new'), value: 'used_Like_new'},
+    {label: t('used_Good'), value: 'used_Good'},
+    {label: t('used_Fair'), value: 'used_Fair'},
   ];
 
   const RegionArea = [
-    {label: 'Africa', value: 'Africa'},
-    {label: 'Europe', value: 'Europe'},
-    {label: 'Americas', value: 'Americas'},
-    {label: 'Asia', value: 'Asia'},
-    {label: 'Middle East', value: 'Middle East'},
+    {label: t('Africa'), value: 'Africa'},
+    {label: t('Europe'), value: 'Europe'},
+    {label: t('Americas'), value: 'Americas'},
+    {label: t('Asia'), value: 'Asia'},
+    {label: t('Middle_East'), value: 'Middle_East'},
   ];
 
   const TakeImageFromCamera = () => {
@@ -852,6 +893,7 @@ export default function Sell({navigation}) {
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={item => {
+              console.log("kon sub category id hai----", item.value);
               setCategoryId(item.value);
               setIsFocus(false);
             }}
@@ -905,7 +947,8 @@ export default function Sell({navigation}) {
             onFocus={() => setIsFocusCondition(true)}
             onBlur={() => setIsFocusCondition(false)}
             onChange={item => {
-              setCondition(item.label);
+              console.log("kon sub category id hai----", item.value);
+              setCondition(item.value);
               //console.log("Condition", item.label)
               setIsFocusCondition(false);
             }}
@@ -959,7 +1002,8 @@ export default function Sell({navigation}) {
             onFocus={() => setIsFocusRegion(true)}
             onBlur={() => setIsFocusRegion(false)}
             onChange={item => {
-              setRegionArea(item.label);
+              setRegionArea(item.value);
+              console.log("kon sub category id hai----", item.value);
               //console.log("Condition", item.label)
               setIsFocusRegion(false);
             }}
