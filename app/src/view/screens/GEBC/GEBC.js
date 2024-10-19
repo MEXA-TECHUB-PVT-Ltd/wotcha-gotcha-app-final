@@ -127,7 +127,7 @@ export default function GEBC({navigation}) {
       if (response.ok) {
         const data = await response.json();
         setUserImage(data.user.image);
-        fetchCategory(token);
+        // fetchCategory(token);
       } else {
         console.error('Failed to fetch user:', response.status, response.statusText);
       }
@@ -157,6 +157,7 @@ export default function GEBC({navigation}) {
 
 
   const fetchCategory = async (token,lang) => {
+    console.log('lag----------', lang)
     try {
       const response = await fetch(`${base_url}gebc/category/getAll?page=1&limit=10000`, {
         method: 'GET',

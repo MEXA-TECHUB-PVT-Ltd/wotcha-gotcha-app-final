@@ -940,7 +940,7 @@ const Category = [
   {label: 'Item 2', value: '2'},
   {label: 'Item 3', value: '3'},
 ];
-
+import { useIsFocused } from "@react-navigation/native";
 export default function UpdateContent({navigation, route}) {
   const { apiEndpoint } = route.params;
   const { Video } = route.params;
@@ -993,7 +993,7 @@ export default function UpdateContent({navigation, route}) {
   const ref_RBSheetCamera = useRef(null);
 
   const ref_RBSheetThumbnail = useRef(null);
-
+  const isFocused = useIsFocused();
   const receivedData = route.params?.Video;
   const [subCate, setSubCate] = useState([]);
   const [subcategory, setSubCategory] = useState("");
@@ -1056,14 +1056,53 @@ export default function UpdateContent({navigation, route}) {
       setThumbnailImageUri(receivedData?.thumbnail);
       setCategoryId(receivedData?.video_category)
       setSubCategory(receivedData?.sub_category)
+
+
+
+
+       // Mapping category and subcategory to label and value format
+ const formattedCategory = {
+  label: language === 'fr' && receivedData?.category_french_name ? receivedData?.category_french_name : receivedData?.category_name,
+  value: receivedData?.video_category?.toString(),
+};
+
+const formattedSubCategory = {
+  label: language === 'fr' && receivedData?.sub_category_french_name ? receivedData?.sub_category_french_name : receivedData?.sub_category_name,
+  value: receivedData?.sub_category?.toString(),
+};
+
+setCategoryId(formattedCategory); // set the category in label-value format
+setSubCategory(formattedSubCategory.value);
+
+
+
+
       isDataFetched(true);
     };
 
     fetchCategory();
   }, []);
 
+console.log('subcategory----------------------------', subcategory)
+  const [language, setLanguage] = useState(null);
 
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log('lanugage--------', storedLanguage)
+          // await fetchCategoryPic(authToken,storedLanguage);
+          // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
 
+    fetchLanguage();
+  }, [isFocused, authToken]);
 
  console.log('category id comes from video', categoryId)
 
@@ -1084,7 +1123,16 @@ export default function UpdateContent({navigation, route}) {
 
       if (response.ok) {
         const result = await response.json();
-        const reverseData =  result.AllCategories.reverse();
+
+        const categories = result.AllCategories.map(category => ({
+          // label: category.name, 
+          label: language === 'fr' && category.french_name ? category.french_name : category.name,
+          value: category.id.toString(), // Convert "id" to a string for the value
+        }));
+  
+
+
+        const reverseData =  categories.reverse();
         setSubCate(reverseData);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
@@ -1920,15 +1968,17 @@ export default function UpdateContent({navigation, route}) {
             data={subCate}
             search={false}
             maxHeight={200}
-            labelField="name"
-            valueField="id"
+            // labelField="name"
+            // valueField="id"
+             labelField="label"
+            valueField="value"
             placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             onFocus={() => setIsFocus(true)}
             onBlur={() => setIsFocus(false)}
             onChange={(item) => {
-              console.log("kon sub category id hai----", item.id);
-              setSubCategory(item.id);
+              console.log("kon sub category id hai----", item.value);
+              setSubCategory(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (

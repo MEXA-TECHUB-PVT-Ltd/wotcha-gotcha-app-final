@@ -57,7 +57,7 @@ const Category = [
   {label: 'Item 2', value: '2'},
   {label: 'Item 3', value: '3'},
 ];
-
+import { useIsFocused } from "@react-navigation/native";
 export default function UploadUpdatePicScreen({navigation, route}) {
   const [selectedItem, setSelectedItem] = useState('');
   const { t } = useTranslation();
@@ -98,7 +98,7 @@ export default function UploadUpdatePicScreen({navigation, route}) {
   const [subCate, setSubCate] = useState([]);
   const [subcategory, setSubCategory] = useState("");
   //------------------\\
-
+  const isFocused = useIsFocused();
   const receivedData = route.params?.item;
 
   console.log('Data Recieved on pics', receivedData);
@@ -111,14 +111,31 @@ export default function UploadUpdatePicScreen({navigation, route}) {
       setCategory(receivedData?.pic_category);
       setImageInfo({uri: receivedData?.image});
 
-      setCategoryId(receivedData?.pic_category);
-      setSubCategory(receivedData?.sub_category);
+      // setCategoryId(receivedData?.pic_category);
+      // setSubCategory(receivedData?.sub_category);
+
+
+ // Mapping category and subcategory to label and value format
+ const formattedCategory = {
+  label: language === 'fr' && receivedData?.category_french_name ? receivedData?.category_french_name : receivedData?.category_name,
+  value: receivedData?.pic_category?.toString(),
+};
+
+const formattedSubCategory = {
+  label: language === 'fr' && receivedData?.sub_category_french_name ? receivedData?.sub_category_french_name : receivedData?.sub_category_name,
+  value: receivedData?.sub_category?.toString(),
+};
+
+setCategoryId(formattedCategory.value); // set the category in label-value format
+setSubCategory(formattedSubCategory.value);
+
+
 
       isDataFetched(true);
     };
 
-    fetchCategory();
-  }, []);
+    fetchCategory(); 
+  }, [receivedData]);
 
   useEffect(() => {
     // Make the API request and update the 'data' state
@@ -148,7 +165,8 @@ export default function UploadUpdatePicScreen({navigation, route}) {
       const result1 = await AsyncStorage.getItem('authToken ');
       if (result1 !== null) {
         setAuthToken(result1);
-        fetchCategoryPic(result1);
+        // 18-10-2024 rat
+        // fetchCategoryPic(result1);
       } else {
         console.log('result is null', result);
       }
@@ -159,10 +177,30 @@ export default function UploadUpdatePicScreen({navigation, route}) {
   };
 
   //---------------------------\\
+  const [language, setLanguage] = useState(null);
 
-  const fetchCategoryPic = async userToken => {
-    const token = userToken;
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log('lanugage--------', storedLanguage)
+          await fetchCategoryPic(authToken,storedLanguage);
+          // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
 
+    fetchLanguage();
+  }, [isFocused, authToken]);
+
+  
+  // const fetchCategoryPic = async userToken => {
+  //   const token = userToken;
+  const fetchCategoryPic = async (token,lang) => {
     try {
       const response = await fetch(
         base_url + 'picCategory/getAllPicCategories',
@@ -181,12 +219,16 @@ export default function UploadUpdatePicScreen({navigation, route}) {
 
         // Use the data from the API to set the categories
         const categories = data.AllCategories.map(category => ({
-          label: category.name, // Use the "name" property as the label
+          // label: category.name, 
+          label: lang === 'fr' && category.french_name ? category.french_name : category.name,
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
-        console.log('categooooooooooooooooooooo', data.AllCategories)
-        setCategorySelect(data.AllCategories);
-        // setCategorySelect(categories); // Update the state with the formatted category data
+        setCategorySelect(categories);
+        
+
+        // console.log('categooooooooooooooooooooo', data.AllCategories)
+        // setCategorySelect(data.AllCategories);
+      
 
         // console.log('Data Categories', categoriesSelect);
       } else {
@@ -219,7 +261,17 @@ export default function UploadUpdatePicScreen({navigation, route}) {
 
       if (response.ok) {
         const result = await response.json();
-        setSubCate(result.AllCategories);
+        const subcategories = result.AllCategories.map(category => ({
+          // label: category.name, // Use the "name" property as the label
+          label: language === 'fr' && category.french_name ? category.french_name : category.name,
+          value: category.id.toString(), // Convert "id" to a string for the value
+        }));
+          const reverseData = subcategories.reverse();
+          setSubCate(reverseData);
+
+
+
+        // setSubCate(result.AllCategories);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
       }
@@ -228,7 +280,7 @@ export default function UploadUpdatePicScreen({navigation, route}) {
     }
   };
 
-  console.log('sub iddddd', subcategory)
+  
 ////////////////////////////////////////////////////////////////////////
   //---------------------------\\
 
@@ -460,10 +512,11 @@ export default function UploadUpdatePicScreen({navigation, route}) {
     }
   };
 
-  console.log('thumbnail---', imageInfo)
-  console.log('picNameError---', profileName)
+  // console.log('thumbnail---', imageInfo)
+  // console.log('picNameError---', profileName)
   console.log('categoryId---', categoryId)
-  console.log('description---', description)
+  console.log('sub iddddd', subcategory)
+  // console.log('description---', description)
 
 
   const [isCategoryActive, setIsCategoryActive] = useState(false); // Track if category dropdown is active
@@ -619,10 +672,10 @@ export default function UploadUpdatePicScreen({navigation, route}) {
             data={categoriesSelect}
             search={false}
             maxHeight={200}
-            labelField="name"
-            valueField="id"
-            // labelField="label"
-            // valueField="value"
+            // labelField="name"
+            // valueField="id"
+            labelField="label"
+            valueField="value"
             placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
             onFocus={handleCategoryFocus}
@@ -630,7 +683,8 @@ export default function UploadUpdatePicScreen({navigation, route}) {
             // onFocus={() => setIsFocus(true)}
             // onBlur={() => setIsFocus(false)}
             onChange={item => {
-              setCategoryId(item.id);
+              console.log("kon category id hai----?? ", item.value);
+              setCategoryId(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (
@@ -675,8 +729,8 @@ export default function UploadUpdatePicScreen({navigation, route}) {
               data={subCate}
               search={false}
               maxHeight={200}
-              labelField="name"
-              valueField="id"
+             labelField="label"
+            valueField="value"
               placeholder={t('SelectSubCategory')}
               searchPlaceholder="Search..."
               // onFocus={() => setIsFocus(true)}
@@ -684,8 +738,8 @@ export default function UploadUpdatePicScreen({navigation, route}) {
               onFocus={handleSubCategoryFocus}
               onBlur={handleSubCategoryBlur}
               onChange={(item) => {
-                console.log("kon sub category id hai----", item.id);
-                setSubCategory(item.id);
+                console.log("kon sub category id hai----", item.value);
+                setSubCategory(item.value);
                 setIsFocus(false);
               }}
               renderRightIcon={() => (

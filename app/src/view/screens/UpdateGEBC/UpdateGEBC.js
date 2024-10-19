@@ -1024,7 +1024,7 @@ import IonIcons from 'react-native-vector-icons/Ionicons';
 import EmojiSelector from 'react-native-emoji-selector';
 import CPaperInput from '../../../assets/Custom/CPaperInput';
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
-
+import { useIsFocused } from "@react-navigation/native";
 import {SelectCountry, Dropdown} from 'react-native-element-dropdown';
 import CustomDialog from '../../../assets/Custom/CustomDialog';
 import { base_url } from '../../../../../baseUrl';
@@ -1081,7 +1081,7 @@ export default function UpdateGEBC({navigation, route}) {
   const [subCate, setSubCate] = useState([]);
   const [subcategory, setSubCategory] = useState("");
   const receivedData = route.params?.item;
-
+  const isFocused = useIsFocused();
   console.log('ReceivedData for ebc', receivedData);
   const [dataFetched, isDataFetched] = useState(false);
   // useEffect(() => {
@@ -1099,12 +1099,47 @@ export default function UpdateGEBC({navigation, route}) {
   //   fetchPhelyCategory();
   // }, []);
 
+  const [language, setLanguage] = useState(null);
+
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log('lanugage--------', storedLanguage)
+          await fetchCategory(authToken,storedLanguage);
+          // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
+
+    fetchLanguage();
+  }, [isFocused, authToken]);
  
+
+
 useEffect(() => {
   if (receivedData) {
     setComment(receivedData?.description);
-    setCategoryId(receivedData?.category_id);
-    setSubCategory(receivedData?.sub_category_id);
+    // setCategoryId(receivedData?.category_id);
+    // setSubCategory(receivedData?.sub_category_id);
+
+    const formattedCategory = {
+      label: language === 'fr' && receivedData?.category_french_name ? receivedData?.category_french_name : receivedData?.category_name,
+      value: receivedData?.category_id?.toString(),
+    };
+    
+    const formattedSubCategory = {
+      label: language === 'fr' && receivedData?.sub_category_french_name ? receivedData?.sub_category_french_name : receivedData?.sub_category_name,
+      value: receivedData?.sub_category_id?.toString(),
+    };
+    
+    setCategoryId(formattedCategory.value); // set the category in label-value format
+    setSubCategory(formattedSubCategory.value);
+
 
     // setCategorySelect(receivedData);
     setImageUrl(receivedData?.image);
@@ -1113,6 +1148,8 @@ useEffect(() => {
   } 
 }, [receivedData]);
 
+console.log('categoryId---------', categoryId)
+console.log('subcategory---------', subcategory)
 
 
   useEffect(() => {
@@ -1141,9 +1178,10 @@ useEffect(() => {
     fetchData();
   }, []);
 
-  console.log('userid ---', userId)
-  console.log('username ---', userName)
-  console.log('authtokeb ---', authToken)
+
+  
+ 
+
 
   const fetchUser = async (id, token) => {
     try {
@@ -1157,7 +1195,7 @@ useEffect(() => {
       if (response.ok) {
         const data = await response.json();
         setUserImage(data.user.image);
-        fetchCategory(token);
+        // fetchCategory(token);
       } else {
         console.error('Failed to fetch user:', response.status, response.statusText);
       }
@@ -1166,7 +1204,7 @@ useEffect(() => {
     }
   };
 
-  const fetchCategory = async (token) => {
+  const fetchCategory = async (token, lang) => {
     try {
       const response = await fetch(`${base_url}gebc/category/getAll?page=1&limit=10000`, {
         method: 'GET',
@@ -1178,10 +1216,14 @@ useEffect(() => {
       if (response.ok) {
         const data = await response.json();
         const categories = data.AllCategories.map(category => ({
-          label: category.name,
+          // label: category.name,
+          label:
+          lang === "fr" && category.french_name
+            ? category.french_name
+            : category.name,
           value: category.id.toString()
         }));
-        const reverseData = data.AllCategories.reverse();
+        const reverseData = categories.reverse();
         setCategorySelect(reverseData);
         // setCategorySelect(categories);
       } else {
@@ -1209,8 +1251,25 @@ useEffect(() => {
 
       if (response.ok) {
         const result = await response.json();
-        const reverseData = result.AllCategories.reverse();
+
+
+        const subcategories = result.AllCategories.map((category) => ({
+          // label: category.name, // Use the "name" property as the label
+          label:
+          language === "fr" && category.french_name
+              ? category.french_name
+              : category.name,
+          value: category.id.toString(), // Convert "id" to a string for the value
+        }));
+        const reverseData = subcategories.reverse();
         setSubCate(reverseData);
+
+
+
+
+
+        // const reverseData = result.AllCategories.reverse();
+        // setSubCate(reverseData);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
       }
@@ -1758,7 +1817,7 @@ useEffect(() => {
           <IonIcons name={'chevron-back'} color={'#282828'} size={25} />
         </TouchableOpacity>
 
-        <Text style={styles.headerText}>EBC</Text>
+        <Text style={styles.headerText}>{t('EBIC')}</Text>
       </View>
 
       <ScrollView
@@ -1945,11 +2004,11 @@ useEffect(() => {
             data={categoriesSelect}
             search={false}
             maxHeight={200}
-            labelField="name"
-            valueField="id"
-            // labelField="label"
-            // valueField="value"
-            placeholder={'Select Category'}
+            // labelField="name"
+            // valueField="id"
+            labelField="label"
+            valueField="value"
+            placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
             onFocus={handleCategoryFocus}
             onBlur={handleCategoryBlur}
@@ -1957,7 +2016,8 @@ useEffect(() => {
             // onBlur={() => setIsFocus(false)}
             onChange={item => {
               //setCategory(item.label);
-              setCategoryId(item.id);
+              console.log("kon main category id hai----", item.value);
+              setCategoryId(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (
@@ -2003,17 +2063,19 @@ useEffect(() => {
             data={subCate}
             search={false}
             maxHeight={200}
-            labelField="name"
-            valueField="id"
-            placeholder={"Select Sub Category"}
+            // labelField="name"
+            // valueField="id"
+             labelField="label"
+            valueField="value"
+            placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             onFocus={handleSubCategoryFocus}
             onBlur={handleSubCategoryBlur}
             // onFocus={() => setIsFocus(true)}
             // onBlur={() => setIsFocus(false)}
             onChange={(item) => {
-              console.log("kon sub category id hai----", item.id);
-              setSubCategory(item.id);
+              console.log("kon sub category id hai----", item.value);
+              setSubCategory(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (

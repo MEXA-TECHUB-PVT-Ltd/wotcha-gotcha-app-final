@@ -55,6 +55,7 @@ import CPaperInput from '../../../assets/Custom/CPaperInput';
 import Headers from '../../../assets/Custom/Headers';
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
 import { base_url } from '../../../../../baseUrl';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function UpdatePostLetterInfo({navigation, route}) {
   const [name, setName] = useState('');
@@ -127,9 +128,31 @@ export default function UpdatePostLetterInfo({navigation, route}) {
   const [subcategory, setSubCategory] = useState("");
   
   const [Username, setUserName] = useState('');
-  console.log('category_id', receivedData.disc_category);
+  console.log('recive data', receivedData);
   // console.log('sub_category_id', receivedData.sub_category_id);
   // console.log('name', name);
+
+  const isFocused = useIsFocused();
+  const [language, setLanguage] = useState(null);
+
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log('lanugage--------', storedLanguage)
+          await fetchMainCategory(authToken,storedLanguage);
+          // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
+
+    fetchLanguage();
+  }, [isFocused, authToken]);
+
 
   useEffect(() => {
     // Make the API request and update the 'data' state
@@ -140,8 +163,21 @@ export default function UpdatePostLetterInfo({navigation, route}) {
       setEmail(receivedData?.email)
       setCategoryPublicType(receivedData?.receiver_type)
 
-      setCategoryId(receivedData?.disc_category);
-      setSubCategory(receivedData?.disc_sub_category);
+
+      const formattedCategory = {
+        label: language === 'fr' && receivedData?.disc_category_french_name ? receivedData?.disc_category_french_name : receivedData?.disc_category_name,
+        value: receivedData?.disc_category?.toString(),
+      };
+      
+      const formattedSubCategory = {
+        label: language === 'fr' && receivedData?.disc_sub_category_french_name ? receivedData?.disc_sub_category_french_name : receivedData?.disc_sub_category_name,
+        value: receivedData?.disc_sub_category?.toString(),
+      };
+      
+      setCategoryId(formattedCategory.value); // set the category in label-value format
+      setSubCategory(formattedSubCategory.value);
+      // setCategoryId(receivedData?.disc_category);
+      // setSubCategory(receivedData?.disc_sub_category);
 
       // setCategoryId(receivedData?.disc_category);
       setImageUrl(receivedData?.image); 
@@ -149,8 +185,11 @@ export default function UpdatePostLetterInfo({navigation, route}) {
     };
 
     fetchCategory();
-  }, []);
+  }, [receivedData]);
 
+
+  console.log('category------', categoryId)
+  console.log('subcategory------', subcategory)
   // useEffect(() => {
   //   // Make the API request and update the 'data' state
   //   fetchVideos();
@@ -343,21 +382,21 @@ export default function UpdatePostLetterInfo({navigation, route}) {
     }
   };
 
-  useEffect(() => {
-    if (authToken) {
-      fetchCategory();
-    }
-  }, [authToken]);
-  const fetchCategory = async (id, token) => {
+  // useEffect(() => {
+  //   if (authToken) {
+  //     fetchCategory();
+  //   }
+  // }, [authToken]);
+  const fetchMainCategory = async (token, lang) => {
     // const token = token;
-    console.log('user token-----------', authToken )
+    // console.log('user token-----------', authToken )
     try {
       const response = await fetch(
         base_url + 'discCategory/getAllDiscCategories?page=1&limit=10000',
         {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${authToken}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -366,11 +405,15 @@ export default function UpdatePostLetterInfo({navigation, route}) {
         const data = await response.json();
       
         const categories = data.AllCategories.map(category => ({
-          label: category.name, // Use the "name" property as the label
+          // label: category.name, // Use the "name" property as the label
+          label:
+          lang === "fr" && category.french_name
+            ? category.french_name
+            : category.name,
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
      
-        const reverseData = data.AllCategories.reverse();
+        const reverseData = categories.reverse();
         setCategorySelect(reverseData);
         // setCategorySelect(categories); // Update the state with the formatted category data
         
@@ -393,7 +436,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
   }, [authToken, categoryId]);
 
   const fetchAllSubCategory = async (categoryId) => {
-    console.log('id ahi', categoryId)
+  
     try {
       const response = await fetch(`${base_url}discSubCategory/get-all?search=Test&category_id=${categoryId}`, {
         method: 'GET',
@@ -404,9 +447,22 @@ export default function UpdatePostLetterInfo({navigation, route}) {
 
       if (response.ok) {
         const result = await response.json();
-        const reverseData = result.data
-        console.log('sub cate data for -------', reverseData)
+
+        const subcategories = result.data.map((category) => ({
+          // label: category.name, // Use the "name" property as the label
+          label:
+          language === "fr" && category.french_name
+              ? category.french_name
+              : category.name,
+          value: category.id.toString(), // Convert "id" to a string for the value
+        }));
+        const reverseData = subcategories.reverse();
         setSubCate(reverseData);
+
+
+        // const reverseData = result.data
+        console.log('sub cate data for -------', reverseData)
+        // setSubCate(reverseData);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
       }
@@ -879,17 +935,18 @@ export default function UpdatePostLetterInfo({navigation, route}) {
             data={categoriesSelect}
             search={false}
             maxHeight={200}
-            // labelField="label"
-            // valueField="value"
-             labelField="name"
-            valueField="id"
+            labelField="label"
+            valueField="value"
+            //  labelField="name"
+            // valueField="id"
             placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
             onFocus={handleCategoryFocus}
             onBlur={handleCategoryBlur}
             onChange={item => {
               // setCategoryId(item.value);
-              setCategoryId(item.id);
+              console.log("kon main category id hai----", item.value);
+              setCategoryId(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (
@@ -934,15 +991,18 @@ export default function UpdatePostLetterInfo({navigation, route}) {
             data={subCate}
             search={false}
             maxHeight={200}
-            labelField="name"
-            valueField="id"
+            labelField="label"
+            valueField="value"
+            // labelField="name"
+            // valueField="id"
             placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             onFocus={handleSubCategoryFocus}
             onBlur={handleSubCategoryBlur}
  
             onChange={(item) => {
-              setSubCategory(item.id);
+              console.log("kon sub category id hai----", item.value);
+              setSubCategory(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (

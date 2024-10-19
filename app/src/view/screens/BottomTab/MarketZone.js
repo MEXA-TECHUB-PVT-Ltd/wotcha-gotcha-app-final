@@ -181,7 +181,7 @@ export default function MarketZone({  }) {
       // setAdsInActiveData(result.AllBanners);
       const updatedBanners = result.AllBanners.map((banner) => {
         if (banner.image.startsWith("/fileUpload")) {
-          banner.image = `https://watch-gotcha-be.mtechub.com${banner.image}`;
+          banner.image = base_url + `${banner.image}`;
         }
         return banner;
       });
@@ -230,10 +230,14 @@ export default function MarketZone({  }) {
       if (response.ok) {
         const data = await response.json();
         const categories = data.AllCategories.map((category) => ({
-          label: category.name, // Use the "name" property as the label
+          // label: category.name, // Use the "name" property as the label
+          label:
+          language === "fr" && category.french_name
+              ? category.french_name
+              : category.name,
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
-
+console.log('data---------------', categories)
         setCategorySelect(categories); // Update the state with the formatted category data
       } else {
         console.error(

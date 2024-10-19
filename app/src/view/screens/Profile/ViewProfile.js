@@ -332,7 +332,7 @@ export default function ViewProfile({ navigation }) {
         const imageUrl = signature.signature_image;
         let formattedUrl;
         if (imageUrl.startsWith("/fileUpload")) {
-          formattedUrl = `https://watch-gotcha-be.mtechub.com${imageUrl}`;
+          formattedUrl = base_url + `${imageUrl}`;
         } else {
           formattedUrl = imageUrl;
         }

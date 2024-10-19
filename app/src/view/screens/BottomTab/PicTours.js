@@ -146,7 +146,7 @@ export default function PicTours() {
     if (authToken && isFocused) {
       // fetchAllCinematicsCategory();
       fetchTopSport();
-      // fetchSubCategorySport(selectedItemId);
+      fetchSubCategorySport(selectedItemId);
     }
   }, [authToken, selectedItemId, isFocused]);
 
@@ -192,7 +192,11 @@ export default function PicTours() {
 
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map((category) => ({
-          title: category.sub_category_name,
+          // title: category.sub_category_name,
+          title:
+          language === "fr" && category.sub_category_french_name
+              ? category.sub_category_french_name
+              : category.sub_category_name,
           data: category.tour_result.Tours,
         }));
 

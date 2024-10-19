@@ -138,6 +138,24 @@ export default function Dashboard({ route }) {
   const [selectedQAFIItemId, setSelectedQAFIItemId] = useState(null);
   const [selectedEBCItemId, setSelectedEBCItemId] = useState(null);
 
+  const [language, setLanguage] = useState(null);
+
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log('lanugage-------- in dash', storedLanguage)
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
+
+    fetchLanguage();
+  }, [isFocused]);
+
   useEffect(() => {
     const fetchInstalledAppData = async () => {
       const installedApps = InstalledApps.getSortedApps();
@@ -602,19 +620,39 @@ export default function Dashboard({ route }) {
   const [authToken, setAuthToken] = useState(null);
 
   const [categoriesSelectMarket, setCategorySelectMarket] = useState([]);
-  const RegionArea = ["Africa", "Europe", "Americas", "Asia", "Middle East"];
-  const MassApp = [
-    "E-commerce",
-    "Business",
-    "Sports",
-    "Education",
-    "Dating",
-    "Food Delivery",
-    "Social Media",
-    "Medical Wellness",
-    "Grocery",
-    "Employment",
+  // const RegionArea = ["Africa", "Europe", "Americas", "Asia", "Middle East"];
+
+  const RegionArea = [
+    t('Africa'),
+    t('Europe'),
+    t('Americas'),
+    t('Asia'),
+    t('Middle_East')
   ];
+  const MassApp = [
+    t('Ecommerce'),
+    t('Business'),
+    t('cateSports'),
+    t('Education'),
+    t('Dating'),
+    t('FoodDelivery'),
+    t('SocialMedia'),
+    t('MedicalWellness'),
+    t('Grocery'),
+    t('Employment')
+  ];
+  // const MassApp = [
+  //   "E-commerce",
+  //   "Business",
+  //   "Sports",
+  //   "Education",
+  //   "Dating",
+  //   "Food Delivery",
+  //   "Social Media",
+  //   "Medical Wellness",
+  //   "Grocery",
+  //   "Employment",
+  // ];
   const containerHeight = Math.min(screenHeight * 0.8, itemHeight);
 
 
@@ -647,6 +685,7 @@ export default function Dashboard({ route }) {
       const result = await response.json();
 
       const categories = result.AllCategories.reverse();
+      // console.log(' videoooooooooooooooo...............', categories)
       setXpiSearches(categories); // Update the state with the fetched data
   
       if (selectedXpiItemId === null && categories.length > 0) {
@@ -692,7 +731,11 @@ export default function Dashboard({ route }) {
       const result = await response.json();
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
-          title: category.sub_category_name,
+          // title: category.sub_category_name,
+          title:
+          language === "fr" && category.sub_category_french_name
+              ? category.sub_category_french_name
+              : category.sub_category_name,
           data: category.video_result.Videos,
         }));
         setXpiSections(formattedSections);
@@ -710,6 +753,7 @@ export default function Dashboard({ route }) {
 
   const renderSearchesVideo = (item) => {
     const isSelected = selectedXpiItemId === item.id;
+    const name = language === "fr" && item.french_name ? item.french_name : item.name;
     return (
       <TouchableOpacity
         style={[
@@ -730,7 +774,8 @@ export default function Dashboard({ route }) {
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.name}
+          {name}
+          {/* {item.name} */}
         </Text>
       </TouchableOpacity>
     );
@@ -909,7 +954,11 @@ export default function Dashboard({ route }) {
 
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
-          title: category.sub_category_name,
+          // title: category.sub_category_name,
+          title:
+          language === "fr" && category.sub_category_french_name
+              ? category.sub_category_french_name
+              : category.sub_category_name,
           data: category.tour_result.Tours,
         }));
 
@@ -928,7 +977,7 @@ export default function Dashboard({ route }) {
 
   const renderSearchesPic = (item) => {
     const isSelected = selectedPicItemId === item.id;
-
+    const name = language === "fr" && item.french_name ? item.french_name : item.name;
     return (
       <TouchableOpacity
         style={[
@@ -948,7 +997,8 @@ export default function Dashboard({ route }) {
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.name}
+          {name}
+          {/* {item.name} */}
         </Text>
       </TouchableOpacity>
     );
@@ -1058,7 +1108,7 @@ export default function Dashboard({ route }) {
   const renderNewsSearches = (item) => {
     // console.log('Items', item);
     const isSelected = selectedNewsItemId === item.id;
-
+    const name = language === "fr" && item.french_name ? item.french_name : item.name;
     return (
       <TouchableOpacity
         style={[
@@ -1078,7 +1128,8 @@ export default function Dashboard({ route }) {
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.name}
+          {name}
+          {/* {item.name} */}
         </Text>
       </TouchableOpacity>
     );
@@ -1169,7 +1220,11 @@ const [postletterloading, setPostLetterLoading] = useState(false);
       const result = await response.json();
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
-          title: category.sub_category_name,
+          // title: category.sub_category_name,
+          title:
+          language === "fr" && category.sub_category_french_name
+              ? category.sub_category_french_name
+              : category.sub_category_name,
           data: category.total_result.letters,
         }));
 
@@ -1189,7 +1244,7 @@ const [postletterloading, setPostLetterLoading] = useState(false);
 
   const renderPostLetterSearches = (item) => {
     const isSelected = letterselectedItemId === item.id;
-
+    const name = language === "fr" && item.french_name ? item.french_name : item.name;
     return (
       <TouchableOpacity
         style={[
@@ -1208,7 +1263,8 @@ const [postletterloading, setPostLetterLoading] = useState(false);
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.name}
+          {name}
+          {/* {item.name} */}
         </Text>
       </TouchableOpacity>
     );
@@ -1583,7 +1639,7 @@ const convertTimeAndDate = (dateString) => {
   const renderQAFISearches = (item) => {
     // console.log('Items', item);
     const isSelected = selectedQAFIItemId === item.id;
-
+    const name = language === "fr" && item.french_name ? item.french_name : item.name;
     return (
       <TouchableOpacity
         style={[
@@ -1602,7 +1658,8 @@ const convertTimeAndDate = (dateString) => {
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.name}
+          {name}
+          {/* {item.name} */}
         </Text>
       </TouchableOpacity>
     );
@@ -1612,7 +1669,7 @@ const convertTimeAndDate = (dateString) => {
   const renderEBCSearches = (item) => {
     // console.log('Items', item);
     const isSelected = selectedEBCItemId === item.id;
-
+    const name = language === "fr" && item.french_name ? item.french_name : item.name;
     return (
       <TouchableOpacity
         style={[
@@ -1631,7 +1688,8 @@ const convertTimeAndDate = (dateString) => {
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.name}
+          {name}
+          {/* {item.name} */}
         </Text>
       </TouchableOpacity>
     );
@@ -1867,7 +1925,11 @@ const convertTimeAndDate = (dateString) => {
 
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
-          title: category.sub_category_name,
+          // title: category.sub_category_name,
+          title:
+          language === "fr" && category.sub_category_french_name
+              ? category.sub_category_french_name
+              : category.sub_category_name,
           data: category.video_result.videos,
         }));
 
@@ -1981,7 +2043,11 @@ const convertTimeAndDate = (dateString) => {
 
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
-          title: category.sub_category_name,
+          // title: category.sub_category_name,
+          title:
+          language === "fr" && category.sub_category_french_name
+              ? category.sub_category_french_name
+              : category.sub_category_name,
           data: category.video_result.videos,
         }));
 
@@ -2095,7 +2161,11 @@ const convertTimeAndDate = (dateString) => {
 
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map((category) => ({
-          title: category.sub_category_name,
+          // title: category.sub_category_name,
+          title:
+          language === "fr" && category.sub_category_french_name
+              ? category.sub_category_french_name
+              : category.sub_category_name,
           data: category.video_result.videos,
         }));
 
@@ -2217,7 +2287,11 @@ const convertTimeAndDate = (dateString) => {
 
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
-          title: category.sub_category_name,
+          // title: category.sub_category_name,
+          title:
+          language === "fr" && category.sub_category_french_name
+              ? category.sub_category_french_name
+              : category.sub_category_name,
           data: category.video_result.videos,
         }));
 
@@ -2335,7 +2409,11 @@ const convertTimeAndDate = (dateString) => {
 
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
-          title: category.sub_category_name,
+          // title: category.sub_category_name,
+          title:
+          language === "fr" && category.sub_category_french_name
+              ? category.sub_category_french_name
+              : category.sub_category_name,
           data: category.video_result.videos,
         }));
 
@@ -2450,7 +2528,11 @@ const convertTimeAndDate = (dateString) => {
       const result = await response.json();
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
-          title: category.sub_category_name,
+          // title: category.sub_category_name,
+          title:
+          language === "fr" && category.sub_category_french_name
+              ? category.sub_category_french_name
+              : category.sub_category_name,
           data: category.news_result.News,
         }));
         setNewsSections(formattedSections);
@@ -2622,7 +2704,11 @@ const convertTimeAndDate = (dateString) => {
 
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
-          title: category.sub_category_name,
+          // title: category.sub_category_name,
+          title:
+          language === "fr" && category.sub_category_french_name
+              ? category.sub_category_french_name
+              : category.sub_category_name,
           data: category.QAFI_result.QAFIs,
         }));
 
@@ -2818,7 +2904,11 @@ const convertTimeAndDate = (dateString) => {
       const result = await response.json();
       if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
-          title: category.sub_category_name,
+          // title: category.sub_category_name,
+          title:
+          language === "fr" && category.sub_category_french_name
+              ? category.sub_category_french_name
+              : category.sub_category_name,
           data: category.GEBC_result.GEBCs,
         }));
         setEBCSections(formattedSections);
@@ -3018,7 +3108,11 @@ const convertTimeAndDate = (dateString) => {
 
         // console.log('Data ', data);
         const categories = data.AllCategories.map((category) => ({
-          label: category.name,
+          // label: category.name,
+          label:
+          language === "fr" && category.french_name
+              ? category.french_name
+              : category.name,
           value: category.id.toString(),
         }));
 
@@ -3947,8 +4041,10 @@ const convertTimeAndDate = (dateString) => {
     setIsSelectedActive(false); ///
     setcategoryActive(false); ////ye old hai jis ko comment kiya tha
     setSelectedCategory(category);
-    setecommerance(category === "E-commerce");
-    setSport(category === "Sports");
+    setecommerance(category === t('Ecommerce'));
+    // setecommerance(category === "E-commerce");
+    setSport(category === t('cateSports'));
+    // setSport(category === "Sports");
   };
 
   const renderSearches = (item) => {
@@ -3965,10 +4061,12 @@ const convertTimeAndDate = (dateString) => {
         onPress={() => {
           // Pass the item data when pressed
           handleItemPress(item);
-          if (item === "E-commerce") {
+          if (item === t('Ecommerce')) {
+          // if (item === "E-commerce") {
             // console.log("E----AYA:");
             loadSavedApps(); // Assuming handleItemPress is a function to handle item press
-          } else if (item === "Business") {
+          } else if (item ===  t('Business')) {
+          // } else if (item === "Business") {
             // console.log("Business----AYA:");
             BusinessSavedApps();
           } // Assuming handleItemPress is a function to handle item press
@@ -4063,6 +4161,7 @@ const convertTimeAndDate = (dateString) => {
   const renderCinematicSearches = (item) => {
     // console.log("Regions", item);
     const isSelected = selectedCinematicItemId === item.id;
+    const name = language === "fr" && item.french_name ? item.french_name : item.name;
     // console.log('is selected hai---', isSelected)
     return (
       <TouchableOpacity
@@ -4083,7 +4182,8 @@ const convertTimeAndDate = (dateString) => {
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.name}
+          {name}
+          {/* {item.name} */}
         </Text>
       </TouchableOpacity>
     );
@@ -4092,6 +4192,7 @@ const convertTimeAndDate = (dateString) => {
   const renderFanstartSearches = (item) => {
     // console.log("Regions", item);
     const isSelected = selectedFanstarItemId === item.id;
+    const name = language === "fr" && item.french_name ? item.french_name : item.name;
     // console.log('is selected hai---', isSelected)
     return (
       <TouchableOpacity
@@ -4112,7 +4213,8 @@ const convertTimeAndDate = (dateString) => {
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.name}
+          {name}
+          {/* {item.name} */}
         </Text>
       </TouchableOpacity>
     );
@@ -4120,6 +4222,7 @@ const convertTimeAndDate = (dateString) => {
 
   const renderKidsSearches = (item) => {
     const isSelected = selectedKidItemId === item.id;
+    const name = language === "fr" && item.french_name ? item.french_name : item.name;
     return (
       <TouchableOpacity
         style={[
@@ -4139,7 +4242,8 @@ const convertTimeAndDate = (dateString) => {
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.name}
+          {name}
+          {/* {item.name} */}
         </Text>
       </TouchableOpacity>
     );
@@ -4186,6 +4290,7 @@ const convertTimeAndDate = (dateString) => {
   const renderLearnSearches = (item) => {
     // console.log("Regions", item);
     const isSelected = selectedlearnItemId === item.id;
+    const name = language === "fr" && item.french_name ? item.french_name : item.name;
     // console.log('is selected hai---', isSelected)
     return (
       <TouchableOpacity
@@ -4206,7 +4311,8 @@ const convertTimeAndDate = (dateString) => {
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.name}
+          {name}
+          {/* {item.name} */}
         </Text>
       </TouchableOpacity>
     );
@@ -4245,6 +4351,7 @@ const convertTimeAndDate = (dateString) => {
 
   const renderTvSearches = (item) => {
     const isSelected = selectedtvItemId === item.id;
+    const name = language === "fr" && item.french_name ? item.french_name : item.name;
     return (
       <TouchableOpacity
         style={[
@@ -4264,7 +4371,8 @@ const convertTimeAndDate = (dateString) => {
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.name}
+          {name}
+          {/* {item.name} */}
         </Text>
       </TouchableOpacity>
     );
@@ -4770,7 +4878,8 @@ const convertTimeAndDate = (dateString) => {
 
         ) : (
           <>
-            {ecommerance && selectedCategory === "E-commerce" && (
+            {/* {ecommerance && selectedCategory === "E-commerce" && ( */}
+            {ecommerance && selectedCategory === t('Ecommerce') && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -4872,7 +4981,8 @@ const convertTimeAndDate = (dateString) => {
               </>
             )}
 
-            {selectedCategory === "Business" && (
+            {selectedCategory ===  t('Business') && (
+            // {selectedCategory === "Business" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -4968,7 +5078,8 @@ const convertTimeAndDate = (dateString) => {
                 </View>
               </>
             )}
-            {selectedCategory === "Sports" && (
+            {selectedCategory === t('cateSports') && (
+            // {selectedCategory === "Sports" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -5064,7 +5175,8 @@ const convertTimeAndDate = (dateString) => {
                 </View>
               </>
             )}
-            {selectedCategory === "Education" && (
+            {selectedCategory ===  t('Education') && (
+            // {selectedCategory === "Education" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -5160,7 +5272,8 @@ const convertTimeAndDate = (dateString) => {
                 </View>
               </>
             )}
-            {selectedCategory === "Dating" && (
+            {selectedCategory === t('Dating') && (
+            // {selectedCategory === "Dating" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -5256,7 +5369,8 @@ const convertTimeAndDate = (dateString) => {
                 </View>
               </>
             )}
-            {selectedCategory === "Food Delivery" && (
+            {selectedCategory === t('FoodDelivery') && (
+            // {selectedCategory === "Food Delivery" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -5352,7 +5466,8 @@ const convertTimeAndDate = (dateString) => {
                 </View>
               </>
             )}
-            {selectedCategory === "Social Media" && (
+            {selectedCategory === t('SocialMedia') && (
+            // {selectedCategory === "Social Media" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -5448,7 +5563,8 @@ const convertTimeAndDate = (dateString) => {
                 </View>
               </>
             )}
-            {selectedCategory === "Medical Wellness" && (
+            {selectedCategory === t('MedicalWellness') && (
+            // {selectedCategory === "Medical Wellness" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -5544,7 +5660,8 @@ const convertTimeAndDate = (dateString) => {
                 </View>
               </>
             )}
-            {selectedCategory === "Grocery" && (
+            {selectedCategory === t('Grocery') && (
+            // {selectedCategory === "Grocery" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -5640,7 +5757,8 @@ const convertTimeAndDate = (dateString) => {
                 </View>
               </>
             )}
-            {selectedCategory === "Employment" && (
+            {selectedCategory === t('Employment') && (
+            // {selectedCategory === "Employment" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -8742,10 +8860,11 @@ const styles = StyleSheet.create({
     marginLeft: wp(3),
     alignItems: "center",
     justifyContent: "center",
-    width: wp(30),
+    // width: wp(30),
     backgroundColor: "#F2F2F2",
     borderRadius: wp(5),
     height: hp(5),
+    paddingHorizontal:hp(1.5)
   },
   // ///////////////////////////
 

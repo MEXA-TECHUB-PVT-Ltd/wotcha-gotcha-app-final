@@ -282,7 +282,7 @@ export default function Tv_promax_upload({ navigation }) {
 
       // const result = dummyData;
 
-      console.log("result---------", result.AllCategories);
+      // console.log("result---------", result.AllCategories);
       const subcategories = result.AllCategories.map((category) => ({
         // label: category.name, // Use the "name" property as the label
         label:

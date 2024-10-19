@@ -385,7 +385,7 @@ export default function Tv_Promax_details({ navigation, route }) {
   const changeModal = () => {
     ref_RBSheetCamera.current.close();
     // navigation.replace('UpdateVideoProfile', {Video: receivedData});
-    navigation.replace('UpdateContent', {Video: receivedData, apiEndpoint: 'tvProgmax/update'});
+    navigation.replace('UpdateContent', {Video: receivedData, apiEndpoint: 'tvProgmax/update' , categoryapiEndpoint: 'tvProgmax/category/getAll', subcategoryapiEndpoint: 'tvProgmax/sub_category/getAllByCategory?category_id='});
   };
 
   const changeDelete = () => {

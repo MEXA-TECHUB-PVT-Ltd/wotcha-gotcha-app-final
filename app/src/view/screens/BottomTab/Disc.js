@@ -152,7 +152,7 @@ export default function Disc({ route }) {
       // setAdsInActiveData(result.AllBanners);
       const updatedBanners = result.AllBanners.map((banner) => {
         if (banner.image.startsWith("/fileUpload")) {
-          banner.image = `https://watch-gotcha-be.mtechub.com${banner.image}`;
+          banner.image = base_url + `${banner.image}`;
         }
         return banner;
       });
