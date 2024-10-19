@@ -53,7 +53,7 @@ import CPaperInput from '../../../assets/Custom/CPaperInput';
 import { base_url } from '../../../../../baseUrl';
 import { CLOUD_NAME, CLOUDINARY_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
 import CustomLoaderButton from '../../../assets/Custom/CustomLoaderButton';
-
+import { useIsFocused } from "@react-navigation/native";
 const Category = [
   {label: 'Item 1', value: '1'},
   {label: 'Item 2', value: '2'},
@@ -113,8 +113,26 @@ export default function UploadScreenPic({navigation, route}) {
   };
 
 
+  const isFocused = useIsFocused();
+  const [language, setLanguage] = useState(null);
 
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log('lanugage--------', storedLanguage)
+          await fetchPicCategory(authToken,storedLanguage);
+          // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
 
+    fetchLanguage();
+  }, [isFocused, authToken]);
 
 
   useEffect(() => {
@@ -143,9 +161,9 @@ export default function UploadScreenPic({navigation, route}) {
     fetchData();
   }, []);
 
-  console.log('userid ---', userId)
-  console.log('username ---', userName)
-  console.log('authtokeb ---', authToken)
+  // console.log('userid ---', userId)
+  // console.log('username ---', userName)
+  // console.log('authtokeb ---', authToken)
 
   const fetchUser = async (id, token) => {
     try {
@@ -159,7 +177,7 @@ export default function UploadScreenPic({navigation, route}) {
       if (response.ok) {
         const data = await response.json();
         setUserImage(data.user.image);
-        fetchPicCategory(token);
+        // fetchPicCategory(token);
       } else {
         console.error('Failed to fetch user:', response.status, response.statusText);
       }
@@ -168,7 +186,8 @@ export default function UploadScreenPic({navigation, route}) {
     }
   };
 
-  const fetchPicCategory = async (token) => {
+  const fetchPicCategory = async (token,lang) => {
+ 
     try {
       const response = await fetch(`${base_url}picCategory/getAllPicCategories?page=1&limit=10000`, {
         method: 'GET',
@@ -179,11 +198,14 @@ export default function UploadScreenPic({navigation, route}) {
 
       if (response.ok) {
         const data = await response.json();
+        // console.log('catte------------',data.AllCategories)
         const categories = data.AllCategories.map(category => ({
-          label: category.name,
+          label: lang === 'fr' && category.french_name ? category.french_name : category.name,
+          // label: category.name,
           value: category.id.toString()
         }));
         setCategorySelect(categories);
+        
         setImageInfo(receivedData);
       } else {
         console.error('Failed to fetch categories:', response.status, response.statusText);
@@ -199,19 +221,27 @@ export default function UploadScreenPic({navigation, route}) {
     }
   }, [authToken, categoryId]);
 
-  const fetchAllSubCategory = async (categoryId) => {
+  // const fetchAllSubCategory = async (token,lang, categoryId) => {
+
+const fetchAllSubCategory = async (category) => {
+  console.log("langiuuuuuuuuuuuuuuuuuuuuuuu---------", language);
+  console.log("category---------", category);
+
+const token = authToken;
     try {
       const response = await fetch(`${base_url}pic/sub_category/getAllByCategory?category_id=${categoryId}`, {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${authToken}`
+          Authorization: `Bearer ${token}`
         }
       });
 
       if (response.ok) {
         const result = await response.json();
+        console.log('result---------', result.AllCategories)
               const subcategories = result.AllCategories.map(category => ({
-        label: category.name, // Use the "name" property as the label
+        // label: category.name, // Use the "name" property as the label
+        label: lang === 'fr' && category.french_name ? category.french_name : category.name,
         value: category.id.toString(), // Convert "id" to a string for the value
       }));
         const reverseData = subcategories.reverse();
@@ -765,6 +795,7 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
             // onBlur={() => setIsFocus(false)}
             onChange={item => {
               //setCategory(item.label);
+              // setCategory(item.label);
               setCategoryId(item.value);
               setIsFocus(false);
             }}

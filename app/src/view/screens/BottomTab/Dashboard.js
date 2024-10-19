@@ -862,7 +862,7 @@ export default function Dashboard({ route }) {
     if (authToken && isFocused) {
       // fetchAllCinematicsCategory();
       fetchTopForPics(selectedPicItemId);
-      fetchSubCategorySport(selectedPicItemId);
+      // fetchSubCategorySport(selectedPicItemId);
     }
   }, [authToken, selectedPicItemId, isFocused]);
 

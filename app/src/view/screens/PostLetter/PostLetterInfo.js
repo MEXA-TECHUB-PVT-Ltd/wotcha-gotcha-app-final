@@ -36,7 +36,7 @@ import Headers from '../../../assets/Custom/Headers';
 import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
 import { base_url } from '../../../../../baseUrl';
 import Loader from '../../../assets/Custom/Loader';
-
+import { useIsFocused } from "@react-navigation/native";
 export default function PostLetterInfo({ navigation }) {
   const { t } = useTranslation();
   const [name, setName] = useState('');
@@ -87,7 +87,7 @@ export default function PostLetterInfo({ navigation }) {
   const [subcategory, setSubCategory] = useState("");
   const [profileNameError, setProfileNameError] = useState("");
   const [imageError, setImageError] = useState("");
-
+  const isFocused = useIsFocused();
   // useEffect(() => {
   //   fetchVideos();
   // }, []);
@@ -192,7 +192,7 @@ export default function PostLetterInfo({ navigation }) {
         if (storedAuthToken) setAuthToken(storedAuthToken);
 
         if (storedUserId && storedAuthToken) {
-          await fetchCategory();
+          // await fetchCategory();
           await fetchUser(storedUserId, storedAuthToken);
         }
       } catch (error) {
@@ -204,6 +204,28 @@ export default function PostLetterInfo({ navigation }) {
 
     fetchData();
   }, []);
+
+  const [language, setLanguage] = useState(null);
+
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log("lanugage--------", storedLanguage);
+          await fetchCategory(authToken, storedLanguage);
+          
+
+          // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
+
+    fetchLanguage();
+  }, [isFocused, authToken]);
 
  
   const fetchUser = async (id, token) => {
@@ -227,7 +249,7 @@ export default function PostLetterInfo({ navigation }) {
     }
   };
   console.log('user-----------about ----', authToken )
-  const fetchCategory = async (id, token) => {
+  const fetchCategory = async (token, lang)  => {
     // const token = token;
     console.log('user-----------', authToken )
     try {
@@ -236,7 +258,7 @@ export default function PostLetterInfo({ navigation }) {
         {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${authToken}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -245,7 +267,11 @@ export default function PostLetterInfo({ navigation }) {
         const data = await response.json();
       
         const categories = data.AllCategories.map(category => ({
-          label: category.name, // Use the "name" property as the label
+          // label: category.name, // Use the "name" property as the label
+          label:
+          lang === "fr" && category.french_name
+            ? category.french_name
+            : category.name,
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
      
@@ -263,11 +289,11 @@ export default function PostLetterInfo({ navigation }) {
     }
   };
 
-  useEffect(() => {
-    if (authToken) {
-      fetchCategory();
-    }
-  }, [authToken,]);
+  // useEffect(() => {
+  //   if (authToken) {
+  //     fetchCategory();
+  //   }
+  // }, [authToken,]);
   useEffect(() => {
     if (authToken && categoryId) {
       fetchAllSubCategory(categoryId);
@@ -275,7 +301,8 @@ export default function PostLetterInfo({ navigation }) {
   }, [authToken, categoryId]);
 
   const fetchAllSubCategory = async (categoryId) => {
-    console.log('id ahi', categoryId)
+    console.log("langiuuuuuuuuuuuuuuuuuuuuuuu---------", language);
+    console.log("category---------", categoryId);
     try {
       const response = await fetch(`${base_url}discSubCategory/get-all?search=Test&category_id=${categoryId}`, {
         method: 'GET',
@@ -286,9 +313,22 @@ export default function PostLetterInfo({ navigation }) {
 
       if (response.ok) {
         const result = await response.json();
-        const reverseData = result.data
-        console.log('sub cate data for -------', reverseData)
+
+        const subcategories = result.data.map((category) => ({
+          // label: category.name, // Use the "name" property as the label
+          label:
+          language === "fr" && category.french_name
+              ? category.french_name
+              : category.name,
+          value: category.id.toString(), // Convert "id" to a string for the value
+        }));
+        const reverseData = subcategories.reverse();
+        console.log("result---------", reverseData);
         setSubCate(reverseData);
+  
+        // const reverseData = result.data
+        // console.log('sub cate data for -------', reverseData)
+        // setSubCate(reverseData);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
       }
@@ -631,6 +671,7 @@ export default function PostLetterInfo({ navigation }) {
             onFocus={handleCategoryFocus}
             onBlur={handleCategoryBlur}
             onChange={item => {
+              console.log("kon main category id hai----", item.value);
               setCategoryId(item.value);
               setIsFocus(false);
             }}
@@ -676,15 +717,18 @@ export default function PostLetterInfo({ navigation }) {
             data={subCate}
             search={false}
             maxHeight={200}
-            labelField="name"
-            valueField="id"
+            // labelField="name"
+            // valueField="id"
+            labelField="label"
+            valueField="value"
             placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             onFocus={handleSubCategoryFocus}
             onBlur={handleSubCategoryBlur}
  
             onChange={(item) => {
-              setSubCategory(item.id);
+              console.log("kon sub category id hai----", item.value);
+              setSubCategory(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (

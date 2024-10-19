@@ -10,8 +10,9 @@ import {
   Text,
   View,
   Dimensions,
+  Platform,
 } from "react-native";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP,
@@ -19,10 +20,10 @@ import {
 } from "react-native-responsive-screen";
 import Carousel from "react-native-snap-carousel";
 import Headers from "../../../assets/Custom/Headers";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 import Add from "../../../assets/svg/AddMainScreen.svg";
 import { appImages } from "../../../assets/utilities";
-import ProfileActive from '../../../assets/svg/ProfileActive.svg';
+import ProfileActive from "../../../assets/svg/ProfileActive.svg";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
@@ -31,6 +32,9 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { base_url } from "../../../../../baseUrl";
 import { useNavigation } from "@react-navigation/native";
+
+
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function PicTours() {
   const navigation = useNavigation();
@@ -57,7 +61,23 @@ export default function PicTours() {
   const [isLoading, setIsLoading] = useState(true);
   const [sections, setSections] = useState([]);
   const [noData, setNoData] = useState(false);
+  const [language, setLanguage] = useState(null);
 
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log('lanugage--------', storedLanguage)
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
+
+    fetchLanguage();
+  }, [isFocused]);
 
 
   useEffect(() => {
@@ -76,23 +96,37 @@ export default function PicTours() {
 
     getAuthToken();
   }, []);
-  
+
   useEffect(() => {
     const getMainCategory = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${base_url}picCategory/getAllPicCategories?page=1&limit=10000`, {
-          method: "GET",
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
-  
+        const response = await fetch(
+          `${base_url}picCategory/getAllPicCategories?page=1&limit=10000`,
+          {
+            method: "GET",
+            headers: { Authorization: `Bearer ${authToken}` },
+          }
+        );
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-  
+
         const result = await response.json();
+
+        // Filter and display categories based on language
+        // const filteredCategories = result.AllCategories.map((category) => {
+        //   if (language === "fr" && category.french_name) {
+        //     return { ...category, name: category.french_name };
+        //   } else {
+        //     return { ...category, name: category.name };
+        //   }
+        // });
+        // setSearches(filteredCategories);
+
         setSearches(result.AllCategories);
-  
+        // console.log("Response result:",result.AllCategories);
         // Set the first item as the default selected item if no item is currently selected
         if (selectedItemId === null && result.AllCategories.length > 0) {
           setSelectedItemId(result.AllCategories[0].id);
@@ -103,7 +137,7 @@ export default function PicTours() {
         setLoading(false);
       }
     };
-  
+
     getMainCategory();
   }, [authToken]);
 
@@ -112,11 +146,11 @@ export default function PicTours() {
     if (authToken && isFocused) {
       // fetchAllCinematicsCategory();
       fetchTopSport();
-      fetchSubCategorySport(selectedItemId);
+      // fetchSubCategorySport(selectedItemId);
     }
   }, [authToken, selectedItemId, isFocused]);
 
-    const fetchTopSport = async () => {
+  const fetchTopSport = async () => {
     const token = authToken;
     try {
       const response = await fetch(
@@ -143,36 +177,41 @@ export default function PicTours() {
     }
   };
 
- // Fetch sub-category sports
- const fetchSubCategorySport = async (categoryId) => {
-  setLoading(true)
-  try {
-    const response = await fetch(`${base_url}picTour/getAllPicTourByCategory/${categoryId}?page=1&limit=100000`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${authToken}` },
-    });
-    const result = await response.json();
+  // Fetch sub-category sports
+  const fetchSubCategorySport = async (categoryId) => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${base_url}picTour/getAllPicTourByCategory/${categoryId}?page=1&limit=1000000`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      );
+      const result = await response.json();
 
-    if (Array.isArray(result.data) && result.data.length > 0) {
-      const formattedSections = result.data.map(category => ({
-        title: category.sub_category_name,
-        data: category.tour_result.Tours,
-      }));
-      
-      setSections(formattedSections);
+      if (Array.isArray(result.data) && result.data.length > 0) {
+        const formattedSections = result.data.map((category) => ({
+          title: category.sub_category_name,
+          data: category.tour_result.Tours,
+        }));
 
-      // console.log('sub cate hai---', formattedSections)
-      setNoData(formattedSections.every(section => section.title.length === 0));
-    } else {
-      setSections([]);
-      setNoData(true);
+        setSections(formattedSections);
+
+        // console.log('sub cate hai---', formattedSections)
+        setNoData(
+          formattedSections.every((section) => section.title.length === 0)
+        );
+      } else {
+        setSections([]);
+        setNoData(true);
+      }
+    } catch (error) {
+      console.error("Error fetching sub-category sports:", error);
+      setNoData(true); // Assume no data on error
     }
-  } catch (error) {
-    console.error("Error fetching sub-category sports:", error);
-    setNoData(true); // Assume no data on error
-  }
-  setLoading(false)
-};
+    setLoading(false);
+  };
 
   useEffect(() => {
     if (authToken) {
@@ -221,9 +260,9 @@ export default function PicTours() {
       );
 
       const result = await response.json();
-      const updatedBanners = result.AllBanners.map(banner => {
-        if (banner.image.startsWith('/fileUpload')) {
-          banner.image = `https://watch-gotcha-be.mtechub.com${banner.image}`;
+      const updatedBanners = result.AllBanners.map((banner) => {
+        if (banner.image.startsWith("/fileUpload")) {
+          banner.image = base_url + `${banner.image}`;
         }
         return banner;
       });
@@ -235,11 +274,11 @@ export default function PicTours() {
     setIsLoading(false);
   };
 
-
   //pics search
 
   const renderSearchesPic = (item) => {
     const isSelected = selectedItemId === item.id;
+    const name = language === "fr" && item.french_name ? item.french_name : item.name;
     return (
       <TouchableOpacity
         style={[
@@ -259,12 +298,12 @@ export default function PicTours() {
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item.name}
+          {/* {item.name} */}
+          {name}
         </Text>
       </TouchableOpacity>
     );
   };
-
 
   const takePhotoFromCamera = async (value) => {
     setSelectedItem(value);
@@ -274,7 +313,6 @@ export default function PicTours() {
         //videoQuality: 'medium',
       },
       (response) => {
-
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setLoading(true);
@@ -306,7 +344,6 @@ export default function PicTours() {
   const choosePhotoFromLibrary = (value) => {
     setSelectedItem(value);
     launchImageLibrary({ mediaType: "photo" }, (response) => {
-
       if (!response.didCancel && response.assets.length > 0) {
         setLoading(true);
         setImageInfo(response.assets[0]);
@@ -318,18 +355,18 @@ export default function PicTours() {
 
       ref_RBSheetCamera.current.close();
       setLoading(false);
-
     });
   };
 
-
   const renderVideoItem = ({ item }) => (
     // <TouchableOpacity onPress={handle_details}>
-    <TouchableOpacity onPress={() => navigation.navigate("PicDetails", { picData: item })}>
-    <View style={styles.itemContainer}>
-      {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
-      <Image source={{ uri: item.image }} style={styles.image} />
-      <View
+    <TouchableOpacity
+      onPress={() => navigation.navigate("PicDetails", { picData: item })}
+    >
+      <View style={styles.itemContainer}>
+        {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
+        <Image source={{ uri: item.image }} style={styles.image} />
+        <View
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -369,7 +406,6 @@ export default function PicTours() {
                 size={24}
                 color={"#FACA4E"}
               />
-
             </View>
           )}
 
@@ -388,11 +424,9 @@ export default function PicTours() {
               {item.name}
             </Text>
           </View>
-      
         </View>
-
-    </View>
-  </TouchableOpacity>
+      </View>
+    </TouchableOpacity>
   );
 
   const renderSection = ({ item }) => (
@@ -400,16 +434,16 @@ export default function PicTours() {
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
+        <Text style={styles.noDataText}>{t("NoDataAvailable")}</Text>
       ) : (
-      <FlatList
-        data={item.data}
-        renderItem={renderVideoItem}
-        keyExtractor={(videoItem) => videoItem.tour_id.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-    )}
+        <FlatList
+          data={item.data}
+          renderItem={renderVideoItem}
+          keyExtractor={(videoItem) => videoItem.tour_id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 
@@ -433,7 +467,7 @@ export default function PicTours() {
           onPressListings={() => navigation.openDrawer()}
           // showListings={true}
           showHome={true}
-          text={t('PicTours')}
+          text={t("PicTours")}
         />
       </View>
 
@@ -459,7 +493,7 @@ export default function PicTours() {
           ) : adsData.length === 0 ? (
             <View style={styles.TopBannerView}>
               <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                {t('NoTopBanner')}
+                {t("NoTopBanner")}
               </Text>
             </View>
           ) : (
@@ -493,8 +527,8 @@ export default function PicTours() {
         </View>
 
         <View style={[styles.latestSearchList, { marginLeft: wp(3) }]}>
-        <View>
-              <ProfileActive width={23} height={23} />
+          <View>
+            <ProfileActive width={23} height={23} />
           </View>
           <FlatList
             style={{ flex: 1 }}
@@ -508,7 +542,6 @@ export default function PicTours() {
         </View>
 
         <View
-     
           style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(15) }}
         >
           <View
@@ -536,33 +569,43 @@ export default function PicTours() {
                   resizeMode: "cover",
                 }}
                 source={appImages?.galleryPlaceHolder}
-              /> 
-            ) : (
-              <TouchableOpacity   style={{ width: "100%", height: "100%", borderRadius: wp(3) }}
-              onPress={() => navigation.navigate("TopPicView", { picData: dataTopVideos })}>
-              <Image
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  zIndex: 1, // Ensure it's on top of other elements
-                  //flex: 1,
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: wp(3),
-                  resizeMode: "cover",
-                }}
-                source={{ uri: dataTopVideos?.image }}
               />
+            ) : (
+              <TouchableOpacity
+                style={{ width: "100%", height: "100%", borderRadius: wp(3) }}
+                onPress={() =>
+                  navigation.navigate("TopPicView", { picData: dataTopVideos })
+                }
+              >
+                <Image
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    zIndex: 1, // Ensure it's on top of other elements
+                    //flex: 1,
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: wp(3),
+                    resizeMode: "cover",
+                  }}
+                  source={{ uri: dataTopVideos?.image }}
+                />
               </TouchableOpacity>
             )}
-         
           </View>
 
-              <View style={{ justifyContent: "flex-start", width: "50%", paddingTop:2 , marginLeft:'2%'}}>
+          <View
+            style={{
+              justifyContent: "flex-start",
+              width: "50%",
+              paddingTop: 2,
+              marginLeft: "2%",
+            }}
+          >
             <Text
-             ellipsizeMode="tail"
-             numberOfLines={7}
+              ellipsizeMode="tail"
+              numberOfLines={7}
               style={{
                 fontSize: hp(1.5),
                 lineHeight: hp(2),
@@ -571,38 +614,38 @@ export default function PicTours() {
                 //fontWeight: '700',
               }}
             >
-              {dataTopVideos === 0 === undefined || dataTopVideos === 0
-                ? t('NoTopPicShown')
+              {(dataTopVideos === 0) === undefined || dataTopVideos === 0
+                ? t("NoTopPicShown")
                 : dataTopVideos?.description}
             </Text>
           </View>
         </View>
 
-  <View style={{  flex: 1, marginTop:hp(2),
-    marginBottom: hp(5)}}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#FACA4E" />
-      ) : noData ? (
-        <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-         <Text style={{ fontFamily: "Inter-Medium",}}>{t('NoDataAvailable')}</Text>
-      </View>
-       
-      ) : (
-        <FlatList
-          data={sections}
-          renderItem={renderSection}
-          keyExtractor={(item) => item.title}
-        />
-      )}
-    </View>
+        <View style={{ flex: 1, marginTop: hp(2), marginBottom: hp(5) }}>
+          {loading ? (
+            <ActivityIndicator size="large" color="#FACA4E" />
+          ) : noData ? (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text style={{ fontFamily: "Inter-Medium" }}>
+                {t("NoDataAvailable")}
+              </Text>
+            </View>
+          ) : (
+            <FlatList
+              data={sections}
+              renderItem={renderSection}
+              keyExtractor={(item) => item.title}
+            />
+          )}
+        </View>
 
-{/* /////////////////////////////////////////////////////////////// */}
+        {/* /////////////////////////////////////////////////////////////// */}
 
         {/* // start of banner slider */}
         <View
@@ -618,7 +661,7 @@ export default function PicTours() {
           ) : adsinActiveData.length === 0 ? (
             <View style={styles.TopBannerView}>
               <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                {t('NoBanner')}
+                {t("NoBanner")}
               </Text>
             </View>
           ) : (
@@ -668,7 +711,7 @@ export default function PicTours() {
           container: {
             borderTopLeftRadius: wp(10),
             borderTopRightRadius: wp(10),
-            // height: hp(25),
+            height: Platform.OS == 'android' ? hp(26) : null,
           },
         }}
       >
@@ -680,7 +723,7 @@ export default function PicTours() {
             alignItems: "center",
           }}
         >
-          <Text style={styles.maintext}>{t('Selectanoption')}</Text>
+          <Text style={styles.maintext}>{t("Selectanoption")}</Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
               name="close"
@@ -713,7 +756,7 @@ export default function PicTours() {
               size={25}
             />
 
-            <Text style={{ color: "#333333" }}>{t('Fromcamera')}</Text>
+            <Text style={{ color: "#333333" }}>{t("Fromcamera")}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -730,7 +773,7 @@ export default function PicTours() {
               size={25}
             />
 
-            <Text style={{ color: "#333333" }}>{t('Fromgallery')}</Text>
+            <Text style={{ color: "#333333" }}>{t("Fromgallery")}</Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
@@ -850,13 +893,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sectionHeader: {
- 
-              color: "#4A4A4A",
-              fontSize: hp(2.3),
-              textAlign: "left",
-              fontFamily: "Inter-SemiBold",
-              marginBottom:6
-              // top: "6%",
+    color: "#4A4A4A",
+    fontSize: hp(2.3),
+    textAlign: "left",
+    fontFamily: "Inter-SemiBold",
+    marginBottom: 6,
+    // top: "6%",
   },
   videoItem: {
     marginRight: 15,
@@ -868,9 +910,9 @@ const styles = StyleSheet.create({
   },
 
   noDataText: {
-    textAlign: 'center',
+    textAlign: "center",
     marginVertical: 20,
     fontSize: 18,
-    color: 'gray',
+    color: "gray",
   },
 });

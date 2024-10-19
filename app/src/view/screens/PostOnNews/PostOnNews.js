@@ -18,7 +18,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import {Button, Divider, TextInput} from 'react-native-paper';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import PlusPost from '../../../assets/svg/PlusPost.svg';
-
+import { useIsFocused } from "@react-navigation/native";
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {appImages} from '../../../assets/utilities/index';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -50,7 +50,7 @@ export default function PostOnNews({navigation}) {
   const [loading, setLoading] = useState(false);
 
   const [modalVisible, setModalVisible] = useState(false);
-
+  const isFocused = useIsFocused();
   const [isTextInputActive, setIsTextInputActive] = useState(false);
 
   const [category, setCategory] = useState('');
@@ -133,7 +133,30 @@ export default function PostOnNews({navigation}) {
     }
   };
 
-  const fetchCategory = async (token) => {
+  const [language, setLanguage] = useState(null);
+
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log("lanugage--------", storedLanguage);
+          await fetchCategory(authToken, storedLanguage);
+          
+
+          // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
+
+    fetchLanguage();
+  }, [isFocused, authToken]);
+
+
+  const fetchCategory = async (token, lang) => {
     try {
       const response = await fetch(`${base_url}news/category/getAll?page=1&limit=10000`, {
         method: 'GET',
@@ -145,7 +168,11 @@ export default function PostOnNews({navigation}) {
       if (response.ok) {
         const data = await response.json();
         const categories = data.AllCategories.map(category => ({
-          label: category.name,
+          // label: category.name,
+          label:
+          lang === "fr" && category.french_name
+            ? category.french_name
+            : category.name,
           value: category.id.toString()
         }));
           const reverseData = categories.reverse();
@@ -165,6 +192,9 @@ export default function PostOnNews({navigation}) {
   }, [authToken, categoryId]);
 
   const fetchAllSubCategory = async (categoryId) => {
+    
+    console.log("langiuuuuuuuuuuuuuuuuuuuuuuu---------", language);
+    console.log("category---------", categoryId);
     try {
       const response = await fetch(`${base_url}news/sub_category/getAllByCategory?category_id=${categoryId}`, {
         method: 'GET',
@@ -175,8 +205,22 @@ export default function PostOnNews({navigation}) {
 
       if (response.ok) {
         const result = await response.json();
-        const reverseData = result.AllCategories.reverse();
+        const subcategories = result.AllCategories.map((category) => ({
+          // label: category.name, // Use the "name" property as the label
+          label:
+          language === "fr" && category.french_name
+              ? category.french_name
+              : category.name,
+          value: category.id.toString(), // Convert "id" to a string for the value
+        }));
+        const reverseData = subcategories.reverse();
+        console.log("result---------", reverseData);
         setSubCate(reverseData);
+
+
+
+        // const reverseData = result.AllCategories.reverse();
+        // setSubCate(reverseData);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
       }
@@ -540,6 +584,7 @@ export default function PostOnNews({navigation}) {
             onFocus={handleCategoryFocus}
             onBlur={handleCategoryBlur}
             onChange={item => {
+              console.log("kon main category id hai----", item.value);
               setCategoryId(item.value);
               setIsFocus(false);
             }}
@@ -585,15 +630,18 @@ export default function PostOnNews({navigation}) {
             data={subCate}
             search={false}
             maxHeight={200}
-            labelField="name"
-            valueField="id"
+            // labelField="name"
+            // valueField="id"
+             labelField="label"
+            valueField="value"
             placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             onFocus={handleSubCategoryFocus}
             onBlur={handleSubCategoryBlur}
  
             onChange={(item) => {
-              setSubCategory(item.id);
+              console.log("kon main category id hai----", item.value);
+              setSubCategory(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (
@@ -657,7 +705,7 @@ export default function PostOnNews({navigation}) {
 
                 if (!hasError) {
                   if (!loading) {
-                    alert("If")
+                    // alert("If")
                     setLoading(true);
                     upload()}  
     
