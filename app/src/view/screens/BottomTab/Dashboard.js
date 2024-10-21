@@ -622,13 +622,23 @@ export default function Dashboard({ route }) {
   const [categoriesSelectMarket, setCategorySelectMarket] = useState([]);
   // const RegionArea = ["Africa", "Europe", "Americas", "Asia", "Middle East"];
 
+  // const RegionArea = [
+  //   t('Africa'),
+  //   t('Europe'),
+  //   t('Americas'),
+  //   t('Asia'),
+  //   t('Middle_East')
+  // ];
+
   const RegionArea = [
-    t('Africa'),
-    t('Europe'),
-    t('Americas'),
-    t('Asia'),
-    t('Middle_East')
+    { name: "Africa", french_name: "Afrique" },
+    { name: "Europe", french_name: "Europe" },
+    { name: "Americas", french_name: "Amériques" },
+    { name: "Asia", french_name: "Asie" },
+    { name: "Middle East", french_name: "Moyen-Orient" }
   ];
+
+
   const MassApp = [
     t('Ecommerce'),
     t('Business'),
@@ -3395,8 +3405,8 @@ const convertTimeAndDate = (dateString) => {
 
   const renderSearchesMarket = (item) => {
     // console.log('Regions item', item);
-    const isSelected = selectedItemIdMarket === item;
-
+    const isSelected = selectedItemIdMarket === item.name;
+    const name = language === "fr" && item.french_name ? item.french_name : item.name;
     return (
       <TouchableOpacity
         style={[
@@ -3407,8 +3417,8 @@ const convertTimeAndDate = (dateString) => {
           },
         ]}
         onPress={() => {
-          setSelectedItemIdMarket(item);
-          console.log("Selected item:", item);
+          setSelectedItemIdMarket(item.name);
+          console.log("Selected item:", item.name);
         }}
       >
         <Text
@@ -3417,7 +3427,8 @@ const convertTimeAndDate = (dateString) => {
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item}
+          {/* {item} */}
+          {name}
         </Text>
       </TouchableOpacity>
     );
@@ -8643,7 +8654,9 @@ const styles = StyleSheet.create({
     marginLeft: wp(3),
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
+    // padding: 10,
+    paddingHorizontal:wp(3),
+    paddingVertical:hp(1.4),
     backgroundColor: "#F2F2F2",
     borderRadius: wp(5),
   },
@@ -8863,8 +8876,10 @@ const styles = StyleSheet.create({
     // width: wp(30),
     backgroundColor: "#F2F2F2",
     borderRadius: wp(5),
-    height: hp(5),
-    paddingHorizontal:hp(1.5)
+    // height: hp(5),
+    paddingHorizontal:wp(3),
+    paddingVertical:hp(1.3),
+
   },
   // ///////////////////////////
 

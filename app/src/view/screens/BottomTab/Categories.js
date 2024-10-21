@@ -3611,8 +3611,10 @@ const styles = StyleSheet.create({
     // width: wp(30),
     backgroundColor: "#F2F2F2",
     borderRadius: wp(5),
-    height: hp(5),
-    paddingHorizontal:hp(1.5)
+    // height: hp(5),
+    paddingHorizontal:wp(3),
+    paddingVertical:hp(1.3),
+    // paddingHorizontal:hp(1.5)
   },
   textSearchDetails: {
     fontFamily: "Inter",

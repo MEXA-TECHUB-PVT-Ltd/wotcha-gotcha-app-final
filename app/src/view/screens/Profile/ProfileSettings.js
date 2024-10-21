@@ -440,7 +440,7 @@ export default function ProfileSettings({ navigation }) {
                 flexDirection: 'row',
                 alignItems: 'center',
                 height: '100%',
-                width: wp(25),
+                width: wp(26),
               }}>
               <Image
                 source={appImages.LogOut}
@@ -449,7 +449,7 @@ export default function ProfileSettings({ navigation }) {
               <Text
                 style={{
                   color: '#232323',
-                  marginLeft: wp(3),
+                  marginLeft: wp(2),
                   fontFamily: 'Inter-Medium',
                   //fontWeight: 'bold',
                 }}>

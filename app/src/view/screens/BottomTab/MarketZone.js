@@ -64,14 +64,20 @@ export default function MarketZone({  }) {
   const ref_RBSheetCamera = useRef(null);
 
   // const RegionArea = ["Africa", "Europe", "Americas", "Asia", "Middle East"];
+  // const RegionArea = [
+  //   t('Africa'),
+  //   t('Europe'),
+  //   t('Americas'),
+  //   t('Asia'),
+  //   t('Middle_East')
+  // ];
   const RegionArea = [
-    t('Africa'),
-    t('Europe'),
-    t('Americas'),
-    t('Asia'),
-    t('Middle_East')
+    { name: "Africa", french_name: "Afrique" },
+    { name: "Europe", french_name: "Europe" },
+    { name: "Americas", french_name: "Amériques" },
+    { name: "Asia", french_name: "Asie" },
+    { name: "Middle East", french_name: "Moyen-Orient" }
   ];
-
 
 
   useEffect(() => {
@@ -80,7 +86,7 @@ export default function MarketZone({  }) {
         const token = await AsyncStorage.getItem("authToken ");
         if (token) {
           setAuthToken(token);
-          await fetchCategory(token);
+          // await fetchCategory(token);
         } else {
           throw new Error("No auth token found");
         }
@@ -101,6 +107,7 @@ export default function MarketZone({  }) {
         if (storedLanguage) {
           setLanguage(storedLanguage);
           console.log('lanugage--------', storedLanguage)
+          // await fetchCategory(storedLanguage);
         }
       } catch (error) {
         console.error("Error fetching language:", error);
@@ -108,27 +115,58 @@ export default function MarketZone({  }) {
     };
 
     fetchLanguage();
-  }, [isFocused]);
+  }, [isFocused, authToken]);
+
+  // useEffect(() => {
+  //   if (authToken && isFocused) {
+  //     // Ensure selectedItemId has a value
+  //     if (selectedItemId === null || selectedItemId === undefined) {
+  //       // setSelectedItemId(t('Africa'));
+  //       setSelectedItemId("Africa");
+  //     }
+
+  //     setLoading(true);
+  //     fetchCategory(language)
+  //     fetchAll(selectedItemId);
+  //     fetchTopVideos();
+  //     fetchElectronics(selectedItemId);
+  //     fetchVehicles(selectedItemId);
+  //     fetchClothing(selectedItemId);
+
+  //     setLoading(false);
+  //   }
+  // }, [authToken, selectedItemId ,isFocused, language]);
 
   useEffect(() => {
-    if (authToken && isFocused) {
-      // Ensure selectedItemId has a value
-      if (selectedItemId === null || selectedItemId === undefined) {
-        setSelectedItemId("Africa");
+    const fetchData = async () => {
+      if (authToken) {
+        // Ensure selectedItemId has a value
+        if (selectedItemId === null || selectedItemId === undefined) {
+          setSelectedItemId("Africa");
+        }
+  
+        setLoading(true);
+        
+        try {
+          // Await all data fetching functions to ensure they complete before proceeding
+          await fetchCategory();
+          await fetchAll(selectedItemId);
+          await fetchTopVideos();
+          await fetchElectronics(selectedItemId);
+          await fetchVehicles(selectedItemId);
+          await fetchClothing(selectedItemId);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        } finally {
+          setLoading(false);
+        }
       }
-
-      setLoading(true);
-
-      fetchAll(selectedItemId);
-      fetchTopVideos();
-      fetchElectronics(selectedItemId);
-      fetchVehicles(selectedItemId);
-      fetchClothing(selectedItemId);
-
-      setLoading(false);
-    }
-  }, [authToken, selectedItemId ,isFocused]);
-
+    };
+  
+    fetchData(); // Call the asynchronous function
+  }, [authToken, selectedItemId]);
+  
+console.log('seceteddd--- id   --?', selectedItemId)
   const [adsData, setAdsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -212,17 +250,15 @@ export default function MarketZone({  }) {
     }
   };
 
-  const fetchCategory = async (result) => {
-    // console.log(" Categories Result", result);
-    const token = result;
-
-    try {
+  const fetchCategory = async () => {
+    // const token = result;
+    setLoading(true);  try {
       const response = await fetch(
         base_url + "itemCategory/getAllItemCategories?page=1&limit=10000",
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         }
       );
@@ -230,11 +266,12 @@ export default function MarketZone({  }) {
       if (response.ok) {
         const data = await response.json();
         const categories = data.AllCategories.map((category) => ({
-          // label: category.name, // Use the "name" property as the label
-          label:
-          language === "fr" && category.french_name
-              ? category.french_name
-              : category.name,
+          label: category.name, // Use the "name" property as the label
+          // label:
+          // lang === "fr" && category.french_name
+          //     ? category.french_name
+          //     : category.name,
+          french_name: category.french_name,
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
 console.log('data---------------', categories)
@@ -248,7 +285,7 @@ console.log('data---------------', categories)
       }
     } catch (error) {
       console.error("Error:", error);
-    }
+    } 
   };
 
   const fetchElectronics = async (selectedItemId) => {
@@ -429,8 +466,8 @@ console.log('data---------------', categories)
 
   const renderSearches = (item) => {
     // console.log("Regions", item);
-    const isSelected = selectedItemId === item;
-
+    const isSelected = selectedItemId === item.name;
+    const name = language === "fr" && item.french_name ? item.french_name : item.name;
     return (
       <TouchableOpacity
         style={[
@@ -440,8 +477,8 @@ console.log('data---------------', categories)
           },
         ]}
         onPress={() => {
-          setSelectedItemId(item);
-          console.log("Selected item:", item);
+          setSelectedItemId(item.name);
+          console.log("Selected item:", item.name);
         }}
       >
         <Text
@@ -450,7 +487,8 @@ console.log('data---------------', categories)
             { color: isSelected ? "#232323" : "#939393" },
           ]}
         >
-          {item}
+          {name}
+          {/* {item} */}
         </Text>
       </TouchableOpacity>
     );
@@ -621,7 +659,8 @@ console.log('data---------------', categories)
               color: "#4A4A4A",
             }}
           >
-            {categoriesSelect[0]?.label}
+             {language === 'fr' ? categoriesSelect[0]?.french_name : categoriesSelect[0]?.label}
+            {/* {categoriesSelect[0]?.label} */}
           </Text>
 
           <View style={{ marginTop: hp(1), height: "100%" }}>
@@ -676,7 +715,8 @@ console.log('data---------------', categories)
               color: "#4A4A4A",
             }}
           >
-            {categoriesSelect[1]?.label}
+             {language === 'fr' ? categoriesSelect[1]?.french_name : categoriesSelect[1]?.label}
+            {/* {categoriesSelect[1]?.label} */}
           </Text>
 
           <View style={{ marginTop: hp(1), height: "100%" }}>
@@ -734,7 +774,8 @@ console.log('data---------------', categories)
               color: "#4A4A4A",
             }}
           >
-            {categoriesSelect[2]?.label}
+             {language === 'fr' ? categoriesSelect[2]?.french_name : categoriesSelect[2]?.label}
+            {/* {categoriesSelect[2]?.label} */}
           </Text>
 
           <View style={{ marginTop: hp(1), height: "100%" }}>
@@ -790,7 +831,8 @@ console.log('data---------------', categories)
 
             }}
           >
-            {categoriesSelect[3]?.label}
+             {language === 'fr' ? categoriesSelect[3]?.french_name : categoriesSelect[3]?.label}
+            {/* {categoriesSelect[3]?.label} */}
           </Text>
 
           <View style={{ marginTop: hp(1), height: "100%" }}>
@@ -953,10 +995,12 @@ const styles = StyleSheet.create({
     marginLeft: wp(3),
     alignItems: "center",
     justifyContent: "center",
-    width: wp(30),
+    // width: wp(30),
+    paddingHorizontal:wp(3),
+    paddingVertical:hp(1.3),
     backgroundColor: "#F2F2F2",
     borderRadius: wp(5),
-    height: hp(5),
+    // height: hp(5),
   },
   textSearchDetails: {
     fontFamily: "Inter",
