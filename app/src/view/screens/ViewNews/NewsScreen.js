@@ -1222,8 +1222,8 @@ import { useTranslation } from 'react-i18next';
       // width: wp(26),
       backgroundColor: "#F2F2F2",
       borderRadius: wp(5),
-      height: hp(5),
-      padding:6
+      paddingHorizontal:wp(3),
+      paddingVertical:hp(1.3),
     },
     textSearchDetails: {
       fontFamily: "Inter",

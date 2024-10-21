@@ -69,7 +69,10 @@ const BottomtabNavigation = () => {
         const storedIcons = await AsyncStorage.getItem('bottomNavIcons');
         if (storedIcons) {
           const parsedIcons = JSON.parse(storedIcons);
-          setScreen(parsedIcons.slice(0, 3).map(name => ({ name })));
+         
+          setScreen(parsedIcons.slice(0, 3).map(key => ({ key })));
+          // setScreen(parsedIcons.slice(0, 3).map(name => ({ name })));
+      
         }
       } catch (error) {
         console.error('Error reading icons from storage:', error);
@@ -80,6 +83,8 @@ const BottomtabNavigation = () => {
     const interval = setInterval(fetchIcons, 2000);
     return () => clearInterval(interval);
   }, []);
+
+  // console.log('botom---------------', screen)
 
   useEffect(() => {
     const screenHeight = Dimensions.get('window').height;
@@ -128,60 +133,60 @@ const BottomtabNavigation = () => {
         {screen.map((screen, index) => (
           <Bottom.Screen
             key={index}
-            name={screen.name}
+            name={screen.key}
             listeners={{
-              tabPress: () => handleScreenSelect(screen.name),
+              tabPress: () => handleScreenSelect(screen.key),
             }}
             options={{
               tabBarIcon: ({ color, size, focused }) => {
                 let iconComponent;
-                switch (screen.name) {
+                switch (screen.key) {
                   // case 'Home':
                   //   iconComponent = focused ? <HomeActive size={size} color={color} /> : <HomeInActive size={size} color={color} />;
                   //   break;
-                  case 'Mass Apps':
+                  case 'one':
                     iconComponent = focused ? <CategoryActive size={size} color={color} /> : <CategoryInActive size={size} color={color} />;
                     break;
-                  case 'Video Mania':
+                  case 'two':
                     iconComponent = focused ? <VideoActive size={size} color={color} /> : <VideoInActive size={size} color={color} />;
                     break;
                   // case 'DISC':
                   //   iconComponent = focused ? <MailActive size={size} color={color} /> : <MailInActive size={size} color={color} />;
                   //   break;
-                  case 'Pic Tours':
+                  case 'four':
                     iconComponent = focused ? <ProfileActive size={size} color={color} /> : <ProfileInActive size={size} color={color} />;
                     break;
-                  case 'Mondo Market':
+                  case 'five':
                     iconComponent = focused ? <MarketZoneActive size={size} color={color} /> : <MarketZoneInActive size={size} color={color} />;
                     break;
-                  case 'Cinematic':
+                  case 'six':
                     iconComponent = focused ? <Cinematiceactive size={size} color={color} /> : <Cinematics_svg size={size} color={color} />;
                     break;
-                  case 'Fans Stars Zone':
+                  case 'seven':
                     iconComponent = focused ? <FansActive size={size} color={color} /> : <Fans size={size} color={color} />;
                     break;
-                  case 'Kid-Vids':
+                  case 'eight':
                     iconComponent = focused ? <KidsActive size={size} color={color} /> : <Kids size={size} color={color} />;
                     break;
-                  case 'TV ProgMax':
+                  case 'nine':
                     iconComponent = focused ? <TVpromaxActive size={size} color={color} /> : <Television size={size} color={color} />;
                     break;
-                  case 'Learnings and Hobbies':
+                  case 'ten':
                     iconComponent = focused ? <PuzzleActive size={size} color={color} /> : <Puzzle size={size} color={color} />;
                     break;
-                  case 'Sports & Sports':
+                  case 'eleven':
                     iconComponent = focused ? <Sport name="sports-handball" size={size} color='#FACA4E' /> : <Sport name="sports-handball"  size={size} color={color} />;
                     break;
-                  case 'On-News':
+                  case 'twelve':
                     iconComponent = focused ? <News name="news"  size={size} color='#FACA4E' /> : <News name="news"  size={size} color={color} />;
                     break;
-                  case 'Open Letters':
+                  case 'thirteen':
                     iconComponent = focused ? <LetterIcon name="newsletter" size={size} color='#FACA4E' /> : <LetterIcon name="newsletter"  size={size} color={color} />;
                     break;
-                  case 'QAFI':
+                  case 'fourteen':
                     iconComponent = focused ? <QafiIcon name="people-arrows" size={20} color='#FACA4E' /> : <QafiIcon name="people-arrows"  size={20} color={color} />;
                     break;
-                  case 'EBIC':
+                  case 'fifteen':
                     iconComponent = focused ? <EBC name="sticker-emoji" size={size} color='#FACA4E' /> : <EBC name="sticker-emoji"  size={size} color={color} />;
                     break;
                   default:
@@ -192,38 +197,38 @@ const BottomtabNavigation = () => {
             }}
           >
             {() => {
-              switch (screen.name) {
+              switch (screen.key) {
                 // case 'Home':
                 //   return <Dashboard />;
-                case 'Mass Apps':
+                case 'one':
                   return <Categories />;
-                case 'Video Mania':
+                case 'two':
                   return <Video />;
                 // case 'DISC':
                 //   return <Disc />;
-                case 'Pic Tours':
+                case 'four':
                   return <PicTours />;
-                case 'Mondo Market':
+                case 'five':
                   return <MarketZone />;
-                case 'Cinematic':
+                case 'six':
                   return <Cinematics />;
-                case 'Fans Stars Zone':
+                case 'seven':
                   return <Fans_star/>;
-                case 'Kid-Vids':
+                case 'eight':
                   return <Kids_vid />;
-                case 'TV ProgMax':
+                case 'nine':
                   return <Tv_Promax />;
-                case 'Learnings and Hobbies':
+                case 'ten':
                   return <Learning />;
-                case 'Sports & Sports':
+                case 'eleven':
                   return <Sports />;
-                case 'On-News':
+                case 'twelve':
                   return <NewsScreen />;
-                case 'Open Letters':
+                case 'thirteen':
                   return <OpenLetterScreen />;
-                case 'QAFI':
+                case 'fourteen':
                   return <QAFIScreen/>;
-                case 'EBIC':
+                case 'fifteen':
                   return <EBCScreen />;
                 default:
                   return null;

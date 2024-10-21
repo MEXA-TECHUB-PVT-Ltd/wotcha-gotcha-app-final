@@ -36,22 +36,39 @@ import { useTranslation } from 'react-i18next';
 import { appImages } from '../../../assets/utilities';
 // ///////// for defult 27.5.2024
 const defaultCategories = [
-  { key: 'one', name: 'Mass Apps', activeIcon: <CategoryActive width={23} height={23} />, inactiveIcon: <CategoryInactive width={23} height={23} />, dropped: false },
-  { key: 'two', name: 'Video Mania', activeIcon: <VideoActive width={23} height={23} />, inactiveIcon: <VideoInactive width={23} height={23} />, dropped: false },
+  { key: 'one', name: 'More.MassApp', activeIcon: <CategoryActive width={23} height={23} />, inactiveIcon: <CategoryInactive width={23} height={23} />, dropped: false },
+  { key: 'two', name: 'Drawer.VideoMania', activeIcon: <VideoActive width={23} height={23} />, inactiveIcon: <VideoInactive width={23} height={23} />, dropped: false },
   // { key: 'three', name: 'DISC', activeIcon: <MailActive width={23} height={23} />, inactiveIcon: <MailInActive width={23} height={23} />, dropped: false },
-  { key: 'four', name: 'Pic Tours', activeIcon: <ProfileActive width={23} height={23} />, inactiveIcon: <ProfileInActive width={23} height={23} />, dropped: false },
-  { key: 'five', name: 'Mondo Market', activeIcon: <MarketActive width={23} height={23} />, inactiveIcon: <MarketZoneInActive width={23} height={23} />, dropped: false },
-  { key: 'six', name: 'Cinematic', activeIcon: <Cinematiceactive width={23} height={23} />, inactiveIcon: <Cinematics width={23} height={23} />, dropped: false },
-  { key: 'seven', name: 'Fans Stars Zone', activeIcon: <FansActive width={23} height={23} />, inactiveIcon: <Fans width={23} height={23} />, dropped: false },
-  { key: 'eight', name: 'Kid-Vids', activeIcon: <KidsActive width={23} height={23} />, inactiveIcon: <Kids width={23} height={23} />, dropped: false },
-  { key: 'nine', name: 'TV ProgMax', activeIcon: <TVpromaxActive width={23} height={23} />, inactiveIcon: <Television width={23} height={23} />, dropped: false },
-  { key: 'ten', name: 'Learnings and Hobbies', activeIcon: <PuzzleActive width={23} height={23} />, inactiveIcon: <Puzzle width={23} height={23} />, dropped: false },
-  { key: 'eleven', name: 'Sports & Sports', activeIcon: <Ionicons name="sports-handball" size={28} color="#FACA4E" />, inactiveIcon: <Ionicons name="sports-handball" size={28} color="#C5C5C5" />, dropped: false },
-  { key: 'twelve', name: 'On-News', activeIcon: <News name="news" size={26} color="#FACA4E" />, inactiveIcon: <News name="news" size={26} color="#C5C5C5" />, dropped: false },
-  { key: 'thirteen', name: 'Open Letters', activeIcon: <LetterIcon name="newsletter" size={26} color="#FACA4E" />, inactiveIcon: <LetterIcon name="newsletter" size={26} color="#C5C5C5" />, dropped: false },
-  { key: 'fourteen', name: 'QAFI', activeIcon: <QafiIcon name="people-arrows" size={20} color="#FACA4E" />, inactiveIcon: <QafiIcon name="people-arrows" size={20} color="#C5C5C5" />, dropped: false },
-  { key: 'fifteen', name: 'EBIC', activeIcon: <EBC name="sticker-emoji" size={28} color="#FACA4E" />, inactiveIcon: <EBC name="sticker-emoji" size={28} color="#C5C5C5" />, dropped: false },
+  { key: 'four', name: 'Drawer.PicTours', activeIcon: <ProfileActive width={23} height={23} />, inactiveIcon: <ProfileInActive width={23} height={23} />, dropped: false },
+  { key: 'five', name: 'Drawer.MarketZone', activeIcon: <MarketActive width={23} height={23} />, inactiveIcon: <MarketZoneInActive width={23} height={23} />, dropped: false },
+  { key: 'six', name: 'Drawer.Cinematics', activeIcon: <Cinematiceactive width={23} height={23} />, inactiveIcon: <Cinematics width={23} height={23} />, dropped: false },
+  { key: 'seven', name: 'Drawer.Fans_star', activeIcon: <FansActive width={23} height={23} />, inactiveIcon: <Fans width={23} height={23} />, dropped: false },
+  { key: 'eight', name: 'Drawer.Kid-Vids', activeIcon: <KidsActive width={23} height={23} />, inactiveIcon: <Kids width={23} height={23} />, dropped: false },
+  { key: 'nine', name: 'Drawer.TVProgMax', activeIcon: <TVpromaxActive width={23} height={23} />, inactiveIcon: <Television width={23} height={23} />, dropped: false },
+  { key: 'ten', name: 'Drawer.LearningHobbies', activeIcon: <PuzzleActive width={23} height={23} />, inactiveIcon: <Puzzle width={23} height={23} />, dropped: false },
+  { key: 'eleven', name: 'Drawer.Sports', activeIcon: <Ionicons name="sports-handball" size={28} color="#FACA4E" />, inactiveIcon: <Ionicons name="sports-handball" size={28} color="#C5C5C5" />, dropped: false },
+  { key: 'twelve', name: 'Drawer.News', activeIcon: <News name="news" size={26} color="#FACA4E" />, inactiveIcon: <News name="news" size={26} color="#C5C5C5" />, dropped: false },
+  { key: 'thirteen', name: 'Drawer.OpenLetter', activeIcon: <LetterIcon name="newsletter" size={26} color="#FACA4E" />, inactiveIcon: <LetterIcon name="newsletter" size={26} color="#C5C5C5" />, dropped: false },
+  { key: 'fourteen', name: 'Drawer.QAFI', activeIcon: <QafiIcon name="people-arrows" size={20} color="#FACA4E" />, inactiveIcon: <QafiIcon name="people-arrows" size={20} color="#C5C5C5" />, dropped: false },
+  { key: 'fifteen', name: 'Drawer.EBIC',  activeIcon: <EBC name="sticker-emoji" size={28} color="#FACA4E" />, inactiveIcon: <EBC name="sticker-emoji" size={28} color="#C5C5C5" />, dropped: false },
 ];
+// const defaultCategories = [
+//   { key: 'one', name: 'Mass Apps', activeIcon: <CategoryActive width={23} height={23} />, inactiveIcon: <CategoryInactive width={23} height={23} />, dropped: false },
+//   { key: 'two', name: 'Video Mania', activeIcon: <VideoActive width={23} height={23} />, inactiveIcon: <VideoInactive width={23} height={23} />, dropped: false },
+//   // { key: 'three', name: 'DISC', activeIcon: <MailActive width={23} height={23} />, inactiveIcon: <MailInActive width={23} height={23} />, dropped: false },
+//   { key: 'four', name: 'Pic Tours', activeIcon: <ProfileActive width={23} height={23} />, inactiveIcon: <ProfileInActive width={23} height={23} />, dropped: false },
+//   { key: 'five', name: 'Mondo Market', activeIcon: <MarketActive width={23} height={23} />, inactiveIcon: <MarketZoneInActive width={23} height={23} />, dropped: false },
+//   { key: 'six', name: 'Cinematic', activeIcon: <Cinematiceactive width={23} height={23} />, inactiveIcon: <Cinematics width={23} height={23} />, dropped: false },
+//   { key: 'seven', name: 'Fans Stars Zone', activeIcon: <FansActive width={23} height={23} />, inactiveIcon: <Fans width={23} height={23} />, dropped: false },
+//   { key: 'eight', name: 'Kid-Vids', activeIcon: <KidsActive width={23} height={23} />, inactiveIcon: <Kids width={23} height={23} />, dropped: false },
+//   { key: 'nine', name: 'TV ProgMax', activeIcon: <TVpromaxActive width={23} height={23} />, inactiveIcon: <Television width={23} height={23} />, dropped: false },
+//   { key: 'ten', name: 'Learnings and Hobbies', activeIcon: <PuzzleActive width={23} height={23} />, inactiveIcon: <Puzzle width={23} height={23} />, dropped: false },
+//   { key: 'eleven', name: 'Sports & Sports', activeIcon: <Ionicons name="sports-handball" size={28} color="#FACA4E" />, inactiveIcon: <Ionicons name="sports-handball" size={28} color="#C5C5C5" />, dropped: false },
+//   { key: 'twelve', name: 'On-News', activeIcon: <News name="news" size={26} color="#FACA4E" />, inactiveIcon: <News name="news" size={26} color="#C5C5C5" />, dropped: false },
+//   { key: 'thirteen', name: 'Open Letters', activeIcon: <LetterIcon name="newsletter" size={26} color="#FACA4E" />, inactiveIcon: <LetterIcon name="newsletter" size={26} color="#C5C5C5" />, dropped: false },
+//   { key: 'fourteen', name: 'QAFI', activeIcon: <QafiIcon name="people-arrows" size={20} color="#FACA4E" />, inactiveIcon: <QafiIcon name="people-arrows" size={20} color="#C5C5C5" />, dropped: false },
+//   { key: 'fifteen', name: 'EBIC', activeIcon: <EBC name="sticker-emoji" size={28} color="#FACA4E" />, inactiveIcon: <EBC name="sticker-emoji" size={28} color="#C5C5C5" />, dropped: false },
+// ];
 
 export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynamicCategories, route }) {
   const { t } = useTranslation(); 
@@ -67,14 +84,15 @@ export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynam
           const storedNames = JSON.parse(storedIcons);
           const updatedCategories = defaultCategories.map(category => ({
             ...category,
-            dropped: storedNames.includes(category.name),
+            dropped: storedNames.includes(category.key),
+            // dropped: storedNames.includes(category.name),
           }));
 
           // Sort updatedCategories based on storedNames order
           const sortedCategories = storedNames
-            .map(name => updatedCategories.find(category => category.name === name))
+            .map(key => updatedCategories.find(category => category.key  === key))
             .filter(Boolean)
-            .concat(updatedCategories.filter(category => !storedNames.includes(category.name)));
+            .concat(updatedCategories.filter(category => !storedNames.includes(category.key)));
 
           setCategories(sortedCategories);
         } else {
@@ -85,7 +103,7 @@ export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynam
             identifier: index < 3 ? 0 : 1,
           }));
           setCategories(updatedCategories);
-          const updatedNames = updatedCategories.map(category => category.name);
+          const updatedNames = updatedCategories.map(category => category.key);
           await AsyncStorage.setItem('bottomNavIcons', JSON.stringify(updatedNames));
         }
       } catch (error) {
@@ -106,61 +124,117 @@ export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynam
 
     setCategories(updatedCategoriesWithDropped);
 
-    const updatedNames = updatedCategoriesWithDropped.map(category => category.name);
+    const updatedNames = updatedCategoriesWithDropped.map(category => category.key);
     AsyncStorage.setItem('bottomNavIcons', JSON.stringify(updatedNames))
       .catch(error => console.error('Error storing bottomNavIcons in local storage:', error));
   };
 
   const handleCategoryPressNav = (categoryName, identifier) => {
     switch (categoryName) {
-      case 'Mass Apps':
+      case 'one':
         navigation.navigate('Categories', { identifier });
         break;
-      case 'Video Mania':
+      case 'two':
         navigation.navigate('Video', { identifier });
         break;
-      // case 'DISC':
-      //   navigation.navigate('Disc');
-      //   break;
-      case 'Pic Tours':
+      case 'four':
         navigation.navigate('PicTours');
         break;
-      case 'Mondo Market':
+      case 'five':
         navigation.navigate('MarketZone');
         break;
-      case 'Cinematic':
+      case 'six':
         navigation.navigate('Cinematics', { identifier });
         break;
-      case 'Kid-Vids':
-        navigation.navigate('Kids_vid', { identifier });
-        break;
-      case 'TV ProgMax':
-        navigation.navigate('Tv_Promax');
-        break;
-      case 'Fans Stars Zone':
+      case 'seven':
         navigation.navigate('Fans_star');
         break;
-      case 'Learnings and Hobbies':
+      case 'eight':
+        navigation.navigate('Kids_vid', { identifier });
+        break;
+      case 'nine':
+        navigation.navigate('Tv_Promax');
+        break;
+      case 'ten':
         navigation.navigate('Learning');
         break;
-      case 'Sports & Sports':
+      case 'eleven':
         navigation.navigate('Sports');
         break;
-      case 'On-News':
+      case 'twelve':
         navigation.navigate('NewsScreen');
         break;
-      case 'Open Letters':
+      case 'thirteen':
         navigation.navigate('OpenLetterScreen');
         break;
-      case 'QAFI':
+      case 'fourteen':
         navigation.navigate('QAFIScreen');
         break;
-      case 'EBIC':
+      case 'fifteen':
         navigation.navigate('EBCScreen');
         break;
+      // case 'Mass Apps':
+      //   navigation.navigate('Categories', { identifier });
+      //   break;
+      // case 'Video Mania':
+      //   navigation.navigate('Video', { identifier });
+      //   break;
+      // // case 'DISC':
+      // //   navigation.navigate('Disc');
+      // //   break;
+      // case 'Pic Tours':
+      //   navigation.navigate('PicTours');
+      //   break;
+      // case 'Mondo Market':
+      //   navigation.navigate('MarketZone');
+      //   break;
+      // case 'Cinematic':
+      //   navigation.navigate('Cinematics', { identifier });
+      //   break;
+      // case 'Kid-Vids':
+      //   navigation.navigate('Kids_vid', { identifier });
+      //   break;
+      // case 'TV ProgMax':
+      //   navigation.navigate('Tv_Promax');
+      //   break;
+      // case 'Fans Stars Zone':
+      //   navigation.navigate('Fans_star');
+      //   break;
+      // case 'Learnings and Hobbies':
+      //   navigation.navigate('Learning');
+      //   break;
+      // case 'Sports & Sports':
+      //   navigation.navigate('Sports');
+      //   break;
+      // case 'On-News':
+      //   navigation.navigate('NewsScreen');
+      //   break;
+      // case 'Open Letters':
+      //   navigation.navigate('OpenLetterScreen');
+      //   break;
+      // case 'QAFI':
+      //   navigation.navigate('QAFIScreen');
+      //   break;
+      // case 'EBIC':
+      //   navigation.navigate('EBCScreen');
+      //   break;
     }
   };
 
+  function render_item(category, index) {
+    const isActive = index < 3;
+    // console.log('isactive hai---', isActive)
+    return (
+      <View key={category.key}>
+        <View style={styles.categoryContainer}>
+          {isActive ? category.activeIcon : category.inactiveIcon}
+        </View>
+        <Text style={styles.categoryText}>{t(category.name)}</Text>
+        {/* <Text style={styles.categoryText}>{category.name}</Text> */}
+       
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <StatusBar translucent={true} backgroundColor="transparent" barStyle="dark-content" />
@@ -176,7 +250,7 @@ export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynam
             numColumns={4}
             renderItem={render_item}
             data={categories}
-            onItemPress={(category) => handleCategoryPressNav(category.name, category.identifier)}
+            onItemPress={(category) => handleCategoryPressNav(category.key, category.identifier)}
             onDragRelease={handleIconDragDrop}
           />
         </View>
@@ -189,19 +263,7 @@ export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynam
   );
 }
 
-function render_item(category, index) {
-  const isActive = index < 3;
-  // console.log('isactive hai---', isActive)
-  return (
-    <View key={category.key}>
-      <View style={styles.categoryContainer}>
-        {isActive ? category.activeIcon : category.inactiveIcon}
-      </View>
-      <Text style={styles.categoryText}>{category.name}</Text>
-     
-    </View>
-  );
-}
+
 
 
 const styles = StyleSheet.create({

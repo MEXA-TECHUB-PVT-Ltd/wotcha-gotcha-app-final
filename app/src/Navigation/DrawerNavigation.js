@@ -316,7 +316,7 @@ const DrawerNavigation = ({ navigation }) => {
                 label={t('Drawer.PicTours')}
                 labelStyle={{
                   color: "#333333",
-                  marginLeft: wp(-2),
+                  marginLeft: wp(-5),
                   fontFamily: "Inter-Medium",
                 }}
                 // onPress={() => navigation.navigate('PicTourss')}
