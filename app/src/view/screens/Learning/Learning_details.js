@@ -336,7 +336,7 @@ export default function Learning_details({ navigation, route }) {
 
   const changeModal = () => {
     ref_RBSheetCamera.current.close();
-    navigation.replace('UpdateContent', {Video: receivedData, apiEndpoint: 'learningHobbies/update'});
+    navigation.replace('UpdateContent', {Video: receivedData, apiEndpoint: 'learningHobbies/update' , categoryapiEndpoint: 'learningHobbies/category/getAll', subcategoryapiEndpoint: 'learningHobbies/sub_category/getAllByCategory?category_id='});
   };
 
   const changeDelete = () => {

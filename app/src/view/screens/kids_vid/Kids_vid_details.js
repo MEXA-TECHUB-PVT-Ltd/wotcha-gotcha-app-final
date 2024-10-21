@@ -230,7 +230,7 @@ export default function Kids_vid_details({ navigation, route }) {
 
   const changeModal = () => {
     ref_RBSheetCamera.current.close();
-    navigation.replace('UpdateContent', {Video: receivedData, apiEndpoint: 'kidVids/update'});
+    navigation.replace('UpdateContent', {Video: receivedData, apiEndpoint: 'kidVids/update' , categoryapiEndpoint: 'kidVids/category/getAll', subcategoryapiEndpoint: 'kidVids/sub_category/getAllByCategory?category_id='});
   };
 
   const changeDelete = () => {

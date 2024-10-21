@@ -627,8 +627,8 @@ export default function Fans_star_details({navigation, route}) {
 
   const changeModal = () => {
     ref_RBSheetCamera.current.close();
-    // navigation.replace('UpdateVideoProfile', {Video: receivedData});
-    navigation.replace('UpdateContent', {Video: receivedData, apiEndpoint: 'fanStar/update'});
+    // navigation.replace('UpdateVideoProfile', {Video: receivedData});                                                                                                
+    navigation.replace('UpdateContent', {Video: receivedData, apiEndpoint: 'fanStar/update' , categoryapiEndpoint: 'fanStar/category/getAll', subcategoryapiEndpoint: 'fanStar/sub_category/getAllByCategory?category_id='});
   };
 
   const changeDelete = () => {

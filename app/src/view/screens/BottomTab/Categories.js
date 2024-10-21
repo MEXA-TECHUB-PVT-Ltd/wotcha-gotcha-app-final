@@ -140,17 +140,30 @@ export default function Categories(identifier) {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [adsData, setAdsData] = useState([]);
   const [adsInActiveData, setAdsInActiveData] = useState([]);
+  // const RegionArea = [
+  //   "E-commerce",
+  //   "Business",
+  //   "Sports",
+  //   "Education",
+  //   "Dating",
+  //   "Food Delivery",
+  //   "Social Media",
+  //   "Medical Wellness",
+  //   "Grocery",
+  //   "Employment",
+  // ];
+
   const RegionArea = [
-    "E-commerce",
-    "Business",
-    "Sports",
-    "Education",
-    "Dating",
-    "Food Delivery",
-    "Social Media",
-    "Medical Wellness",
-    "Grocery",
-    "Employment",
+    t('Ecommerce'),
+    t('Business'),
+    t('cateSports'),
+    t('Education'),
+    t('Dating'),
+    t('FoodDelivery'),
+    t('SocialMedia'),
+    t('MedicalWellness'),
+    t('Grocery'),
+    t('Employment')
   ];
   const containerHeight = Math.min(screenHeight * 0.8, itemHeight);
   //-------------------------------------------------------
@@ -1194,8 +1207,10 @@ export default function Categories(identifier) {
     setIsSelectedActive(false);///
     setcategoryActive(false);////ye old hai jis ko comment kiya tha
     setSelectedCategory(category);
-    setecommerance(category === "E-commerce");
-    setSport(category === "Sports");
+    setecommerance(category === t('Ecommerce'));
+    // setecommerance(category === "E-commerce");
+    setSport(category === t('cateSports'));
+    // setSport(category === "Sports");
   };
 
   const renderSearches = (item) => {
@@ -1212,12 +1227,14 @@ export default function Categories(identifier) {
         onPress={() => {
           // Pass the item data when pressed
           handleItemPress(item);
-          if(item === 'E-commerce')
+          if(item === t('Ecommerce'))
+          // if(item === 'E-commerce')
             {
               console.log("E----AYA:");
               loadSavedApps() // Assuming handleItemPress is a function to handle item press
             }
-            else if (item === 'Business')
+            else if (item === t('Business'))
+            // else if (item === 'Business')
               {
                 console.log("Business----AYA:");
                 BusinessSavedApps() 
@@ -1758,7 +1775,8 @@ export default function Categories(identifier) {
         
         ) : (
           <>
-            {ecommerance && selectedCategory === "E-commerce" && (
+            {ecommerance && selectedCategory === t('Ecommerce') && (
+            // {ecommerance && selectedCategory === "E-commerce" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -1859,7 +1877,8 @@ export default function Categories(identifier) {
               </>
             )}
 
-            {selectedCategory === "Business" && (
+            {selectedCategory === t('Business') && (
+            // {selectedCategory === "Business" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -1955,7 +1974,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === "Sports" && (
+            {selectedCategory === t('cateSports') && (
+            // {selectedCategory === "Sports" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -2051,7 +2071,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === "Education" && (
+            {selectedCategory === t('Education') && (
+            // {selectedCategory === "Education" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -2147,7 +2168,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === "Dating" && (
+            {selectedCategory === t('Dating') && (
+            // {selectedCategory === "Dating" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -2243,7 +2265,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === "Food Delivery" && (
+            {selectedCategory === t('FoodDelivery') && (
+            // {selectedCategory === "Food Delivery" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -2339,7 +2362,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === "Social Media" && (
+            {selectedCategory === t('SocialMedia') && (
+            // {selectedCategory === "Social Media" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -2435,7 +2459,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === "Medical Wellness" && (
+            {selectedCategory === t('MedicalWellness') && (
+            // {selectedCategory === "Medical Wellness" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -2531,7 +2556,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === "Grocery" && (
+            {selectedCategory === t('Grocery') && (
+            // {selectedCategory === "Grocery" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -2627,7 +2653,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === "Employment" && (
+            {selectedCategory === t('Employment') && (
+            // {selectedCategory === "Employment" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -3581,10 +3608,11 @@ const styles = StyleSheet.create({
     marginLeft: wp(3),
     alignItems: "center",
     justifyContent: "center",
-    width: wp(30),
+    // width: wp(30),
     backgroundColor: "#F2F2F2",
     borderRadius: wp(5),
     height: hp(5),
+    paddingHorizontal:hp(1.5)
   },
   textSearchDetails: {
     fontFamily: "Inter",

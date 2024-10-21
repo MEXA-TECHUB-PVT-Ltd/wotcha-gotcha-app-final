@@ -149,7 +149,7 @@ import {
       const result = await response.json();
       const updatedBanners = result.AllBanners.map(banner => {
         if (banner.image.startsWith('/fileUpload')) {
-          banner.image = `https://watch-gotcha-be.mtechub.com${banner.image}`;
+          banner.image = base_url + `${banner.image}`;
         }
         return banner;
       });
@@ -216,7 +216,11 @@ import {
       const result = await response.json();
        if (Array.isArray(result.data) && result.data.length > 0) {
         const formattedSections = result.data.map(category => ({
-          title: category.sub_category_name,
+          // title: category.sub_category_name,
+          title:
+          language === "fr" && category.sub_category_french_name
+              ? category.sub_category_french_name
+              : category.sub_category_name,
           data: category.Sport_result.Sports,
         }));
         // const reverseData = formattedSections.reverse();

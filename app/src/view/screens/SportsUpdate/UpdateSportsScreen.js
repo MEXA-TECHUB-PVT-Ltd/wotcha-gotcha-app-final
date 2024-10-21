@@ -31,6 +31,7 @@ import {
   import CPaperInput from '../../../assets/Custom/CPaperInput';
   import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
   import { base_url } from '../../../../../baseUrl';
+  import { useIsFocused } from "@react-navigation/native";
   import { CLOUD_NAME, CLOUDINARY_URL, UPLOAD_PRESET } from '../../../../../cloudinaryConfig';
   export default function UpdateSportsScreen({navigation, route}) {
     const [selectedItem, setSelectedItem] = useState('');
@@ -64,7 +65,7 @@ import {
     const [categoryId, setCategoryId] = useState('');
   
     const [isFocus, setIsFocus] = useState(false);
-  
+    const isFocused = useIsFocused();
     const ref_RBSheetCamera = useRef(null);
     const [snackbarVisibleAlert, setsnackbarVisibleAlert] = useState(false);
     const [categoryType, setCategoryType] = useState(null);
@@ -74,19 +75,60 @@ import {
   const [subCate, setSubCate] = useState([]);
   const [subcategory, setSubCategory] = useState("");
     //------------------\\
-  
-    const receivedData = route.params?.item;
+    const [language, setLanguage] = useState(null);
 
+    useEffect(() => {
+      const fetchLanguage = async () => {
+        try {
+          const storedLanguage = await AsyncStorage.getItem("language");
+          if (storedLanguage) {
+            setLanguage(storedLanguage);
+            console.log('lanugage--------', storedLanguage)
+            await fetchCategoryPic(authToken,storedLanguage);
+            // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
+          }
+        } catch (error) {
+          console.error("Error fetching language:", error);
+        }
+      };
+  
+      fetchLanguage();
+    }, [isFocused, authToken]);
+
+    
+    const receivedData = route.params?.item;
+console.log('reveicev data---------', receivedData)
     useEffect(() => {
       if (receivedData) {
 
-        setCategoryId(receivedData?.category_id);
+        // setCategoryId(receivedData?.category_id);
   
 
         setProfileName(receivedData?.name);
         setDescription(receivedData?.description);
-        setSubCategory(receivedData?.sub_category_id);
+        // setSubCategory(receivedData?.sub_category_id);
         setImageInfo({uri: receivedData?.image});
+
+
+
+
+        const formattedCategory = {
+          label: language === 'fr' && receivedData?.category_french_name ? receivedData?.category_french_name : receivedData?.category_name,
+          value: receivedData?.category_id?.toString(),
+        };
+        
+        const formattedSubCategory = {
+          label: language === 'fr' && receivedData?.sub_category_french_name ? receivedData?.sub_category_french_name : receivedData?.sub_category_name,
+          value: receivedData?.sub_category_id?.toString(),
+        };
+        
+        setCategoryId(formattedCategory.value); // set the category in label-value format
+        setSubCategory(formattedSubCategory.value);
+
+
+
+
+
         isDataFetched(true);
       }
     }, [receivedData]);
@@ -113,7 +155,7 @@ import {
         const result1 = await AsyncStorage.getItem('authToken ');
         if (result1 !== null) {
           setAuthToken(result1);
-          fetchCategoryPic(result1);
+          // fetchCategoryPic(result1);
         } else {
         }
       } catch (error) {
@@ -122,8 +164,9 @@ import {
       }
     };
   
-    const fetchCategoryPic = async userToken => {
-      const token = userToken;
+    // const fetchCategoryPic = async userToken => {
+      const fetchCategoryPic = async (token, lang) => {
+      // const token = userToken;
   
       try {
         const response = await fetch(
@@ -139,11 +182,15 @@ import {
         if (response.ok) {
           const data = await response.json();
           const categories = data.AllCategories.map(category => ({
-            label: category.name, // Use the "name" property as the label
+            // label: category.name, // Use the "name" property as the label
+            label:
+            lang === "fr" && category.french_name
+              ? category.french_name
+              : category.name,
             value: category.id.toString(), // Convert "id" to a string for the value
           }));
 
-        setCategorySelect(data.AllCategories);
+        setCategorySelect(categories);
           setImageInfo(receivedData);
         } else {
           console.error(
@@ -179,7 +226,20 @@ import {
           }
         );
         const result = await response.json();
-        setSubCate(result.AllCategories);
+        const subcategories = result.AllCategories.map((category) => ({
+          // label: category.name, // Use the "name" property as the label
+          label:
+          language === "fr" && category.french_name
+              ? category.french_name
+              : category.name,
+          value: category.id.toString(), // Convert "id" to a string for the value
+        }));
+        const reverseData = subcategories.reverse();
+        setSubCate(reverseData);
+
+
+
+        // setSubCate(result.AllCategories);
 
       } catch (error) {
         console.error("Error Trending:", error);
@@ -581,10 +641,10 @@ import {
               data={categoriesSelect}
               search={false}
               maxHeight={200}
-                 labelField="name"
-            valueField="id"
-              // labelField="label"
-              // valueField="value"
+            //      labelField="name"
+            // valueField="id"
+              labelField="label"
+              valueField="value"
               placeholder={t('SelectCategory')}
               searchPlaceholder="Search..."
               onFocus={handleCategoryFocus}
@@ -592,7 +652,8 @@ import {
               // onFocus={() => setIsFocus(true)}
               // onBlur={() => setIsFocus(false)}
               onChange={item => {
-                setCategoryId(item.id);
+                console.log("kon main category id hai----", item.value);
+                setCategoryId(item.value);
                 setIsFocus(false);
               }}
               renderRightIcon={() => (
@@ -638,8 +699,10 @@ import {
             data={subCate}
             search={false}
             maxHeight={200}
-            labelField="name"
-            valueField="id"
+            // labelField="name"
+            // valueField="id"
+             labelField="label"
+              valueField="value"
             placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             onFocus={handleSubCategoryFocus}
@@ -647,8 +710,8 @@ import {
             // onFocus={() => setIsFocus(true)}
             // onBlur={() => setIsFocus(false)}
             onChange={(item) => {
-              console.log("kon sub category id hai----", item.id);
-              setSubCategory(item.id);
+              console.log("kon sub category id hai----", item.value);
+              setSubCategory(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (

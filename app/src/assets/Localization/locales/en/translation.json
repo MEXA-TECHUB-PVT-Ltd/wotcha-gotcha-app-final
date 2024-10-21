@@ -170,6 +170,19 @@
   "Americas": "Americas",
   "Asia": "Asia",
   "Middle_East": "Middle East",
+
+
+
+  "Business": "Business",
+  "cateSports": "Sports",
+  "Education": "Education",
+  "Dating": "Dating",
+  "FoodDelivery": "Food Delivery",
+  "SocialMedia": "Social Medias & Networks",
+  "MedicalWellness": "Health and Fitness",
+  "Grocery": "Grocery & Shopping",
+  "Employment": "Employment",
+
     "EBIC" :"EBIC",
     "QAFI" :"QAFI",
     "camera": "camera",

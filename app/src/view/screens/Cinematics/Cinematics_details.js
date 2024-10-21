@@ -250,7 +250,7 @@ console.log('received data', receivedData)
   const changeModal = () => {
     ref_RBSheetCamera.current.close();
     // navigation.replace('UpdateVideoProfile', {Video: receivedData});
-    navigation.replace('UpdateContent', {Video: receivedData, apiEndpoint: 'cinematics/update'});
+    navigation.replace('UpdateContent', {Video: receivedData, apiEndpoint: 'cinematics/update', categoryapiEndpoint: 'cinematics/category/getAll', subcategoryapiEndpoint: 'cinematics/sub_category/getAllByCategory?category_id=' });
   };
 
   const changeDelete = () => {

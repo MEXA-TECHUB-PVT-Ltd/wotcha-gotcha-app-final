@@ -47,7 +47,7 @@ const Category = [
   {label: 'Item 2', value: '2'},
   {label: 'Item 3', value: '3'},
 ];
-
+import { useIsFocused } from "@react-navigation/native";
 export default function UpdateQAFI({navigation, route}) {
   const [selectedItem, setSelectedItem] = useState('');
 
@@ -95,7 +95,7 @@ export default function UpdateQAFI({navigation, route}) {
   const [subCate, setSubCate] = useState([]);
   const [subcategory, setSubCategory] = useState("");
   console.log('ReceivedData', receivedData);
-
+  const isFocused = useIsFocused();
   // useEffect(() => {
   //   // Make the API request and update the 'data' state
   //   const fetchPehlyCategory = async () => {
@@ -117,11 +117,48 @@ export default function UpdateQAFI({navigation, route}) {
   // }, []);
 
 
+  
+  const [language, setLanguage] = useState(null);
+
+  useEffect(() => {
+    const fetchLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem("language");
+        if (storedLanguage) {
+          setLanguage(storedLanguage);
+          console.log('lanugage--------', storedLanguage)
+          await fetchCategory(authToken,storedLanguage);
+          // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
+        }
+      } catch (error) {
+        console.error("Error fetching language:", error);
+      }
+    };
+
+    fetchLanguage();
+  }, [isFocused, authToken]);
+
+
   useEffect(() => {
     if (receivedData) {
       setComment(receivedData?.description);
-      setCategoryId(receivedData?.category_id);
-      setSubCategory(receivedData?.sub_category_id);
+
+      // setCategoryId(receivedData?.category_id);
+      // setSubCategory(receivedData?.sub_category_id);
+
+      const formattedCategory = {
+        label: language === 'fr' && receivedData?.category_french_name ? receivedData?.category_french_name : receivedData?.category_name,
+        value: receivedData?.category_id?.toString(),
+      };
+      
+      const formattedSubCategory = {
+        label: language === 'fr' && receivedData?.sub_category_french_name ? receivedData?.sub_category_french_name : receivedData?.sub_category_name,
+        value: receivedData?.sub_category_id?.toString(),
+      };
+      
+      setCategoryId(formattedCategory.value); // set the category in label-value format
+      setSubCategory(formattedSubCategory.value);
+
 
       // setCategorySelect(receivedData);
       setImageUrl(receivedData?.image);
@@ -158,9 +195,9 @@ export default function UpdateQAFI({navigation, route}) {
     fetchData();
   }, []);
 
-  console.log('categoryId ---', categoryId)
-  console.log('subcategory ---', subcategory)
-  console.log('authtokeb ---', authToken)
+  // console.log('categoryId ---', categoryId)
+  // console.log('subcategory ---', subcategory)
+  // console.log('authtokeb ---', authToken)
 
   const fetchUser = async (id, token) => {
     try {
@@ -174,7 +211,7 @@ export default function UpdateQAFI({navigation, route}) {
       if (response.ok) {
         const data = await response.json();
         // setUserImage(data.user.image);
-        fetchCategory(token);
+        // fetchCategory(token);
       } else {
         console.error('Failed to fetch user:', response.status, response.statusText);
       }
@@ -183,7 +220,7 @@ export default function UpdateQAFI({navigation, route}) {
     }
   };
 
-  const fetchCategory = async (token) => {
+  const fetchCategory = async (token, lang) => {
     try {
       const response = await fetch(`${base_url}qafi/category/getAll?page=1&limit=10000`, {
         method: 'GET',
@@ -195,11 +232,16 @@ export default function UpdateQAFI({navigation, route}) {
       if (response.ok) {
         const data = await response.json();
         const categories = data.AllCategories.map(category => ({
-          label: category.name,
+          // label: category.name,
+          label:
+          lang === "fr" && category.french_name
+            ? category.french_name
+            : category.name,
           value: category.id.toString()
         }));
-        // console.log('categooooooooooooooooooooo', data.AllCategories)
-        setCategorySelect(data.AllCategories);
+        const reverseData = categories.reverse();
+        setCategorySelect(reverseData);
+      
       } else {
         console.error('Failed to fetch categories:', response.status, response.statusText);
       }
@@ -225,7 +267,20 @@ export default function UpdateQAFI({navigation, route}) {
 
       if (response.ok) {
         const result = await response.json();
-        setSubCate(result.AllCategories);
+
+        const subcategories = result.AllCategories.map((category) => ({
+          // label: category.name, // Use the "name" property as the label
+          label:
+          language === "fr" && category.french_name
+              ? category.french_name
+              : category.name,
+          value: category.id.toString(), // Convert "id" to a string for the value
+        }));
+        const reverseData = subcategories.reverse();
+        setSubCate(reverseData);
+
+
+        // setSubCate(result.AllCategories);
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
       }
@@ -233,6 +288,10 @@ export default function UpdateQAFI({navigation, route}) {
       console.error('Error fetching subcategories:', error);
     }
   };
+
+
+  console.log('CATEGORY-----', categoryId)
+  console.log('subcategory-----', subcategory)
 ////////////////////////////////////////////////////////////////////////
 
 
@@ -777,8 +836,10 @@ export default function UpdateQAFI({navigation, route}) {
             data={categoriesSelect}
             search={false}
             maxHeight={200}
-            labelField="name"
-            valueField="id"
+            // labelField="name"
+            // valueField="id"
+             labelField="label"
+            valueField="value"
             placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
             onFocus={handleCategoryFocus}
@@ -787,7 +848,8 @@ export default function UpdateQAFI({navigation, route}) {
             // onBlur={() => setIsFocus(false)}
             onChange={item => {
               //setCategory(item.label);
-              setCategoryId(item.id);
+              console.log("kon main category id hai----", item.value);
+              setCategoryId(item.value);
               setIsFocus(false);
             }}
             renderRightIcon={() => (
@@ -833,8 +895,10 @@ export default function UpdateQAFI({navigation, route}) {
               data={subCate}
               search={false}
               maxHeight={200}
-              labelField="name"
-              valueField="id"
+              // labelField="name"
+              // valueField="id"
+               labelField="label"
+            valueField="value"
               placeholder={t('SelectSubCategory')}
               searchPlaceholder="Search..."
               // onFocus={() => setIsFocus(true)}
@@ -842,8 +906,8 @@ export default function UpdateQAFI({navigation, route}) {
               onFocus={handleSubCategoryFocus}
               onBlur={handleSubCategoryBlur}
               onChange={(item) => {
-                console.log("kon sub category id hai----", item.id);
-                setSubCategory(item.id);
+                console.log("kon sub category id hai----", item.value);
+                setSubCategory(item.value);
                 setIsFocus(false);
               }}
               renderRightIcon={() => (
