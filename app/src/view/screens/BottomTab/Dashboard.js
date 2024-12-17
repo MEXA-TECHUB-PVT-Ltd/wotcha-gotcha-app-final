@@ -353,6 +353,19 @@ export default function Dashboard({ route }) {
   };
 
   //------------------------------------------------------------\\
+  const openCategoryApp = async (app) => {
+    try {
+      console.log("Opening app-------------------:", app.bundle);
+  
+      // Launch the application using its bundle ID
+      await RNLauncherKitHelper.launchApplication(app.bundle);
+      
+      console.log("App launched successfully.");
+    } catch (error) {
+      console.error("Error launching the app:", error.message);
+    }
+  };
+  
 
   const renderApps = (item) => {
     //console.log('item at first', item);
@@ -917,7 +930,7 @@ export default function Dashboard({ route }) {
     if (authToken && isFocused) {
       // fetchAllCinematicsCategory();
       fetchTopForPics(selectedPicItemId);
-      // fetchSubCategorySport(selectedPicItemId);
+      fetchSubCategorySport(selectedPicItemId);
     }
   }, [authToken, selectedPicItemId, isFocused]);
 
@@ -3928,7 +3941,7 @@ const convertTimeAndDate = (dateString) => {
     try {
       const savedApps = await AsyncStorage.getItem("savedApps");
       if (savedApps) {
-        console.log("saved apps in useeffect --------->", savedApps);
+        // console.log("saved apps in useeffect --------->", savedApps);
         setSavedApps(JSON.parse(savedApps));
       }
     } catch (error) {
@@ -4914,8 +4927,9 @@ const convertTimeAndDate = (dateString) => {
                                 {savedApps
                                   .slice(rowIndex * 5, (rowIndex + 1) * 5)
                                   .map((app, index) => (
-                                    <View
+                                    <TouchableOpacity
                                       key={index}
+                                      onPress={() => openCategoryApp(app)}
                                       style={{
                                         flexDirection: "column",
                                         alignItems: "center",
@@ -4943,7 +4957,7 @@ const convertTimeAndDate = (dateString) => {
                                       >
                                         {app.label.substring(0, 10)}
                                       </Text>
-                                    </View>
+                                    </TouchableOpacity>
                                   ))}
                                 {[
                                   ...Array(
@@ -4983,7 +4997,7 @@ const convertTimeAndDate = (dateString) => {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -5015,8 +5029,9 @@ const convertTimeAndDate = (dateString) => {
                             {savedApps_b
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
+                                <TouchableOpacity
                                   key={index}
+                                  onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -5044,7 +5059,7 @@ const convertTimeAndDate = (dateString) => {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                  </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -5081,7 +5096,7 @@ const convertTimeAndDate = (dateString) => {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_b(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -5112,8 +5127,9 @@ const convertTimeAndDate = (dateString) => {
                             {savedApps_sp
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
+                                <TouchableOpacity
                                   key={index}
+                                  onPress={() => openCategoryApp(app)} 
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -5141,7 +5157,7 @@ const convertTimeAndDate = (dateString) => {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -5178,7 +5194,7 @@ const convertTimeAndDate = (dateString) => {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_sp(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -5209,8 +5225,9 @@ const convertTimeAndDate = (dateString) => {
                             {savedApps_e
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
+                                <TouchableOpacity
                                   key={index}
+                                  onPress={() => openCategoryApp(app)} 
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -5238,7 +5255,7 @@ const convertTimeAndDate = (dateString) => {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -5275,7 +5292,7 @@ const convertTimeAndDate = (dateString) => {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_e(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -5306,8 +5323,9 @@ const convertTimeAndDate = (dateString) => {
                             {savedApps_d
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
+                                <TouchableOpacity
                                   key={index}
+                                  onPress={() => openCategoryApp(app)} 
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -5335,7 +5353,7 @@ const convertTimeAndDate = (dateString) => {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -5372,7 +5390,7 @@ const convertTimeAndDate = (dateString) => {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_d(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -5403,8 +5421,9 @@ const convertTimeAndDate = (dateString) => {
                             {savedApps_fd
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
+                                <TouchableOpacity
                                   key={index}
+                                  onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -5432,7 +5451,7 @@ const convertTimeAndDate = (dateString) => {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -5469,7 +5488,7 @@ const convertTimeAndDate = (dateString) => {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_fd(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -5500,8 +5519,9 @@ const convertTimeAndDate = (dateString) => {
                             {savedApps_sm
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
+                                <TouchableOpacity
                                   key={index}
+                                  onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -5529,7 +5549,7 @@ const convertTimeAndDate = (dateString) => {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -5566,7 +5586,7 @@ const convertTimeAndDate = (dateString) => {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_sm(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -5597,8 +5617,9 @@ const convertTimeAndDate = (dateString) => {
                             {savedApps_mw
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
+                                <TouchableOpacity
                                   key={index}
+                                  onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -5626,7 +5647,7 @@ const convertTimeAndDate = (dateString) => {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -5663,7 +5684,7 @@ const convertTimeAndDate = (dateString) => {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_mw(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -5694,8 +5715,9 @@ const convertTimeAndDate = (dateString) => {
                             {savedApps_g
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
+                                <TouchableOpacity
                                   key={index}
+                                  onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -5723,7 +5745,7 @@ const convertTimeAndDate = (dateString) => {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -5760,7 +5782,7 @@ const convertTimeAndDate = (dateString) => {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_g(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -5791,8 +5813,9 @@ const convertTimeAndDate = (dateString) => {
                             {savedApps_em
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
+                                <TouchableOpacity
                                   key={index}
+                                  onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -5820,7 +5843,7 @@ const convertTimeAndDate = (dateString) => {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -5857,7 +5880,7 @@ const convertTimeAndDate = (dateString) => {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_em(true)}>
                       <Add />
                     </TouchableOpacity>

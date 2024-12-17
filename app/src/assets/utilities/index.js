@@ -4,11 +4,12 @@
 
 const IMAGES_DIR = '../images/';
 const appImages = {
-  logo: require(IMAGES_DIR + 'logowithwhiteBG.png'),
+  logo: require(IMAGES_DIR + 'logo/transblack.png'),
   // logo: require(IMAGES_DIR + 'logowithWBG.jpg'),
 
   // logo: require(IMAGES_DIR + 'LogoOfWG.jpg'),
-  logoTransparent: require(IMAGES_DIR + 'logotransNew.png'),
+  // logoTransparent: require(IMAGES_DIR + 'logotransNew.png'),
+  logoTransparent: require(IMAGES_DIR + 'logo/transblack.png'),
   // logoTransparent: require(IMAGES_DIR + 'logoTransparentone.png'),
 
   // logoTransparent: require(IMAGES_DIR + 'logoNewTransparent.png'),

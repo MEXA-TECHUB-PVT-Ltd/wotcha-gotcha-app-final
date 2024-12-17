@@ -1013,7 +1013,7 @@ export default function ViewVideo({navigation, route}) {
                 {receivedData.username}
               </Text>
             </View>
-            <View style={{ width: "80%", marginHorizontal: wp(5) }}>
+            <View style={{ width: "80%", marginHorizontal: wp(5), marginTop:4 }}>
                   <Text ellipsizeMode="tail"
                 numberOfLines={2} style={[styles.textProfileName, { marginLeft: 0,}]}>
                     {receivedData.name}
@@ -1057,13 +1057,13 @@ export default function ViewVideo({navigation, route}) {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                justifyContent: 'space-evenly',
                 height: hp(5),
               }}>
               <View
                 style={{
                   height: hp(2),
-                  width: wp(65),
+                  width: wp(70),
                   justifyContent: 'center',
                 }}>
                 <Slider
@@ -1111,6 +1111,7 @@ export default function ViewVideo({navigation, route}) {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 height: hp(8),
+                paddingLeft:10
               }}>
               <View
                 style={{
@@ -1769,7 +1770,9 @@ const styles = StyleSheet.create({
   },
   bottomView: {
     position:'absolute',
-    bottom:0
+    bottom: 0,
+    left: 0,
+    right: 0,
     // flex: 1,
     // justifyContent: 'flex-end',
     // You can add padding or content to this view as needed.

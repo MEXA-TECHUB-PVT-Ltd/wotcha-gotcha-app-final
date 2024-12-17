@@ -238,14 +238,16 @@ const token = authToken;
 
       if (response.ok) {
         const result = await response.json();
-        console.log('result---------', result.AllCategories)
+        
               const subcategories = result.AllCategories.map(category => ({
         // label: category.name, // Use the "name" property as the label
-        label: lang === 'fr' && category.french_name ? category.french_name : category.name,
+        label: language === 'fr' && category.french_name ? category.french_name : category.name,
         value: category.id.toString(), // Convert "id" to a string for the value
       }));
+      
         const reverseData = subcategories.reverse();
         setSubCate(reverseData);
+        // console.log('result---------', reverseData)
       } else {
         console.error('Failed to fetch subcategories:', response.status, response.statusText);
       }

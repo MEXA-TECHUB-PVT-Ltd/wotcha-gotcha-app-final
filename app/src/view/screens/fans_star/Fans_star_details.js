@@ -796,7 +796,7 @@ export default function Fans_star_details({navigation, route}) {
               </Text>
             </View>
 
-            <View style={{ width: "80%", marginHorizontal: wp(5) }}>
+            <View style={{ width: "80%", marginHorizontal: wp(5) , marginTop:4}}>
                   <Text ellipsizeMode="tail"
                 numberOfLines={2} style={[styles.textProfileName, { marginLeft: 0,}]}>
                     {receivedData.name}
@@ -840,7 +840,7 @@ export default function Fans_star_details({navigation, route}) {
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                justifyContent: 'space-evenly',
                 height: hp(5),
               }}>
               <View
@@ -894,6 +894,7 @@ export default function Fans_star_details({navigation, route}) {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 height: hp(8),
+                paddingLeft:10
               }}>
               <View
                 style={{
@@ -1269,7 +1270,9 @@ const styles = StyleSheet.create({
   },
   bottomView: {
     position:'absolute',
-    bottom:0
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
   textProfileName: {
     color: '#FFFFFF',

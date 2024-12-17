@@ -492,7 +492,7 @@ export default function ProfileSettings({ navigation }) {
           {t('Drawer.Confirmation')}
         </Text>
 
-        <Text style={{ marginTop: hp(2) }}>{t('Drawer.SureLogout')}</Text>
+        <Text style={{ marginTop: hp(2), color:'black' }}>{t('Drawer.SureLogout')}</Text>
 
         <View style={styles.buttonDirections}>
           <TouchableOpacity
@@ -541,7 +541,7 @@ export default function ProfileSettings({ navigation }) {
           {/* Confirmation */}
         </Text>
 
-        <Text style={{ marginTop: hp(2) }}>
+        <Text style={{ marginTop: hp(2) , color:'black'}}>
           {t('Drawer.SureDelete')}
           {/* Do You Really Want To Delete Your Account? */}
         </Text>
@@ -623,7 +623,7 @@ const styles = StyleSheet.create({
   },
   selectedTextStyle: {
     fontSize: 16,
-
+color:'black'
   },
   iconStyle: {
     width: 20,

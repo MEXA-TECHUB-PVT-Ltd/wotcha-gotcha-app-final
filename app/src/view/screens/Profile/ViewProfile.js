@@ -44,49 +44,50 @@ export default function ViewProfile({ navigation }) {
   const [videos, setVideos] = useState([]);
   const [pics, setPics] = useState([]);
 
-  const [totalVideos, setTotalVideos] = useState(null);
+  const [totalVideos, setTotalVideos] = useState(0);
 
-  const [totalPics, setTotalPics] = useState(null);
+  const [totalPics, setTotalPics] = useState(0);
 
   const [marketZone, setMarketZone] = useState([]);
 
-  const [totalMarketZone, setTotalMarketZone] = useState(null);
+  const [totalMarketZone, setTotalMarketZone] = useState(0);
 
   const [news, setNews] = useState([]);
 
-  const [totalNews, setTotalNews] = useState(null);
+  const [totalNews, setTotalNews] = useState(0);
 
   const [QAFI, setQAFI] = useState([]);
 
-  const [totalQAFI, setTotalQAFI] = useState(null);
+  const [totalQAFI, setTotalQAFI] = useState(0);
 
   const [GEBC, setGEBC] = useState([]);
 
   const [sports, setSports] = useState([]);
-  const [totalsports, setTotalSports] = useState(null);
+  const [totalsports, setTotalSports] = useState(0);
 
-  const [totalGEBC, setTotalGEBC] = useState(null);
+  const [totalGEBC, setTotalGEBC] = useState(0);
 
   const [letter, setLetter] = useState([]);
-  const [totalLetter, setTotalLetter] = useState(null);
+  const [totalLetter, setTotalLetter] = useState(0);
 
   const [cinematicvideos, setCinematicVideos] = useState([]);
-  const [cinematictotalVideos, setCinematicTotalVideos] = useState(null);
+  const [cinematictotalVideos, setCinematicTotalVideos] = useState(0);
 
   const [kidsvideos, setKidsVideos] = useState([]);
-  const [kidstotalVideos, setKidsTotalVideos] = useState(null);
+  const [kidstotalVideos, setKidsTotalVideos] = useState(0);
 
   const [tvvideos, setTVVideos] = useState([]);
-  const [tvtotalVideos, setTVTotalVideos] = useState(null);
+  const [tvtotalVideos, setTVTotalVideos] = useState(0);
 
   const [learningvideos, setLearningVideos] = useState([]);
-  const [learningtotalVideos, setLearningTotalVideos] = useState(null);
+  const [learningtotalVideos, setLearningTotalVideos] = useState(0);
 
   const [fanStarvideos, setfanStarVideos] = useState([]);
-  const [fanStartotalVideos, setfanStarTotalVideos] = useState(null);
+  const [fanStartotalVideos, setfanStarTotalVideos] = useState(0);
   const [signatureData, setSignatureData] = useState(null);
   const isFocused = useIsFocused();
 
+  console.log('image----------------------------', image)
   useEffect(() => {
     fetchVideos();
   }, [isFocused]);
