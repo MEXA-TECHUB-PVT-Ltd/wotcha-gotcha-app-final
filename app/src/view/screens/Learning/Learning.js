@@ -47,7 +47,7 @@ export default function Learning({ route }) {
   const [loading, setLoading] = useState(false);
 
   const [dataTopVideos, setDataTopVideos] = useState([]);
-
+  const [selectedButton, setSelectedButton] = useState(null);
   const ref_RBSheetCamera = useRef(null);
   const [imageUri, setImageUri] = useState(null);
   const [imageInfo, setImageInfo] = useState(null);
@@ -681,8 +681,9 @@ export default function Learning({ route }) {
           container: {
             borderTopLeftRadius: wp(10),
             borderTopRightRadius: wp(10),
-            paddingVertical: 30
-            // height: hp(25),
+            // paddingVertical: 30
+            paddingBottom: Platform.OS == "ios" ? 40 : 10,
+            height: hp(28),
           },
         }}
       >
@@ -725,14 +726,19 @@ export default function Learning({ route }) {
           }}
         >
           <TouchableOpacity
-            onPress={() => takeVideoFromCamera("Camera")}
+            onPress={() => {
+              takeVideoFromCamera("Camera"),
+              setSelectedButton('Camera');
+            }
+            }
             // onPress={goto_camera}
             style={{
               alignItems: "center",
               justifyContent: "center",
               flex: 1,
               borderRadius: 10,
-              borderColor: "#FACA4E",
+              // borderColor: "#FACA4E",
+              borderColor: selectedButton === 'Camera' ? "#FACA4E" : "gray",
               borderWidth: 1,
             }}
           >
@@ -753,13 +759,17 @@ export default function Learning({ route }) {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => chooseVideoFromLibrary("gallery")}
+            onPress={() =>{ chooseVideoFromLibrary("gallery"),
+              setSelectedButton('Gallery');
+            }
+          }
             style={{
               alignItems: "center",
               justifyContent: "center", // Center the icon and text vertically
               flex: 1,
               borderRadius: 10,
-              borderColor: "grey",
+              // borderColor: "grey",
+              borderColor: selectedButton === 'Gallery' ? "#FACA4E" : "gray", 
               borderWidth: 1,
               marginLeft: wp(8), // Add margin to separate the options
             }}

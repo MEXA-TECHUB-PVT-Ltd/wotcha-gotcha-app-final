@@ -387,7 +387,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
   //     fetchCategory();
   //   }
   // }, [authToken]);
-  const fetchMainCategory = async (token, lang) => {
+  const fetchMainCategory = async (token) => {
     // const token = token;
     // console.log('user token-----------', authToken )
     try {
@@ -407,7 +407,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
         const categories = data.AllCategories.map(category => ({
           // label: category.name, // Use the "name" property as the label
           label:
-          lang === "fr" && category.french_name
+          language === "fr" && category.french_name
             ? category.french_name
             : category.name,
           value: category.id.toString(), // Convert "id" to a string for the value

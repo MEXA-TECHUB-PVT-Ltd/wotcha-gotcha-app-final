@@ -34,25 +34,7 @@ import { base_url } from "../../../../../baseUrl";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import Carousel from 'react-native-snap-carousel';
 import TVpromaxActive from "../../../assets/svg/TVpromaxActive";
-import Swiper from "react-native-swiper";
-const bannerAds = [
-  {
-    id: 1,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-  {
-    id: 2,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-  {
-    id: 3,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-  {
-    id: 4,
-    image: require("../../../assets/images/BannerAds.png"),
-  },
-];
+
 
 import { useTranslation } from 'react-i18next';
 export default function Tv_Promax({  route }) {
@@ -64,6 +46,7 @@ export default function Tv_Promax({  route }) {
   const [authToken, setAuthToken] = useState("");
 
   const isFocused = useIsFocused();
+  const [selectedButton, setSelectedButton] = useState(null);
 
   const [loading, setLoading] = useState(false);
 
@@ -736,7 +719,9 @@ export default function Tv_Promax({  route }) {
           container: {
             borderTopLeftRadius: wp(10),
             borderTopRightRadius: wp(10),
-            height: hp(25),
+            paddingBottom: Platform.OS == "ios" ? 40 : 10,
+            // height: hp(28),
+            height: hp(28),
           },
         }}
       >
@@ -768,10 +753,9 @@ export default function Tv_Promax({  route }) {
             />
           </TouchableOpacity>
         </View>
-
+<View style={{ height: 20 }} />
         <View
           style={{
-            top: "1%",
             flex: 1,
             marginHorizontal: wp(8),
             marginBottom: hp(1),
@@ -780,14 +764,20 @@ export default function Tv_Promax({  route }) {
           }}
         >
           <TouchableOpacity
-            onPress={() => takeVideoFromCamera("Camera")}
-            // onPress={goto_camera}
+            // onPress={() => takeVideoFromCamera("Camera")}
+            onPress={() => {
+              takeVideoFromCamera("Camera"),
+              setSelectedButton('Camera');
+            }
+            }
+  
             style={{
               alignItems: "center",
               justifyContent: "center",
               flex: 1,
               borderRadius: 10,
-              borderColor: "#FACA4E",
+              // borderColor: "#FACA4E",
+              borderColor: selectedButton === 'Camera' ? "#FACA4E" : "gray",
               borderWidth: 1,
             }}
           >
@@ -809,13 +799,19 @@ export default function Tv_Promax({  route }) {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => chooseVideoFromLibrary("gallery")}
+            // onPress={() => chooseVideoFromLibrary("gallery")}
+            onPress={() =>{ chooseVideoFromLibrary("gallery"),
+              setSelectedButton('Gallery');
+            }
+          }
             style={{
               alignItems: "center",
               justifyContent: "center", // Center the icon and text vertically
               flex: 1,
               borderRadius: 10,
-              borderColor: "grey",
+              // borderColor: "grey",
+              borderColor: selectedButton === 'Gallery' ? "#FACA4E" : "gray", 
+
               borderWidth: 1,
               marginLeft: wp(8), // Add margin to separate the options
             }}

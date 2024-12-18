@@ -46,45 +46,39 @@ export default function ViewElseProfile({ navigation , route}) {
   const [videos, setVideos] = useState([]);
   const [pics, setPics] = useState([]);
 
-  const [totalVideos, setTotalVideos] = useState(null);
+  const [totalVideos, setTotalVideos] = useState(0);
 
-  const [totalPics, setTotalPics] = useState(null);
+  const [totalPics, setTotalPics] = useState(0);
 
   const [marketZone, setMarketZone] = useState([]);
 
-  const [totalMarketZone, setTotalMarketZone] = useState(null);
+  const [totalMarketZone, setTotalMarketZone] = useState(0);
 
   const [news, setNews] = useState([]);
 
-  const [totalNews, setTotalNews] = useState(null);
+  const [totalNews, setTotalNews] = useState(0);
 
   const [QAFI, setQAFI] = useState([]);
 
-  const [totalQAFI, setTotalQAFI] = useState(null);
+  const [totalQAFI, setTotalQAFI] = useState(0);
 
   const [GEBC, setGEBC] = useState([]);
 
-  const [totalGEBC, setTotalGEBC] = useState(null);
+  const [totalGEBC, setTotalGEBC] = useState(0);
   const [sports, setSports] = useState([]);
-  const [totalsports, setTotalSports] = useState(null);
-
+  const [totalsports, setTotalSports] = useState(0);
   const [letter, setLetter] = useState([]);
-  const [totalLetter, setTotalLetter] = useState(null);
-
+  const [totalLetter, setTotalLetter] = useState(0);
   const [cinematicvideos, setCinematicVideos] = useState([]);
-  const [cinematictotalVideos, setCinematicTotalVideos] = useState(null);
-
+  const [cinematictotalVideos, setCinematicTotalVideos] = useState(0);
   const [kidsvideos, setKidsVideos] = useState([]);
-  const [kidstotalVideos, setKidsTotalVideos] = useState(null);
-
+  const [kidstotalVideos, setKidsTotalVideos] = useState(0);
   const [tvvideos, setTVVideos] = useState([]);
-  const [tvtotalVideos, setTVTotalVideos] = useState(null);
-
+  const [tvtotalVideos, setTVTotalVideos] = useState(0);
   const [learningvideos, setLearningVideos] = useState([]);
-  const [learningtotalVideos, setLearningTotalVideos] = useState(null);
-
+  const [learningtotalVideos, setLearningTotalVideos] = useState(0);
   const [fanStarvideos, setfanStarVideos] = useState([]);
-  const [fanStartotalVideos, setfanStarTotalVideos] = useState(null);
+  const [fanStartotalVideos, setfanStarTotalVideos] = useState(0);
   const [signatureData, setSignatureData] = useState(null);
   const isFocused = useIsFocused();
 
@@ -1285,20 +1279,38 @@ paddingTop:6,
   //---------------------------\
 
   const data = [
-    { id: "1", total: totalVideos, label: "Videos Mania" },
-    { id: "2", total: totalPics, label: "Pic Tour" },
-    { id: "3", total: totalNews, label: "News" },
-    { id: "4", total: totalLetter, label: "Open Letters" },
-    { id: "5", total: totalQAFI, label: "QAFI" },
-    { id: "6", total: totalGEBC, label: "EBC" },
-    { id: "7", total: totalQAFI, label: "Sports" },
+    // { id: "1", total: totalVideos, label: "Videos Mania" },
+    // { id: "2", total: totalPics, label: "Pic Tour" },
+    // { id: "3", total: totalNews, label: "News" },
+    // { id: "4", total: totalLetter, label: "Open Letters" },
+    // { id: "5", total: totalQAFI, label: "QAFI" },
+    // { id: "6", total: totalGEBC, label: "EBC" },
+    // { id: "7", total: totalQAFI, label: "Sports" },
 
-    { id: "8", total: cinematictotalVideos, label: "Cinematics" },
-    { id: "9", total: kidstotalVideos, label: "Kids-Vids" },
-    { id: "10", total: tvtotalVideos, label: "TV ProgMax" },
-    { id: "11", total: learningtotalVideos, label: "Learning & Hobbies" },
-    { id: "12", total: fanStartotalVideos, label: "Fan Star Zone" },
-    { id: "13", total: totalMarketZone, label: "Market Zone" },
+    // { id: "8", total: cinematictotalVideos, label: "Cinematics" },
+    // { id: "9", total: kidstotalVideos, label: "Kids-Vids" },
+    // { id: "10", total: tvtotalVideos, label: "TV ProgMax" },
+    // { id: "11", total: learningtotalVideos, label: "Learning & Hobbies" },
+    // { id: "12", total: fanStartotalVideos, label: "Fan Star Zone" },
+    // { id: "13", total: totalMarketZone, label: "Market Zone" },
+
+
+
+    { id: "1", total: totalVideos, label:  t('Drawer.VideoMania')},
+    { id: "2", total: totalPics, label: t('Drawer.PicTours') },
+    { id: "3", total: totalNews, label:  t('Drawer.News') },
+    { id: "4", total: totalLetter, label: t('Drawer.OpenLetter') },
+    { id: "5", total: totalQAFI, label: t('Drawer.QAFI') },
+    { id: "6", total: totalGEBC, label: t('Drawer.EBIC') },
+    { id: "7", total: totalsports, label: t('Drawer.Sports')},
+ 
+    { id: "8", total: cinematictotalVideos, label: t('Drawer.Cinematics')},
+    { id: "12", total: fanStartotalVideos, label: t('Drawer.Fans_star')},
+    { id: "9", total: kidstotalVideos, label: t('Drawer.Kid-Vids') },
+    { id: "10", total: tvtotalVideos, label: t('Drawer.TVProgMax')},
+    { id: "11", total: learningtotalVideos, label: t('Drawer.LearningHobbies') },
+    { id: "13", total: totalMarketZone, label: t('Drawer.MarketZone') },
+
     // Add more items as needed
   ];
 

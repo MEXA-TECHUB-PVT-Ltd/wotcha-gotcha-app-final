@@ -165,7 +165,7 @@ console.log('reveicev data---------', receivedData)
     };
   
     // const fetchCategoryPic = async userToken => {
-      const fetchCategoryPic = async (token, lang) => {
+      const fetchCategoryPic = async (token) => {
       // const token = userToken;
   
       try {
@@ -184,7 +184,7 @@ console.log('reveicev data---------', receivedData)
           const categories = data.AllCategories.map(category => ({
             // label: category.name, // Use the "name" property as the label
             label:
-            lang === "fr" && category.french_name
+            language === "fr" && category.french_name
               ? category.french_name
               : category.name,
             value: category.id.toString(), // Convert "id" to a string for the value

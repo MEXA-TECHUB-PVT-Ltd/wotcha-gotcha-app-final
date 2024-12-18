@@ -203,7 +203,7 @@ export default function Sell({navigation}) {
     fetchLanguage();
   }, [isFocused, authToken]);
 
-  const fetchCategory = async (token, lang) => {
+  const fetchCategory = async (token) => {
  
 
     try {
@@ -226,7 +226,7 @@ export default function Sell({navigation}) {
         const categories = data.AllCategories.map(category => ({
           // label: category.name, // Use the "name" property as the label
           label:
-          lang === "fr" && category.french_name
+          language === "fr" && category.french_name
             ? category.french_name
             : category.name,
           value: category.id.toString(), // Convert "id" to a string for the value
@@ -1024,7 +1024,7 @@ export default function Sell({navigation}) {
           onChangeText={text => setDescription(text)}
           multiline={true} // Enable multiline input
           numberOfLines={3} // Set the initial number of lines
-          style={{height: hp(25), ...styles.ti, width: wp(82)}} // Adjust the height as needed
+          style={{height: hp(10), ...styles.ti}} // Adjust the height as needed
           outlineColor="#0000001F"
           placeholderTextColor="#646464"
           activeOutlineColor="#FACA4E"
@@ -1329,16 +1329,16 @@ const styles = StyleSheet.create({
   },
   ti: {
     marginTop: '5%',
-    width: 300,
+    width: '100%',
     backgroundColor: 'white',
     fontSize: wp(4),
-    paddingLeft: '2%',
+    // paddingLeft: '2%',
     borderRadius: 10,
   },
   textInputSelectedCategory: {
     borderWidth: 1,
     borderRadius: wp(3),
-    width: '98.8%',
+    width: '100%',
     borderColor: '#FACA4E',
 
     paddingHorizontal: 20,
@@ -1349,7 +1349,7 @@ const styles = StyleSheet.create({
   textInputCategoryNonSelected: {
     borderWidth: 1,
     borderRadius: wp(3),
-    width: '98.8%',
+    width: '100%',
     borderColor: '#E7EAF2',
     paddingHorizontal: 20,
     paddingVertical: 6.8,

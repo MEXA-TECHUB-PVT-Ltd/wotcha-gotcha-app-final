@@ -222,7 +222,7 @@ export default function Tv_promax_upload({ navigation }) {
   };
 
   // const fetchAllCinematicsCategory = async () => {
-    const fetchAllCinematicsCategory = async (token, lang) => {
+    const fetchAllCinematicsCategory = async (token) => {
     //console.log("Categry in id", selectedItemId)
     // const token = authToken;
     try {
@@ -241,7 +241,7 @@ export default function Tv_promax_upload({ navigation }) {
 
       const categories = result.AllCategories.map((category) => ({
         label:
-          lang === "fr" && category.french_name
+          language === "fr" && category.french_name
             ? category.french_name
             : category.name,
         // label: category.name,
@@ -250,7 +250,7 @@ export default function Tv_promax_upload({ navigation }) {
 
       setData(categories);
 
-      // await fetchAllSubCategory(token, lang, category);
+      // await fetchAllSubCategory(token, category);
       // console.log("AllCategories---", result.AllCategories);
       // setData(result.AllCategories);
     } catch (error) {
@@ -262,8 +262,8 @@ export default function Tv_promax_upload({ navigation }) {
 
     const fetchAllSubCategory = async (category) => {
 
-      console.log("langiuuuuuuuuuuuuuuuuuuuuuuu---------", language);
-      console.log("category---------", category);
+      // console.log("langiuuuuuuuuuuuuuuuuuuuuuuu---------", language);
+      // console.log("category---------", category);
 
     const token = authToken;
     try {

@@ -353,6 +353,60 @@ export default function ViewVideo({navigation, route}) {
   };
 
   //------------------------------------\\
+  //------------------------------------\\
+       //----------------------------------\\
+        const handleDownload = async () => {
+          if (!pastedURL) {
+            console.log('Please Add Video URL');
+            return;
+          }
+      
+          // Check if permission is already granted
+          const permissionGranted = await checkStoragePermission();
+          if (permissionGranted) {
+            downloadFile();
+          }
+        };
+        const checkStoragePermission = async () => {
+          try {
+            const granted = await PermissionsAndroid.check(
+              PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+            );
+      
+            if (granted) {
+              return true; // Permission already granted
+            } else {
+              return await requestForStoragePermission();
+            }
+          } catch (err) {
+            console.warn(err);
+            return false;
+          }
+        };
+      
+        const requestForStoragePermission = async () => {
+          try {
+            const granted = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+              {
+                title: 'Downloader App Storage Permission',
+                message:
+                  'Downloader App needs access to your storage ' +
+                  'so you can download files',
+                buttonNeutral: 'Ask Me Later',
+                buttonNegative: 'Cancel',
+                buttonPositive: 'OK',
+              }
+            );
+      
+            return granted === PermissionsAndroid.RESULTS.GRANTED;
+          } catch (err) {
+            console.warn(err);
+            return false;
+          }
+        };
+        //------------------------------------\\
+        
 
   const dismissSnackbar = () => {
     setsnackbarVisible(false);
@@ -1185,7 +1239,8 @@ export default function ViewVideo({navigation, route}) {
                   width: wp(10),
                   height: hp(5),
                 }}>
-                <TouchableOpacity onPress={() => handleUpdatePassword()}>
+                   <TouchableOpacity onPress={handleDownload}>
+                {/* <TouchableOpacity onPress={() => handleUpdatePassword()}> */}
                   <Download height={20} width={20} />
                 </TouchableOpacity>
               </View>
@@ -1309,7 +1364,7 @@ export default function ViewVideo({navigation, route}) {
                   alignItems: "center",
                 }}
               >
-                <Text>{t('NoCommentsYet')}</Text>
+                <Text style={{color:'black'}}>{t('NoCommentsYet')}</Text>
               </View>
             ) : (
               <FlatList

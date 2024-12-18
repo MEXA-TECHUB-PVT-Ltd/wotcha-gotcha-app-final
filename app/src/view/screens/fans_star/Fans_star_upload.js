@@ -207,7 +207,7 @@ export default function Fans_star_upload({ navigation }) {
   };
 
   // const fetchAllCinematicsCategory = async () => {
-    const fetchAllCinematicsCategory = async (token, lang) => {
+    const fetchAllCinematicsCategory = async (token) => {
     //console.log("Categry in id", selectedItemId)
     // const token = authToken;
     try {
@@ -226,7 +226,7 @@ export default function Fans_star_upload({ navigation }) {
 
       const categories = result.AllCategories.map((category) => ({
         label:
-          lang === "fr" && category.french_name
+          language === "fr" && category.french_name
             ? category.french_name
             : category.name,
         // label: category.name,

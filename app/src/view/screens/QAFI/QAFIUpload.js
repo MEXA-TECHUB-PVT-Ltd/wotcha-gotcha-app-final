@@ -155,7 +155,7 @@ import { useIsFocused } from "@react-navigation/native";
     fetchLanguage();
   }, [isFocused, authToken]);
 
-    const fetchCategory = async (token, lang) => {
+    const fetchCategory = async (token) => {
       try {
         const response = await fetch(`${base_url}qafi/category/getAll?page=1&limit=10000`, {
           method: 'GET',
@@ -169,7 +169,7 @@ import { useIsFocused } from "@react-navigation/native";
           const categories = data.AllCategories.map(category => ({
             // label: category.name,
             label:
-            lang === "fr" && category.french_name
+            language === "fr" && category.french_name
               ? category.french_name
               : category.name,
             value: category.id.toString()
@@ -403,6 +403,14 @@ import { useIsFocused } from "@react-navigation/native";
       const handleSubCategoryBlur = () => {
         setIsSubCategoryActive(false);
       };
+      const handleCommentChange = (text) => {
+        setComment(text);
+    
+        // Remove the error message if the user starts typing
+        if (profileNameError) {
+          setProfileNameError('');
+        }
+      };
     return (
       <KeyboardAvoidingView
         style={{flex: 1, backgroundColor: 'white'}}
@@ -493,7 +501,8 @@ import { useIsFocused } from "@react-navigation/native";
               placeholder={t('AddQAFI')}
               placeholderTextColor="#B0B0B0"
               value={comment}
-              onChangeText={text => setComment(text)}
+              // onChangeText={text => setComment(text)}
+              onChangeText={handleCommentChange}
               //height={hp(5)}
             />
             
@@ -524,7 +533,8 @@ import { useIsFocused } from "@react-navigation/native";
                 fontWeight: 'bold',
                 fontFamily: 'Inter',
               }}>
-                {t('AddImage')}
+                {/* {t('AddImage')} */}
+                {imageUri ? t('ChangeImage') : t('AddImage')}
               
             </Text>
           </TouchableOpacity>

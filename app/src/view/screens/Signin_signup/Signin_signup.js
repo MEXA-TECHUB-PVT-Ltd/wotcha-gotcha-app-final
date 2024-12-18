@@ -325,7 +325,7 @@ const App = ({ navigation }) => {
 
   const handleBlur = () => {
     setIsTextInputActive(false);
-    setsignin_email(signin_email.trim());
+    setsignin_email((prevEmail) => prevEmail.trim());
   };
   const handleFocus1 = () => {
     setIsTextInputActive1(true);
@@ -347,7 +347,7 @@ const App = ({ navigation }) => {
 
   const handleBlur3 = () => {
     setIsTextInputActive3(false);
-    setsignup_email(signup_email.trim());
+    setsignup_email((prevEmail) => prevEmail.trim());
   };
   const handleFocus4 = () => {
     setIsTextInputActive4(true);
@@ -666,7 +666,8 @@ const App = ({ navigation }) => {
                 <TextInput
                   mode="outlined"
                   label={t('signin.EmailAddress')}
-                  onChangeText={(text) => setsignin_email(text)}
+                  // onChangeText={(text) => setsignin_email(text)}
+                  onChangeText={(text) => setsignin_email(text.trimStart())}
                   style={styles.ti}
                   outlineColor="#0000001F"
                   placeholderTextColor={"#646464"}
@@ -860,7 +861,8 @@ const App = ({ navigation }) => {
                   mode="outlined"
                   label={t('signin.EmailAddress')}
                   // label="Email Address"
-                  onChangeText={(text) => setsignup_email(text)}
+                  // onChangeText={(text) => setsignup_email(text)}
+                  onChangeText={(text) => setsignup_email(text.trimStart())}
                   style={styles.ti}
                   outlineColor="#0000001F"
                   placeholderTextColor={"#646464"}

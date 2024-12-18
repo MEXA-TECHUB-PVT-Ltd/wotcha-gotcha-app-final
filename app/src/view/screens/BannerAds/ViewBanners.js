@@ -6,15 +6,11 @@ import {
   Text,
   Image,
   ActivityIndicator,
-  KeyboardAvoidingView,
-  ScrollView,
   StatusBar,
-  ImageBackground,
   View,
   TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
-import RBSheet from "react-native-raw-bottom-sheet";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Link from "../../../assets/svg/Link.svg";
 import { useTranslation } from 'react-i18next';
@@ -32,12 +28,8 @@ export default function ViewBanners({ navigation }) {
   const [authToken, setAuthToken] = useState("");
   const { t } = useTranslation();
   const [userId, setUserId] = useState("");
-
   const [loading, setLoading] = useState(false);
-
-  const [allBanners, setAllBanners] = useState(false);
-
-
+  const [allBanners, setAllBanners] = useState([]);
   useEffect(() => {
     const getAuthToken = async () => {
       try {
@@ -73,13 +65,6 @@ export default function ViewBanners({ navigation }) {
 
 
 
-
-  useEffect(() => {
-    if (authToken && userId) {
-      fetchBanners(userId)
-    }
-  }, [authToken, userId]);
-
   const fetchBanners = async (userId) => {
     const token = authToken;
     setLoading(true);
@@ -90,15 +75,17 @@ export default function ViewBanners({ navigation }) {
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         }
       );
 
       if (response.ok) {
         const data = await response.json();
+        const Banners = data.AllBanners;
         // Use the data from the API to set the categories
-        setAllBanners(data.AllBanners);
+        console.log('data of banner------------',Banners )
+        setAllBanners(Banners);
       } else {
         console.error(
           "Failed to fetch user banner:",
@@ -112,6 +99,11 @@ export default function ViewBanners({ navigation }) {
     setLoading(false); 
   };
 
+  useEffect(() => {
+    if (userId) {
+      fetchBanners(userId)
+    }
+  }, [userId]);
   const goToScreen = () => {
     navigation.navigate("AddBanner");
   };
@@ -284,7 +276,11 @@ export default function ViewBanners({ navigation }) {
          {/* <ActivityIndicator size="large" color="#0000ff" style={styles.loading} /> */}
        </View>
       ) : allBanners.length === 0 ? (
-        <Text style={styles.placeholder}>Your ads will show here</Text>
+        <View style={{flex:1, justifyContent:'center',alignItems:'center'}}>
+
+          <Text style={styles.placeholder}>Your ads will show here</Text>
+
+        </View>
       ) : (
         <FlatList
           style={{ flexGrow: 1 }}
@@ -313,7 +309,7 @@ export default function ViewBanners({ navigation }) {
           alignItems: "center",
         }}
       >
-        {loading && <ActivityIndicator size="large" color="#FACA4E" />}
+        {/* {loading && <ActivityIndicator size="large" color="#FACA4E" />} */}
       </View>
     </View>
   );
@@ -325,7 +321,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   placeholder: {
-    flex: 1,
+ 
     justifyContent: 'center',
     alignItems: 'center',
     fontSize: 18,

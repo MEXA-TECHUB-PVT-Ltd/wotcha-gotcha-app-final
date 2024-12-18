@@ -1544,7 +1544,7 @@ import axios from "axios";
 
 import Shares from "react-native-share";
 import { base_url } from "../../../../baseUrl";
-
+import { useTranslation } from "react-i18next";
 export default function ProductDetails({ navigation, route }) {
   const [imageUri, setImageUri] = useState(null);
   const [userId, setUserId] = useState("");
@@ -1570,8 +1570,8 @@ export default function ProductDetails({ navigation, route }) {
   const [loading, setLoading] = useState(false);
   const [offerId, setOfferId] = useState("");
   const receivedData = route.params?.ProductDetails;
-
-  console.log("Recieved Data", receivedData);
+   const { t } = useTranslation();
+  // console.log("Recieved Data", receivedData);
 
 
   const [reset, setReset] = useState(false); // State to trigger reset
@@ -1803,7 +1803,7 @@ export default function ProductDetails({ navigation, route }) {
     console.log("userId", userId);
     console.log("price", offerValue);
     const token = authToken;
-    const apiUrl = "https://watch-gotcha-be.mtechub.com/item/sendOffer";
+    const apiUrl = base_url+ "item/sendOffer";
 
     const requestData = {
       item_id: receivedData.id,
@@ -1843,7 +1843,7 @@ export default function ProductDetails({ navigation, route }) {
         setOfferId(data);
         setLoading(false);
         //sendNotification()
-
+        handleUpdatePassword()
         createNotification();
         //handleUpdatePassword();
 
@@ -1913,7 +1913,7 @@ export default function ProductDetails({ navigation, route }) {
     console.log("userId------", userId);
     console.log("price----", priceOffer);
     const token = authToken;
-    const apiUrl = "https://watch-gotcha-be.mtechub.com/item/sendOffer";
+    const apiUrl = base_url + "item/sendOffer";
 
     const requestData = {
       item_id: receivedData.id,
@@ -1986,7 +1986,7 @@ export default function ProductDetails({ navigation, route }) {
 
     const token = authToken;
     const apiUrl =
-      "https://watch-gotcha-be.mtechub.com/notification/createNotification";
+      base_url + "notification/createNotification";
 
     const requestData = {
       sender_id: userId,
@@ -2010,7 +2010,8 @@ export default function ProductDetails({ navigation, route }) {
         const data = await response.json();
         console.log("API Response:", data);
         //handleUpdatePassword();
-        sendNotification();
+        handleUpdatePassword();
+        // sendNotification();
 
         // Handle the response data as needed
       } else {
@@ -2490,7 +2491,7 @@ export default function ProductDetails({ navigation, route }) {
                   fontSize: hp(1.6),
                 }}
               >
-                Send Offer
+               {t('SendOffer')}
               </Text>
             </TouchableOpacity>
 
@@ -2529,7 +2530,7 @@ export default function ProductDetails({ navigation, route }) {
                   fontSize: hp(1.6),
                 }}
               >
-                Alert
+                 {t('Alert')}
               </Text>
             </View>
 
@@ -2566,7 +2567,7 @@ export default function ProductDetails({ navigation, route }) {
                   fontSize: hp(1.6),
                 }}
               >
-                Book Mark
+               {t('BookMark')}
               </Text>
             </View>
 
@@ -2589,7 +2590,8 @@ export default function ProductDetails({ navigation, route }) {
                   fontSize: hp(1.6),
                 }}
               >
-                Share
+                   {t('Share')}
+                
               </Text>
             </View>
           </View>
@@ -2624,7 +2626,7 @@ export default function ProductDetails({ navigation, route }) {
             alignItems: "center",
           }}
         >
-          <Text style={styles.maintext}>Send Offer</Text>
+          <Text style={styles.maintext}>{t('SendOffer')}</Text>
           <TouchableOpacity onPress={() => ref_RBSendOffer.current.close()}>
             <Ionicons
               name="close"
@@ -2809,7 +2811,8 @@ export default function ProductDetails({ navigation, route }) {
               fontSize: hp(1.8),
             }}
           >
-            Offer a different amount
+            {t('OfferADifferentAmount')}
+  
           </Text>
         </TouchableOpacity>
 
@@ -2822,7 +2825,7 @@ export default function ProductDetails({ navigation, route }) {
           }}
         >
           <CustomButton
-            title={"Send Offer"}
+            title={t('SendOffer')}
             load={loading}
             // checkdisable={inn == '' && cm == '' ? true : false}
             customClick={() => {
@@ -3003,6 +3006,7 @@ export default function ProductDetails({ navigation, route }) {
             <TextInput
               placeholderTextColor={"#848484"}
               keyboardType="numeric"
+              color='black'
               value={priceOffer} // Bind the value to the state variable
               onChangeText={(text) => setPriceOffer(text)} // Update state on text change
               placeholder={isFocused ? "" : "Please Enter Your Price"} // Conditionally render placeholder
@@ -3060,7 +3064,7 @@ export default function ProductDetails({ navigation, route }) {
           }}
         >
           <CustomButton
-            title={"Send Offer"}
+            title={t('SendOffer')}
             load={false}
             // checkdisable={inn == '' && cm == '' ? true : false}
             customClick={() => {
@@ -3080,36 +3084,36 @@ export default function ProductDetails({ navigation, route }) {
       </RBSheet>
 
       <CustomSnackbar
-        message={"Success"}
-        messageDescription={"Your Offer Sent Successfully"}
+        message={t('Success')}
+        messageDescription={t('YourOfferSentSuccessfully')} 
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
 
       <CustomSnackbar
-        message={"Success"}
-        messageDescription={"You will get notified to the relevant feed"}
+        message={t('Success')}
+        messageDescription={t('YouWillGetNotifiedToTheRelevantFeed')}
         onDismiss={dismissSnackbarAlert} // Make sure this function is defined
         visible={snackbarVisibleAlert}
       />
 
       <CustomSnackbar
-        message={"Success"}
-        messageDescription={"Item saved successfully"}
+        message={t('Success')}
+        messageDescription={t('ItemSavedSuccessfully')} 
         onDismiss={dismissSnackbarSaved} // Make sure this function is defined
         visible={snackbarVisibleSaved}
       />
 
       <CustomSnackbar
-        message={"Alert"}
-        messageDescription={"Kindly Select Price First"}
+        message={t('Alert')}
+        messageDescription={t('KindlySelectPriceFirst')} 
         onDismiss={dismissSnackbarPrice} // Make sure this function is defined
         visible={snackbarVisiblePrice}
       />
 
       <CustomSnackbar
-        message={"Success"}
-        messageDescription={"Item Removed Successfully"}
+        message={t('Success')}
+        messageDescription={t('ItemRemovedSuccessfully')} 
         onDismiss={dismissSnackbarRemove} // Make sure this function is defined
         visible={snackbarVisibleRemoveSave}
       />

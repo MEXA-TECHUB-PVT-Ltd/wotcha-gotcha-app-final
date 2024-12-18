@@ -1013,7 +1013,7 @@ export default function Conversation({ navigation, route }) {
             alignItems: "center",
             height: "100%",
             width: wp(39),
-            justifyContent: "space-between",
+            justifyContent: 'space-evenly',
             alignSelf: "center",
           }}
         >
@@ -1022,11 +1022,11 @@ export default function Conversation({ navigation, route }) {
         flexDirection: "row",
         alignItems: "center",
         height: hp(5),
-        backgroundColor: 'red',
         borderRadius: hp(5) / 2,
         overflow: "hidden",
+
       }}
-    >
+     >
       <TouchableOpacity
         onPress={() =>
           navigation.navigate("ViewElseProfile", {
@@ -1059,7 +1059,7 @@ export default function Conversation({ navigation, route }) {
           />
         )}
       </TouchableOpacity>
-    </View>
+      </View>
           {/* {receivedData?.userimage !== null ? (
             <TouchableOpacity
               onPress={() =>
@@ -1101,7 +1101,7 @@ export default function Conversation({ navigation, route }) {
           <Text
             style={{
               color: "#1E2022",
-              marginLeft: wp(-10),
+              // marginLeft: wp(-10),
               fontFamily: "Inter-Bold",
               fontSize: hp(2.1),
             }}
@@ -1109,6 +1109,7 @@ export default function Conversation({ navigation, route }) {
             {receivedData?.username}
           </Text>
         </View>
+
       </View>
 
       <View style={{ flex: 1 }}>
@@ -1198,10 +1199,17 @@ export default function Conversation({ navigation, route }) {
           value={commentText} // Bind the value to the state variable
           onChangeText={(text) => setCommentText(text)} // Update state on text change
           placeholder={t('WriteCommentHere')}  
+          color='black'
           style={{ flex: 1 }}
         />
 
-        <TouchableOpacity onPress={() => onSend()}>
+        <TouchableOpacity
+        //  onPress={() => onSend()}
+        onPress={() => {
+          onSend(); // Ensure this is a valid function
+          setCommentText(''); // Ensure setCommentText is properly initialized with useState
+        }}
+         >
           <ButtonSend />
         </TouchableOpacity>
       </View>

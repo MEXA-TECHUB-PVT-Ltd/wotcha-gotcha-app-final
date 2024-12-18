@@ -204,7 +204,7 @@ export default function Kids_vid_upload({ navigation }) {
   };
 
   // const fetchAllCinematicsCategory = async () => {
-    const fetchAllCinematicsCategory = async (token, lang) => {
+    const fetchAllCinematicsCategory = async (token) => {
     //console.log("Categry in id", selectedItemId)
     // const token = authToken;
     try {
@@ -222,7 +222,7 @@ export default function Kids_vid_upload({ navigation }) {
       // const result = dummyData;
       const categories = result.AllCategories.map((category) => ({
         label:
-          lang === "fr" && category.french_name
+          language === "fr" && category.french_name
             ? category.french_name
             : category.name,
         // label: category.name,
@@ -237,11 +237,11 @@ export default function Kids_vid_upload({ navigation }) {
   };
 
   // const fetchAllSubCategory = async (category) => {
-    // const fetchAllSubCategory = async (token, lang, category) => {
+    // const fetchAllSubCategory = async (token, category) => {
 
       const fetchAllSubCategory = async (category) => {
-        console.log("langiuuuuuuuuuuuuuuuuuuuuuuu---------", language);
-        console.log("category---------", category);
+        // console.log("langiuuuuuuuuuuuuuuuuuuuuuuu---------", language);
+        // console.log("category---------", category);
   
       const token = authToken;
     // const token = authToken;

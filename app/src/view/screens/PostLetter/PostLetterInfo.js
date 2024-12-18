@@ -11,42 +11,43 @@ import {
   View,
   TouchableOpacity,
   Platform,
-} from 'react-native';
-import React, { useState, useEffect, useRef } from 'react';
-import RBSheet from 'react-native-raw-bottom-sheet';
-import Entypo from 'react-native-vector-icons/Entypo';
+  Alert,
+} from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import RBSheet from "react-native-raw-bottom-sheet";
+import Entypo from "react-native-vector-icons/Entypo";
 
-import { Button, Divider, TextInput } from 'react-native-paper';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import { appImages } from '../../../assets/utilities/index';
-import CustomButton from '../../../assets/Custom/Custom_Button';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import PublicLetter from '../../../assets/svg/PublicLetter.svg';
-import PrivateLetter from '../../../assets/svg/PrivateLetter.svg';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useTranslation } from 'react-i18next';
+import { Button, Divider, TextInput } from "react-native-paper";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import { appImages } from "../../../assets/utilities/index";
+import CustomButton from "../../../assets/Custom/Custom_Button";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import PublicLetter from "../../../assets/svg/PublicLetter.svg";
+import PrivateLetter from "../../../assets/svg/PrivateLetter.svg";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTranslation } from "react-i18next";
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP,
   widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import { SelectCountry, Dropdown } from 'react-native-element-dropdown';
-import Headers from '../../../assets/Custom/Headers';
-import CustomSnackbar from '../../../assets/Custom/CustomSnackBar';
-import { base_url } from '../../../../../baseUrl';
-import Loader from '../../../assets/Custom/Loader';
+} from "react-native-responsive-screen";
+import { SelectCountry, Dropdown } from "react-native-element-dropdown";
+import Headers from "../../../assets/Custom/Headers";
+import CustomSnackbar from "../../../assets/Custom/CustomSnackBar";
+import { base_url } from "../../../../../baseUrl";
+import Loader from "../../../assets/Custom/Loader";
 import { useIsFocused } from "@react-navigation/native";
 export default function PostLetterInfo({ navigation }) {
   const { t } = useTranslation();
-  const [name, setName] = useState('');
-  const [Username, setUserName] = useState('');
-  const [address, setAddress] = useState('');
-  const [contact, setContact] = useState('');
-  const [email, setEmail] = useState('');
-  const [categoryId, setCategoryId] = useState('');
+  const [name, setName] = useState("");
+  const [Username, setUserName] = useState("");
+  const [address, setAddress] = useState("");
+  const [contact, setContact] = useState("");
+  const [email, setEmail] = useState("");
+  const [categoryId, setCategoryId] = useState("");
 
-  const [categoryPublicType, setCategoryPublicType] = useState('');
+  const [categoryPublicType, setCategoryPublicType] = useState("");
 
   const [categoriesSelect, setCategorySelect] = useState([]);
 
@@ -69,18 +70,17 @@ export default function PostLetterInfo({ navigation }) {
 
   const ref_RBSendOffer = useRef(null);
 
-  const [authToken, setAuthToken] = useState('');
+  const [authToken, setAuthToken] = useState("");
 
-  const [letterType, setLetterTypes] = useState('Public Letter');
-
+  const [letterType, setLetterTypes] = useState("Public Letter");
 
   const [snackbarVisible, setsnackbarVisible] = useState(false);
 
   const [userImage, setUserImage] = useState();
 
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState("");
 
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState("");
   const [categoryError, setCategoryError] = useState("");
   const [subcategoryError, setSubcategoryError] = useState("");
   const [subCate, setSubCate] = useState([]);
@@ -131,12 +131,11 @@ export default function PostLetterInfo({ navigation }) {
   //   try {
   //     const result3 = await AsyncStorage.getItem('userName');
   //     if (result3 !== null) {
-  //       setUserName(result3);  
+  //       setUserName(result3);
   //     }
   //   } catch (error) {
   //   }
   // };
-
 
   // const authTokenAndId = async (id, token) => {
   //   fetchUser(id, token);
@@ -176,16 +175,15 @@ export default function PostLetterInfo({ navigation }) {
 
   //----------------------------------\\
 
-
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [storedUserId, storedUserName, storedAuthToken] = await Promise.all([
-          AsyncStorage.getItem('userId '),
-          AsyncStorage.getItem('userName'),
-          AsyncStorage.getItem('authToken ')
-        ]);
+        const [storedUserId, storedUserName, storedAuthToken] =
+          await Promise.all([
+            AsyncStorage.getItem("userId "),
+            AsyncStorage.getItem("userName"),
+            AsyncStorage.getItem("authToken "),
+          ]);
 
         if (storedUserId) setUserId(storedUserId);
         if (storedUserName) setUserName(storedUserName);
@@ -196,7 +194,7 @@ export default function PostLetterInfo({ navigation }) {
           await fetchUser(storedUserId, storedAuthToken);
         }
       } catch (error) {
-        console.error('Error fetching initial data:', error);
+        console.error("Error fetching initial data:", error);
       } finally {
         setLoading(false);
       }
@@ -215,7 +213,6 @@ export default function PostLetterInfo({ navigation }) {
           setLanguage(storedLanguage);
           console.log("lanugage--------", storedLanguage);
           await fetchCategory(authToken, storedLanguage);
-          
 
           // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
         }
@@ -227,65 +224,66 @@ export default function PostLetterInfo({ navigation }) {
     fetchLanguage();
   }, [isFocused, authToken]);
 
- 
   const fetchUser = async (id, token) => {
     try {
       const response = await fetch(`${base_url}user/getUser/${id}`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (response.ok) {
         const data = await response.json();
         setUserImage(data.user.image);
-        
       } else {
-        console.error('Failed to fetch user:', response.status, response.statusText);
+        console.error(
+          "Failed to fetch user:",
+          response.status,
+          response.statusText
+        );
       }
     } catch (error) {
-      console.error('Error fetching user:', error);
+      console.error("Error fetching user:", error);
     }
   };
-  console.log('user-----------about ----', authToken )
-  const fetchCategory = async (token, lang)  => {
+  console.log("user-----------about ----", authToken);
+  const fetchCategory = async (token) => {
     // const token = token;
-    console.log('user-----------', authToken )
+    console.log("user-----------", authToken);
     try {
       const response = await fetch(
-        base_url + 'discCategory/getAllDiscCategories?page=1&limit=10000',
+        base_url + "discCategory/getAllDiscCategories?page=1&limit=10000",
         {
-          method: 'GET',
+          method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
 
       if (response.ok) {
         const data = await response.json();
-      
-        const categories = data.AllCategories.map(category => ({
+
+        const categories = data.AllCategories.map((category) => ({
           // label: category.name, // Use the "name" property as the label
           label:
-          lang === "fr" && category.french_name
-            ? category.french_name
-            : category.name,
+            language === "fr" && category.french_name
+              ? category.french_name
+              : category.name,
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
-     
+
         setCategorySelect(categories); // Update the state with the formatted category data
-        
       } else {
         console.error(
-          'Failed to fetch categ',
+          "Failed to fetch categ",
           response.status,
-          response.statusText,
+          response.statusText
         );
       }
     } catch (error) {
-      console.error('Errors:', error);
+      console.error("Errors:", error);
     }
   };
 
@@ -301,23 +299,32 @@ export default function PostLetterInfo({ navigation }) {
   }, [authToken, categoryId]);
 
   const fetchAllSubCategory = async (categoryId) => {
-    console.log("langiuuuuuuuuuuuuuuuuuuuuuuu---------", language);
-    console.log("category---------", categoryId);
+    console.log("langiuuuuuuuuu letter--------", language);
+    console.log("category-  letter--------", categoryId);
     try {
-      const response = await fetch(`${base_url}discSubCategory/get-all?search=Test&category_id=${categoryId}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${authToken}`
+      const response = await fetch(
+        `${base_url}discSubCategory/get-all?category_id=${categoryId}`,
+        {
+          // const response = await fetch(`${base_url}discSubCategory/get-all?search=Test&category_id=${categoryId}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
         }
-      });
+      );
 
       if (response.ok) {
         const result = await response.json();
-
+       // Check if subcategories are empty, null, or undefined
+       if (!result.data || result.data.length === 0) {
+        setSubcategoryError('No category to select');
+        setSubCate([]); // Set empty list for subcategories
+        return;
+      }
         const subcategories = result.data.map((category) => ({
           // label: category.name, // Use the "name" property as the label
           label:
-          language === "fr" && category.french_name
+            language === "fr" && category.french_name
               ? category.french_name
               : category.name,
           value: category.id.toString(), // Convert "id" to a string for the value
@@ -325,20 +332,22 @@ export default function PostLetterInfo({ navigation }) {
         const reverseData = subcategories.reverse();
         console.log("result---------", reverseData);
         setSubCate(reverseData);
-  
+        setSubcategoryError('');
         // const reverseData = result.data
         // console.log('sub cate data for -------', reverseData)
         // setSubCate(reverseData);
       } else {
-        console.error('Failed to fetch subcategories:', response.status, response.statusText);
+        const errorData = await response.json();
+        if (errorData.message === "Sub Categories Not Found") {
+          setSubcategoryError('No category to select');
+          setSubCate([]); // Set empty list for subcategories
+          return;
+        }
       }
     } catch (error) {
-      console.error('Error fetching subcategories:', error);
+      console.error("Error fetching subcategories:", error);
     }
   };
-
-
-
 
   const handleFocus = () => {
     setIsTextInputActive(true);
@@ -384,30 +393,30 @@ export default function PostLetterInfo({ navigation }) {
   };
 
   const CategoryPublicType = [
-    { label: 'general', value: 'general' },
+    { label: "general", value: "general" },
     {
-      label: 'Celebrities, authorities, leaders',
-      value: 'Celebrities, authorities, leaders',
+      label: "Celebrities, authorities, leaders",
+      value: "Celebrities, authorities, leaders",
     },
   ];
 
-  const setLetterType = value => {
+  const setLetterType = (value) => {
     setLetterTypes(value);
     ref_RBSheetCamera.current.close();
   };
 
   const setType = () => {
     ref_RBSheetCamera.current.close();
-    setLetterType('Private Letter');
+    setLetterType("Private Letter");
 
     ref_RBSendOffer.current.open();
   };
 
   const uploadLetter = () => {
-    if (letterType == 'Public Letter') {
+    if (letterType == "Public Letter") {
       checkOnPublicAndAuthorities();
-    } else if (letterType == 'Private Letter') {
-      navigation.navigate('PostLetterAllUserName', {
+    } else if (letterType == "Private Letter") {
+      navigation.navigate("PostLetterAllUserName", {
         name: name,
         address: address,
         contactNumber: contact,
@@ -419,9 +428,9 @@ export default function PostLetterInfo({ navigation }) {
   };
 
   const checkOnPublicAndAuthorities = () => {
-    console.log('Letter Type', categoryPublicType);
-    if (categoryPublicType === 'general') {
-      navigation.replace('PostLetter', {
+    console.log("Letter Type", categoryPublicType);
+    if (categoryPublicType === "general") {
+      navigation.replace("PostLetter", {
         name: name,
         address: address,
         contactNumber: contact,
@@ -432,7 +441,7 @@ export default function PostLetterInfo({ navigation }) {
         // letterType: 'general',
       });
     } else {
-      navigation.replace('PostLetter', {
+      navigation.replace("PostLetter", {
         name: name,
         address: address,
         contactNumber: contact,
@@ -445,28 +454,25 @@ export default function PostLetterInfo({ navigation }) {
     }
   };
 
-
-
   const [isCategoryActive, setIsCategoryActive] = useState(false); // Track if category dropdown is active
   const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
-    const handleCategoryFocus = () => {
-      setIsCategoryActive(true);
-      setIsSubCategoryActive(false); // Make the sub-category dropdown inactive
-    };
-    
-    const handleCategoryBlur = () => {
-      setIsCategoryActive(false);
-    };
-    
-    const handleSubCategoryFocus = () => {
-      setIsSubCategoryActive(true);
-      setIsCategoryActive(false); // Make the category dropdown inactive
-    };
-    
-    const handleSubCategoryBlur = () => {
-      setIsSubCategoryActive(false);
-    };
+  const handleCategoryFocus = () => {
+    setIsCategoryActive(true);
+    setIsSubCategoryActive(false); // Make the sub-category dropdown inactive
+  };
 
+  const handleCategoryBlur = () => {
+    setIsCategoryActive(false);
+  };
+
+  const handleSubCategoryFocus = () => {
+    setIsSubCategoryActive(true);
+    setIsCategoryActive(false); // Make the category dropdown inactive
+  };
+
+  const handleSubCategoryBlur = () => {
+    setIsSubCategoryActive(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -480,7 +486,7 @@ export default function PostLetterInfo({ navigation }) {
         <Headers
           showBackIcon={true}
           showText={true}
-          text={t('PostLetters')}
+          text={t("PostLetters")}
           onPress={() => navigation.goBack()}
         />
       </View>
@@ -488,12 +494,13 @@ export default function PostLetterInfo({ navigation }) {
       <ScrollView style={{ flexGrow: 1 }}>
         <View
           style={{
-            flexDirection: 'row',
+            flexDirection: "row",
             marginHorizontal: wp(8),
-            alignItems: 'center',
+            alignItems: "center",
             marginTop: hp(3),
             height: hp(8),
-          }}>
+          }}
+        >
           {userImage !== undefined ? (
             <View
               style={{
@@ -501,13 +508,14 @@ export default function PostLetterInfo({ navigation }) {
                 marginLeft: wp(0.5),
                 height: wp(12),
                 borderRadius: wp(12) / 2,
-              }}>
+              }}
+            >
               <Image
                 source={{ uri: userImage }}
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  resizeMode: 'cover',
+                  width: "100%",
+                  height: "100%",
+                  resizeMode: "cover",
                   borderRadius: wp(12) / 2,
                 }}
               />
@@ -518,25 +526,27 @@ export default function PostLetterInfo({ navigation }) {
                 width: wp(10),
                 marginLeft: wp(3),
                 height: wp(10),
-                overflow: 'hidden',
+                overflow: "hidden",
                 borderRadius: wp(10) / 2,
-              }}>
+              }}
+            >
               <MaterialCommunityIcons
                 style={{ marginTop: hp(0.5) }}
-                name={'account-circle'}
+                name={"account-circle"}
                 size={35}
-                color={'#FACA4E'}
+                color={"#FACA4E"}
               />
             </View>
           )}
 
           <Text
             style={{
-              color: '#333333',
+              color: "#333333",
               marginLeft: wp(3),
-              fontFamily: 'Inter',
-              fontWeight: 'bold',
-            }}>
+              fontFamily: "Inter",
+              fontWeight: "bold",
+            }}
+          >
             {Username}
           </Text>
           {/* <TouchableOpacity
@@ -567,78 +577,71 @@ export default function PostLetterInfo({ navigation }) {
 
         <Text
           style={{
-            color: '#FACA4E',
-            fontFamily: 'Inter-Medium',
+            color: "#FACA4E",
+            fontFamily: "Inter-Medium",
             fontSize: hp(2.3),
             marginTop: hp(3),
             marginLeft: wp(8),
-          }}>
-            {t('SenderInformation')}
+          }}
+        >
+          {t("SenderInformation")}
           {/* Sender's Information */}
         </Text>
 
         <TextInput
           mode="outlined"
-          label={t('Name')}
-          onChangeText={text => setName(text)}
-          style={[styles.ti, { marginTop: '5%' }]}
+          label={t("Name")}
+          onChangeText={(text) => setName(text)}
+          style={[styles.ti, { marginTop: "5%" }]}
           outlineColor="#0000001F"
-          placeholderTextColor={'#404040'}
+          placeholderTextColor={"#404040"}
           activeOutlineColor="#FACA4E"
           autoCapitalize="none"
           onFocus={handleFocus}
           onBlur={handleBlur}
- 
         />
 
         <TextInput
           mode="outlined"
-          label={t('Address')}
-          onChangeText={text => setAddress(text)}
-          style={[styles.ti, { marginTop: '5%' }]}
+          label={t("Address")}
+          onChangeText={(text) => setAddress(text)}
+          style={[styles.ti, { marginTop: "5%" }]}
           outlineColor="#0000001F"
-          placeholderTextColor={'#404040'}
+          placeholderTextColor={"#404040"}
           activeOutlineColor="#FACA4E"
           autoCapitalize="none"
           onFocus={handleFocusAddress}
           onBlur={handleBlurAddress}
- 
         />
 
         <TextInput
           mode="outlined"
-          label={t('ContactNumber')}
-          onChangeText={text => setContact(text)}
-          style={[styles.ti, { marginTop: '5%' }]}
+          label={t("ContactNumber")}
+          onChangeText={(text) => setContact(text)}
+          style={[styles.ti, { marginTop: "5%" }]}
           outlineColor="#0000001F"
-          placeholderTextColor={'#404040'}
+          placeholderTextColor={"#404040"}
           activeOutlineColor="#FACA4E"
           autoCapitalize="none"
           onFocus={handleFocusContact}
           onBlur={handleBlurContact}
           keyboardType="numeric" // Set keyboardType to 'numeric'
-
-   
         />
 
         <TextInput
           mode="outlined"
-          label={t('EmailAddress')}
-          onChangeText={text => setEmail(text)}
-          style={[styles.ti, { marginTop: '5%' }]}
+          label={t("EmailAddress")}
+          onChangeText={(text) => setEmail(text)}
+          style={[styles.ti, { marginTop: "5%" }]}
           outlineColor="#0000001F"
-          placeholderTextColor={'#404040'}
+          placeholderTextColor={"#404040"}
           activeOutlineColor="#FACA4E"
           autoCapitalize="none"
           onFocus={handleFocusEmail}
           onBlur={handleBlurEmail}
-  
         />
 
-
-
-
-        <View style={{ marginHorizontal: wp(7)}}>
+        <View style={{ marginHorizontal: wp(7) }}>
           <Dropdown
             style={
               isCategoryActive
@@ -647,30 +650,29 @@ export default function PostLetterInfo({ navigation }) {
             }
             containerStyle={{
               marginTop: 3,
-              alignSelf: 'center',
+              alignSelf: "center",
               borderRadius: wp(3),
-              width: '100%',
+              width: "100%",
             }}
-    
             placeholderStyle={{
-              color: '#121420',
-              fontFamily: 'Inter',
+              color: "#121420",
+              fontFamily: "Inter",
               fontSize: hp(1.8),
             }}
             iconStyle={isFocus ? styles.iconStyle : styles.iconStyleInactive}
-            itemTextStyle={{color: '#000000'}}
-            selectedTextStyle={{fontSize: 16, color: '#000000'}}
+            itemTextStyle={{ color: "#000000" }}
+            selectedTextStyle={{ fontSize: 16, color: "#000000" }}
             value={categoryId}
             data={categoriesSelect}
             search={false}
             maxHeight={200}
             labelField="label"
             valueField="value"
-            placeholder={t('SelectCategory')}
+            placeholder={t("SelectCategory")}
             searchPlaceholder="Search..."
             onFocus={handleCategoryFocus}
             onBlur={handleCategoryBlur}
-            onChange={item => {
+            onChange={(item) => {
               console.log("kon main category id hai----", item.value);
               setCategoryId(item.value);
               setIsFocus(false);
@@ -678,41 +680,46 @@ export default function PostLetterInfo({ navigation }) {
             renderRightIcon={() => (
               <AntDesign
                 style={styles.icon}
-                color={isFocus ? '#000000' : '#000000'}
+                color={isFocus ? "#000000" : "#000000"}
                 name="down"
                 size={15}
               />
             )}
           />
-              <View style={{ marginTop:hp(-3), marginBottom:hp(3)}}>
-                    {categoryError ? <Text style={styles.errorText}>{categoryError}</Text> : null}
-                    </View>
+          <View style={{ marginTop: hp(-3), marginBottom: hp(3) }}>
+            {categoryError ? (
+              <Text style={styles.errorText}>{categoryError}</Text>
+            ) : null}
+          </View>
         </View>
 
         <View style={{ marginHorizontal: wp(7) }}>
           <Dropdown
-           style={
-            isSubCategoryActive
-              ? styles.textInputSelectedCategory
-              : styles.textInputCategoryNonSelected
-          }
+            style={
+              isSubCategoryActive
+                ? styles.textInputSelectedCategory
+                : styles.textInputCategoryNonSelected
+            }
             containerStyle={{
               marginTop: 3,
               alignSelf: "center",
               borderRadius: wp(3),
               width: "100%",
             }}
-
             placeholderStyle={{
               color: "#121420",
               //   fontWeight: '400',
               fontFamily: "Inter",
               fontSize: hp(1.8),
-            
             }}
             iconStyle={isFocus ? styles.iconStyle : styles.iconStyleInactive}
-            itemTextStyle={{ color: "#000000", }}
-            selectedTextStyle={{ fontSize: 16, color: "#000000",   height: 42, textAlignVertical: "center",}}
+            itemTextStyle={{ color: "#000000" }}
+            selectedTextStyle={{
+              fontSize: 16,
+              color: "#000000",
+              height: 42,
+              textAlignVertical: "center",
+            }}
             value={subcategory}
             data={subCate}
             search={false}
@@ -721,11 +728,10 @@ export default function PostLetterInfo({ navigation }) {
             // valueField="id"
             labelField="label"
             valueField="value"
-            placeholder={t('SelectSubCategory')}
+            placeholder={t("SelectSubCategory")}
             searchPlaceholder="Search..."
             onFocus={handleSubCategoryFocus}
             onBlur={handleSubCategoryBlur}
- 
             onChange={(item) => {
               console.log("kon sub category id hai----", item.value);
               setSubCategory(item.value);
@@ -734,25 +740,18 @@ export default function PostLetterInfo({ navigation }) {
             renderRightIcon={() => (
               <AntDesign
                 style={styles.icon}
-                color={isFocus ? '#000000' : '#000000'}
+                color={isFocus ? "#000000" : "#000000"}
                 name="down"
                 size={15}
               />
             )}
           />
-         <View style={{ marginTop:hp(-3), marginBottom:hp(3)}}>
-          {subcategoryError ? <Text style={styles.errorText}>{subcategoryError}</Text> : null}
+          <View style={{ marginTop: hp(1), marginBottom: hp(3) }}>
+            {subcategoryError ? (
+              <Text style={styles.errorText}>{subcategoryError}</Text>
+            ) : null}
           </View>
         </View>
-
-
-
-
-
-
-
-
-
 
         {/* <View
           style={{ marginLeft: wp(8), marginTop: hp(1.8), marginRight: wp(8) }}>
@@ -800,126 +799,135 @@ export default function PostLetterInfo({ navigation }) {
           />
         </View> */}
 
-        <View style={{ marginTop:Platform.OS =="ios"? "15%" : '20%', alignSelf: 'center' }}>
+        <View
+          style={{
+            marginTop: Platform.OS == "ios" ? "15%" : "20%",
+            alignSelf: "center",
+          }}
+        >
           <CustomButton
-            title={t('Next')}
+            title={t("Next")}
             customClick={() => {
               if (
-                name !== '' &&
-                address !== '' &&
-                contact !== '' &&
-                email !== '' &&
-                categoryId !== '' &&
-                subcategory !== '' 
+                name !== "" &&
+                address !== "" &&
+                contact !== "" &&
+                email !== "" &&
+                categoryId !== "" &&
+                subcategory !== ""
                 // categoryPublicType !== ''
               ) {
                 uploadLetter();
               } else {
                 handleUpdatePassword();
               }
-             
             }}
           />
         </View>
       </ScrollView>
-        <RBSheet
-          ref={ref_RBSheetCamera}
-          closeOnDragDown={true}
-          closeOnPressMask={false}
-          animationType="fade"
-          minClosingHeight={0}
-          customStyles={{
-            wrapper: {
-              backgroundColor: 'rgba(52, 52, 52, 0.5)',
-            },
-            draggableIcon: {
-              backgroundColor: 'white',
-            },
-            container: {
-              borderTopLeftRadius: wp(10),
-              borderTopRightRadius: wp(10),
-              height: hp(25),
-            },
-          }}>
-          <View
+      <RBSheet
+        ref={ref_RBSheetCamera}
+        closeOnDragDown={true}
+        closeOnPressMask={false}
+        animationType="fade"
+        minClosingHeight={0}
+        customStyles={{
+          wrapper: {
+            backgroundColor: "rgba(52, 52, 52, 0.5)",
+          },
+          draggableIcon: {
+            backgroundColor: "white",
+          },
+          container: {
+            borderTopLeftRadius: wp(10),
+            borderTopRightRadius: wp(10),
+            height: hp(25),
+          },
+        }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginHorizontal: wp(8),
+            alignItems: "center",
+          }}
+        >
+          <Text
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginHorizontal: wp(8),
-              alignItems: 'center',
-            }}>
+              fontFamily: "Inter-Medium",
+              color: "#303030",
+              fontSize: hp(2.3),
+            }}
+          >
+            {t("SelectLetterType")}
+          </Text>
+          <TouchableOpacity>
+            <Ionicons
+              name="close"
+              size={22}
+              color={"#303030"}
+              onPress={() => ref_RBSheetCamera.current.close()}
+            />
+          </TouchableOpacity>
+        </View>
+
+        <View
+          style={{
+            justifyContent: "space-evenly",
+            marginTop: hp(3),
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => setLetterType("Public Letter")}
+            style={{ flexDirection: "row", marginHorizontal: wp(7) }}
+          >
+            <PublicLetter height={23} width={23} />
+
             <Text
               style={{
-                fontFamily: 'Inter-Medium',
-                color: '#303030',
-                fontSize: hp(2.3),
-              }}>
-                {t('SelectLetterType')}
-    
+                fontFamily: "Inter-Regular",
+                color: "#656565",
+                marginLeft: wp(3),
+                fontSize: hp(2.1),
+              }}
+            >
+              {t("PublicLetter")}
             </Text>
-            <TouchableOpacity>
-              <Ionicons
-                name="close"
-                size={22}
-                color={'#303030'}
-                onPress={() => ref_RBSheetCamera.current.close()}
-              />
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
 
           <View
             style={{
-              justifyContent: 'space-evenly',
+              height: hp(0.1),
+              marginHorizontal: wp(8),
               marginTop: hp(3),
-            }}>
-            <TouchableOpacity
-              onPress={() => setLetterType('Public Letter')}
-              style={{ flexDirection: 'row', marginHorizontal: wp(7) }}>
-              <PublicLetter height={23} width={23} />
+              backgroundColor: "#00000012",
+            }}
+          ></View>
 
-              <Text
-                style={{
-                  fontFamily: 'Inter-Regular',
-                  color: '#656565',
-                  marginLeft: wp(3),
-                  fontSize: hp(2.1),
-                }}>
-                  {t('PublicLetter')}
-              
-              </Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setType()}
+            style={{
+              flexDirection: "row",
+              marginTop: hp(2.5),
+              marginHorizontal: wp(7),
+            }}
+          >
+            <PrivateLetter height={23} width={23} />
 
-            <View
+            <Text
               style={{
-                height: hp(0.1),
-                marginHorizontal: wp(8),
-                marginTop: hp(3),
-                backgroundColor: '#00000012',
-              }}></View>
-
-            <TouchableOpacity
-              onPress={() => setType()}
-              style={{
-                flexDirection: 'row',
-                marginTop: hp(2.5),
-                marginHorizontal: wp(7),
-              }}>
-              <PrivateLetter height={23} width={23} />
-
-              <Text
-                style={{
-                  fontFamily: 'Inter-Regular',
-                  color: '#656565',
-                  marginLeft: wp(3),
-                  fontSize: hp(2.1),
-                }}>
-                  {t('PrivateLetter')}
-                
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </RBSheet>
-
+                fontFamily: "Inter-Regular",
+                color: "#656565",
+                marginLeft: wp(3),
+                fontSize: hp(2.1),
+              }}
+            >
+              {t("PrivateLetter")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </RBSheet>
 
       <RBSheet
         ref={ref_RBSendOffer}
@@ -929,91 +937,97 @@ export default function PostLetterInfo({ navigation }) {
         minClosingHeight={0}
         customStyles={{
           wrapper: {
-            backgroundColor: 'rgba(52, 52, 52, 0.5)',
+            backgroundColor: "rgba(52, 52, 52, 0.5)",
           },
           draggableIcon: {
-            backgroundColor: 'white',
+            backgroundColor: "white",
           },
           container: {
             borderTopLeftRadius: wp(10),
             borderTopRightRadius: wp(10),
             height: hp(55),
           },
-        }}>
+        }}
+      >
         <View
           style={{
             flex: 1,
-            alignItems: 'center',
+            alignItems: "center",
             marginHorizontal: wp(8),
-            justifyContent: 'space-evenly',
-          }}>
-          <Image source={appImages.alert} style={{ resizeMode: 'contain' }} />
+            justifyContent: "space-evenly",
+          }}
+        >
+          <Image source={appImages.alert} style={{ resizeMode: "contain" }} />
 
           <Text
             style={{
-              color: '#333333',
+              color: "#333333",
               marginLeft: wp(1),
               fontSize: hp(2.3),
-              fontFamily: 'Inter-Bold',
-            }}>
-              {t('UnableToPost')}
-              
+              fontFamily: "Inter-Bold",
+            }}
+          >
+            {t("UnableToPost")}
+
             {/* Unable To Post! */}
           </Text>
 
           <Text
             style={{
-              color: '#9597A6',
+              color: "#9597A6",
               marginLeft: wp(1),
               fontSize: hp(2),
-              textAlign: 'center',
+              textAlign: "center",
               lineHeight: hp(3),
-              fontFamily: 'Inter-Regular',
-            }}>
-              {t('UpgradeForPrivateLetterPostingAndASeamlessExperience')}
+              fontFamily: "Inter-Regular",
+            }}
+          >
+            {t("UpgradeForPrivateLetterPostingAndASeamlessExperience")}
             {/* Upgrade for private letter posting and a{'\n'}seamless experience */}
           </Text>
 
           <View style={{ marginHorizontal: wp(10) }}>
             <CustomButton
-              title={t('BuySubscription')}
+              title={t("BuySubscription")}
               customClick={() => {
                 ref_RBSendOffer.current.close();
-                setLetterTypes('Public Letter');
-                navigation.navigate('SubscriptionPayment');
+                setLetterTypes("Public Letter");
+                navigation.navigate("SubscriptionPayment");
               }}
               style={{ width: wp(59) }}
             />
           </View>
 
-          <TouchableOpacity onPress={() => {
-            setLetterTypes('Public Letter');
-            ref_RBSendOffer.current.close();
-          }}>
+          <TouchableOpacity
+            onPress={() => {
+              setLetterTypes("Public Letter");
+              ref_RBSendOffer.current.close();
+            }}
+          >
             <Text
               style={{
-                color: '#9597A6',
+                color: "#9597A6",
                 marginLeft: wp(1),
                 marginBottom: hp(3),
                 fontSize: hp(2),
-                textAlign: 'center',
+                textAlign: "center",
                 lineHeight: hp(3),
-                fontFamily: 'Inter-Regular',
+                fontFamily: "Inter-Regular",
                 //fontWeight: 'bold',
-              }}>
-                {t('MaybeLater')}
+              }}
+            >
+              {t("MaybeLater")}
               {/* Maybe later */}
             </Text>
           </TouchableOpacity>
         </View>
       </RBSheet>
 
-{loading && <Loader />}
-  
+      {loading && <Loader />}
 
       <CustomSnackbar
-        message={t('Alert!')}
-        messageDescription={t('KindlyFillAllFields')}
+        message={t("Alert!")}
+        messageDescription={t("KindlyFillAllFields")}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
@@ -1024,42 +1038,41 @@ export default function PostLetterInfo({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   ti: {
-    marginHorizontal: '7%',
-    marginTop: '10%',
+    marginHorizontal: "7%",
+    marginTop: "10%",
     // width: 300,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     fontSize: wp(4),
-    paddingLeft: '2%',
+    paddingLeft: "2%",
     borderRadius: 10,
   },
   textInputCategoryNonSelected: {
     borderWidth: 1,
     borderRadius: wp(1),
-    width: '100%',
-    borderColor: '#E7EAF2',
+    width: "100%",
+    borderColor: "#E7EAF2",
     paddingHorizontal: 20,
     paddingVertical: 6.8,
     // marginBottom: 20,
     marginTop: hp(3),
   },
   iconStyle: {
-    color: '#C4C4C4',
+    color: "#C4C4C4",
     width: 20,
     height: 20,
   },
   iconStyleInactive: {
-    color: '#FACA4E',
+    color: "#FACA4E",
   },
-
 
   textInputSelectedCategory: {
     borderWidth: 1,
     borderRadius: wp(1),
-    width: '100%',
-    borderColor: '#FACA4E',
+    width: "100%",
+    borderColor: "#FACA4E",
 
     paddingHorizontal: 20,
     paddingVertical: 6.8,
@@ -1068,7 +1081,7 @@ const styles = StyleSheet.create({
   },
 
   errorText: {
-    color: 'red',
+    color: "red",
     fontSize: 12,
     marginTop: 4,
   },

@@ -1204,7 +1204,7 @@ console.log('subcategory---------', subcategory)
     }
   };
 
-  const fetchCategory = async (token, lang) => {
+  const fetchCategory = async (token) => {
     try {
       const response = await fetch(`${base_url}gebc/category/getAll?page=1&limit=10000`, {
         method: 'GET',
@@ -1218,7 +1218,7 @@ console.log('subcategory---------', subcategory)
         const categories = data.AllCategories.map(category => ({
           // label: category.name,
           label:
-          lang === "fr" && category.french_name
+          language === "fr" && category.french_name
             ? category.french_name
             : category.name,
           value: category.id.toString()
