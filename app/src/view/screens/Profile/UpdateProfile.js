@@ -261,7 +261,7 @@ export default function UpdateProfile({navigation}) {
         const data = await response.json();
         console.log('API Response:', data);
         setLoading(false);
-        handleUpdatePassword();
+        // handleUpdatePassword();
       } else {
         setLoading(false);
 
@@ -475,6 +475,7 @@ export default function UpdateProfile({navigation}) {
             borderTopLeftRadius: wp(10),
             borderTopRightRadius: wp(10),
             // height: hp(25),
+            height: Platform.OS === "ios" ? hp(0) : hp(26),
           },
         }}>
         <View

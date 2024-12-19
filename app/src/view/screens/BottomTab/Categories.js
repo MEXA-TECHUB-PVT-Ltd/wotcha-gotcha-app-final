@@ -1868,7 +1868,7 @@ export default function Categories(identifier) {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -1966,7 +1966,7 @@ export default function Categories(identifier) {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_b(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -2063,7 +2063,7 @@ export default function Categories(identifier) {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_sp(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -2160,7 +2160,7 @@ export default function Categories(identifier) {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_e(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -2257,7 +2257,7 @@ export default function Categories(identifier) {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_d(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -2354,7 +2354,7 @@ export default function Categories(identifier) {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_fd(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -2451,7 +2451,7 @@ export default function Categories(identifier) {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_sm(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -2548,7 +2548,7 @@ export default function Categories(identifier) {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_mw(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -2645,7 +2645,7 @@ export default function Categories(identifier) {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_g(true)}>
                       <Add />
                     </TouchableOpacity>
@@ -2742,7 +2742,7 @@ export default function Categories(identifier) {
                       </View>
                     </>
                   )}
-                  <View style={{ position: "absolute", top: "80%", right: 10 }}>
+                  <View style={{ position: "absolute", top: "70%", right: 10 }}>
                     <TouchableOpacity onPress={() => setModalVisible_em(true)}>
                       <Add />
                     </TouchableOpacity>

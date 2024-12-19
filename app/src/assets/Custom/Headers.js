@@ -230,7 +230,7 @@ const Headers = ({
           }}
         >
           {image ? (
-            <View style={{ backgroundColor: 'red', borderRadius: 30 }}>
+            <View style={{ borderRadius: 30 }}>
               <Image
                 source={{ uri: image }} // Use image URI if available
                 style={styles.profileImgs}

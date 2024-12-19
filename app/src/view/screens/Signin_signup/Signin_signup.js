@@ -325,6 +325,7 @@ const App = ({ navigation }) => {
 
   const handleBlur = () => {
     setIsTextInputActive(false);
+    setsignin_email(signin_email.trim());
   };
   const handleFocus1 = () => {
     setIsTextInputActive1(true);
@@ -346,6 +347,7 @@ const App = ({ navigation }) => {
 
   const handleBlur3 = () => {
     setIsTextInputActive3(false);
+    setsignup_email(signup_email.trim());
   };
   const handleFocus4 = () => {
     setIsTextInputActive4(true);
@@ -461,6 +463,7 @@ const App = ({ navigation }) => {
     }
   };
 
+  console.log('email-------',signin_email)
   const signInEndpoint = base_url + "user/login"; // Replace with your actual API endpoint
 
   const handleSignIn = async () => {
@@ -729,7 +732,8 @@ const App = ({ navigation }) => {
                         icon={() => (
                           <MaterialCommunityIcons
                             name={"lock-outline"}
-                            size={23}
+                            // size={23}
+                            size={wp(5.5)}
                             color={
                               isTextInputActive1 == true
                                 ? "#FACA4E"
@@ -1061,8 +1065,8 @@ const App = ({ navigation }) => {
 
                 <View
                   style={{
-                    marginTop: heightPercentageToDP(5),
-                    height: heightPercentageToDP(78),
+                    // marginTop: heightPercentageToDP(5),
+                    // height: heightPercentageToDP(78),
                     marginBottom: heightPercentageToDP(12),
                     marginHorizontal: widthPercentageToDP(8),
                   }}
@@ -1109,7 +1113,7 @@ const App = ({ navigation }) => {
               <ActivityIndicator size="large" color="#FACA4E" />
             </View>
           )}
-        </ScrollView>
+       
         {check === 1 ? (
           <View
             style={{ position: "absolute", bottom: 0, alignSelf: "center" }}
@@ -1123,7 +1127,7 @@ const App = ({ navigation }) => {
             />
           </View>
         ) : null}
-
+ </ScrollView>
         <CustomSnackbar
           message={"Alert!"}
           messageDescription={
