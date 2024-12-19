@@ -35,7 +35,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import IonIcons from 'react-native-vector-icons/Ionicons';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import Custom_Button from '../../../assets/Custom/Custom_Button';
-
+import { useTranslation } from 'react-i18next';
 export default function CameraView({navigation, route}) {
   const [showFullContent, setShowFullContent] = useState(false);
 
@@ -62,7 +62,7 @@ export default function CameraView({navigation, route}) {
   const [snackbarVisible, setsnackbarVisible] = useState(false);
 
   const [commentText, setCommentText] = useState(null); // State variable to hold the text
-
+const { t } = useTranslation();
   const [showLikes, setShowLikes] = useState(false);
 
   useEffect(() => {
@@ -456,7 +456,8 @@ const gotoPost=()=>{
               value={commentText} // Bind the value to the state variable
               onChangeText={text => setCommentText(text)} // Update state on text change
               placeholderTextColor={'#848484'}
-              placeholder="Write Comment Heressssss"
+              placeholder={t('WriteCommentHere')} 
+                color='black'
               style={{flex: 1, marginLeft: wp(1)}}
             />
 
@@ -486,7 +487,8 @@ const gotoPost=()=>{
               value={commentText} // Bind the value to the state variable
               onChangeText={text => setCommentText(text)} // Update state on text change
               placeholderTextColor={'#848484'}
-              placeholder="Add a reply"
+               placeholder={t('WriteCommentHere')}
+              color='black'
               style={{flex: 1, marginLeft: wp(1)}}
             />
 
@@ -523,7 +525,8 @@ const gotoPost=()=>{
             value={commentText} // Bind the value to the state variable
             onChangeText={text => setCommentText(text)} // Update state on text change
             placeholderTextColor={'#848484'}
-            placeholder="Write Comment Here"
+             placeholder={t('WriteCommentHere')}
+              color='black'
             style={{flex: 1, marginLeft: wp(1)}}
           />
 
@@ -555,7 +558,8 @@ const gotoPost=()=>{
               value={commentText} // Bind the value to the state variable
               onChangeText={text => setCommentText(text)} // Update state on text change
               placeholderTextColor={'#848484'}
-              placeholder="Add a reply"
+          placeholder={t('WriteCommentHere')}
+              color='black'
               style={{flex: 1, marginLeft: wp(1)}}
             />
 

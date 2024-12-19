@@ -1441,7 +1441,7 @@ export default function ViewProfile({ navigation }) {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                    <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                       {/* No data available */}
                       {t('Dashboard.NoDataavailable')}
                     </Text>
@@ -1497,7 +1497,7 @@ export default function ViewProfile({ navigation }) {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                   <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                
                       {t('Dashboard.NoDataavailable')}
                     </Text>
@@ -1555,7 +1555,7 @@ export default function ViewProfile({ navigation }) {
                           alignItems: "center",
                         }}
                       >
-                        <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                        <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                           {/* No data available */}
                           {t('Dashboard.NoDataavailable')}
                         </Text>
@@ -1616,7 +1616,7 @@ export default function ViewProfile({ navigation }) {
                           alignItems: "center",
                         }}
                       >
-                        <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                         <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                 
                           {t('Dashboard.NoDataavailable')}
                         </Text>
@@ -1680,7 +1680,7 @@ export default function ViewProfile({ navigation }) {
                           alignItems: "center",
                         }}
                       >
-                        <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                         <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                           {/* No data available */}
                           {t('Dashboard.NoDataavailable')}
                         </Text>
@@ -1744,7 +1744,7 @@ export default function ViewProfile({ navigation }) {
                           alignItems: "center",
                         }}
                       >
-                        <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                         <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                           {/* No data available */}
                           {t('Dashboard.NoDataavailable')}
                         </Text>
@@ -1806,7 +1806,7 @@ export default function ViewProfile({ navigation }) {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                     <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                       {/* No data available */}
                       {t('Dashboard.NoDataavailable')}
                     </Text>
@@ -1866,7 +1866,7 @@ export default function ViewProfile({ navigation }) {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                     <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                       {/* No data available */}
                       {t('Dashboard.NoDataavailable')}
                     </Text>
@@ -1927,7 +1927,7 @@ export default function ViewProfile({ navigation }) {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                     <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                       {/* No data available */}
                       {t('Dashboard.NoDataavailable')}
                     </Text>
@@ -1988,7 +1988,7 @@ export default function ViewProfile({ navigation }) {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                     <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                       {/* No data available */}
                       {t('Dashboard.NoDataavailable')}
                     </Text>
@@ -2047,7 +2047,7 @@ export default function ViewProfile({ navigation }) {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                     <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                       {/* No data available */}
                       {t('Dashboard.NoDataavailable')}
                     </Text>
@@ -2106,7 +2106,7 @@ export default function ViewProfile({ navigation }) {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                     <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                       {/* No data available */}
                       {t('Dashboard.NoDataavailable')}
                     </Text>
@@ -2168,9 +2168,10 @@ export default function ViewProfile({ navigation }) {
                     flex: 1,
                     justifyContent: "center",
                     alignItems: "center",
+                    paddingLeft:wp(6)
                   }}
                 >
-                  <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                   <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                     {/* No data available */}
                     {t('Dashboard.NoDataavailable')}
                   </Text>

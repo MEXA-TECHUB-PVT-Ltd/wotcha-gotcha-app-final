@@ -63,7 +63,8 @@ export default function ViewBanners({ navigation }) {
     }
   };
 
-
+  // console.log('userId------------',userId )
+  // console.log('authTokenauthToken------------',authToken )
 
   const fetchBanners = async (userId) => {
     const token = authToken;

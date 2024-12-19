@@ -1319,6 +1319,22 @@ export default function Categories(identifier) {
     }
   };
 
+
+  //------------------------------------------------------------\\
+  const openCategoryApp = async (app) => {
+    try {
+      console.log("Opening app-------------------:", app.bundle);
+  
+      // Launch the application using its bundle ID
+      await RNLauncherKitHelper.launchApplication(app.bundle);
+      
+      console.log("App launched successfully.");
+    } catch (error) {
+      console.error("Error launching the app:", error.message);
+    }
+  };
+  
+
   return (
     <View
       style={{
@@ -1800,8 +1816,9 @@ export default function Categories(identifier) {
                                 {savedApps
                                   .slice(rowIndex * 5, (rowIndex + 1) * 5)
                                   .map((app, index) => (
-                                    <View
-                                      key={index}
+                                      <TouchableOpacity
+                                       key={index}
+                                      onPress={() => openCategoryApp(app)}
                                       style={{
                                         flexDirection: "column",
                                         alignItems: "center",
@@ -1829,7 +1846,7 @@ export default function Categories(identifier) {
                                       >
                                         {app.label.substring(0, 10)}
                                       </Text>
-                                    </View>
+                                    </TouchableOpacity>
                                   ))}
                                 {[
                                   ...Array(
@@ -1900,8 +1917,9 @@ export default function Categories(identifier) {
                             {savedApps_b
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
+                                <TouchableOpacity
                                   key={index}
+                                  onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -1929,7 +1947,7 @@ export default function Categories(identifier) {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -1997,8 +2015,9 @@ export default function Categories(identifier) {
                             {savedApps_sp
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
+                                <TouchableOpacity
                                   key={index}
+                                  onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -2026,7 +2045,7 @@ export default function Categories(identifier) {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -2094,8 +2113,9 @@ export default function Categories(identifier) {
                             {savedApps_e
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
-                                  key={index}
+                                <TouchableOpacity
+                                key={index}
+                                onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -2123,7 +2143,7 @@ export default function Categories(identifier) {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -2191,8 +2211,9 @@ export default function Categories(identifier) {
                             {savedApps_d
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
-                                  key={index}
+                                <TouchableOpacity
+                                key={index}
+                                onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -2220,7 +2241,7 @@ export default function Categories(identifier) {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -2288,8 +2309,9 @@ export default function Categories(identifier) {
                             {savedApps_fd
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
-                                  key={index}
+                                <TouchableOpacity
+                                key={index}
+                                onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -2317,7 +2339,7 @@ export default function Categories(identifier) {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -2385,8 +2407,9 @@ export default function Categories(identifier) {
                             {savedApps_sm
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
-                                  key={index}
+                                <TouchableOpacity
+                                key={index}
+                                onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -2414,7 +2437,7 @@ export default function Categories(identifier) {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -2482,8 +2505,9 @@ export default function Categories(identifier) {
                             {savedApps_mw
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
-                                  key={index}
+                                <TouchableOpacity
+                                key={index}
+                                onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -2511,7 +2535,7 @@ export default function Categories(identifier) {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -2579,8 +2603,9 @@ export default function Categories(identifier) {
                             {savedApps_g
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
-                                  key={index}
+                                <TouchableOpacity
+                                key={index}
+                                onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -2608,7 +2633,7 @@ export default function Categories(identifier) {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(
@@ -2676,8 +2701,9 @@ export default function Categories(identifier) {
                             {savedApps_em
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
-                                <View
-                                  key={index}
+                                <TouchableOpacity
+                                key={index}
+                                onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -2705,7 +2731,7 @@ export default function Categories(identifier) {
                                   >
                                     {app.label}
                                   </Text>
-                                </View>
+                                </TouchableOpacity>
                               ))}
                             {[
                               ...Array(

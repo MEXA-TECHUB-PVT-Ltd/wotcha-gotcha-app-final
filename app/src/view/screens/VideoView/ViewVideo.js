@@ -1419,7 +1419,8 @@ export default function ViewVideo({navigation, route}) {
                 value={commentText} // Bind the value to the state variable
                 onChangeText={(text) => setCommentText(text)} // Update state on text change
                 placeholderTextColor={"#848484"}
-                placeholder="Write Comment Here"
+                placeholder={t('WriteCommentHere')} 
+                color='black'
                 style={{ flex: 1, marginLeft: wp(1) }}
               />
 
@@ -1458,7 +1459,8 @@ export default function ViewVideo({navigation, route}) {
                   onChangeText={(text) => setCommentText(text)} // Update state on text change
                   placeholderTextColor={"#848484"}
                   // placeholder="Add a reply"
-                  placeholder="Write Comment Here"
+                   placeholder={t('WriteCommentHere')} 
+                color='black'
                   style={{ flex: 1, marginLeft: wp(1) }}
                 />
                 <TouchableOpacity style={{ marginRight: wp(3) }} onPress={() => clearTextInput()}>

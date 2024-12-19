@@ -663,7 +663,7 @@ const styles = StyleSheet.create({
     marginBottom: '5%',
   },
   circleBox: {
-    width: wp(28),
+    width: wp(27),
     height: hp(13),
     borderWidth: 1,
     overflow: 'hidden',
