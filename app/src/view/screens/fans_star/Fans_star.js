@@ -56,7 +56,7 @@ export default function Fans_star({  route }) {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [sections, setSections] = useState([]);
   const [noData, setNoData] = useState(false);
-
+    const [selectedButton, setSelectedButton] = useState(null);
   useEffect(() => {
     const getAuthToken = async () => {
       try {
@@ -701,7 +701,8 @@ export default function Fans_star({  route }) {
           container: {
             borderTopLeftRadius: wp(10),
             borderTopRightRadius: wp(10),
-            height: hp(25),
+            paddingBottom: Platform.OS == "ios" ? 40 : 10,
+            height: hp(28),
           },
         }}
       >
@@ -733,10 +734,10 @@ export default function Fans_star({  route }) {
             />
           </TouchableOpacity>
         </View>
-
+      <View style={{ height: 20 }} />
         <View
           style={{
-            top: "1%",
+            // top: "1%",
             flex: 1,
             marginHorizontal: wp(8),
             marginBottom: hp(1),
@@ -745,14 +746,20 @@ export default function Fans_star({  route }) {
           }}
         >
           <TouchableOpacity
-            onPress={() => takeVideoFromCamera("Camera")}
-            // onPress={goto_camera}
+            // onPress={() => takeVideoFromCamera("Camera")}
+            onPress={() => {
+              takeVideoFromCamera("Camera"),
+              setSelectedButton('Camera');
+            }
+            }
+           
             style={{
               alignItems: "center",
               justifyContent: "center",
               flex: 1,
               borderRadius: 10,
-              borderColor: "#FACA4E",
+              // borderColor: "#FACA4E",
+              borderColor: selectedButton === 'Camera' ? "#FACA4E" : "gray",
               borderWidth: 1,
             }}
           >
@@ -774,13 +781,17 @@ export default function Fans_star({  route }) {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => chooseVideoFromLibrary("gallery")}
+            // onPress={() => chooseVideoFromLibrary("gallery")}
+            onPress={() =>{ chooseVideoFromLibrary("gallery"),
+              setSelectedButton('Gallery');
+            }
+          }
             style={{
               alignItems: "center",
               justifyContent: "center", // Center the icon and text vertically
               flex: 1,
               borderRadius: 10,
-              borderColor: "grey",
+              borderColor: selectedButton === 'Gallery' ? "#FACA4E" : "gray", 
               borderWidth: 1,
               marginLeft: wp(8), // Add margin to separate the options
             }}

@@ -199,7 +199,7 @@ export default function UpdateContent({ navigation, route }) {
 
   // const fetchCategoryPic = async userToken => {
   //   const token = userToken;
-  const fetchCategoryPic = async (token, lang) => {
+  const fetchCategoryPic = async (token) => {
     try {
       const response = await fetch(  
         base_url + `${categoryapiEndpoint}?page=1&limit=10000`,
@@ -217,7 +217,7 @@ export default function UpdateContent({ navigation, route }) {
         const categories = data.AllCategories.map((category) => ({
           // label: category.name,
           label:
-            lang === "fr" && category.french_name
+            language === "fr" && category.french_name
               ? category.french_name
               : category.name,
           value: category.id.toString(), // Convert "id" to a string for the value

@@ -234,6 +234,60 @@ export default function ViewVideo({ navigation, route }) {
     }
   };
 
+   //------------------------------------\\
+   //----------------------------------\\
+    const handleDownload = async () => {
+      if (!pastedURL) {
+        console.log('Please Add Video URL');
+        return;
+      }
+  
+      // Check if permission is already granted
+      const permissionGranted = await checkStoragePermission();
+      if (permissionGranted) {
+        downloadFile();
+      }
+    };
+    const checkStoragePermission = async () => {
+      try {
+        const granted = await PermissionsAndroid.check(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+        );
+  
+        if (granted) {
+          return true; // Permission already granted
+        } else {
+          return await requestForStoragePermission();
+        }
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    };
+  
+    const requestForStoragePermission = async () => {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Downloader App Storage Permission',
+            message:
+              'Downloader App needs access to your storage ' +
+              'so you can download files',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          }
+        );
+  
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    };
+    //------------------------------------\\
+
   const dismissSnackbar = () => {
     setsnackbarVisible(false);
   };
@@ -973,7 +1027,8 @@ export default function ViewVideo({ navigation, route }) {
                   height: hp(5),
                 }}
               >
-                <TouchableOpacity onPress={() => handleUpdatePassword()}>
+                <TouchableOpacity onPress={handleDownload}>
+                {/* <TouchableOpacity onPress={() => handleUpdatePassword()}> */}
                   <Download height={21} width={21} />
                 </TouchableOpacity>
               </View>
@@ -1027,7 +1082,7 @@ export default function ViewVideo({ navigation, route }) {
                 alignItems: "center",
               }}
             >
-              <Text>{t('NoCommentsYet')}</Text>
+              <Text style={{color:'black'}}>{t('NoCommentsYet')}</Text>
             </View>
           ) : (
             <FlatList
@@ -1082,6 +1137,7 @@ export default function ViewVideo({ navigation, route }) {
               onChangeText={(text) => setCommentText(text)} // Update state on text change
               placeholderTextColor={"#848484"}
               placeholder={t('WriteCommentHere')}
+              color='black'
               style={{ flex: 1, marginLeft: wp(1) }}
             />
 
@@ -1120,8 +1176,9 @@ export default function ViewVideo({ navigation, route }) {
                 onChangeText={(text) => setCommentText(text)} // Update state on text change
                 placeholderTextColor={"#848484"}
                 // placeholder="Add a reply"
+                color='black'
                 placeholder={t('WriteCommentHere')}
-                style={{ flex: 1, marginLeft: wp(1) }}
+                style={{ flex: 1, marginLeft: wp(1), }}
               />
               <TouchableOpacity
                 style={{ marginRight: wp(3) }}

@@ -1081,7 +1081,7 @@ import {
                     alignItems: "center",
                   }}
                 >
-                  <Text>{t('NoCommentsYet')}</Text>
+                  <Text style={{color:'black'}}>{t('NoCommentsYet')}</Text>
                 </View>
               ) : (
                 <FlatList
@@ -1137,6 +1137,7 @@ import {
                   onChangeText={(text) => setCommentText(text)} // Update state on text change
                   placeholderTextColor={"#848484"}
                   placeholder={t('WriteCommentHere')}
+                  color='black'
                   style={{ flex: 1, marginLeft: wp(1) }}
                 />
   
@@ -1176,6 +1177,7 @@ import {
                     placeholderTextColor={"#848484"}
                     // placeholder="Add a reply"
                     placeholder={t('WriteCommentHere')}
+                    color='black'
                     style={{ flex: 1, marginLeft: wp(1) }}
                   />
                   <TouchableOpacity style={{ marginRight: wp(3) }} onPress={() => clearTextInput()}>

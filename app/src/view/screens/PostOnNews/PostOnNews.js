@@ -143,7 +143,6 @@ export default function PostOnNews({navigation}) {
           setLanguage(storedLanguage);
           console.log("lanugage--------", storedLanguage);
           await fetchCategory(authToken, storedLanguage);
-          
 
           // await fetchAllSubCategory(authToken,storedLanguage,categoryId);
         }
@@ -155,8 +154,14 @@ export default function PostOnNews({navigation}) {
     fetchLanguage();
   }, [isFocused, authToken]);
 
+  useEffect(()=>{
+  // Remove the error message if an image is selected
+  if (imageUri) {
+    setImageError('');
+  }
+  },[imageUri])
 
-  const fetchCategory = async (token, lang) => {
+  const fetchCategory = async (token) => {
     try {
       const response = await fetch(`${base_url}news/category/getAll?page=1&limit=10000`, {
         method: 'GET',
@@ -170,7 +175,7 @@ export default function PostOnNews({navigation}) {
         const categories = data.AllCategories.map(category => ({
           // label: category.name,
           label:
-          lang === "fr" && category.french_name
+          language === "fr" && category.french_name
             ? category.french_name
             : category.name,
           value: category.id.toString()
@@ -396,6 +401,14 @@ export default function PostOnNews({navigation}) {
     const handleSubCategoryBlur = () => {
       setIsSubCategoryActive(false);
     };
+    const handleCommentChange = (text) => {
+      setComment(text);
+  
+      // Remove the error message if the user starts typing
+      if (profileNameError) {
+        setProfileNameError('');
+      }
+    };
   return (
     <KeyboardAvoidingView
       style={{flex: 1, backgroundColor: 'white'}}
@@ -475,7 +488,8 @@ export default function PostOnNews({navigation}) {
             placeholder={t('Addanews')}
             placeholderTextColor="#B0B0B0"
             value={comment}
-            onChangeText={text => setComment(text)}
+            // onChangeText={text => setComment(text)}
+            onChangeText={handleCommentChange}
             //height={hp(5)}
           />
         </View>
@@ -504,11 +518,12 @@ export default function PostOnNews({navigation}) {
               fontWeight: 'bold',
               fontFamily: 'Inter',
             }}>
-              {t('AddImage')}
+              {/* {t('AddImage')} */}
+              {imageUri ? t('ChangeImage') : t('AddImage')}
             {/* Add Image */}
           </Text>
         </TouchableOpacity>
-        <View style={{marginHorizontal:hp('4%'), marginTop:hp('-2%')}}>
+        <View style={{marginHorizontal:hp('4%'), marginTop:hp('-1%')}}>
 {imageError ? <Text style={styles.errorText}>{imageError}</Text> : null}
         </View>
         {imageUri !== null ? (
@@ -720,7 +735,8 @@ export default function PostOnNews({navigation}) {
         closeOnDragDown={true}
         closeOnPressMask={false}
         animationType="fade"
-        minClosingHeight={0}
+        // minClosingHeight={0}
+        height={hp(28)}
         customStyles={{
           wrapper: {
             backgroundColor: 'rgba(52, 52, 52, 0.5)',
@@ -793,7 +809,7 @@ export default function PostOnNews({navigation}) {
         </View>
       </RBSheet>
 
-     {loading && <Loader />}
+     {/* {loading && <Loader />}g */}
 
       <CustomDialog
         visible={modalVisible}

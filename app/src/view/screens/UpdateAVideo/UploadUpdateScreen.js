@@ -203,7 +203,7 @@ export default function UploadUpdateScreen({navigation, route}) {
     fetchLanguage();
   }, [isFocused, authToken]);
 
-  const fetchCategory = async (token, lang) => {
+  const fetchCategory = async (token) => {
     // const token = userToken;
 
     try {
@@ -226,7 +226,7 @@ export default function UploadUpdateScreen({navigation, route}) {
         const categories = data.AllCategories.map(category => ({
           // label: category.name, // Use the "name" property as the label
           label:
-          lang === "fr" && category.french_name
+          language === "fr" && category.french_name
             ? category.french_name
             : category.name,
           value: category.id.toString(), // Convert "id" to a string for the value

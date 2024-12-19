@@ -260,7 +260,8 @@ const Profile_image = ({navigation}) => {
             fontFamily: 'Inter-Bold',
             color: '#232323',
           }}>
-            {t('AddImage')}
+            {imageUri ? t('ChangeImage') : t('AddImage')}
+            {/* {t('AddImage')} */}
           {/* Add Image */}
         </Button>
         <View style={{marginTop: '25%', alignSelf: 'center'}}>

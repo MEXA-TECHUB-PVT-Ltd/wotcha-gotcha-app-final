@@ -234,6 +234,61 @@ export default function ViewNews({navigation, route}) {
     }
   };
 
+  //----------------------------------\\
+    const handleDownload = async () => {
+      if (!pastedURL) {
+        console.log('Please Add Video URL');
+        return;
+      }
+  
+      // Check if permission is already granted
+      const permissionGranted = await checkStoragePermission();
+      if (permissionGranted) {
+        downloadFile();
+      }
+    };
+    const checkStoragePermission = async () => {
+      try {
+        const granted = await PermissionsAndroid.check(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+        );
+  
+        if (granted) {
+          return true; // Permission already granted
+        } else {
+          return await requestForStoragePermission();
+        }
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    };
+  
+    const requestForStoragePermission = async () => {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Downloader App Storage Permission',
+            message:
+              'Downloader App needs access to your storage ' +
+              'so you can download files',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          }
+        );
+  
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    };
+    //------------------------------------\\
+  
+
+
   const dismissSnackbar = () => {
     setsnackbarVisible(false);
   };
@@ -1006,7 +1061,8 @@ export default function ViewNews({navigation, route}) {
                   width: wp(10),
                   height: hp(5),
                 }}>
-                <TouchableOpacity onPress={() => handleUpdatePassword()}>
+                      <TouchableOpacity onPress={handleDownload}>
+                {/* <TouchableOpacity onPress={() => handleUpdatePassword()}> */}
                   <MaterialCommunityIcons
                     color={'#FACA4E'}
                     name={'download'}
@@ -1078,7 +1134,7 @@ export default function ViewNews({navigation, route}) {
                   alignItems: "center",
                 }}
               >
-                <Text>{t('NoCommentsYet')}</Text>
+                <Text style={{color:'black'}}>{t('NoCommentsYet')}</Text>
               </View>
             ) : (
               <FlatList
@@ -1136,6 +1192,7 @@ export default function ViewNews({navigation, route}) {
                 onChangeText={(text) => setCommentText(text)} // Update state on text change
                 placeholderTextColor={"#848484"}
                 placeholder={t('WriteCommentHere')}
+                color='black'
                 style={{ flex: 1, marginLeft: wp(1) }}
               />
 
@@ -1175,6 +1232,7 @@ export default function ViewNews({navigation, route}) {
                   placeholderTextColor={"#848484"}
                   // placeholder="Add a reply"
                   placeholder={t('WriteCommentHere')}
+                  color='black'
                   style={{ flex: 1, marginLeft: wp(1) }}
                 />
                 <TouchableOpacity

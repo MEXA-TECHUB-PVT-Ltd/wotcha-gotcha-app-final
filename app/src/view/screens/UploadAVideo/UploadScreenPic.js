@@ -186,7 +186,7 @@ export default function UploadScreenPic({navigation, route}) {
     }
   };
 
-  const fetchPicCategory = async (token,lang) => {
+  const fetchPicCategory = async (token) => {
  
     try {
       const response = await fetch(`${base_url}picCategory/getAllPicCategories?page=1&limit=10000`, {
@@ -200,7 +200,7 @@ export default function UploadScreenPic({navigation, route}) {
         const data = await response.json();
         // console.log('catte------------',data.AllCategories)
         const categories = data.AllCategories.map(category => ({
-          label: lang === 'fr' && category.french_name ? category.french_name : category.name,
+          label: language === 'fr' && category.french_name ? category.french_name : category.name,
           // label: category.name,
           value: category.id.toString()
         }));
@@ -221,7 +221,7 @@ export default function UploadScreenPic({navigation, route}) {
     }
   }, [authToken, categoryId]);
 
-  // const fetchAllSubCategory = async (token,lang, categoryId) => {
+  // const fetchAllSubCategory = async (token, categoryId) => {
 
 const fetchAllSubCategory = async (category) => {
   console.log("langiuuuuuuuuuuuuuuuuuuuuuuu---------", language);

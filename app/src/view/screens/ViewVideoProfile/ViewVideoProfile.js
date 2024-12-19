@@ -1259,7 +1259,7 @@ export default function ViewVideo({navigation, route}) {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Text>{t('NoCommentsYet')}</Text>
+                <Text style={{color:'black'}}>{t('NoCommentsYet')}</Text>
               </View>
             ) : (
               <BottomSheetFlatList
@@ -1294,6 +1294,7 @@ export default function ViewVideo({navigation, route}) {
                 onChangeText={text => setCommentText(text)} // Update state on text change
                 placeholderTextColor={'#848484'}
                 placeholder={t('WriteCommentHere')}
+                color='black'
                 style={{flex: 1, marginLeft: wp(1)}}
               />
 
@@ -1325,6 +1326,7 @@ export default function ViewVideo({navigation, route}) {
                 onChangeText={text => setCommentText(text)} // Update state on text change
                 placeholderTextColor={'#848484'}
                 placeholder={t('WriteCommentHere')}
+                color='black'
                 style={{flex: 1, marginLeft: wp(1)}}
               />
 
@@ -1370,6 +1372,7 @@ export default function ViewVideo({navigation, route}) {
               onChangeText={text => setCommentText(text)} // Update state on text change
               placeholderTextColor={'#848484'}
               placeholder={t('WriteCommentHere')}
+              color='black'
               style={{flex: 1, marginLeft: wp(1)}}
             />
 

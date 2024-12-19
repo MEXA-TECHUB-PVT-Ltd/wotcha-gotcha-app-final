@@ -156,8 +156,8 @@ export default function GEBC({navigation}) {
   }, [isFocused, authToken]);
 
 
-  const fetchCategory = async (token,lang) => {
-    console.log('lag----------', lang)
+  const fetchCategory = async (token) => {
+
     try {
       const response = await fetch(`${base_url}gebc/category/getAll?page=1&limit=10000`, {
         method: 'GET',
@@ -170,7 +170,7 @@ export default function GEBC({navigation}) {
         const data = await response.json();
         const categories = data.AllCategories.map(category => ({
           // label: category.name,
-          label: lang === "fr" && category.french_name
+          label: language === "fr" && category.french_name
           ? category.french_name
           : category.name,
           value: category.id.toString()

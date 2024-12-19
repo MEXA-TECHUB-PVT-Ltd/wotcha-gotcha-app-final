@@ -831,7 +831,7 @@ export default function ViewGEBC({navigation, route}) {
                 </TouchableOpacity>
               </View>
 
-              <View
+              {/* <View
                 style={{
                   flexDirection: 'row',
                   justifyContent: 'center',
@@ -839,7 +839,6 @@ export default function ViewGEBC({navigation, route}) {
                   width: wp(10),
                   height: hp(5),
                 }}>
-                   {/* <Canvas ref={canvasRef} style={{ width: 300, height: 300 }} /> */}
                 <TouchableOpacity onPress={() => handleUpdatePassword()}>
                   <MaterialCommunityIcons
                     color={'#FACA4E'}
@@ -847,7 +846,7 @@ export default function ViewGEBC({navigation, route}) {
                     size={25}
                   />
                 </TouchableOpacity>
-              </View>
+              </View> */}
             </View>
           </View>
         </View>
@@ -911,7 +910,7 @@ export default function ViewGEBC({navigation, route}) {
                   alignItems: "center",
                 }}
               >
-                <Text>{t('NoCommentsYet')}</Text>
+                <Text style={{color:'black'}}>{t('NoCommentsYet')}</Text>
               </View>
             ) : (
               <FlatList
@@ -954,6 +953,7 @@ export default function ViewGEBC({navigation, route}) {
                 onChangeText={(text) => setCommentText(text)} // Update state on text change
                 placeholderTextColor={"#848484"}
                 placeholder={t('WriteCommentHere')}
+                color='black'
                 style={{ flex: 1, marginLeft: wp(1) }}
               />
 
@@ -992,6 +992,7 @@ export default function ViewGEBC({navigation, route}) {
                   onChangeText={(text) => setCommentText(text)} // Update state on text change
                   placeholderTextColor={"#848484"}
                   // placeholder="Add a reply"
+                  color='black'
                   placeholder={t('WriteCommentHere')}
                   style={{ flex: 1, marginLeft: wp(1) }}
                 />

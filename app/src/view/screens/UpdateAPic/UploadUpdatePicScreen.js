@@ -200,7 +200,7 @@ setSubCategory(formattedSubCategory.value);
   
   // const fetchCategoryPic = async userToken => {
   //   const token = userToken;
-  const fetchCategoryPic = async (token,lang) => {
+  const fetchCategoryPic = async (token) => {
     try {
       const response = await fetch(
         base_url + 'picCategory/getAllPicCategories',
@@ -220,7 +220,7 @@ setSubCategory(formattedSubCategory.value);
         // Use the data from the API to set the categories
         const categories = data.AllCategories.map(category => ({
           // label: category.name, 
-          label: lang === 'fr' && category.french_name ? category.french_name : category.name,
+          label: language === 'fr' && category.french_name ? category.french_name : category.name,
           value: category.id.toString(), // Convert "id" to a string for the value
         }));
         setCategorySelect(categories);
