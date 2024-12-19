@@ -24,7 +24,8 @@ const BannerCarousel = ({ isLoading, adsData, noDataMessage, onBannerPress }) =>
         <ActivityIndicator size="large" color="#FACA4E" />
       ) : adsData.length === 0 ? (
         <View style={styles.TopBannerView}>
-          <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>{noDataMessage}</Text>
+
+          <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>{noDataMessage}</Text>
         </View>
       ) : (
         <Carousel

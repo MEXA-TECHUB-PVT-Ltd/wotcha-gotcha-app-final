@@ -190,7 +190,10 @@ const App = () => {
   return (
     <SafeAreaView style={{flex:1}}>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{
+    lazy: true,
+    detachInactiveScreens: true,
+  }}>
           <Stack.Screen
             name="SpashScreen"
             component={SplashScreen}

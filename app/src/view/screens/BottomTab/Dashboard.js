@@ -4654,7 +4654,7 @@ const convertTimeAndDate = (dateString) => {
                           alignItems: "center",
                         }}
                       >
-                        <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                                 <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                           {t('Dashboard.NoTopApps')}
                         </Text>
                       </View>
@@ -4790,6 +4790,7 @@ const convertTimeAndDate = (dateString) => {
                             fontWeight: "bold",
                             fontSize: hp(2.1),
                             justifyContent: "center",
+                            color:'gray'
                           }}
                         >
                           {t('Dashboard.NoFavouriteApps')}
@@ -6014,7 +6015,8 @@ const convertTimeAndDate = (dateString) => {
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontFamily: "Inter-Regular", }}>{t('Dashboard.NoDataavailable')}</Text>
+                        
+              <Text style={{ fontFamily: "Inter-Regular", color:'gray'}}>{t('Dashboard.NoDataavailable')}</Text>
             </View>
 
           ) : (
@@ -6136,8 +6138,8 @@ const convertTimeAndDate = (dateString) => {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-            >
-              <Text style={{ fontFamily: "Inter-Regular", }}>{t('Dashboard.NoDataavailable')}</Text>
+            > 
+              <Text style={{ fontFamily: "Inter-Regular",  color:'gray'}}>{t('Dashboard.NoDataavailable')}</Text>
             </View>
 
           ) : (
@@ -6268,7 +6270,7 @@ const convertTimeAndDate = (dateString) => {
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontFamily: "Inter-Regular", }}>{t('Dashboard.NoDataavailable')}</Text>
+              <Text style={{ fontFamily: "Inter-Regular", color:'gray'}}>{t('Dashboard.NoDataavailable')}</Text>
             </View>
 
           ) : (
@@ -6585,7 +6587,7 @@ const convertTimeAndDate = (dateString) => {
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontFamily: "Inter-Medium", }}>{t('Dashboard.NoDataavailable')}</Text>
+              <Text style={{ fontFamily: "Inter-Medium", color:'gray' }}>{t('Dashboard.NoDataavailable')}</Text>
             </View>
 
           ) : (
@@ -6718,7 +6720,7 @@ const convertTimeAndDate = (dateString) => {
                 alignItems: "center",
               }}
             >
-              <Text style={{ fontFamily: "Inter-Medium", }}>{t('Dashboard.NoDataavailable')}</Text>
+              <Text style={{ fontFamily: "Inter-Medium", color:'gray' }}>{t('Dashboard.NoDataavailable')}</Text>
             </View>
 
           ) : (
@@ -7485,7 +7487,7 @@ const convertTimeAndDate = (dateString) => {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                    <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                       {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
@@ -7541,7 +7543,7 @@ const convertTimeAndDate = (dateString) => {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                   <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                       {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
@@ -7598,7 +7600,7 @@ const convertTimeAndDate = (dateString) => {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                    <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                       {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
@@ -7654,7 +7656,7 @@ const convertTimeAndDate = (dateString) => {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                    <Text style={{  fontFamily: "Inter-Medium",fontSize: hp(2), color:'gray' }}>
                       {t('Dashboard.NoDataavailable')}
                     </Text>
                   </View>
