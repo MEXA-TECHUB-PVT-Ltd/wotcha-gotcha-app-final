@@ -190,9 +190,9 @@ const DrawerNavigation = ({ navigation }) => {
             {image !== null ? (
               <View
                 style={{
-                  width: wp(14),
+                  width: wp(11),
                   marginLeft: wp(0.1),
-                  height: wp(14),
+                  height: wp(11),
                   borderRadius: wp(14) / 2,
                 }}
               >
@@ -210,14 +210,14 @@ const DrawerNavigation = ({ navigation }) => {
               <EvilIcons
                 style={{ marginTop: hp(0.5) }}
                 name={"user"}
-                size={55}
+                size={52}
                 color={"#FACA4E"}
               />
             )}
             <View style={{marginLeft:5}}>
               <Text
                 style={{
-                  fontSize: hp(2.3),
+                  fontSize: hp(2.1),
                   //marginLeft: wp(2),
                   // marginTop: hp(1.3),
                   color: "#FACA4E",
@@ -230,7 +230,7 @@ const DrawerNavigation = ({ navigation }) => {
 
               <Text
                 style={{
-                  fontSize: hp(2),
+                  fontSize: hp(1.8),
                   // marginLeft: wp(2),
                   //   /marginTop:hp(0.1),
                   color: "#77838F",

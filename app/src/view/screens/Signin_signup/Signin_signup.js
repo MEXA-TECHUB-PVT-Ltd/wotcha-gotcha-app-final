@@ -666,8 +666,8 @@ const App = ({ navigation }) => {
                 <TextInput
                   mode="outlined"
                   label={t('signin.EmailAddress')}
-                  // onChangeText={(text) => setsignin_email(text)}
-                  onChangeText={(text) => setsignin_email(text.trimStart())}
+                  onChangeText={(text) => setsignin_email(text)}
+                  // onChangeText={(text) => setsignin_email(text.trimStart())}
                   style={styles.ti}
                   outlineColor="#0000001F"
                   placeholderTextColor={"#646464"}
@@ -861,8 +861,8 @@ const App = ({ navigation }) => {
                   mode="outlined"
                   label={t('signin.EmailAddress')}
                   // label="Email Address"
-                  // onChangeText={(text) => setsignup_email(text)}
-                  onChangeText={(text) => setsignup_email(text.trimStart())}
+                  onChangeText={(text) => setsignup_email(text)}
+                  // onChangeText={(text) => setsignup_email(text.trimStart())}
                   style={styles.ti}
                   outlineColor="#0000001F"
                   placeholderTextColor={"#646464"}

@@ -256,7 +256,7 @@ const Profile_image = ({navigation}) => {
             padding: '1%',
           }}
           labelStyle={{
-            fontSize: widthPercentageToDP(3.7),
+            fontSize: widthPercentageToDP(3.1),
             fontFamily: 'Inter-Bold',
             color: '#232323',
           }}>
