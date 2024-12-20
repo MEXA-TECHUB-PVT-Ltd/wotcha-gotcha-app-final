@@ -54,7 +54,8 @@ import QafiIcon from "react-native-vector-icons/FontAwesome5";
 import EBC from "react-native-vector-icons/MaterialCommunityIcons";
 import QAFIScreen from '../view/screens/QAFI/QAFIScreen';
 import EBCScreen from '../view/screens/GEBC/EBCScreen';
-
+import CategoryInactive from '../assets/svg/CategoryInactive.svg';
+import VideoInactive from '../assets/svg/VideoInactive.svg';
 const Bottom = createBottomTabNavigator();
 const BottomtabNavigation = () => {
   const navigation = useNavigation();
@@ -63,16 +64,30 @@ const BottomtabNavigation = () => {
   const [selectedScreen, setSelectedScreen] = useState('Dashboard');
   const [screen, setScreen] = useState([]);
 
+
+  // this code is for empty bottom navicon on 20-12-2024. delet nai krna
+
+  const defaultCategories = [
+    { key: 'one', name: 'More.MassApp', activeIcon: <CategoryActive width={23} height={23} />, inactiveIcon: <CategoryInactive width={23} height={23} />, dropped: false },
+    { key: 'two', name: 'Drawer.VideoMania', activeIcon: <VideoActive width={23} height={23} />, inactiveIcon: <VideoInactive width={23} height={23} />, dropped: false },
+    { key: 'four', name: 'Drawer.PicTours', activeIcon: <ProfileActive width={23} height={23} />, inactiveIcon: <ProfileInActive width={23} height={23} />, dropped: false },
+  ];
+
   useEffect(() => {
     const fetchIcons = async () => {
       try {
         const storedIcons = await AsyncStorage.getItem('bottomNavIcons');
         if (storedIcons) {
           const parsedIcons = JSON.parse(storedIcons);
-         
-          setScreen(parsedIcons.slice(0, 3).map(key => ({ key })));
-          // setScreen(parsedIcons.slice(0, 3).map(name => ({ name })));
-      
+          const filteredIcons = parsedIcons.slice(0, 3).map(key => ({ key }));
+          if (filteredIcons.length > 0) {
+            setScreen(filteredIcons);
+          } else if (screen.length === 0) {
+            // Only assign defaultCategories if screen is empty
+            setScreen(defaultCategories.slice(0, 3));
+          }
+        } else if (screen.length === 0) {
+          setScreen(defaultCategories.slice(0, 3));
         }
       } catch (error) {
         console.error('Error reading icons from storage:', error);
@@ -82,9 +97,33 @@ const BottomtabNavigation = () => {
     fetchIcons();
     const interval = setInterval(fetchIcons, 2000);
     return () => clearInterval(interval);
-  }, []);
+  }, [screen]);
 
-  // console.log('botom---------------', screen)
+    // this code is for empty bottom navicon on 20-12-2024. delet nai krna
+
+    
+  // useEffect(() => {
+  //   const fetchIcons = async () => {
+  //     try {
+  //       const storedIcons = await AsyncStorage.getItem('bottomNavIcons');
+  //       if (storedIcons) {
+  //         const parsedIcons = JSON.parse(storedIcons);
+         
+  //         setScreen(parsedIcons.slice(0, 3).map(key => ({ key })));
+  //         // setScreen(parsedIcons.slice(0, 3).map(name => ({ name })));
+      
+  //       }
+  //     } catch (error) {
+  //       console.error('Error reading icons from storage:', error);
+  //     }
+  //   };
+
+  //   fetchIcons();
+  //   const interval = setInterval(fetchIcons, 2000);
+  //   return () => clearInterval(interval);
+  // }, []);
+
+  console.log('botom---------------?????????????----------', screen)
 
   useEffect(() => {
     const screenHeight = Dimensions.get('window').height;
