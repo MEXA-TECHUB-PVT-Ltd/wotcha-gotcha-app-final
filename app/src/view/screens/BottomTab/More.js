@@ -34,6 +34,9 @@ import { useIsFocused } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { appImages } from '../../../assets/utilities';
+import { useDispatch,useSelector  } from 'react-redux';
+import { setCategories } from '../../../redux/store/categoriesSlice';
+
 // ///////// for defult 27.5.2024
 const defaultCategories = [
   { key: 'one', name: 'More.MassApp', activeIcon: <CategoryActive width={23} height={23} />, inactiveIcon: <CategoryInactive width={23} height={23} />, dropped: false },
@@ -76,6 +79,7 @@ export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynam
   const isFocused = useIsFocused();
   const [categories, setCategories] = useState(defaultCategories);
 
+
   useEffect(() => {
     async function initializeIcons() {
       try {
@@ -115,7 +119,28 @@ export default function MoreScreen({ bottomNavIcons, setBottomNavIcons, setDynam
       initializeIcons();
     }
   }, [isFocused]);
+  // const dispatch = useDispatch();
+  // const categories = useSelector((state) => state.categories.categories);
+ 
+  // useEffect(() => {
+  //   // Initialize categories from Redux state (no AsyncStorage required anymore)
+  //   const updatedCategories = categories.map((category, index) => ({
+  //     ...category,
+  //     dropped: index < 3,
+  //     identifier: index,
+  //   }));
 
+  //   dispatch(setCategories(updatedCategories)); // Update the Redux state
+  // }, []);
+  // const handleIconDragDrop = (updatedCategories) => {
+  //   const updatedCategoriesWithDropped = updatedCategories.map((category, index) => ({
+  //     ...category,
+  //     dropped: index < 3,
+  //     identifier: index,
+  //   }));
+
+  //   dispatch(setCategories(updatedCategoriesWithDropped)); // Update Redux state
+  // };
   const handleIconDragDrop = (updatedCategories) => {
     const updatedCategoriesWithDropped = updatedCategories.map((category, index) => {
       const identifier = index < 3 ? 0 : 1;

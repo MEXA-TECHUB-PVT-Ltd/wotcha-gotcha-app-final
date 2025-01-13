@@ -10169,4 +10169,441 @@
 //       //borderWidth: 3,
 //     },
 //   });
-  
+  //////////////////////////////////////////////////
+
+  // //////////////////////////////////
+
+// import React, { useEffect, useState } from 'react';
+// import {
+//   View,
+//   Text,
+//   FlatList,
+//   TouchableOpacity,
+//   StyleSheet,
+//   ActivityIndicator,
+//   ScrollView,
+// } from 'react-native';
+
+// const Dashboard = () => {
+//   const [data, setData] = useState({
+//     categories: [],
+//     subCategories: [],
+//     items: [],
+//     selectedCategory: null,
+//     loading: false,
+//   });
+
+//   // Simulated API calls
+//   const fetchCategories = async () => {
+//     return [
+//       { id: 1, name: 'Electronics' },
+//       { id: 2, name: 'Fashion' },
+//       { id: 3, name: 'Home Appliances' },
+//     ];
+//   };
+
+//   const fetchSubCategories = async (categoryId) => {
+//     const data = {
+//       1: [
+//         { id: 101, name: 'Mobiles' },
+//         { id: 102, name: 'Laptops' },
+//       ],
+//       2: [
+//         { id: 201, name: 'Men' },
+//         { id: 202, name: 'Women' },
+//       ],
+//       3: [
+//         { id: 301, name: 'Kitchen' },
+//         { id: 302, name: 'Living Room' },
+//       ],
+//     };
+//     return data[categoryId];
+//   };
+
+//   const fetchItems = async (subCategoryId) => {
+//     const data = {
+//       101: ['iPhone', 'Samsung Galaxy', 'OnePlus'],
+//       102: ['MacBook', 'Dell XPS', 'HP Pavilion'],
+//       201: ['Shirts', 'Jeans', 'Shoes'],
+//       202: ['Dresses', 'Handbags', 'Heels'],
+//       301: ['Refrigerator', 'Microwave', 'Blender'],
+//       302: ['Sofa', 'TV', 'Coffee Table'],
+//     };
+//     return data[subCategoryId];
+//   };
+
+//   useEffect(() => {
+//     const loadCategories = async () => {
+//       setData((prev) => ({ ...prev, loading: true }));
+//       const categories = await fetchCategories();
+
+//       if (categories.length > 0) {
+//         const firstCategory = categories[0];
+//         handleCategorySelect(firstCategory.id, categories);
+//       } else {
+//         setData((prev) => ({
+//           ...prev,
+//           categories,
+//           loading: false,
+//         }));
+//       }
+//     };
+
+//     loadCategories();
+//   }, []);
+
+//   const handleCategorySelect = async (categoryId, categoriesList = null) => {
+//     setData((prev) => ({
+//       ...prev,
+//       selectedCategory: categoryId,
+//       loading: true,
+//     }));
+
+//     // Fetch subcategories
+//     const subCategories = await fetchSubCategories(categoryId);
+
+//     // Fetch all items for the subcategories
+//     const itemsPromises = subCategories.map((subCategory) =>
+//       fetchItems(subCategory.id)
+//     );
+//     const itemsArrays = await Promise.all(itemsPromises);
+
+//     // Combine all items into a single array
+//     const items = itemsArrays.flat();
+
+//     setData((prev) => ({
+//       ...prev,
+//       categories: categoriesList || prev.categories,
+//       subCategories,
+//       items,
+//       loading: false,
+//     }));
+//   };
+
+//   const { categories, subCategories, items, selectedCategory, loading } = data;
+
+//   return (
+//     <ScrollView style={styles.container}>
+//       <Text style={styles.title}>Dashboard</Text>
+
+//       {loading && <ActivityIndicator size="large" color="#6200ee" />}
+
+//       {/* Categories */}
+//       <FlatList
+//         data={categories}
+//         horizontal
+//         keyExtractor={(item) => item.id.toString()}
+//         renderItem={({ item }) => (
+//           <TouchableOpacity
+//             style={[
+//               styles.categoryButton,
+//               selectedCategory === item.id && styles.selectedCategory,
+//             ]}
+//             onPress={() => handleCategorySelect(item.id)}
+//           >
+//             <Text
+//               style={[
+//                 styles.categoryText,
+//                 selectedCategory === item.id && styles.selectedCategoryText,
+//               ]}
+//             >
+//               {item.name}
+//             </Text>
+//           </TouchableOpacity>
+//         )}
+//       />
+
+//       {/* Subcategories */}
+//       {subCategories.length > 0 && (
+//         <>
+//           <Text style={styles.sectionTitle}>Subcategories</Text>
+//           <FlatList
+//             data={subCategories}
+//             horizontal
+//             keyExtractor={(item) => item.id.toString()}
+//             renderItem={({ item }) => (
+//               <View style={styles.subCategoryContainer}>
+//                 <Text style={styles.subCategoryText}>{item.name}</Text>
+//               </View>
+//             )}
+//           />
+//         </>
+//       )}
+
+//       {/* Items */}
+//       {items.length > 0 && (
+//         <>
+//           <Text style={styles.sectionTitle}>Items</Text>
+//           <FlatList
+//             data={items}
+//             keyExtractor={(item, index) => index.toString()}
+//             renderItem={({ item }) => (
+//               <View style={styles.itemContainer}>
+//                 <Text style={styles.itemText}>{item}</Text>
+//               </View>
+//             )}
+//           />
+//         </>
+//       )}
+//     </ScrollView>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     padding: 16,
+//     backgroundColor: '#f9f9f9',
+//   },
+//   title: {
+//     fontSize: 24,
+//     fontWeight: 'bold',
+//     marginBottom: 16,
+//   },
+//   sectionTitle: {
+//     fontSize: 18,
+//     fontWeight: 'bold',
+//     marginVertical: 8,
+//   },
+//   categoryButton: {
+//     padding: 12,
+//     backgroundColor: '#e0e0e0',
+//     borderRadius: 8,
+//     marginHorizontal: 4,
+//   },
+//   selectedCategory: {
+//     backgroundColor: '#6200ee',
+//   },
+//   categoryText: {
+//     color: '#000',
+//   },
+//   selectedCategoryText: {
+//     color: '#fff',
+//   },
+//   subCategoryContainer: {
+//     padding: 10,
+//     backgroundColor: '#cfcfcf',
+//     borderRadius: 8,
+//     marginHorizontal: 4,
+//   },
+//   subCategoryText: {
+//     color: '#000',
+//   },
+//   itemContainer: {
+//     padding: 12,
+//     backgroundColor: '#f0f0f0',
+//     borderRadius: 8,
+//     marginVertical: 4,
+//   },
+//   itemText: {
+//     fontSize: 16,
+//   },
+// });
+
+// export default Dashboard;
+
+////////////////////////////////////
+// import React, { useEffect, useState } from 'react';
+// import {
+//   View,
+//   Text,
+//   FlatList,
+//   TouchableOpacity,
+//   StyleSheet,
+//   ActivityIndicator,
+//   ScrollView,
+// } from 'react-native';
+
+// const Dashboard = () => {
+//   const base_url = 'http://192.168.18.24:3005/'; // Replace with your actual API base URL
+
+//   const [data, setData] = useState({
+//     categories: [],
+//     subCategories: [],
+//     items: [],
+//     selectedCategory: null,
+//     loading: false,
+//   });
+
+//   const fetchCategories = async () => {
+//     const response = await fetch(`${base_url}videoCategory/getAllVideoCategories`);
+//     const result = await response.json();
+//     return result.AllCategories; // Assuming AllCategories is an array of categories
+//   };
+
+//   const fetchSubCategories = async (selectedXpiItemId) => {
+//     const response = await fetch(`${base_url}xpi/getAllVideosBycategory/${selectedXpiItemId}`);
+//     const result = await response.json();
+//     return result.data; // Assuming data contains subcategories with items
+//   };
+
+//   useEffect(() => {
+//     const loadCategories = async () => {
+//       try {
+//         setData((prev) => ({ ...prev, loading: true }));
+//         const categories = await fetchCategories();
+
+//         if (categories.length > 0) {
+//           const firstCategory = categories[0];
+//           handleCategorySelect(firstCategory.id, categories);
+//         } else {
+//           setData((prev) => ({
+//             ...prev,
+//             categories,
+//             loading: false,
+//           }));
+//         }
+//       } catch (error) {
+//         console.error('Error fetching categories:', error);
+//         setData((prev) => ({ ...prev, loading: false }));
+//       }
+//     };
+
+//     loadCategories();
+//   }, []);
+
+//   const handleCategorySelect = async (categoryId, categoriesList = null) => {
+//     try {
+//       setData((prev) => ({
+//         ...prev,
+//         selectedCategory: categoryId,
+//         loading: true,
+//       }));
+
+//       // Fetch subcategories and items
+//       const subCategories = await fetchSubCategories(categoryId);
+
+//       setData((prev) => ({
+//         ...prev,
+//         categories: categoriesList || prev.categories,
+//         subCategories,
+//         items: subCategories.flatMap((sub) => sub.items || []), // Combine all items
+//         loading: false,
+//       }));
+//     } catch (error) {
+//       console.error('Error fetching data:', error);
+//       setData((prev) => ({ ...prev, loading: false }));
+//     }
+//   };
+
+//   const { categories, subCategories, items, selectedCategory, loading } = data;
+
+//   return (
+//     <ScrollView style={styles.container}>
+//       <Text style={styles.title}>Dashboard</Text>
+
+//       {loading && <ActivityIndicator size="large" color="#6200ee" />}
+
+//       {/* Categories */}
+//       <FlatList
+//         data={categories}
+//         horizontal
+//         keyExtractor={(item) => item.id.toString()}
+//         renderItem={({ item }) => (
+//           <TouchableOpacity
+//             style={[
+//               styles.categoryButton,
+//               selectedCategory === item._id && styles.selectedCategory,
+//             ]}
+//             onPress={() => handleCategorySelect(item._id)}
+//           >
+//             <Text
+//               style={[
+//                 styles.categoryText,
+//                 selectedCategory === item._id && styles.selectedCategoryText,
+//               ]}
+//             >
+//               {item.name}
+//             </Text>
+//           </TouchableOpacity>
+//         )}
+//       />
+
+//       {/* Subcategories */}
+//       {subCategories.length > 0 && (
+//         <>
+//           <Text style={styles.sectionTitle}>Subcategories</Text>
+//           <FlatList
+//             data={subCategories}
+//             horizontal
+//             keyExtractor={(item) => item.name.toString()}
+//             renderItem={({ item }) => (
+//               <View style={styles.subCategoryContainer}>
+//                 <Text style={styles.subCategoryText}>{item.name}</Text>
+//               </View>
+//             )}
+//           />
+//         </>
+//       )}
+
+//       {/* Items */}
+//       {items.length > 0 && (
+//         <>
+//           <Text style={styles.sectionTitle}>Items</Text>
+//           <FlatList
+//             data={items}
+//             keyExtractor={(item, index) => index.toString()}
+//             renderItem={({ item }) => (
+//               <View style={styles.itemContainer}>
+//                 <Text style={styles.itemText}>{item}</Text>
+//               </View>
+//             )}
+//           />
+//         </>
+//       )}
+//     </ScrollView>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     padding: 16,
+//     backgroundColor: '#f9f9f9',
+//   },
+//   title: {
+//     fontSize: 24,
+//     fontWeight: 'bold',
+//     marginBottom: 16,
+//   },
+//   sectionTitle: {
+//     fontSize: 18,
+//     fontWeight: 'bold',
+//     marginVertical: 8,
+//   },
+//   categoryButton: {
+//     padding: 12,
+//     backgroundColor: '#e0e0e0',
+//     borderRadius: 8,
+//     marginHorizontal: 4,
+//   },
+//   selectedCategory: {
+//     backgroundColor: '#6200ee',
+//   },
+//   categoryText: {
+//     color: '#000',
+//   },
+//   selectedCategoryText: {
+//     color: '#fff',
+//   },
+//   subCategoryContainer: {
+//     padding: 10,
+//     backgroundColor: '#cfcfcf',
+//     borderRadius: 8,
+//     marginHorizontal: 4,
+//   },
+//   subCategoryText: {
+//     color: '#000',
+//   },
+//   itemContainer: {
+//     padding: 12,
+//     backgroundColor: '#f0f0f0',
+//     borderRadius: 8,
+//     marginVertical: 4,
+//   },
+//   itemText: {
+//     fontSize: 16,
+//   },
+// });
+
+// export default Dashboard;

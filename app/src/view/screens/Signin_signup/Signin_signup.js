@@ -109,7 +109,7 @@ const App = ({ navigation }) => {
   const handleLanguageChange = (value) => {
       if (value) {
           setSelectedLanguage(value);
-          console.log('langugae select', value)
+          // console.log('langugae select', value)
           changeLanguage(value);
       }
   };
@@ -125,7 +125,7 @@ const App = ({ navigation }) => {
           setSelectedLanguage('en');
         }
       } catch (error) {
-        console.error('Error fetching language:', error);
+        // console.error('Error fetching language:', error);
         setSelectedLanguage('en'); // Fallback to default if there's an error
       }
     };
@@ -197,7 +197,7 @@ const App = ({ navigation }) => {
   const goToScreen2 = () => {
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
-    console.log("Sign Up");
+    // console.log("Sign Up");
 
     setSignUpUserNameError(false);
     setSignUpEmailError(false);
@@ -220,7 +220,7 @@ const App = ({ navigation }) => {
       signup_pass === "" &&
       signup_cpass === ""
     ) {
-      console.log("user name not present");
+      // console.log("user name not present");
 
       setSignUpUserNameError(false);
       setSignUpEmailError(true);
@@ -232,7 +232,7 @@ const App = ({ navigation }) => {
       signup_pass === "" &&
       signup_cpass === ""
     ) {
-      console.log("user name not present");
+      // console.log("user name not present");
 
       setSignUpUserNameError(false);
       setSignUpEmailError(false);
@@ -244,7 +244,7 @@ const App = ({ navigation }) => {
       signup_pass !== "" &&
       signup_cpass === ""
     ) {
-      console.log("user name not present");
+      // console.log("user name not present");
 
       setSignUpUserNameError(false);
       setSignUpEmailError(false);
@@ -256,7 +256,7 @@ const App = ({ navigation }) => {
       signup_pass === "" &&
       signup_cpass !== ""
     ) {
-      console.log("user name not present");
+      // console.log("user name not present");
 
       setSignUpUserNameError(true);
       setSignUpEmailError(true);
@@ -268,7 +268,7 @@ const App = ({ navigation }) => {
       signup_pass !== "" &&
       signup_cpass !== ""
     ) {
-      console.log("user name not present");
+      // console.log("user name not present");
 
       setSignUpUserNameError(false);
       setSignUpEmailError(true);
@@ -377,12 +377,12 @@ const App = ({ navigation }) => {
   const signupEndpoint = base_url + "user/register"; // Replace with your actual API endpoint
 
   const handleSignup = async () => {
-    console.log("GVSVGV", signup_email);
-    console.log("user name", username);
-    console.log("password", signup_pass);
-    console.log("password C", signup_cpass);
-    console.log("device_id", token);
-    console.log("role", "user");
+    // console.log("GVSVGV", signup_email);
+    // console.log("user name", username);
+    // console.log("password", signup_pass);
+    // console.log("password C", signup_cpass);
+    // console.log("device_id", token);
+    // console.log("role", "user");
 
     setIsLoading(true);
     try {
@@ -419,7 +419,7 @@ const App = ({ navigation }) => {
         // Assuming there's at least one result
         const firstResult = data.newUser;
         AsyncStorage.setItem("email", firstResult.email.toString(), () => {
-          console.log("user email saved successfully");
+          // console.log("user email saved successfully");
         });
 
         AsyncStorage.setItem(
@@ -455,7 +455,7 @@ const App = ({ navigation }) => {
 
       navigation.navigate("Profile_image");
     } catch (error) {
-      console.error("Error is on sign up:", error);
+      // console.error("Error is on sign up:", error);
       handleUpdatePassword();
 
       //showAlert();
@@ -463,7 +463,7 @@ const App = ({ navigation }) => {
     }
   };
 
-  console.log('email-------',signin_email)
+  // console.log('email-------',signin_email)
   const signInEndpoint = base_url + "user/login"; // Replace with your actual API endpoint
 
   const handleSignIn = async () => {
@@ -528,12 +528,15 @@ const App = ({ navigation }) => {
           });
         });
 
+        console.log('naviiiiiiiiiiiiiiii',navigation.getState());
         /////5/7/2024 dispatch
         resetFields()
+        // navigation.navigate('MainStackNavigation');
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
-            routes: [{ name: 'BottomTabNavigation' }],
+            // routes: [{ name: 'BottomTabNavigation' }],
+            routes: [{ name: 'MainStackNavigation' }], 
           })
         );
       } else {

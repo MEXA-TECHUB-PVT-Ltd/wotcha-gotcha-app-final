@@ -87,41 +87,63 @@ export default function ViewProfile({ navigation }) {
   const [signatureData, setSignatureData] = useState(null);
   const isFocused = useIsFocused();
 
-  console.log('image----------------------------', image)
+  // console.log('image----------------------------', image)
+  // useEffect(() => {
+  //   fetchVideos();
+  // }, [isFocused]);
+
+  // const fetchVideos = async () => {
+  //   // Simulate loading
+  //   setLoading(true);
+  //   await getUserID();
+  //   setLoading(false);
+  // };
+
+  // const getUserID = async () => {
+  //   try {
+  //     const result = await AsyncStorage.getItem("authToken ");
+  //     if (result !== null) {
+  //       setAuthToken(result);
+  //       await fetchUserId(result);
+  //     }
+
+  //   } catch (error) {
+
+  //     console.error("Error retrieving user ID:", error);
+  //   }
+  // };
+
+  // const fetchUserId = async (tokens) => {
+  //   const result3 = await AsyncStorage.getItem("userId ");
+  //   if (result3 !== null) {
+  //     setUserId(result3);
+  //     fetchUser(tokens, result3);
+  //   } else {
+  //   }
+  // };
   useEffect(() => {
-    fetchVideos();
+    if (isFocused) {
+      fetchVideos();
+    }
   }, [isFocused]);
 
   const fetchVideos = async () => {
-    // Simulate loading
-    setLoading(true);
-    await getUserID();
-    setLoading(false);
-  };
-
-  const getUserID = async () => {
     try {
-      const result = await AsyncStorage.getItem("authToken ");
-      if (result !== null) {
-        setAuthToken(result);
-        await fetchUserId(result);
+      setLoading(true);
+      const token = await AsyncStorage.getItem("authToken ");
+      const user = await AsyncStorage.getItem("userId ");
+
+      if (token && user) {
+        setAuthToken(token);
+        setUserId(user);
+        await fetchUser(token, user);
       }
-
     } catch (error) {
-
-      console.error("Error retrieving user ID:", error);
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
-
-  const fetchUserId = async (tokens) => {
-    const result3 = await AsyncStorage.getItem("userId ");
-    if (result3 !== null) {
-      setUserId(result3);
-      fetchUser(tokens, result3);
-    } else {
-    }
-  };
-
   const fetchUser = async (tokens, user) => {
     const token = tokens;
 

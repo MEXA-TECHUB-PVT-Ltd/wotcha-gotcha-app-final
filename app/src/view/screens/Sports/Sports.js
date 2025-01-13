@@ -284,14 +284,14 @@ import {
               ref_RBSheetCamera.current.close();
               setLoading(false);
   
-              navigation.navigate("UploadUpdateSports", {
+              navigation.replace("UploadUpdateSports", {
                 Video: response.assets[0],
               });
             } else if (response.uri) {
               ref_RBSheetCamera.current.close();
               setLoading(false);
   
-              navigation.navigate("UploadUpdateSports", {
+              navigation.replace("UploadUpdateSports", {
                 Video: response.assets[0],
               });
             }

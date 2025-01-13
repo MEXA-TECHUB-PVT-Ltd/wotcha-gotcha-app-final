@@ -1186,7 +1186,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     height: hp(6.2),
-    marginTop: hp(10),
+    marginTop: Platform.OS == "ios" ? 0 : hp(6),
     alignItems: "center",
     marginHorizontal: wp(8),
   },

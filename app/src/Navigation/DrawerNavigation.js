@@ -43,6 +43,8 @@ import {
 } from "react-native-responsive-screen";
 import { useIsFocused } from "@react-navigation/native";
 import { useTranslation } from 'react-i18next';
+import MainStackNavigation from "./MainStackNavigation";
+import { useAuth } from "../redux/store/AuthProvider";
 const Drawer = createDrawerNavigator();
 const DrawerNavigation = ({ navigation }) => {
   const [authToken, setAuthToken] = useState(null);
@@ -58,6 +60,7 @@ const DrawerNavigation = ({ navigation }) => {
   const isFocused = useIsFocused();
 
   const ref_RBSheetLogout = useRef(null);
+    const { setIsAuthenticated } = useAuth();
   const logOut = async () => {
     ref_RBSheetLogout.current.close();
     console.log("KEYS CALLED");
@@ -67,6 +70,7 @@ const DrawerNavigation = ({ navigation }) => {
       const filteredKeys = keys.filter((key) => !keysToExclude.includes(key));
       await AsyncStorage.multiRemove(filteredKeys);
       const remainingKeys = await AsyncStorage.getAllKeys();
+      setIsAuthenticated(false);
       if (remainingKeys.length === keysToExclude.length) {
         navigation.reset({
           index: 0,
@@ -78,7 +82,7 @@ const DrawerNavigation = ({ navigation }) => {
     } catch (error) {
       console.error("Error clearing AsyncStorage:", error);
     }
-    navigation.navigate("Signin_signup");
+    // navigation.navigate("Signin_signup");
   };
 
   const CustomDrawerContent = (props) => {
@@ -547,11 +551,13 @@ const DrawerNavigation = ({ navigation }) => {
         screenOptions={{ headerShown: false }}
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
-        <Drawer.Screen name="Home" component={BottomtabNavigation} />
+        {/* // 24-12-2024 ko stack change kr raha hun */}
+        {/* <Drawer.Screen name="Home" component={BottomtabNavigation} /> */}
+        <Drawer.Screen name="MainStackNavigation" component={MainStackNavigation} />
       </Drawer.Navigator>
       <RBSheet
         ref={ref_RBSheetLogout}
-        height={330}
+        height={300}
         openDuration={250}
         enableOverDrag={false}
         enabledGestureInteraction={false}
@@ -572,7 +578,7 @@ const DrawerNavigation = ({ navigation }) => {
           },
         }}
       >
-        <Image source={appImages.alert} style={{ resizeMode: "contain" }} />
+        <Image source={appImages.alert} style={{ resizeMode: "contain" , height:hp(20), width:wp(20)}} />
         <Text
           style={[
             styles.txtNotification,
@@ -629,7 +635,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: hp(4.3),
     width: "100%",
-    marginLeft: wp(5),
+    // marginLeft: wp(5),
     justifyContent: "space-evenly",
   },
   button: {

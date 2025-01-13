@@ -46,7 +46,7 @@ import {
               load={false}
 
               customClick={() => {
-                navigation.navigate("UploadScreenSports", { Video: receivedData })
+                navigation.replace("UploadScreenSports", { Video: receivedData })
                 //navigation.navigate('Profile_image');
               }}
             />

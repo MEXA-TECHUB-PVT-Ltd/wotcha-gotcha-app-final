@@ -13,7 +13,7 @@ import {
   Alert,
   Dimensions,
   Linking,
-  Platform
+  Platform,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import {
@@ -28,9 +28,9 @@ import { DraxProvider, DraxView } from "react-native-drax";
 import { BlurView } from "@react-native-community/blur";
 import Entypo from "react-native-vector-icons/Entypo";
 import CategoryInactive from "../../../assets/svg/CategoryInactive";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 // hover apps
-import Carousel from 'react-native-snap-carousel';
+import Carousel from "react-native-snap-carousel";
 import { InstalledApps, RNLauncherKitHelper } from "react-native-launcher-kit";
 import Swiper from "react-native-swiper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -44,17 +44,16 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import CustomSnackbar from "../../../assets/Custom/CustomSnackBar";
 import HeaderImageSlider from "../../../assets/Custom/HeaderImageSlider";
 import SwiperFlatList from "react-native-swiper-flatlist";
-import { fetchBannerConfig, fetchBannerInActive } from '../../../../../API';
+import { fetchBannerConfig, fetchBannerInActive } from "../../../../../API";
 import BannerCarousel from "../../../assets/Custom/BannerCarousel";
 //------------------------\\
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 const screenHeight = Dimensions.get("window").height;
 const itemHeight = 450;
 
-const { width: viewportWidth } = Dimensions.get('window');
+const { width: viewportWidth } = Dimensions.get("window");
 
 const sliderWidth = viewportWidth * 0.9;
-
 
 export default function Categories(identifier) {
   // const identifierName = identifier.route.name;
@@ -64,7 +63,7 @@ export default function Categories(identifier) {
   const [isLongPress, setIsLongPress] = useState(false);
   const [categoryActive, setcategoryActive] = useState(true);
   const [banner, setBanners] = useState([]);
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const [authToken, setAuthToken] = useState("");
 
   const [unUsedLocal, setUnUsedLocal] = useState([]);
@@ -117,7 +116,7 @@ export default function Categories(identifier) {
 
   const [topData, setTopData] = useState([]);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [modalDeleteApps, setModalDeleteApps] = useState(false);
 
@@ -154,58 +153,39 @@ export default function Categories(identifier) {
   // ];
 
   const RegionArea = [
-    t('Ecommerce'),
-    t('Business'),
-    t('cateSports'),
-    t('Education'),
-    t('Dating'),
-    t('FoodDelivery'),
-    t('SocialMedia'),
-    t('MedicalWellness'),
-    t('Grocery'),
-    t('Employment')
+    t("Ecommerce"),
+    t("Business"),
+    t("cateSports"),
+    t("Education"),
+    t("Dating"),
+    t("FoodDelivery"),
+    t("SocialMedia"),
+    t("MedicalWellness"),
+    t("Grocery"),
+    t("Employment"),
   ];
   const containerHeight = Math.min(screenHeight * 0.8, itemHeight);
   //-------------------------------------------------------
-
-  useEffect(() => {
-    // Check if it's the initial load (selectedItemId is not set yet)
-    fetchVideos();
-  }, [isFocused]);
-
-  const fetchVideos = async () => {
-    // Simulate loading
-    setIsLoading(true);
-    getUserID();
-    // Once all data is fetched, set loading to false
-    setIsLoading(false);
-  };
-
-  const getUserID = async () => {
-    try {
-      const result = await AsyncStorage.getItem("authToken ");
-      if (result !== null) {
-        setAuthToken(result);
-        console.log("user id retrieved:", result);
-      }
-    } catch (error) {
-      // Handle errors here
-      console.error("Error retrieving user ID:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (authToken){
-      fetchBanners();
-    }
-    }, [authToken]);
-  
   const fetchBanners = async () => {
     setIsLoading(true);
     try {
+      // Retrieve auth token from AsyncStorage
+      const authToken = await AsyncStorage.getItem("authToken ");
+
+      if (!authToken) {
+        console.error("Auth token not found");
+        setIsLoading(false);
+        return;
+      }
+      if (authToken !== null) {
+        setAuthToken(authToken);
+        console.log("user id retrieved:", authToken);
+      }
+
+      // Fetch active and inactive banners
       const [activeBannersResult, inactiveBannersResult] = await Promise.all([
         fetchBannerConfig(authToken, base_url),
-        fetchBannerInActive(authToken, base_url)
+        fetchBannerInActive(authToken, base_url),
       ]);
 
       setAdsData(activeBannersResult.AllBanners || []);
@@ -216,9 +196,92 @@ export default function Categories(identifier) {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchBanners();
+  }, []);
+  // useEffect(() => {
+  //   // Check if it's the initial load (selectedItemId is not set yet)
+  //   fetchVideos();
+  // }, [isFocused]);
+
+  // const fetchVideos = async () => {
+  //   // Simulate loading
+  //   setIsLoading(true);
+  //   getUserID();
+  //   // Once all data is fetched, set loading to false
+  //   setIsLoading(false);
+  // };
+
+  // const getUserID = async () => {
+  //   try {
+  //     const result = await AsyncStorage.getItem("authToken ");
+  //     if (result !== null) {
+  //       setAuthToken(result);
+  //       console.log("user id retrieved:", result);
+  //     }
+  //   } catch (error) {
+  //     // Handle errors here
+  //     console.error("Error retrieving user ID:", error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (authToken){
+  //     fetchBanners();
+  //   }
+  //   }, [authToken]);
+
+  // const fetchBanners = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const [activeBannersResult, inactiveBannersResult] = await Promise.all([
+  //       fetchBannerConfig(authToken, base_url),
+  //       fetchBannerInActive(authToken, base_url)
+  //     ]);
+
+  //     setAdsData(activeBannersResult.AllBanners || []);
+  //     setAdsInActiveData(inactiveBannersResult || []);
+  //   } catch (error) {
+  //     console.error("Error fetching banners:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
   const handleBannerPress = (link) => {
     Linking.openURL(link);
   };
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const cachedData = await AsyncStorage.getItem("installedApps");
+  //       console.log('get install in async-------------', cachedData)
+  //       if (cachedData) {
+  //         // Use cached data if available
+  //         setData(JSON.parse(cachedData));
+  //       } else {
+  //         // Fetch fresh data if no cache is available
+  //         const installedApps = InstalledApps.getSortedApps();
+  //         const packageNames = installedApps.map((app) => app.label);
+  //         const packageImages = installedApps.map((app) => app.icon);
+  //         const packageBundle = installedApps.map((app) => app.packageName);
+  //         const packageDataArray = packageNames.map((packageName, index) => ({
+  //           label: packageName,
+  //           bundle: packageBundle[index],
+  //           image: packageImages[index],
+  //         }));
+
+  //         setData(packageDataArray);
+  //         await AsyncStorage.setItem("installedApps", JSON.stringify(packageDataArray));
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching installed apps:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -233,18 +296,18 @@ export default function Categories(identifier) {
       }));
 
       setData(packageDataArray);
-      setIsLoading(false);
+      // setIsLoading(false);
     };
 
     fetchData();
   }, []);
   useEffect(() => {
-    if (isFocused) {
+   
       // Load favouriteData from AsyncStorage when the component mounts
       const loadFavouriteData = async () => {
         try {
           const storedData = await AsyncStorage.getItem("favouriteData");
-        
+
           // it is conisdering empty array as 2 length thats why i a have added it
           if (storedData.length === 2) {
             const initialFavouriteData = dataApps.slice(0, 4);
@@ -267,11 +330,11 @@ export default function Categories(identifier) {
       };
 
       loadFavouriteData();
-    }
-  }, [isFocused]); // Run this effect only once when the component mounts
+    
+  }, []); // Run this effect only once when the component mounts
 
   useEffect(() => {
-    if (isFocused) {
+  
       // Save favouriteData to AsyncStorage whenever it changes
       const saveFavouriteData = async () => {
         try {
@@ -284,16 +347,15 @@ export default function Categories(identifier) {
         }
       };
       saveFavouriteData();
-
-    }
-  }, [favouriteData, isFocused]); // Run this effect whenever favouriteData changes
+    
+  }, [favouriteData, ]); // Run this effect whenever favouriteData changes
 
   //------------------------------------\\
 
   //-------------------Use Effect Top Apps---------\\
 
   useEffect(() => {
-    if (isFocused) {
+
       // Load topData from AsyncStorage when the component mounts
       const loadTopData = async () => {
         //await AsyncStorage.removeItem('topData');
@@ -309,11 +371,11 @@ export default function Categories(identifier) {
       };
 
       loadTopData();
-    }
-  }, [isFocused]); // Run this effect only once when the component mounts
+    
+  }, []); // Run this effect only once when the component mounts
 
   useEffect(() => {
-    if (isFocused) {
+   
       // Save topData to AsyncStorage whenever it changes
       const saveTopData = async () => {
         try {
@@ -324,7 +386,7 @@ export default function Categories(identifier) {
       };
 
       saveTopData();
-    }
+    
   }, [topData]); // Run this effect whenever topData changes
 
   //---------------------------------------------\\
@@ -376,7 +438,7 @@ export default function Categories(identifier) {
         "comparisonDate",
         JSON.stringify(packageDataArray)
       );
-      setIsLoading(false);
+      // setIsLoading(false);
     };
 
     fetchUsedData();
@@ -405,10 +467,15 @@ export default function Categories(identifier) {
           image: app.image,
         };
 
-        await AsyncStorage.setItem(`appInfo_${app.label}`, JSON.stringify(appInfo));
+        await AsyncStorage.setItem(
+          `appInfo_${app.label}`,
+          JSON.stringify(appInfo)
+        );
       }
 
-      const lastUsageDate = await AsyncStorage.getItem(`lastUsageDate_${app.label}`);
+      const lastUsageDate = await AsyncStorage.getItem(
+        `lastUsageDate_${app.label}`
+      );
 
       if (!lastUsageDate || new Date(lastUsageDate) < threeWeeksAgo) {
         unusedAppsData.push(appInfo);
@@ -435,7 +502,9 @@ export default function Categories(identifier) {
       await AsyncStorage.setItem(`lastUsageDate_${item.label}`, now);
 
       // Remove app from unused apps list
-      const updatedUnusedApps = unusedApps.filter(app => app.label !== item.label);
+      const updatedUnusedApps = unusedApps.filter(
+        (app) => app.label !== item.label
+      );
       setUnusedApps(updatedUnusedApps);
     } catch (error) {
       console.error("Error opening the app:", error);
@@ -462,13 +531,11 @@ export default function Categories(identifier) {
     { id: 10, title: "LinkedIn", image: appImages.linkedIn },
   ]);
 
-
   const onDragEnd = (data, targetList, item) => {
     // You might want to implement your own logic here
     const updatedList = [...targetList, item];
     // Update the state and use the callback to log the updated state
-    setFavouriteApps(updatedList, () => {
-    });
+    setFavouriteApps(updatedList, () => {});
 
     setFlatListKey(Date.now()); // Update the key to force re-render
   };
@@ -551,27 +618,25 @@ export default function Categories(identifier) {
       </TouchableOpacity>
     );
   };
- 
 
   // Load saved apps from AsyncStorage when the component mounts
- 
-    const loadSavedApps = async () => {
-      try {
-        const savedApps = await AsyncStorage.getItem('savedApps');
-        if (savedApps) {
 
-          setSavedApps(JSON.parse(savedApps));
-        }
-      } catch (error) {
-        console.error('Error loading saved apps from AsyncStorage:', error);
+  const loadSavedApps = async () => {
+    try {
+      const savedApps = await AsyncStorage.getItem("savedApps");
+      if (savedApps) {
+        setSavedApps(JSON.parse(savedApps));
       }
-    };
+    } catch (error) {
+      console.error("Error loading saved apps from AsyncStorage:", error);
+    }
+  };
 
-   // Function to save selected apps to AsyncStorage
-   const handleSave = async () => {
+  // Function to save selected apps to AsyncStorage
+  const handleSave = async () => {
     try {
       // Retrieve the current array of saved apps from AsyncStorage
-      const currentSavedApps = await AsyncStorage.getItem('savedApps');
+      const currentSavedApps = await AsyncStorage.getItem("savedApps");
       let updatedSavedApps = [];
 
       if (currentSavedApps) {
@@ -582,36 +647,35 @@ export default function Categories(identifier) {
       updatedSavedApps.push(...selectedApps);
 
       // Save the updated array back to AsyncStorage
-      await AsyncStorage.setItem('savedApps', JSON.stringify(updatedSavedApps));
+      await AsyncStorage.setItem("savedApps", JSON.stringify(updatedSavedApps));
       setSnackbarVisible(true);
       setSelectedApps([]); // Clear the selected apps
       setModalVisible(false);
       // Update the state
       setSavedApps(updatedSavedApps);
-
     } catch (error) {
-      console.error('Error saving selected apps to AsyncStorage:', error);
+      console.error("Error saving selected apps to AsyncStorage:", error);
     }
   };
 
-
-    const BusinessSavedApps = async () => {
-      try {
-        const savedApps = await AsyncStorage.getItem('savedApps_b');
-        if (savedApps) {
-
-          setSavedApps_b(JSON.parse(savedApps));
-        }
-      } catch (error) {
-        console.error('Error loading saved apps from AsyncStorage:', error);
+  const BusinessSavedApps = async () => {
+    try {
+      const savedApps = await AsyncStorage.getItem("savedApps_b");
+      if (savedApps) {
+        setSavedApps_b(JSON.parse(savedApps));
       }
-    };
+    } catch (error) {
+      console.error("Error loading saved apps from AsyncStorage:", error);
+    }
+  };
 
-   // Function to save selected apps to AsyncStorage
-   const handleSave_b = async () => {
+  // Function to save selected apps to AsyncStorage
+  const handleSave_b = async () => {
     try {
       // Retrieve the current array of saved apps from AsyncStorage
-      const currentBusinessSavedApps = await AsyncStorage.getItem('savedApps_b');
+      const currentBusinessSavedApps = await AsyncStorage.getItem(
+        "savedApps_b"
+      );
       let updatedSavedApps = [];
 
       if (currentBusinessSavedApps) {
@@ -621,16 +685,19 @@ export default function Categories(identifier) {
       updatedSavedApps.push(...selectedApps_b);
 
       // Save the updated array back to AsyncStorage
-      await AsyncStorage.setItem('savedApps_b', JSON.stringify(updatedSavedApps));
+      await AsyncStorage.setItem(
+        "savedApps_b",
+        JSON.stringify(updatedSavedApps)
+      );
       setSnackbarVisible(true);
       setModalVisible_b(false);
-      setSelectedApps_b([])
+      setSelectedApps_b([]);
       // Update the state
       setSavedApps_b(updatedSavedApps);
 
       // console.log('saved apps in handleSave_b --------->', updatedSavedApps);
     } catch (error) {
-      console.error('Error saving selected apps to AsyncStorage:', error);
+      console.error("Error saving selected apps to AsyncStorage:", error);
     }
   };
 
@@ -683,7 +750,6 @@ export default function Categories(identifier) {
       }
     });
   };
-
 
   const renderAppsFav = (item) => {
     const isSelected = selectedApps.includes(item);
@@ -1151,7 +1217,7 @@ export default function Categories(identifier) {
           setIsCancelRemoveModalVisible(true);
           setRemoveFavouriteItem(item);
         }}
-        //onPress={() => openApp(item?.bundle)}
+        onPress={() => openApp(item?.bundle)}
         style={styles.items}
       >
         <Image
@@ -1173,7 +1239,6 @@ export default function Categories(identifier) {
       </TouchableOpacity>
     );
   };
-
 
   const renderAvailableApps = (item) => {
     // Render the item only if count is equal to 2
@@ -1199,17 +1264,16 @@ export default function Categories(identifier) {
         </View>
       );
     }
-
   };
 
   const handleItemPress = (category) => {
     setSelectedItemId(category);
-    setIsSelectedActive(false);///
-    setcategoryActive(false);////ye old hai jis ko comment kiya tha
+    setIsSelectedActive(false); ///
+    setcategoryActive(false); ////ye old hai jis ko comment kiya tha
     setSelectedCategory(category);
-    setecommerance(category === t('Ecommerce'));
+    setecommerance(category === t("Ecommerce"));
     // setecommerance(category === "E-commerce");
-    setSport(category === t('cateSports'));
+    setSport(category === t("cateSports"));
     // setSport(category === "Sports");
   };
 
@@ -1227,18 +1291,15 @@ export default function Categories(identifier) {
         onPress={() => {
           // Pass the item data when pressed
           handleItemPress(item);
-          if(item === t('Ecommerce'))
-          // if(item === 'E-commerce')
-            {
-              console.log("E----AYA:");
-              loadSavedApps() // Assuming handleItemPress is a function to handle item press
-            }
-            else if (item === t('Business'))
+          if (item === t("Ecommerce")) {
+            // if(item === 'E-commerce')
+            console.log("E----AYA:");
+            loadSavedApps(); // Assuming handleItemPress is a function to handle item press
+          } else if (item === t("Business")) {
             // else if (item === 'Business')
-              {
-                console.log("Business----AYA:");
-                BusinessSavedApps() 
-              }
+            console.log("Business----AYA:");
+            BusinessSavedApps();
+          }
           console.log("Selected item:", item);
         }}
       >
@@ -1287,10 +1348,10 @@ export default function Categories(identifier) {
   const press_category = () => {
     setIsSelectedActive(!isSelectedActive);
     setSelectedItemId(null); // Deactivate all items when category is pressed
-    setSelectedCategory('');
+    setSelectedCategory("");
     setecommerance(false);
     setSport(false);
-    setcategoryActive(true);//ye old hai jis ko comment kiya tha
+    setcategoryActive(true); //ye old hai jis ko comment kiya tha
   };
 
   const handleConfirmFavourite = () => {
@@ -1319,21 +1380,19 @@ export default function Categories(identifier) {
     }
   };
 
-
   //------------------------------------------------------------\\
   const openCategoryApp = async (app) => {
     try {
       console.log("Opening app-------------------:", app.bundle);
-  
+
       // Launch the application using its bundle ID
       await RNLauncherKitHelper.launchApplication(app.bundle);
-      
+
       console.log("App launched successfully.");
     } catch (error) {
       console.error("Error launching the app:", error.message);
     }
   };
-  
 
   return (
     <View
@@ -1376,7 +1435,9 @@ export default function Categories(identifier) {
               }}
               style={styles.overlayButton}
             >
-              <Text style={{ color: "white" }}>{t('Dashboard.AddtoFavorites')}</Text>
+              <Text style={{ color: "white" }}>
+                {t("Dashboard.AddtoFavorites")}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
@@ -1387,11 +1448,11 @@ export default function Categories(identifier) {
               style={styles.overlayButton}
             >
               <Text style={{ color: "white" }}>
-              {t('Dashboard.RemoveFromWotchaGotchaApp')}
+                {t("Dashboard.RemoveFromWotchaGotchaApp")}
                 {/* Remove From Wotcha Gotcha App */}
               </Text>
             </TouchableOpacity>
-          </View> 
+          </View>
         </View>
         {isCancelModalVisible && (
           <TouchableOpacity
@@ -1412,13 +1473,14 @@ export default function Categories(identifier) {
           <View style={styles.modalContent}>
             <TouchableOpacity
               onPress={() => {
-
                 setIsLongPressRemove(false);
                 setModalDeleteFavouriteApps(true);
               }}
               style={styles.overlayButton}
             >
-              <Text style={{ color: "white" }}>{t('Dashboard.RemoveFavorites')}</Text>
+              <Text style={{ color: "white" }}>
+                {t("Dashboard.RemoveFavorites")}
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -1430,7 +1492,7 @@ export default function Categories(identifier) {
               style={styles.overlayButton}
             >
               <Text style={{ color: "white" }}>
-              {t('Dashboard.RemoveFromWotchaGotchaApp')}
+                {t("Dashboard.RemoveFromWotchaGotchaApp")}
                 {/* Remove From Wotcha Gotcha App */}
               </Text>
             </TouchableOpacity>
@@ -1451,9 +1513,9 @@ export default function Categories(identifier) {
         barStyle="dark-content" // You can set the StatusBar text color to dark or light
       />
 
-      <View style={{ marginTop:Platform.OS =="ios"? 0: hp(7) }}>
+      <View style={{ marginTop: Platform.OS == "ios" ? 0 : hp(7) }}>
         <Headers
-         OnpresshowHome={() => {
+          OnpresshowHome={() => {
             navigation.navigate("MoreScreen");
           }}
           // showListings={true}
@@ -1462,7 +1524,6 @@ export default function Categories(identifier) {
           // onPressListings={() => navigation.openDrawer()}
           showSearch={true}
           onPressSearch={() => navigation.navigate("SearchApps")}
-          
         />
       </View>
 
@@ -1470,223 +1531,240 @@ export default function Categories(identifier) {
         showsVerticalScrollIndicator={false}
         style={{ flex: 1, marginHorizontal: wp(5) }}
       >
+        {/* // start of banner slider */}
+        <BannerCarousel
+          isLoading={isLoading}
+          adsData={adsData}
+          noDataMessage="No Top Banner"
+          onBannerPress={handleBannerPress}
+        />
 
-  {/* // start of banner slider */}
-  <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsData}
-        noDataMessage="No Top Banner"
-        onBannerPress={handleBannerPress}
-      />
- 
         {/* ////slider end */}
-{Platform.OS !="ios" ?
- <View style={styles.latestSearchList}>
- <TouchableOpacity onPress={press_category}>
-   {isSelectedActive ? (
-     <CategoryActive width={23} height={23} />
-   ) : (
-     <CategoryInactive width={23} height={23} />
-   )}
- </TouchableOpacity>
+        {Platform.OS != "ios" ? (
+          <View style={styles.latestSearchList}>
+            <TouchableOpacity onPress={press_category}>
+              {isSelectedActive ? (
+                <CategoryActive width={23} height={23} />
+              ) : (
+                <CategoryInactive width={23} height={23} />
+              )}
+            </TouchableOpacity>
 
- <FlatList
-   style={{ flex: 1 }}
-   contentContainerStyle={{ alignItems: "center" }}
-   showsHorizontalScrollIndicator={false}
-   horizontal
-   //data={regions}
-   data={RegionArea}
-   // keyExtractor={item => item.id.toString()}
-   renderItem={({ item }) => renderSearches(item)}
- />
-</View>:
-<Text>{t('Dashboard.NoDataavailable')}</Text>
-}
-       
+            <FlatList
+              style={{ flex: 1 }}
+              contentContainerStyle={{ alignItems: "center" }}
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              //data={regions}
+              data={RegionArea}
+              // keyExtractor={item => item.id.toString()}
+              renderItem={({ item }) => renderSearches(item)}
+            />
+          </View>
+        ) : (
+          <Text>{t("Dashboard.NoDataavailable")}</Text>
+        )}
+
         {categoryActive ? (
-          Platform.OS !="ios" && (
+          Platform.OS != "ios" && (
             <>
-            <View
-              style={{
-                marginTop: hp(2),
-                marginLeft: wp(-1),
-                height: hp(23),
-                width: wp(60),
-              }}
-            >
-              {isLoading === true ? (
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <ActivityIndicator size="large" color="#FACA4E" />
-                </View>
-              ) : (
-                <>
-                  {topData?.length === 0 ? (
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
-                      {t('Dashboard.NoTopApps')}
-                        {/* No Top Apps */}
-                      </Text>
-                    </View>
-                  ) : (
-                    <FlatList
-                      style={{ margin: 8, flex: 1 }}
-                      //contentContainerStyle={{marginBottom:hp(5)}}
-                      showsVerticalScrollIndicator={false}
-                      data={topData}
-                      //keyExtractor={item => item.id.toString()}
-                      numColumns={3} // Set the number of columns to 3
-                      renderItem={({ item }) => renderAvailableApps(item)}
-                    />
-                  )}
-                </>
-              )}
-            </View>
-
-            <View style={{ marginTop: hp(-3), height: hp(25) }}>
-              <Text
-                style={{
-                  fontSize: hp(2.3),
-                  marginLeft: wp(3),
-                  fontFamily: "Inter-Bold",
-                  color: "#4A4A4A",
-                  fontWeight: "bold",
-                }}
-              >
-                {t('Dashboard.PhoneBasedApps')}
-                {/* Phone Based Apps */}
-              </Text>
-
-              {isLoading ? (
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <ActivityIndicator size="large" color="#FACA4E" />
-                </View>
-              ) : (
-                <View style={{ flex: 1 }}>
-                  <FlatList
-                    data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                    renderItem={({ item }) => renderApps(item)}
-                    contentContainerStyle={{
-                      borderWidth: 1,
-                      marginRight: wp(2.3),
-                      marginTop: hp(3),
-                      borderColor: "#00000017",
-                      borderRadius: wp(3),
-                    }}
-                  />
-
-                  <FlatList
-                    data={dataApps.slice(Math.ceil(dataApps.length / 2))}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                    renderItem={({ item }) => renderApps(item)}
-                    contentContainerStyle={{
-                      borderWidth: 1,
-                      marginRight: wp(2.3),
-                      marginTop: hp(3),
-                      borderColor: "#00000017",
-                      borderRadius: wp(3),
-                    }}
-                  />
-                </View>
-              )}
-            </View>
-
-            <View style={{ height: hp(8), justifyContent: "center" }}>
               <View
                 style={{
-                  height: hp(7),
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  alignItems: "center",
-                  //borderWidth: 1,
-                  marginHorizontal: wp(12),
-                }}
-              ></View>
-            </View>
-
-            <View style={{ marginTop: hp(-5), height: hp(28) }}>
-              <Text
-                style={{
-                  fontSize: hp(2.3),
-                  marginLeft: wp(3),
-                  fontFamily: "Inter-Bold",
-                  color: "#4A4A4A",
-                  fontWeight: "bold",
+                  marginTop: hp(2),
+                  marginLeft: wp(-1),
+                  height: hp(23),
+                  width: wp(60),
                 }}
               >
-                {t('Dashboard.FavouriteApps')}
-                {/* Favourite Apps */}
-              </Text>
-              {isLoading ? (
-                <View
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <ActivityIndicator size="large" color="#FACA4E" />
-                </View>
-              ) : (
-                <>
-                  {favouriteData?.length === 0 ? (
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Text
+                {/* {isLoading === true ? (
+                  <View
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <ActivityIndicator size="large" color="#FACA4E" />
+                  </View>
+                ) : ( */}
+                  <>
+                    {topData?.length === 0 ? (
+                      <View
                         style={{
-                          fontWeight: "bold",
-                          fontSize: hp(2.1),
+                          flex: 1,
                           justifyContent: "center",
+                          alignItems: "center",
                         }}
                       >
-                        {t('Dashboard.NoFavouriteApps')}
-                        {/* No Favourite Apps */}
-                      </Text>
-                    </View>
-                  ) : (
+                        <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                          {t("Dashboard.NoTopApps")}
+                          {/* No Top Apps */}
+                        </Text>
+                      </View>
+                    ) : (
+                      <FlatList
+                        style={{ margin: 8, flex: 1 }}
+                        //contentContainerStyle={{marginBottom:hp(5)}}
+                        showsVerticalScrollIndicator={false}
+                        data={topData}
+                        //keyExtractor={item => item.id.toString()}
+                        numColumns={3} // Set the number of columns to 3
+                        renderItem={({ item }) => renderAvailableApps(item)}
+                      />
+                    )}
+                  </>
+                {/* )} */}
+              </View>
+
+              <View style={{ marginTop: hp(-3), height: hp(25) }}>
+                <Text
+                  style={{
+                    fontSize: hp(2.3),
+                    marginLeft: wp(3),
+                    fontFamily: "Inter-Bold",
+                    color: "#4A4A4A",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {t("Dashboard.PhoneBasedApps")}
+                  {/* Phone Based Apps */}
+                </Text>
+
+                {/* {isLoading ? (
+                  <View
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <ActivityIndicator size="large" color="#FACA4E" />
+                  </View>
+                ) : ( */}
+                  <View style={{ flex: 1 }}>
+                    <FlatList
+                      data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      keyExtractor={(item, itemIndex) => `${itemIndex}`}
+                      renderItem={({ item }) => renderApps(item)}
+                      contentContainerStyle={{
+                        borderWidth: 1,
+                        marginRight: wp(2.3),
+                        marginTop: hp(3),
+                        borderColor: "#00000017",
+                        borderRadius: wp(3),
+                      }}
+                    />
+
+                    <FlatList
+                      data={dataApps.slice(Math.ceil(dataApps.length / 2))}
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      keyExtractor={(item, itemIndex) => `${itemIndex}`}
+                      renderItem={({ item }) => renderApps(item)}
+                      contentContainerStyle={{
+                        borderWidth: 1,
+                        marginRight: wp(2.3),
+                        marginTop: hp(3),
+                        borderColor: "#00000017",
+                        borderRadius: wp(3),
+                      }}
+                    />
+                  </View>
+                {/* )} */}
+              </View>
+
+              <View style={{ height: hp(8), justifyContent: "center" }}>
+                <View
+                  style={{
+                    height: hp(7),
+                    flexDirection: "row",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    //borderWidth: 1,
+                    marginHorizontal: wp(12),
+                  }}
+                ></View>
+              </View>
+
+              <View style={{ marginTop: hp(-5), height: hp(28) }}>
+                <Text
+                  style={{
+                    fontSize: hp(2.3),
+                    marginLeft: wp(3),
+                    fontFamily: "Inter-Bold",
+                    color: "#4A4A4A",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {t("Dashboard.FavouriteApps")}
+                  {/* Favourite Apps */}
+                </Text>
+                {/* {isLoading ? (
+                  <View
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <ActivityIndicator size="large" color="#FACA4E" />
+                  </View>
+                ) : ( */}
+                  <>
+                    {favouriteData?.length === 0 ? (
+                      <View
+                        style={{
+                          flex: 1,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: hp(2.1),
+                            justifyContent: "center",
+                          }}
+                        >
+                          {t("Dashboard.NoFavouriteApps")}
+                          {/* No Favourite Apps */}
+                        </Text>
+                      </View>
+                    ) : (
+                      <FlatList
+                        data={favouriteData.slice(
+                          0,
+                          Math.ceil(favouriteData.length / 2)
+                        )}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        keyExtractor={(item, itemIndex) => `${itemIndex}`}
+                        renderItem={({ item }) => renderFavouritesApps(item)}
+                        contentContainerStyle={{
+                          borderWidth: 1,
+                          marginRight: wp(2.3),
+                          marginTop: hp(3),
+                          borderColor: "#00000017",
+                          borderRadius: wp(3),
+                        }}
+                      />
+                    )}
                     <FlatList
                       data={favouriteData.slice(
-                        0,
                         Math.ceil(favouriteData.length / 2)
                       )}
                       horizontal
@@ -1701,98 +1779,84 @@ export default function Categories(identifier) {
                         borderRadius: wp(3),
                       }}
                     />
-                  )}
-                  <FlatList
-                    data={favouriteData.slice(
-                      Math.ceil(favouriteData.length / 2)
-                    )}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                    renderItem={({ item }) => renderFavouritesApps(item)}
-                    contentContainerStyle={{
-                      borderWidth: 1,
-                      marginRight: wp(2.3),
-                      marginTop: hp(3),
-                      borderColor: "#00000017",
-                      borderRadius: wp(3),
-                    }}
-                  />
-                </>
-              )}
-            </View>
+                  </>
+                {/* )} */}
+              </View>
 
-            <View
-              style={{ marginTop: hp(1), marginBottom: hp(5), height: hp(25) }}
-            >
-              <Text
+              <View
                 style={{
-                  fontSize: hp(2.3),
-                  marginLeft: wp(3),
-                  fontFamily: "Inter-Bold",
-                  color: "#4A4A4A",
-                  fontWeight: "bold",
+                  marginTop: hp(1),
+                  marginBottom: hp(5),
+                  height: hp(25),
                 }}
               >
-                {t('Dashboard.UnusedApps')}
-                {/* Unused Apps */}
-              </Text>
-
-              {isLoading ? (
-                <View
+                <Text
                   style={{
-                    position: "absolute",
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    justifyContent: "center",
-                    alignItems: "center",
+                    fontSize: hp(2.3),
+                    marginLeft: wp(3),
+                    fontFamily: "Inter-Bold",
+                    color: "#4A4A4A",
+                    fontWeight: "bold",
                   }}
                 >
-                  <ActivityIndicator size="large" color="#FACA4E" />
-                </View>
-              ) : (
-                <View style={{ flex: 1 }}>
-                  <FlatList
-                    data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                    renderItem={({ item }) => renderApps(item)}
-                    contentContainerStyle={{
-                      borderWidth: 1,
-                      marginRight: wp(2.3),
-                      marginTop: hp(3),
-                      borderColor: "#00000017",
-                      borderRadius: wp(3),
-                    }}
-                  />
+                  {t("Dashboard.UnusedApps")}
+                  {/* Unused Apps */}
+                </Text>
 
-                  <FlatList
-                    data={dataApps.slice(Math.ceil(dataApps.length / 2))}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                    renderItem={({ item }) => renderApps(item)}
-                    contentContainerStyle={{
-                      borderWidth: 1,
-                      marginRight: wp(2.3),
-                      marginTop: hp(3),
-                      borderColor: "#00000017",
-                      borderRadius: wp(3),
+                {/* {isLoading ? (
+                  <View
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
-                  />
-                </View>
-              )}
-            </View>
-          </>
+                  >
+                    <ActivityIndicator size="large" color="#FACA4E" />
+                  </View>
+                ) : ( */}
+                  <View style={{ flex: 1 }}>
+                    <FlatList
+                      data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      keyExtractor={(item, itemIndex) => `${itemIndex}`}
+                      renderItem={({ item }) => renderApps(item)}
+                      contentContainerStyle={{
+                        borderWidth: 1,
+                        marginRight: wp(2.3),
+                        marginTop: hp(3),
+                        borderColor: "#00000017",
+                        borderRadius: wp(3),
+                      }}
+                    />
+
+                    <FlatList
+                      data={dataApps.slice(Math.ceil(dataApps.length / 2))}
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      keyExtractor={(item, itemIndex) => `${itemIndex}`}
+                      renderItem={({ item }) => renderApps(item)}
+                      contentContainerStyle={{
+                        borderWidth: 1,
+                        marginRight: wp(2.3),
+                        marginTop: hp(3),
+                        borderColor: "#00000017",
+                        borderRadius: wp(3),
+                      }}
+                    />
+                  </View>
+                {/* )} */}
+              </View>
+            </>
           )
-        
         ) : (
           <>
-            {ecommerance && selectedCategory === t('Ecommerce') && (
-            // {ecommerance && selectedCategory === "E-commerce" && (
+            {ecommerance && selectedCategory === t("Ecommerce") && (
+              // {ecommerance && selectedCategory === "E-commerce" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -1816,8 +1880,8 @@ export default function Categories(identifier) {
                                 {savedApps
                                   .slice(rowIndex * 5, (rowIndex + 1) * 5)
                                   .map((app, index) => (
-                                      <TouchableOpacity
-                                       key={index}
+                                    <TouchableOpacity
+                                      key={index}
                                       onPress={() => openCategoryApp(app)}
                                       style={{
                                         flexDirection: "column",
@@ -1879,7 +1943,7 @@ export default function Categories(identifier) {
                             top: "40%",
                           }}
                         >
-                          {t('Dashboard.addEcommernceapps')}
+                          {t("Dashboard.addEcommernceapps")}
                           {/* Your can add E-commernce apps here */}
                         </Text>
                       </View>
@@ -1894,8 +1958,8 @@ export default function Categories(identifier) {
               </>
             )}
 
-            {selectedCategory === t('Business') && (
-            // {selectedCategory === "Business" && (
+            {selectedCategory === t("Business") && (
+              // {selectedCategory === "Business" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -1978,7 +2042,7 @@ export default function Categories(identifier) {
                             top: "40%",
                           }}
                         >
-                           {t('Dashboard.addBussinessapps')}
+                          {t("Dashboard.addBussinessapps")}
                           {/* Your can add Bussiness apps here */}
                         </Text>
                       </View>
@@ -1992,8 +2056,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === t('cateSports') && (
-            // {selectedCategory === "Sports" && (
+            {selectedCategory === t("cateSports") && (
+              // {selectedCategory === "Sports" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -2076,7 +2140,7 @@ export default function Categories(identifier) {
                             top: "40%",
                           }}
                         >
-                          {t('Dashboard.addSportsapps')}
+                          {t("Dashboard.addSportsapps")}
                           {/* Your can add Sports apps here */}
                         </Text>
                       </View>
@@ -2090,8 +2154,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === t('Education') && (
-            // {selectedCategory === "Education" && (
+            {selectedCategory === t("Education") && (
+              // {selectedCategory === "Education" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -2114,8 +2178,8 @@ export default function Categories(identifier) {
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
                                 <TouchableOpacity
-                                key={index}
-                                onPress={() => openCategoryApp(app)}
+                                  key={index}
+                                  onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -2174,7 +2238,7 @@ export default function Categories(identifier) {
                             top: "40%",
                           }}
                         >
-                          {t('Dashboard.addEducationapps')}
+                          {t("Dashboard.addEducationapps")}
                           {/* Your can add Education apps here */}
                         </Text>
                       </View>
@@ -2188,8 +2252,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === t('Dating') && (
-            // {selectedCategory === "Dating" && (
+            {selectedCategory === t("Dating") && (
+              // {selectedCategory === "Dating" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -2212,8 +2276,8 @@ export default function Categories(identifier) {
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
                                 <TouchableOpacity
-                                key={index}
-                                onPress={() => openCategoryApp(app)}
+                                  key={index}
+                                  onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -2272,7 +2336,7 @@ export default function Categories(identifier) {
                             top: "40%",
                           }}
                         >
-                          {t('Dashboard.addDatingapps')}
+                          {t("Dashboard.addDatingapps")}
                           {/* Your can add Dating apps here */}
                         </Text>
                       </View>
@@ -2286,8 +2350,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === t('FoodDelivery') && (
-            // {selectedCategory === "Food Delivery" && (
+            {selectedCategory === t("FoodDelivery") && (
+              // {selectedCategory === "Food Delivery" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -2310,8 +2374,8 @@ export default function Categories(identifier) {
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
                                 <TouchableOpacity
-                                key={index}
-                                onPress={() => openCategoryApp(app)}
+                                  key={index}
+                                  onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -2370,7 +2434,7 @@ export default function Categories(identifier) {
                             top: "40%",
                           }}
                         >
-                          {t('Dashboard.addFoodDeliveryapps')}
+                          {t("Dashboard.addFoodDeliveryapps")}
                           {/* Your can add Food Delivery apps here */}
                         </Text>
                       </View>
@@ -2384,8 +2448,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === t('SocialMedia') && (
-            // {selectedCategory === "Social Media" && (
+            {selectedCategory === t("SocialMedia") && (
+              // {selectedCategory === "Social Media" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -2408,8 +2472,8 @@ export default function Categories(identifier) {
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
                                 <TouchableOpacity
-                                key={index}
-                                onPress={() => openCategoryApp(app)}
+                                  key={index}
+                                  onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -2468,7 +2532,7 @@ export default function Categories(identifier) {
                             top: "40%",
                           }}
                         >
-                          {t('Dashboard.addSocialMediaapp')}
+                          {t("Dashboard.addSocialMediaapp")}
                           {/* you can add Social Media app here */}
                         </Text>
                       </View>
@@ -2482,8 +2546,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === t('MedicalWellness') && (
-            // {selectedCategory === "Medical Wellness" && (
+            {selectedCategory === t("MedicalWellness") && (
+              // {selectedCategory === "Medical Wellness" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -2506,8 +2570,8 @@ export default function Categories(identifier) {
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
                                 <TouchableOpacity
-                                key={index}
-                                onPress={() => openCategoryApp(app)}
+                                  key={index}
+                                  onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -2566,7 +2630,7 @@ export default function Categories(identifier) {
                             top: "40%",
                           }}
                         >
-                          {t('Dashboard.addMedicalwallnessapp')}
+                          {t("Dashboard.addMedicalwallnessapp")}
                           {/* You can add Medical wallness app here */}
                         </Text>
                       </View>
@@ -2580,8 +2644,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === t('Grocery') && (
-            // {selectedCategory === "Grocery" && (
+            {selectedCategory === t("Grocery") && (
+              // {selectedCategory === "Grocery" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -2604,8 +2668,8 @@ export default function Categories(identifier) {
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
                                 <TouchableOpacity
-                                key={index}
-                                onPress={() => openCategoryApp(app)}
+                                  key={index}
+                                  onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -2664,7 +2728,7 @@ export default function Categories(identifier) {
                             top: "40%",
                           }}
                         >
-                          {t('Dashboard.addGroceryapps')}
+                          {t("Dashboard.addGroceryapps")}
                           {/* You can add Grocery apps here */}
                         </Text>
                       </View>
@@ -2678,8 +2742,8 @@ export default function Categories(identifier) {
                 </View>
               </>
             )}
-            {selectedCategory === t('Employment') && (
-            // {selectedCategory === "Employment" && (
+            {selectedCategory === t("Employment") && (
+              // {selectedCategory === "Employment" && (
               <>
                 <View
                   style={{ flex: 1, height: containerHeight, width: "100%" }}
@@ -2702,8 +2766,8 @@ export default function Categories(identifier) {
                               .slice(rowIndex * 5, (rowIndex + 1) * 5)
                               .map((app, index) => (
                                 <TouchableOpacity
-                                key={index}
-                                onPress={() => openCategoryApp(app)}
+                                  key={index}
+                                  onPress={() => openCategoryApp(app)}
                                   style={{
                                     flexDirection: "column",
                                     alignItems: "center",
@@ -2762,7 +2826,7 @@ export default function Categories(identifier) {
                             top: "40%",
                           }}
                         >
-                          {t('Dashboard.addEmploymentapps')}
+                          {t("Dashboard.addEmploymentapps")}
                           {/* Your can add Employment apps here */}
                         </Text>
                       </View>
@@ -2779,23 +2843,23 @@ export default function Categories(identifier) {
           </>
         )}
 
-          {/* // start of banner slider */}
-          <BannerCarousel
-        isLoading={isLoading}
-        adsData={adsInActiveData}
-        noDataMessage="No Banner"
-        onBannerPress={handleBannerPress}
-      />
+        {/* // start of banner slider */}
+        <BannerCarousel
+          isLoading={isLoading}
+          adsData={adsInActiveData}
+          noDataMessage="No Banner"
+          onBannerPress={handleBannerPress}
+        />
         {/* ////slider end */}
       </ScrollView>
 
       <CustomModal
         visible={modalDeleteApps}
         onClose={() => setModalDeleteApps(false)}
-        headerText={t('Alert!')} 
-        bodyText={t('SureToRemoveTheApp')}
-        cancelText={t('Drawer.Cancel')}
-        doneText={t('YesDelete')} 
+        headerText={t("Alert!")}
+        bodyText={t("SureToRemoveTheApp")}
+        cancelText={t("Drawer.Cancel")}
+        doneText={t("YesDelete")}
         onCancel={() => handleCancel()}
         onConfirm={() => handleConfirm()}
       />
@@ -2803,10 +2867,10 @@ export default function Categories(identifier) {
       <CustomModal
         visible={modalDeleteFavouriteApps}
         onClose={() => setModalDeleteFavouriteApps(false)}
-        headerText={t('Alert!')}
-        bodyText={t('SureToRemoveFromFavourites')}
-        cancelText={t('Drawer.Cancel')}
-        doneText={t('YesDelete')}
+        headerText={t("Alert!")}
+        bodyText={t("SureToRemoveFromFavourites")}
+        cancelText={t("Drawer.Cancel")}
+        doneText={t("YesRemove")}
         onCancel={() => handleCancelFavourite()}
         onConfirm={() => handleConfirmFavourite()}
       />
@@ -2819,7 +2883,7 @@ export default function Categories(identifier) {
         <View style={styles.modalContainer1}>
           <View style={styles.modalContent1}>
             <View style={{ marginTop: hp(-3), height: hp(30) }}>
-              {isLoading ? (
+              {/* {isLoading ? (
                 <View
                   style={{
                     position: "absolute",
@@ -2833,12 +2897,17 @@ export default function Categories(identifier) {
                 >
                   <ActivityIndicator size="large" color="#FACA4E" />
                 </View>
-              ) : (
+              ) : ( */}
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
+                    <Text style={styles.leftText1}>
+                      {t("Dashboard.YourApps")}
+                    </Text>
                     <View style={{ left: "100%" }}>
-                      <TouchableOpacity onPress={handleSave} style={{height:30, width:30, paddingLeft:4}}>
+                      <TouchableOpacity
+                        onPress={handleSave}
+                        style={{ height: 30, width: 30, paddingLeft: 4 }}
+                      >
                         <Ionicons
                           name="checkmark-sharp"
                           size={24}
@@ -2882,7 +2951,7 @@ export default function Categories(identifier) {
                     </View>
                   </View>
                 </>
-              )}
+              {/* )} */}
             </View>
           </View>
         </View>
@@ -2896,7 +2965,7 @@ export default function Categories(identifier) {
         <View style={styles.modalContainer1}>
           <View style={styles.modalContent1}>
             <View style={{ marginTop: hp(-3), height: hp(30) }}>
-              {isLoading ? (
+              {/* {isLoading ? (
                 <View
                   style={{
                     position: "absolute",
@@ -2910,12 +2979,17 @@ export default function Categories(identifier) {
                 >
                   <ActivityIndicator size="large" color="#FACA4E" />
                 </View>
-              ) : (
+              ) : ( */}
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
+                    <Text style={styles.leftText1}>
+                      {t("Dashboard.YourApps")}
+                    </Text>
                     <View style={{ left: "100%" }}>
-                      <TouchableOpacity onPress={handleSave_b} style={{height:30, width:30, paddingLeft:4}}>
+                      <TouchableOpacity
+                        onPress={handleSave_b}
+                        style={{ height: 30, width: 30, paddingLeft: 4 }}
+                      >
                         <Ionicons
                           name="checkmark-sharp"
                           size={24}
@@ -2959,7 +3033,7 @@ export default function Categories(identifier) {
                     </View>
                   </View>
                 </>
-              )}
+              {/* )} */}
             </View>
           </View>
         </View>
@@ -2973,7 +3047,7 @@ export default function Categories(identifier) {
         <View style={styles.modalContainer1}>
           <View style={styles.modalContent1}>
             <View style={{ marginTop: hp(-3), height: hp(30) }}>
-              {isLoading ? (
+              {/* {isLoading ? (
                 <View
                   style={{
                     position: "absolute",
@@ -2987,12 +3061,17 @@ export default function Categories(identifier) {
                 >
                   <ActivityIndicator size="large" color="#FACA4E" />
                 </View>
-              ) : (
+              ) : ( */}
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
+                    <Text style={styles.leftText1}>
+                      {t("Dashboard.YourApps")}
+                    </Text>
                     <View style={{ left: "100%" }}>
-                      <TouchableOpacity onPress={handleSave_sp} style={{height:30, width:30, paddingLeft:4}}>
+                      <TouchableOpacity
+                        onPress={handleSave_sp}
+                        style={{ height: 30, width: 30, paddingLeft: 4 }}
+                      >
                         <Ionicons
                           name="checkmark-sharp"
                           size={24}
@@ -3036,7 +3115,7 @@ export default function Categories(identifier) {
                     </View>
                   </View>
                 </>
-              )}
+              {/* )} */}
             </View>
           </View>
         </View>
@@ -3050,7 +3129,7 @@ export default function Categories(identifier) {
         <View style={styles.modalContainer1}>
           <View style={styles.modalContent1}>
             <View style={{ marginTop: hp(-3), height: hp(30) }}>
-              {isLoading ? (
+              {/* {isLoading ? (
                 <View
                   style={{
                     position: "absolute",
@@ -3064,12 +3143,17 @@ export default function Categories(identifier) {
                 >
                   <ActivityIndicator size="large" color="#FACA4E" />
                 </View>
-              ) : (
+              ) : ( */}
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
+                    <Text style={styles.leftText1}>
+                      {t("Dashboard.YourApps")}
+                    </Text>
                     <View style={{ left: "100%" }}>
-                      <TouchableOpacity onPress={handleSave_e} style={{height:30, width:30, paddingLeft:4}}>
+                      <TouchableOpacity
+                        onPress={handleSave_e}
+                        style={{ height: 30, width: 30, paddingLeft: 4 }}
+                      >
                         <Ionicons
                           name="checkmark-sharp"
                           size={24}
@@ -3113,7 +3197,7 @@ export default function Categories(identifier) {
                     </View>
                   </View>
                 </>
-              )}
+              {/* )} */}
             </View>
           </View>
         </View>
@@ -3127,7 +3211,7 @@ export default function Categories(identifier) {
         <View style={styles.modalContainer1}>
           <View style={styles.modalContent1}>
             <View style={{ marginTop: hp(-3), height: hp(30) }}>
-              {isLoading ? (
+              {/* {isLoading ? (
                 <View
                   style={{
                     position: "absolute",
@@ -3141,12 +3225,17 @@ export default function Categories(identifier) {
                 >
                   <ActivityIndicator size="large" color="#FACA4E" />
                 </View>
-              ) : (
+              ) : ( */}
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
+                    <Text style={styles.leftText1}>
+                      {t("Dashboard.YourApps")}
+                    </Text>
                     <View style={{ left: "100%" }}>
-                      <TouchableOpacity onPress={handleSave_d} style={{height:30, width:30, paddingLeft:4}}>
+                      <TouchableOpacity
+                        onPress={handleSave_d}
+                        style={{ height: 30, width: 30, paddingLeft: 4 }}
+                      >
                         <Ionicons
                           name="checkmark-sharp"
                           size={24}
@@ -3190,7 +3279,7 @@ export default function Categories(identifier) {
                     </View>
                   </View>
                 </>
-              )}
+              {/* )} */}
             </View>
           </View>
         </View>
@@ -3204,7 +3293,7 @@ export default function Categories(identifier) {
         <View style={styles.modalContainer1}>
           <View style={styles.modalContent1}>
             <View style={{ marginTop: hp(-3), height: hp(30) }}>
-              {isLoading ? (
+              {/* {isLoading ? (
                 <View
                   style={{
                     position: "absolute",
@@ -3218,12 +3307,17 @@ export default function Categories(identifier) {
                 >
                   <ActivityIndicator size="large" color="#FACA4E" />
                 </View>
-              ) : (
+              ) : ( */}
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
+                    <Text style={styles.leftText1}>
+                      {t("Dashboard.YourApps")}
+                    </Text>
                     <View style={{ left: "100%" }}>
-                      <TouchableOpacity onPress={handleSave_fd} style={{height:30, width:30, paddingLeft:4}}>
+                      <TouchableOpacity
+                        onPress={handleSave_fd}
+                        style={{ height: 30, width: 30, paddingLeft: 4 }}
+                      >
                         <Ionicons
                           name="checkmark-sharp"
                           size={24}
@@ -3267,7 +3361,7 @@ export default function Categories(identifier) {
                     </View>
                   </View>
                 </>
-              )}
+              {/* )} */}
             </View>
           </View>
         </View>
@@ -3281,7 +3375,7 @@ export default function Categories(identifier) {
         <View style={styles.modalContainer1}>
           <View style={styles.modalContent1}>
             <View style={{ marginTop: hp(-3), height: hp(30) }}>
-              {isLoading ? (
+              {/* {isLoading ? (
                 <View
                   style={{
                     position: "absolute",
@@ -3295,12 +3389,17 @@ export default function Categories(identifier) {
                 >
                   <ActivityIndicator size="large" color="#FACA4E" />
                 </View>
-              ) : (
+              ) : ( */}
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
+                    <Text style={styles.leftText1}>
+                      {t("Dashboard.YourApps")}
+                    </Text>
                     <View style={{ left: "100%" }}>
-                      <TouchableOpacity onPress={handleSave_sm} style={{height:30, width:30, paddingLeft:4}}>
+                      <TouchableOpacity
+                        onPress={handleSave_sm}
+                        style={{ height: 30, width: 30, paddingLeft: 4 }}
+                      >
                         <Ionicons
                           name="checkmark-sharp"
                           size={24}
@@ -3344,7 +3443,7 @@ export default function Categories(identifier) {
                     </View>
                   </View>
                 </>
-              )}
+              {/* )} */}
             </View>
           </View>
         </View>
@@ -3358,7 +3457,7 @@ export default function Categories(identifier) {
         <View style={styles.modalContainer1}>
           <View style={styles.modalContent1}>
             <View style={{ marginTop: hp(-3), height: hp(30) }}>
-              {isLoading ? (
+              {/* {isLoading ? (
                 <View
                   style={{
                     position: "absolute",
@@ -3372,12 +3471,17 @@ export default function Categories(identifier) {
                 >
                   <ActivityIndicator size="large" color="#FACA4E" />
                 </View>
-              ) : (
+              ) : ( */}
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
+                    <Text style={styles.leftText1}>
+                      {t("Dashboard.YourApps")}
+                    </Text>
                     <View style={{ left: "100%" }}>
-                      <TouchableOpacity onPress={handleSave_mw} style={{height:30, width:30, paddingLeft:4}}>
+                      <TouchableOpacity
+                        onPress={handleSave_mw}
+                        style={{ height: 30, width: 30, paddingLeft: 4 }}
+                      >
                         <Ionicons
                           name="checkmark-sharp"
                           size={24}
@@ -3421,7 +3525,7 @@ export default function Categories(identifier) {
                     </View>
                   </View>
                 </>
-              )}
+              {/* )} */}
             </View>
           </View>
         </View>
@@ -3435,7 +3539,7 @@ export default function Categories(identifier) {
         <View style={styles.modalContainer1}>
           <View style={styles.modalContent1}>
             <View style={{ marginTop: hp(-3), height: hp(30) }}>
-              {isLoading ? (
+              {/* {isLoading ? (
                 <View
                   style={{
                     position: "absolute",
@@ -3449,12 +3553,17 @@ export default function Categories(identifier) {
                 >
                   <ActivityIndicator size="large" color="#FACA4E" />
                 </View>
-              ) : (
+              ) : ( */}
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
+                    <Text style={styles.leftText1}>
+                      {t("Dashboard.YourApps")}
+                    </Text>
                     <View style={{ left: "100%" }}>
-                      <TouchableOpacity onPress={handleSave_g} style={{height:30, width:30, paddingLeft:4}}>
+                      <TouchableOpacity
+                        onPress={handleSave_g}
+                        style={{ height: 30, width: 30, paddingLeft: 4 }}
+                      >
                         <Ionicons
                           name="checkmark-sharp"
                           size={24}
@@ -3498,7 +3607,7 @@ export default function Categories(identifier) {
                     </View>
                   </View>
                 </>
-              )}
+              {/* )} */}
             </View>
           </View>
         </View>
@@ -3512,7 +3621,7 @@ export default function Categories(identifier) {
         <View style={styles.modalContainer1}>
           <View style={styles.modalContent1}>
             <View style={{ marginTop: hp(-3), height: hp(30) }}>
-              {isLoading ? (
+              {/* {isLoading ? (
                 <View
                   style={{
                     position: "absolute",
@@ -3526,12 +3635,17 @@ export default function Categories(identifier) {
                 >
                   <ActivityIndicator size="large" color="#FACA4E" />
                 </View>
-              ) : (
+              ) : ( */}
                 <>
                   <View style={styles.leftContent1}>
-                    <Text style={styles.leftText1}>{t('Dashboard.YourApps')}</Text>
+                    <Text style={styles.leftText1}>
+                      {t("Dashboard.YourApps")}
+                    </Text>
                     <View style={{ left: "100%" }}>
-                      <TouchableOpacity onPress={handleSave_em} style={{height:30, width:30, paddingLeft:4}}>
+                      <TouchableOpacity
+                        onPress={handleSave_em}
+                        style={{ height: 30, width: 30, paddingLeft: 4 }}
+                      >
                         <Ionicons
                           name="checkmark-sharp"
                           size={24}
@@ -3575,14 +3689,14 @@ export default function Categories(identifier) {
                     </View>
                   </View>
                 </>
-              )}
+              {/* )} */}
             </View>
           </View>
         </View>
       </Modal>
       <CustomSnackbar
         message={"Success"}
-        messageDescription={t('Dashboard.Appsaddedincategory')} 
+        messageDescription={t("Dashboard.Appsaddedincategory")}
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
@@ -3638,8 +3752,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#F2F2F2",
     borderRadius: wp(5),
     // height: hp(5),
-    paddingHorizontal:wp(3),
-    paddingVertical:hp(1.3),
+    paddingHorizontal: wp(3),
+    paddingVertical: hp(1.3),
     // paddingHorizontal:hp(1.5)
   },
   textSearchDetails: {
@@ -3746,7 +3860,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "black",
-    marginRight:20
+    marginRight: 20,
   },
   rightContent1: {
     marginLeft: 20,
@@ -3768,12 +3882,12 @@ const styles = StyleSheet.create({
   child: {
     width: sliderWidth,
     height: hp(14),
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   image: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
     borderRadius: 10,
   },
   pagination: {
@@ -3788,17 +3902,22 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
   },
-  TopBannerView:{
-    height:'100%', width:'100%', borderWidth:1, borderColor:'gray',  borderRadius: 10, flex: 1,
+  TopBannerView: {
+    height: "100%",
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 10,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
   appItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 10,
     marginVertical: 5,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
     borderRadius: 5,
   },
   appIcon: {

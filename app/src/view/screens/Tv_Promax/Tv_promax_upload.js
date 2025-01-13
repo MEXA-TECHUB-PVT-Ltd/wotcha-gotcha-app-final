@@ -291,7 +291,7 @@ export default function Tv_promax_upload({ navigation }) {
         value: category.id.toString(), // Convert "id" to a string for the value
       }));
       const reverseData = subcategories.reverse();
-      console.log("result---------", reverseData);
+      // console.log("result---------", reverseData);
       setSubCate(reverseData);
 
 
@@ -1218,7 +1218,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     height: hp(6.2),
-    marginTop: hp(10),
+    // marginTop: hp(10),
+     marginTop: Platform.OS == "ios" ? 0 : hp(6),
     alignItems: "center",
     marginHorizontal: wp(8),
   },
