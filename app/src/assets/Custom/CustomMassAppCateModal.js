@@ -23,12 +23,12 @@ const CustomMassAppCateModal = ({
     >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-          <View style={{ marginTop: hp(-3), height: hp(30) }}>
+          <View style={{height: hp(26) }}>
             <View style={styles.header}>
               <Text style={styles.title}>{title}</Text>
               <TouchableOpacity
                 onPress={handleSave}
-                style={{ height: 30, width: 30, paddingLeft: 4 , padding:10}}
+                style={{ height: 30, width: 30, paddingLeft: 4 ,}}
               >
                 <Ionicons name="checkmark-sharp" size={24} color="#FACA4E" />
               </TouchableOpacity>
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 25,
   },
   title: {
     fontSize: 18,

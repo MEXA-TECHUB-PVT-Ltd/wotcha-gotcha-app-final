@@ -17,6 +17,7 @@ const SubCateItem = ({
   ShowThumbnail,
   CinematicContent,
   ShowUserImage,
+  showNOImage
 }) => {
   return (
     <TouchableOpacity onPress={onPress}>
@@ -43,11 +44,17 @@ const SubCateItem = ({
         ) : null
         // <Image source={{ uri: item.image }} style={styles.image} />
         }
-        {ShowThumbnail && item.thumbnail ? (
+        {/* {ShowThumbnail && item.thumbnail ? (
           <Image source={{ uri: item.thumbnail }} style={styles.image} />
         ) : (
           <Image source={{ uri: item.image }} style={styles.image} />
-        )}
+        )} */}
+
+{ShowThumbnail && item.thumbnail ? (
+  <Image source={{ uri: item.thumbnail }} style={styles.image} />
+) : showNOImage ? null : (
+  <Image source={{ uri: item.image }} style={styles.image} />
+)}
         {/* User Info Section */}
         <View style={styles.userInfoContainer}>
           {/* User Image */}
@@ -162,15 +169,15 @@ const styles = StyleSheet.create({
   userInfoContainer: {
     flexDirection: "row",
     alignItems: "center",
-    height: hp(7),
+    height: hp(4),
     width: wp(25),
   },
   userImageContainer: {
-    width: wp(7),
+    width: wp(6),
     marginLeft: wp(0.5),
-    height: wp(7),
+    height: wp(6),
     overflow: "hidden",
-    borderRadius: wp(7) / 2,
+    borderRadius: wp(6) / 2,
   },
   userImage: {
     width: "100%",
@@ -178,10 +185,10 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   placeholderIconContainer: {
-    width: wp(7),
+    width: wp(6),
     marginLeft: wp(0.5),
-    height: wp(7),
-    borderRadius: wp(7) / 2,
+    height: wp(6),
+    borderRadius: wp(6) / 2,
     alignItems: "center",
     justifyContent: "center",
   },

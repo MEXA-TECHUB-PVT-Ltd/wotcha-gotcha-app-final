@@ -236,7 +236,7 @@ export default function Kids_vid({ route }) {
 
       const result = await response.json();
       // console.log("AllBanners---", result.AllBanners);
-      setAdsData(result.AllBanners);
+      setAdsData(result?.AllBanners || []);
     } catch (error) {
       console.error("Error AllBanners:", error);
     }
@@ -259,7 +259,7 @@ export default function Kids_vid({ route }) {
 
       const result = await response.json();
       // setAdsInActiveData(result.AllBanners);
-      const updatedBanners = result.AllBanners.map(banner => {
+      const updatedBanners = result?.AllBanners.map(banner => {
         if (banner.image.startsWith('/fileUpload')) {
           banner.image = base_url+`${banner.image}`;
         }

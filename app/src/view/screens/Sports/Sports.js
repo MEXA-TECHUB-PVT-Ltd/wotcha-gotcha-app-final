@@ -124,7 +124,7 @@ import {
       );
 
       const result = await response.json();
-      setAdsData(result.AllBanners);
+      setAdsData(result?.AllBanners || []);
     } catch (error) {
       console.error("Error AllBanners:", error);
     }
@@ -147,7 +147,7 @@ import {
       );
 
       const result = await response.json();
-      const updatedBanners = result.AllBanners.map(banner => {
+      const updatedBanners = result?.AllBanners.map(banner => {
         if (banner.image.startsWith('/fileUpload')) {
           banner.image = base_url + `${banner.image}`;
         }
