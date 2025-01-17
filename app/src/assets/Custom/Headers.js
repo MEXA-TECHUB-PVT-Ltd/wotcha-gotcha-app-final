@@ -324,6 +324,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     //paddingHorizontal:wp(5),
     height: hp(5),
+    paddingBottom:8
     // marginTop: StatusBar.currentHeight - 20,
   },
   headerText: {

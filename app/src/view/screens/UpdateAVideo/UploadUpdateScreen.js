@@ -1308,7 +1308,7 @@ console.log('category id comes from video', categoryId)
         onDismiss={dismissSnackbar} // Make sure this function is defined
         visible={snackbarVisible}
       />
-      {loading && (
+      {/* {loading && (
         <View
           style={{
             position: 'absolute',
@@ -1322,7 +1322,7 @@ console.log('category id comes from video', categoryId)
           }}>
           <ActivityIndicator size="large" color="#FACA4E" />
         </View>
-      )}
+      )} */}
 
       <CustomDialog
         visible={modalVisible}

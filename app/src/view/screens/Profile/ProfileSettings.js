@@ -38,6 +38,7 @@ import { base_url } from '../../../../../baseUrl';
 import { Dropdown } from 'react-native-element-dropdown';
 import useCustomTranslation from "../../../assets/Localization/useCustomTranslation";
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../../../redux/store/AuthProvider';
 export default function ProfileSettings({ navigation }) {
   const ref_RBSheetLogout = useRef(null);
 
@@ -118,7 +119,8 @@ export default function ProfileSettings({ navigation }) {
     logOut();
   };
 
-  const logOut = async () => {
+  const { setIsAuthenticated } = useAuth();
+    const logOut = async () => {
     ref_RBSheetLogout.current.close();
     try {
       const keysToExclude = ['UserToken', 'favouriteData'];
@@ -127,18 +129,42 @@ export default function ProfileSettings({ navigation }) {
       await AsyncStorage.multiRemove(filteredKeys);
       const remainingKeys = await AsyncStorage.getAllKeys();
 
-      if (remainingKeys.length === keysToExclude.length) {
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Signin_signup' }],
-        });
-      } else {
+      setIsAuthenticated(false);
 
-      }
+      // Reset navigation to AuthStack
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Signin_signup' }],
+      });
     } catch (error) {
     }
-    navigation.navigate('Signin_signup');
+    // navigation.navigate('Signin_signup');
   };
+
+
+  // const logOut = async () => {
+  //   ref_RBSheetLogout.current.close();
+  //   try {
+  //     const keysToExclude = ['UserToken', 'favouriteData'];
+  //     const keys = await AsyncStorage.getAllKeys();
+  //     const filteredKeys = keys.filter(key => !keysToExclude.includes(key));
+  //     await AsyncStorage.multiRemove(filteredKeys);
+  //     const remainingKeys = await AsyncStorage.getAllKeys();
+
+  //     if (remainingKeys.length === keysToExclude.length) {
+  //       navigation.reset({
+  //         index: 0,
+  //         routes: [{ name: 'Signin_signup' }],
+  //       });
+  //     } else {
+
+  //     }
+  //   } catch (error) {
+  //   }
+  //   navigation.navigate('Signin_signup');
+  // };
+
+
   const deleteAccount = () => {
     ref_RBSheetDelete.current.close();
     deleteUser();
@@ -440,7 +466,8 @@ export default function ProfileSettings({ navigation }) {
                 flexDirection: 'row',
                 alignItems: 'center',
                 height: '100%',
-                width: wp(26),
+                // width: wp(20),
+                // backgroundColor: 'red',
               }}>
               <Image
                 source={appImages.LogOut}

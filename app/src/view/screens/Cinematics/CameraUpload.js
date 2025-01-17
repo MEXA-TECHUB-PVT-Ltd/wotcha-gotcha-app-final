@@ -910,7 +910,9 @@ export default function Tv_promax_upload({ navigation }) {
             container: {
               borderTopLeftRadius: wp(10),
               borderTopRightRadius: wp(10),
-              paddingVertical: 30,
+              // paddingVertical: 30,
+               paddingBottom: Platform.OS == "ios" ? 40 : 10,
+                          height: hp(26),
               // height: hp(25),
             },
           }}
@@ -1169,7 +1171,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     height: hp(6.2),
-    marginTop: Platform.OS == "ios" ? 0 : hp(10),
+    marginTop: Platform.OS == "ios" ? 0 : hp(6),
     alignItems: "center",
     marginHorizontal: wp(8),
   },

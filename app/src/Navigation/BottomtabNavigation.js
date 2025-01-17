@@ -57,6 +57,7 @@ import EBCScreen from '../view/screens/GEBC/EBCScreen';
 import CategoryInactive from '../assets/svg/CategoryInactive.svg';
 import VideoInactive from '../assets/svg/VideoInactive.svg';
 const Bottom = createBottomTabNavigator();
+import { useSelector } from 'react-redux';
 const BottomtabNavigation = () => {
   const navigation = useNavigation();
   const bottomSheetRef = useRef(null);
@@ -65,7 +66,86 @@ const BottomtabNavigation = () => {
   const [screen, setScreen] = useState([]);
 
 
-  // this code is for empty bottom navicon on 20-12-2024. delet nai krna
+  // redux implemented 26-12-2024
+  // const categories = useSelector((state) => state.categories.categories);
+  // const [activeTabs, setActiveTabs] = useState([]);
+  // useEffect(() => {
+  //   // Default to the first three categories
+  //   const initialTabs = categories.slice(0, 3);
+  //   setActiveTabs(initialTabs);
+  // }, [categories]);
+
+  const renderIcon = (screenKey, focused, size, color) => {
+    switch (screenKey) {
+      case 'one':
+        return focused ? <CategoryActive size={size} color={color} /> : <CategoryInActive size={size} color={color} />;
+      case 'two':
+        return focused ? <VideoActive size={size} color={color} /> : <VideoInActive size={size} color={color} />;
+      case 'four':
+        return focused ? <ProfileActive size={size} color={color} /> : <ProfileInActive size={size} color={color} />;
+      case 'five':
+        return focused ? <MarketZoneActive size={size} color={color} /> : <MarketZoneInActive size={size} color={color} />;
+      case 'six':
+        return focused ? <Cinematiceactive size={size} color={color} /> : <Cinematics_svg size={size} color={color} />;
+      case 'seven':
+        return focused ? <FansActive size={size} color={color} /> : <Fans size={size} color={color} />;
+      case 'eight':
+        return focused ? <KidsActive size={size} color={color} /> : <Kids size={size} color={color} />;
+      case 'nine':
+        return focused ? <TVpromaxActive size={size} color={color} /> : <Television size={size} color={color} />;
+      case 'ten':
+        return focused ? <PuzzleActive size={size} color={color} /> : <Puzzle size={size} color={color} />;
+      case 'eleven':
+        return focused ? <Sport name="sports-handball" size={size} color="#FACA4E" /> : <Sport name="sports-handball" size={size} color={color} />;
+      case 'twelve':
+        return focused ? <News name="news" size={size} color="#FACA4E" /> : <News name="news" size={size} color={color} />;
+      case 'thirteen':
+        return focused ? <LetterIcon name="newsletter" size={size} color="#FACA4E" /> : <LetterIcon name="newsletter" size={size} color={color} />;
+      case 'fourteen':
+        return focused ? <QafiIcon name="people-arrows" size={20} color="#FACA4E" /> : <QafiIcon name="people-arrows" size={20} color={color} />;
+      case 'fifteen':
+        return focused ? <EBC name="sticker-emoji" size={size} color="#FACA4E" /> : <EBC name="sticker-emoji" size={size} color={color} />;
+      default:
+        return <More width={23} height={23} />;
+    }
+  };
+  
+  const renderScreenComponent = (screenKey) => {
+    switch (screenKey) {
+      case 'one':
+        return <Categories />;
+      case 'two':
+        return <Video />;
+      case 'four':
+        return <PicTours />;
+      case 'five':
+        return <MarketZone />;
+      case 'six':
+        return <Cinematics />;
+      case 'seven':
+        return <Fans_star />;
+      case 'eight':
+        return <Kids_vid />;
+      case 'nine':
+        return <Tv_Promax />;
+      case 'ten':
+        return <Learning />;
+      case 'eleven':
+        return <Sports />;
+      case 'twelve':
+        return <NewsScreen />;
+      case 'thirteen':
+        return <OpenLetterScreen />;
+      case 'fourteen':
+        return <QAFIScreen />;
+      case 'fifteen':
+        return <EBCScreen />;
+      default:
+        return null;
+    }
+  };
+
+  // // this code is for empty bottom navicon on 20-12-2024. delet nai krna
 
   const defaultCategories = [
     { key: 'one', name: 'More.MassApp', activeIcon: <CategoryActive width={23} height={23} />, inactiveIcon: <CategoryInactive width={23} height={23} />, dropped: false },
@@ -101,7 +181,7 @@ const BottomtabNavigation = () => {
 
     // this code is for empty bottom navicon on 20-12-2024. delet nai krna
 
-    
+    // ye old function hai, with out defualt icon 17-12-2024
   // useEffect(() => {
   //   const fetchIcons = async () => {
   //     try {
@@ -123,7 +203,7 @@ const BottomtabNavigation = () => {
   //   return () => clearInterval(interval);
   // }, []);
 
-  console.log('botom---------------?????????????----------', screen)
+  // console.log('botom---------------?????????????----------', screen)
 
   useEffect(() => {
     const screenHeight = Dimensions.get('window').height;
@@ -169,6 +249,24 @@ const BottomtabNavigation = () => {
             ),
           }}
         />
+
+
+
+{/* {activeTabs.map((screen, index) => (
+        <Bottom.Screen
+          key={index}
+          name={screen.key}
+          listeners={{
+            tabPress: () => handleScreenSelect(screen.key),
+          }}
+          options={{
+            tabBarIcon: ({ color, size, focused }) =>
+              renderIcon(screen.key, focused, size, color),
+          }}
+        >
+          {() => renderScreenComponent(screen.key)}
+        </Bottom.Screen>
+      ))} */}
         {screen.map((screen, index) => (
           <Bottom.Screen
             key={index}

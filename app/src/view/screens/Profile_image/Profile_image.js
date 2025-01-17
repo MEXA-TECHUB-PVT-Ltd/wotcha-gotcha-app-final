@@ -129,7 +129,8 @@ const Profile_image = ({navigation}) => {
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: 'BottomTabNavigation' }],
+          // routes: [{ name: 'BottomTabNavigation' }],
+          routes: [{ name: 'MainStackNavigation' }],
         })
       );
     }, 3000);

@@ -795,7 +795,7 @@ export default function GEBC({navigation}) {
         </View>
       </RBSheet>
 
-   {loading && <Loader />}
+   {/* {loading && <Loader />} */}
 
       <CustomDialog
         visible={modalVisible}
