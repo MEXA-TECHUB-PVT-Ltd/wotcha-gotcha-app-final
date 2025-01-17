@@ -9464,6 +9464,7 @@ import {
   Platform,
   StatusBar,
   Image,
+  Dimensions,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import RenderCategory from "../../../assets/Custom/RenderCategory";
@@ -9500,6 +9501,23 @@ import LetterIcon from "react-native-vector-icons/Entypo";
 import QafiIcon from "react-native-vector-icons/FontAwesome5";
 import EBC from "react-native-vector-icons/MaterialCommunityIcons";
 import { VideoActive } from "../../../assets/svg";
+import { InstalledApps, RNLauncherKitHelper } from "react-native-launcher-kit";
+
+//----------------- IMPORT VIDE0 -------------------\\
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+
+import Ionicons from "react-native-vector-icons/Ionicons";
+import RBSheet from "react-native-raw-bottom-sheet";
+//----------------------------------------------------\\
+import CategoryActive from "../../../assets/svg/CategoryActive.svg";
+import CategoryInactive from "../../../assets/svg/CategoryInactive";
+import Add from "../../../assets/svg/AddMainScreen.svg";
+import DotLoader from "../../../assets/Custom/DotLoader";
+import CustomaddFavModal from "../../../assets/Custom/CustomaddFavModal";
+import CustomMassAppCateModal from "../../../assets/Custom/CustomMassAppCateModal";
+import AppGrid from "../../../assets/Custom/AppGrid";
+
+
 
 const Dashboard = () => {
   const navigation = useNavigation();
@@ -9517,6 +9535,9 @@ const Dashboard = () => {
   const [adsData, setAdsData] = useState([]);
   const [adsInActiveData, setAdsInActiveData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [DotLoading, setDotLoading] = useState(true); 
+
     const RegionArea = [
     { name: "Africa", french_name: "Afrique" },
     { name: "Europe", french_name: "Europe" },
@@ -9524,7 +9545,19 @@ const Dashboard = () => {
     { name: "Asia", french_name: "Asie" },
     { name: "Middle East", french_name: "Moyen-Orient" }
   ];
-  useEffect(() => {
+    const MassApp = [
+    t('Ecommerce'),
+    t('Business'),
+    t('cateSports'),
+    t('Education'),
+    t('Dating'),
+    t('FoodDelivery'),
+    t('SocialMedia'),
+    t('MedicalWellness'),
+    t('Grocery'),
+    t('Employment')
+  ];
+ 
     const getAuthToken = async () => {
       try {
         const token = await AsyncStorage.getItem("authToken ");
@@ -9539,11 +9572,20 @@ const Dashboard = () => {
         setError(err.message);
       }
     };
-
+    useEffect(() => {
     getAuthToken();
   }, [isFocused]);
 
+  // useEffect(() => {
+  //   if (data.videosByCategory?.length > 0) {
+  //     setDotLoading(false); // Set loading to false once data is available
+  //   } else {
+  //     setDotLoading(true); // Keep loading true until data is available
+  //   }
+  // }, [authToken, data.videosByCategory]);
+
   const [language, setLanguage] = useState(null);
+
   useEffect(() => {
     const fetchLanguage = async () => {
       try {
@@ -9559,6 +9601,155 @@ const Dashboard = () => {
 
     fetchLanguage();
   }, [isFocused]);
+
+  const [topData, setTopData] = useState([]);
+  const [dataApps, setDataApps] = useState([]);
+  const [favouriteData, setFavouriteData] = useState([]);
+  const [isLongPress, setIsLongPress] = useState(false);
+  const [isCancelModalVisible, setIsCancelModalVisible] = useState(false);
+  const [isCancelRemoveModalVisible, setIsCancelRemoveModalVisible] =
+  useState(false);
+const [isLongPressRemove, setIsLongPressRemove] = useState(false);
+const [favouriteItem, setFavouriteItem] = useState(null);
+const [removeFavouriteItem, setRemoveFavouriteItem] = useState(null);
+
+  const [ecommerance, setecommerance] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible_b, setModalVisible_b] = useState(false);
+  const [modalVisible_sp, setModalVisible_sp] = useState(false);
+  const [modalVisible_e, setModalVisible_e] = useState(false);
+  const [modalVisible_d, setModalVisible_d] = useState(false);
+  const [modalVisible_fd, setModalVisible_fd] = useState(false);
+  const [modalVisible_sm, setModalVisible_sm] = useState(false);
+  const [modalVisible_mw, setModalVisible_mw] = useState(false);
+  const [modalVisible_g, setModalVisible_g] = useState(false);
+  const [modalVisible_em, setModalVisible_em] = useState(false);
+  const [selectedApps, setSelectedApps] = useState([]);
+  const [selectedApps_b, setSelectedApps_b] = useState([]);
+  const [selectedApps_sp, setSelectedApps_sp] = useState([]);
+  const [selectedApps_e, setSelectedApps_e] = useState([]);
+  const [selectedApps_d, setSelectedApps_d] = useState([]);
+  const [selectedApps_fd, setSelectedApps_fd] = useState([]);
+  const [selectedApps_sm, setSelectedApps_sm] = useState([]);
+  const [selectedApps_mw, setSelectedApps_mw] = useState([]);
+  const [selectedApps_g, setSelectedApps_g] = useState([]);
+  const [selectedApps_em, setSelectedApps_em] = useState([]);
+  const [savedApps, setSavedApps] = useState([]);
+  const [savedApps_b, setSavedApps_b] = useState([]);
+  const [savedApps_sp, setSavedApps_sp] = useState([]);
+  const [savedApps_e, setSavedApps_e] = useState([]);
+  const [savedApps_d, setSavedApps_d] = useState([]);
+  const [savedApps_fd, setSavedApps_fd] = useState([]);
+  const [savedApps_sm, setSavedApps_sm] = useState([]);
+  const [savedApps_mw, setSavedApps_mw] = useState([]);
+  const [savedApps_g, setSavedApps_g] = useState([]);
+  const [savedApps_em, setSavedApps_em] = useState([]);
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
+  const [Sports, setSport] = useState(false);
+  const [Education, seteducation] = useState(false);
+
+const [unusedApps, setUnusedApps] = useState([]);
+
+  const initializeAppData = async (setDataApps, setTopData, setFavouriteData) => {
+    try {
+      // const installedApps = InstalledApps.getSortedApps();
+      // const appDataArray = installedApps.map((app) => ({
+      //   label: app.label,
+      //   bundle: app.packageName,
+      //   image: app.icon,
+      // }));
+      const installedApps = InstalledApps.getSortedApps();
+      const packageNames = installedApps.map((app) => app.label);
+      const packageImages = installedApps.map((app) => app.icon);
+      const packageBundle = installedApps.map((app) => app.packageName);
+      const packageDataArray = packageNames.map((packageName, index) => ({
+        label: packageName,
+        bundle: packageBundle[index],
+        image: packageImages[index],
+      }));
+
+      setDataApps(packageDataArray);
+      // setDataApps(appDataArray);
+  
+      // Top 6 Apps
+      const storedTopData = await AsyncStorage.getItem("topData");
+      if (storedTopData) {
+        setTopData(JSON.parse(storedTopData));
+      } else {
+        const topSixApps = appDataArray.slice(0, 6).map((item) => ({
+          ...item,
+          count: 2,
+        }));
+        await AsyncStorage.setItem("topData", JSON.stringify(topSixApps));
+        setTopData(topSixApps);
+      }
+  
+      // Favourite Apps
+      const storedFavouriteData = await AsyncStorage.getItem("favouriteData");
+      if (!storedFavouriteData) {
+        const initialFavouriteData = appDataArray.slice(0, 4);
+        await AsyncStorage.setItem(
+          "favouriteData",
+          JSON.stringify(initialFavouriteData)
+        );
+        setFavouriteData(initialFavouriteData);
+      } else {
+        setFavouriteData(JSON.parse(storedFavouriteData));
+      }
+    } catch (error) {
+      console.error("Error initializing app data:", error);
+    }
+  };
+  
+  const handleSaveData = async (key, data) => {
+    try {
+      await AsyncStorage.setItem(key, JSON.stringify(data));
+    } catch (error) {
+      console.error(`Error saving ${key} to AsyncStorage:`, error);
+    }
+  };
+  
+  const fetchAndStoreUnusedApps = async (setUnusedApps) => {
+    try {
+      const lastUsageDate = new Date().toISOString();
+      const installedApps = InstalledApps.getSortedApps();
+      const unusedApps = installedApps.map((app) => ({
+        label: app.label,
+        bundle: app.packageName,
+        image: app.icon,
+        date: lastUsageDate,
+      }));
+  
+      setUnusedApps(unusedApps);
+      await AsyncStorage.setItem("comparisonDate", JSON.stringify(unusedApps));
+    } catch (error) {
+      console.error("Error fetching unused apps:", error);
+    }
+  };
+  useEffect(() => {
+    // Initialize apps and related data
+    initializeAppData(setDataApps, setTopData, setFavouriteData);
+
+    // Fetch unused apps
+    // fetchAndStoreUnusedApps(setUnusedApps);
+  }, []);
+
+  useEffect(() => {
+    // Save favourite and top data when updated
+    if (favouriteData.length) {
+      handleSaveData("favouriteData", favouriteData);
+    }
+
+    if (topData.length) {
+      handleSaveData("topData", topData);
+    }
+  }, [favouriteData, topData]);
+
+
+
+
+
+
 
   const fetchBanners = async () => {
     setIsLoading(true);
@@ -10995,7 +11186,7 @@ const Dashboard = () => {
   const [dataClothing, setDataClothing] = useState([]);
   const [marketLoading, setMarketLoading] = useState(false);
   const [dataTopVideosMarket, setDataTopVideosMarket] = useState([]);
-  console.log('selectedItemIdMarket-----',selectedItemIdMarket)
+  // console.log('selectedItemIdMarket-----',selectedItemIdMarket)
   // console.log('dataElectronics-----',dataElectronics)
   // console.log('allMarket-----',allMarket)
   // console.log('dataVehicles-----',dataVehicles)
@@ -11012,8 +11203,8 @@ const Dashboard = () => {
   //   setMarketLoading(false);
   // }, [authToken, selectedItemIdMarket]);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  
+    const fetchMarketData = async () => {
       try {
         setMarketLoading(true); // Start the loader
         await Promise.all([
@@ -11030,8 +11221,8 @@ const Dashboard = () => {
         setMarketLoading(false); // Stop the loader
       }
     };
-  
-    fetchData();
+    useEffect(() => {
+    fetchMarketData();
   }, [authToken, selectedItemIdMarket]);
 
   const fetchTopMarket = async () => {
@@ -11864,8 +12055,9 @@ const Dashboard = () => {
     const renderAvailableAppsMarket = (item) => (
       <TouchableOpacity
         style={{
-          width: wp(43),
-          marginHorizontal: wp(1),
+          // width: wp(43),
+          width: wp(25.5), margin: 5,
+          // marginHorizontal: wp(1),
           borderRadius: wp(5),
           // backgroundColor: "#f9f9f9",
         }}
@@ -11895,8 +12087,681 @@ const Dashboard = () => {
         </Text>
       </TouchableOpacity>
     );
+    
+    const [selectedItemId, setSelectedItemId] = useState(1);
+    const [isSelectedActive, setIsSelectedActive] = useState(true);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [categoryActive, setcategoryActive] = useState(true);
+
+console.log('selectedCategory-------------------',selectedCategory)
+
+    const handleItemPress = (category) => {
+    setSelectedItemId(category);
+    setIsSelectedActive(false); ///
+    setcategoryActive(false); ////ye old hai jis ko comment kiya tha
+    setSelectedCategory(category);
+  //   setecommerance(category === t('Ecommerce'));
+  //   setSport(category === t('cateSports'));
+  };
+  const press_category = () => {
+    setIsSelectedActive(!isSelectedActive);
+    setSelectedItemId(null); // Deactivate all items when category is pressed
+    setSelectedCategory("");
+    // setecommerance(false);
+    // setSport(false);
+    setcategoryActive(true); //ye old hai jis ko comment kiya tha
+  };
+      const renderMassAppSearches = (item) => {
+    const isSelected = selectedItemId === item;
+    return (
+      <TouchableOpacity
+      style={[
+        styles.categoryItem,
+        { backgroundColor: isSelected ? "#FACA4E" : "#DDDDDD" },
+      ]}
+        onPress={() => {
+          // Pass the item data when pressed
+          handleItemPress(item);
+          if (item === t('Ecommerce')) {
+          // if (item === "E-commerce") {
+            // console.log("E----AYA:");
+            loadSavedApps(); // Assuming handleItemPress is a function to handle item press
+          } else if (item ===  t('Business')) {
+          // } else if (item === "Business") {
+            // console.log("Business----AYA:");
+            BusinessSavedApps();
+          } // Assuming handleItemPress is a function to handle item press
+          // console.log("Selected item:", item);
+        }}
+      >
+        <Text
+          style={[
+            styles.textSearchDetails,
+            { color: isSelected ? "#232323" : "#939393" },
+          ]}
+        >
+          {item}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+
+    const renderAvailableApps = (item) => {
+    // Render the item only if count is equal to 2
+    if (item.count >= 2) {
+      return (
+        <View style={{ height: hp(8), padding: 5 }}>
+          <Image
+            style={{ width: wp(12), height: wp(12) }}
+            resizeMode="contain"
+            source={{ uri: `data:image/png;base64,${item?.image}` }}
+          />
+        </View>
+      );
+    } 
+    // else {
+    //   // Return null or an empty view if count is not equal to 2
+    //   return (
+    //     <View style={{ height: hp(8), padding: 5 }}>
+    //       <Image
+    //         style={{ width: wp(12), height: wp(12) }}
+    //         resizeMode="contain"
+    //         source={appImages.logoTransparent}
+    //       />
+    //     </View>
+    //   );
+    // }
+  };
+
+    const renderApps = (item) => {
+    //console.log('item at first', item);
+    const openApp = async (items) => {
+      try {
+        // Check if the app is already in the topData array
+        const appIndex = topData.findIndex((app) => app.bundle === item.bundle);
+
+        if (appIndex !== -1) {
+          // If the app is already in the array, update the count
+          const updatedTopData = [...topData];
+          updatedTopData[appIndex] = {
+            ...updatedTopData[appIndex],
+            count: updatedTopData[appIndex].count + 1,
+          };
+
+          setTopData(updatedTopData);
+
+          await RNLauncherKitHelper.launchApplication(item.bundle);
+
+        } else {
+          // If the app is not in the array, add it with count 1
+          const randomIndex = Math.floor(Math.random() * 6); // Random index between 0 and 5
+          const updatedTopData = [...topData];
+          updatedTopData[randomIndex] = {
+            label: item.label,
+            bundle: item.bundle,
+            image: item.image,
+            count: 1,
+          };
+
+          setTopData(updatedTopData);
+
+          await RNLauncherKitHelper.launchApplication(item.bundle);
+        }
+      } catch (error) {
+        console.error("Error opening the app:", error);
+        await RNLauncherKitHelper.launchApplication(item.bundle);
+        // Your additional error handling logic here
+      }
+    };
+
+    return (
+      <TouchableOpacity
+        onLongPress={() => {
+          setIsLongPress(true);
+          setIsCancelModalVisible(true);
+          setFavouriteItem(item);
+        }}
+        onPress={() => openApp(item?.bundle)}
+        style={styles.items}
+      >
+        <Image
+          style={{ width: 43, height: 43 }}
+          source={{ uri: `data:image/png;base64,${item?.image}` }}
+        />
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Text
+            style={{
+              color: "#000000",
+              textAlign: "center",
+              fontSize: hp(1.4),
+              fontWeight: "bold",
+            }}
+            ellipsizeMode="tail"
+            numberOfLines={1}
+          >
+            {item?.label}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+    const renderFavouritesApps = (item) => {
+    //console.log('item at first', item);
+    const openApp = async (items) => {
+      try {
+        // Launch the application
+        await RNLauncherKitHelper.launchApplication(item.bundle);
+
+        // Check if the app is already in the topData array
+        const appIndex = topData.findIndex((app) => app.bundle === item.bundle);
+
+        if (appIndex !== -1) {
+          // If the app is already in the array, update the count
+          const updatedTopData = [...topData];
+          updatedTopData[appIndex] = {
+            ...updatedTopData[appIndex],
+            count: updatedTopData[appIndex].count + 1,
+          };
+
+          setTopData(updatedTopData);
+        } else {
+          // If the app is not in the array, add it with count 1
+          setTopData((prevData) => [
+            ...prevData,
+            {
+              label: item.label,
+              bundle: item.bundle,
+              image: item.image,
+              count: 1,
+            },
+          ]);
+        }
+
+        await RNLauncherKitHelper.launchApplication(items); // Assuming 'item.label' is the package name
+      } catch (error) {
+        console.error("Error opening the app:", error);
+        await RNLauncherKitHelper.launchApplication(items); // Assuming 'item.label' is the package name
+      }
+    };
+
+    return (
+      <TouchableOpacity
+        onLongPress={() => {
+          setIsLongPressRemove(true);
+          setIsCancelRemoveModalVisible(true);
+          setRemoveFavouriteItem(item);
+        }}
+         onPress={() => openApp(item?.bundle)}
+        style={styles.items}
+      >
+        <Image
+          style={{ width: 43, height: 43 }}
+          source={{ uri: `data:image/png;base64,${item?.image}` }}
+        />
+        <Text
+          style={{
+            color: "#000000",
+            textAlign: "center",
+            fontSize: hp(1.2),
+            fontWeight: "bold",
+          }}
+          ellipsizeMode="tail"
+          numberOfLines={1}
+        >
+          {item?.label}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+    const closeRequestModal = () => {
+    setIsLongPress(false);
+    setIsCancelModalVisible(false);
+  };
+
+  const closeRequestRemoveModal = () => {
+    setIsLongPressRemove(false);
+    setIsCancelRemoveModalVisible(false);
+  };
+
+  const actionsForAddToFavourites = [
+    {
+      label: "Add to Favorites",
+      onPress: () => {
+        if (favouriteItem) {
+          const isItemInFavourites = favouriteData.some(
+            (item) => item.bundle === favouriteItem.bundle
+          );
+          if (!isItemInFavourites) {
+            setFavouriteData((prev) => [...prev, favouriteItem]);
+          }
+          setIsLongPress(false);
+        }
+      },
+    },
+    {
+      label: "Remove From Wotcha Gotcha App",
+      onPress: () => {
+        if (favouriteItem) {
+          const updatedData = dataApps.filter(
+            (item) => item.bundle !== favouriteItem.bundle
+          );
+          setDataApps(updatedData);
+          setIsCancelModalVisible(false);
+          setIsLongPress(false);
+        }
+      },
+    },
+  ];
+
+  const actionsForRemoveFavourites = [
+    {
+      label: "Remove Favorites",
+      onPress: () => {
+        if (removeFavouriteItem) {
+          const updatedData = favouriteData.filter(
+            (item) => item.bundle !== removeFavouriteItem.bundle
+          );
+          setFavouriteData(updatedData);
+          setIsLongPressRemove(false);
+        }
+      },
+    },
+    {
+      label: "Remove From Wotcha Gotcha App",
+      onPress: () => {
+        if (removeFavouriteItem) {
+          const updatedData = dataApps.filter(
+            (item) => item.bundle !== removeFavouriteItem.bundle
+          );
+          setDataApps(updatedData);
+          setIsCancelModalVisible(false);
+          setIsLongPressRemove(false);
+        }
+      },
+    },
+  ];
+
+    const loadSavedApps = async () => {
+    try {
+      const savedNewApps = await AsyncStorage.getItem("savedApps");
+      if (savedNewApps) {
+        // console.log("saved apps in useeffect --------->", savedNewApps);
+        setSavedApps(JSON.parse(savedNewApps));
+      }
+    } catch (error) {
+      console.error("Error loading saved apps from AsyncStorage:", error);
+    }
+  };
+  const renderAppsFav = (item) => {
+    const isSelected = selectedApps.includes(item);
+
+    const handleAppPress = () => {
+      setSelectedApps((selected) => {
+        if (selected.includes(item)) {
+          return selected.filter((app) => app !== item);
+        } else {
+          return [...selected, item];
+        }
+      });
+    };
+
+    return (
+      <TouchableOpacity
+        onPress={handleAppPress}
+        style={[styles.itemFavContainer, isSelected]}
+      >
+        {isSelected && (
+          <Ionicons name="checkmark-circle" size={15} color="green"  style={styles.checkmarkIcon} />
+        )}
+        <Image
+          style={{ width: 43, height: 43 }}
+          source={{ uri: `data:image/png;base64,${item?.image}` }}
+        />
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Text
+            style={{
+              color: "#000000",
+              textAlign: "center",
+              fontSize: hp(1.2),
+              fontWeight: "bold",
+            }}
+            ellipsizeMode="tail"
+            numberOfLines={1}
+          >
+            {item?.label}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const renderAppsFavItem = ({ item, selectedApps, setSelectedApps }) => {
+    const isSelected = selectedApps.includes(item);
+  
+    const handleAppPress = () => {
+      setSelectedApps((selected) => {
+        if (selected.includes(item)) {
+          return selected.filter((app) => app !== item);
+        } else {
+          return [...selected, item];
+        }
+      });
+    };
+  
+    return (
+      <TouchableOpacity
+        onPress={handleAppPress}
+        style={[styles.itemFavContainer, isSelected && styles.selectedItem]}
+      >
+        {isSelected && (
+          <Ionicons name="checkmark-circle" size={15} color="green" style={styles.checkmarkIcon} />
+        )}
+        <Image
+          style={{ width: 43, height: 43 }}
+          source={{ uri: `data:image/png;base64,${item?.image}` }}
+        />
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Text
+            style={{
+              color: "#000000",
+              textAlign: "center",
+              fontSize: hp(1.2),
+              fontWeight: "bold",
+            }}
+            ellipsizeMode="tail"
+            numberOfLines={1}
+          >
+            {item?.label}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+  
+  // Function to save selected apps to AsyncStorage
+  const handleSave = async () => {
+    try {
+      // Retrieve the current array of saved apps from AsyncStorage
+      const currentSavedApps = await AsyncStorage.getItem("savedApps");
+      let updatedSavedApps = [];
+
+      if (currentSavedApps) {
+        updatedSavedApps = JSON.parse(currentSavedApps);
+      }
+      // Add the selected apps to the saved apps array
+      updatedSavedApps.push(...selectedApps);
+      // Save the updated array back to AsyncStorage
+      await AsyncStorage.setItem("savedApps", JSON.stringify(updatedSavedApps));
+      setSnackbarVisible(true);
+      setModalVisible(false);
+      setSelectedApps([]); // Clear the selected apps
+      // Update the state
+      setSavedApps(updatedSavedApps);
+      console.log("saved apps in handleSave --------->", updatedSavedApps);
+    } catch (error) {
+      console.error("Error saving selected apps to AsyncStorage:", error);
+    }
+  };
+
+  const BusinessSavedApps = async () => {
+    try {
+      const savedApps = await AsyncStorage.getItem("savedApps_b");
+      if (savedApps) {
+        // console.log('saved apps in useeffect --------->', savedApps)
+        setSavedApps_b(JSON.parse(savedApps));
+      }
+    } catch (error) {
+      console.error("Error loading saved apps from AsyncStorage:", error);
+    }
+  };
+
+  // Function to save selected apps to AsyncStorage
+  const handleSave_b = async () => {
+    try {
+      // Retrieve the current array of saved apps from AsyncStorage
+      const currentBusinessSavedApps = await AsyncStorage.getItem(
+        "savedApps_b"
+      );
+      let updatedSavedApps = [];
+
+      if (currentBusinessSavedApps) {
+        updatedSavedApps = JSON.parse(currentBusinessSavedApps);
+      }
+
+      // Add the selected apps to the saved apps array
+      updatedSavedApps.push(...selectedApps_b);
+
+      // Save the updated array back to AsyncStorage
+      await AsyncStorage.setItem(
+        "savedApps_b",
+        JSON.stringify(updatedSavedApps)
+      );
+      setSnackbarVisible(true);
+      setModalVisible_b(false);
+      setSelectedApps_b([])
+      // Update the state
+      setSavedApps_b(updatedSavedApps);
+
+      // console.log('saved apps in handleSave_b --------->', updatedSavedApps);
+    } catch (error) {
+      console.error("Error saving selected apps to AsyncStorage:", error);
+    }
+  };
+
+  const handleSave_sp = () => {
+    setSavedApps_sp(selectedApps_sp);
+    setSnackbarVisible(true);
+    setModalVisible_sp(false);
+  };
+  const handleSave_e = () => {
+    setSavedApps_e(selectedApps_e);
+    setSnackbarVisible(true);
+    setModalVisible_e(false);
+  };
+  const handleSave_d = () => {
+    setSavedApps_d(selectedApps_d);
+    setSnackbarVisible(true);
+    setModalVisible_d(false);
+  };
+  const handleSave_fd = () => {
+    setSavedApps_fd(selectedApps_fd);
+    setSnackbarVisible(true);
+    setModalVisible_fd(false);
+  };
+  const handleSave_sm = () => {
+    setSavedApps_sm(selectedApps_sm);
+    setSnackbarVisible(true);
+    setModalVisible_sm(false);
+  };
+  const handleSave_mw = () => {
+    setSavedApps_mw(selectedApps_mw);
+    setSnackbarVisible(true);
+    setModalVisible_mw(false);
+  };
+  const handleSave_g = () => {
+    setSavedApps_g(selectedApps_g);
+    setSnackbarVisible(true);
+    setModalVisible_g(false);
+  };
+  const handleSave_em = () => {
+    setSavedApps_em(selectedApps_em);
+    setSnackbarVisible(true);
+    setModalVisible_em(false);
+  };
+  const openCategoryApp = async (app) => {
+    try {
+      console.log("Opening app-------------------:", app.bundle);
+
+      // Launch the application using its bundle ID
+      await RNLauncherKitHelper.launchApplication(app.bundle);
+
+      console.log("App launched successfully.");
+    } catch (error) {
+      console.error("Error launching the app:", error.message);
+    }
+  };
+  const screenHeight = Dimensions.get("window").height;
+const itemHeight = 450;
+
+const { width: viewportWidth } = Dimensions.get("window");
+
+const sliderWidth = viewportWidth * 0.9;
+  const containerHeight = Math.min(screenHeight * 0.8, itemHeight);
+  const categoryComponents = {
+    [t('Ecommerce')]: {
+      component: (
+        <View style={[styles.Appcategorycontainer, { height: containerHeight }]}>
+          {savedApps.length > 0 ? (
+            <ScrollView>
+              {Array.from({ length: Math.ceil(savedApps.length / 5) }).map((_, rowIndex) => (
+                <View key={rowIndex} style={styles.row}>
+                  {savedApps
+                    .slice(rowIndex * 5, (rowIndex + 1) * 5)
+                    .map((app, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => openCategoryApp(app)}
+                        style={styles.appContainer}
+                      >
+                        <Image
+                          style={styles.appImage}
+                          source={{ uri: `data:image/png;base64,${app.image}` }}
+                        />
+                        <Text style={styles.appText}>
+                          {app.label.substring(0, 10)}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                </View>
+              ))}
+            </ScrollView>
+          ) : (
+            <Text style={styles.placeholderText}>
+              {t('Dashboard.addEcommernceapps')}
+            </Text>
+          )}
+          <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
+            <Add />
+          </TouchableOpacity>
+        </View>
+      ),
+    },
+    [t('Business')]: {
+      component: (
+        <View style={[styles.Appcategorycontainer, { height: containerHeight }]}>
+          {savedApps_b.length > 0 ? (
+            <ScrollView>
+              {Array.from({ length: Math.ceil(savedApps_b.length / 5) }).map((_, rowIndex) => (
+                <View key={rowIndex} style={styles.row}>
+                  {savedApps_b
+                    .slice(rowIndex * 5, (rowIndex + 1) * 5)
+                    .map((app, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => openCategoryApp(app)}
+                        style={styles.appContainer}
+                      >
+                        <Image
+                          style={styles.appImage}
+                          source={{ uri: `data:image/png;base64,${app.image}` }}
+                        />
+                        <Text style={styles.appText}>{app.label}</Text>
+                      </TouchableOpacity>
+                    ))}
+                </View>
+              ))}
+            </ScrollView>
+          ) : (
+            <Text style={styles.placeholderText}>
+              {t('Dashboard.addBussinessapps')}
+            </Text>
+          )}
+          <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible_b(true)}>
+            <Add />
+          </TouchableOpacity>
+        </View>
+      ),
+    },
+
+    [t('cateSports')]: {
+      component: (
+        <View style={[styles.Appcategorycontainer, { height: containerHeight }]}>
+          {savedApps_sp.length > 0 ? (
+            <ScrollView>
+              {Array.from({ length: Math.ceil(savedApps_sp.length / 5) }).map((_, rowIndex) => (
+                <View key={rowIndex} style={styles.row}>
+                  {savedApps_sp
+                    .slice(rowIndex * 5, (rowIndex + 1) * 5)
+                    .map((app, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => openCategoryApp(app)}
+                        style={styles.appContainer}
+                      >
+                        <Image
+                          style={styles.appImage}
+                          source={{ uri: `data:image/png;base64,${app.image}` }}
+                        />
+                        <Text style={styles.appText}>{app.label}</Text>
+                      </TouchableOpacity>
+                    ))}
+                </View>
+              ))}
+            </ScrollView>
+          ) : (
+            <Text style={styles.placeholderText}>
+              {t('Dashboard.addSportsapps')}
+            </Text>
+          )}
+          <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible_sp(true)}>
+            <Add />
+          </TouchableOpacity>
+        </View>
+      ),
+    },
+    [t('Education')]: {
+      component: (
+        <View style={[styles.Appcategorycontainer, { height: containerHeight }]}>
+          {savedApps_e.length > 0 ? (
+            <ScrollView>
+              {Array.from({ length: Math.ceil(savedApps_e.length / 5) }).map((_, rowIndex) => (
+                <View key={rowIndex} style={styles.row}>
+                  {savedApps_e
+                    .slice(rowIndex * 5, (rowIndex + 1) * 5)
+                    .map((app, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        onPress={() => openCategoryApp(app)}
+                        style={styles.appContainer}
+                      >
+                        <Image
+                          style={styles.appImage}
+                          source={{ uri: `data:image/png;base64,${app.image}` }}
+                        />
+                        <Text style={styles.appText}>{app.label}</Text>
+                      </TouchableOpacity>
+                    ))}
+                </View>
+              ))}
+            </ScrollView>
+          ) : (
+            <Text style={styles.placeholderText}>
+              {t('Dashboard.addSportsapps')}
+            </Text>
+          )}
+          <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible_e(true)}>
+            <Add />
+          </TouchableOpacity>
+        </View>
+      ),
+    },
+    // Add other categories similarly
+  };
   return (
     <View style={styles.container}>
+       {/* {DotLoading ? <DotLoader /> :
+       <> */}
       <StatusBar
         translucent={true}
         backgroundColor="transparent"
@@ -11914,6 +12779,7 @@ const Dashboard = () => {
           showProfileImage={true}
         />
       </View>
+     
       <ScrollView
         contentContainerStyle={styles.dataContainer}
         showsVerticalScrollIndicator={false}
@@ -11924,7 +12790,142 @@ const Dashboard = () => {
           noDataMessage={t("Dashboard.NoBanner")}
           onBannerPress={handleBannerPress}
         />
-        {/* Horizontal Category List */}
+       {Platform.OS != "ios" ?
+          <View style={styles.latestSearchList}>
+            <View style={{ marginRight: 6 }}>
+            <TouchableOpacity onPress={press_category}>
+              {isSelectedActive ? (
+                <CategoryActive width={23} height={23} />
+              ) : (
+                <CategoryInactive width={23} height={23} />
+              )}
+            </TouchableOpacity>
+            </View>
+            <FlatList
+              style={{ flex: 1 }}
+              contentContainerStyle={{ alignItems: "center" }}
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              data={MassApp}
+              renderItem={({ item }) => renderMassAppSearches(item)}
+            />
+          </View> : <View>
+            <Text>{t('NoDataAvailable')}</Text>
+          </View>
+        }
+
+{categoryActive ? (
+  Platform.OS !== "ios" && (
+    <>
+      {/* Top Apps Section */}
+      <View style={styles.Masscontainer}>
+        {topData?.length === 0 ? (
+          <View style={styles.emptyStateContainer}>
+            <Text style={styles.emptyStateText}>
+              {t("Dashboard.NoTopApps")}
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            style={styles.flatList}
+            showsVerticalScrollIndicator={false}
+            data={topData}
+            numColumns={3}
+            renderItem={({ item }) => renderAvailableApps(item)}
+          />
+        )}
+      </View>
+
+      {/* Phone-Based Apps Section */}
+      <View style={styles.sectionMassContainer}>
+        <Text style={styles.sectionTitle}>
+          {t("Dashboard.PhoneBasedApps")}
+        </Text>
+        <FlatList
+          data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item, index) => `${index}`}
+          renderItem={({ item }) => renderApps(item)}
+          contentContainerStyle={styles.flatListContainer}
+        />
+        <FlatList
+          data={dataApps.slice(Math.ceil(dataApps.length / 2))}
+
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item, index) => `${index}`}
+          renderItem={({ item }) => renderApps(item)}
+          contentContainerStyle={styles.flatListContainer}
+        />
+      </View>
+
+      {/* Favourite Apps Section */}
+      <View style={styles.favoritesContainer}>
+        <Text style={styles.sectionTitle}>
+          {t("Dashboard.FavouriteApps")}
+        </Text>
+        {favouriteData?.length === 0 ? (
+          <View style={styles.emptyStateContainer}>
+            <Text style={styles.favoritesText}>
+              {t("Dashboard.NoFavouriteApps")}
+            </Text>
+          </View>
+        ) : (
+          <>
+          <FlatList
+            data={favouriteData.slice(0, Math.ceil(favouriteData.length / 2))}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item, index) => `${index}`}
+            renderItem={({ item }) => renderFavouritesApps(item)}
+            contentContainerStyle={styles.flatListContainer}
+          />
+          <FlatList
+            data={favouriteData.slice(Math.ceil(favouriteData.length / 2))}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item, index) => `${index}`}
+            renderItem={({ item }) => renderFavouritesApps(item)}
+            contentContainerStyle={styles.flatListContainer}
+          />
+          </>
+        )}
+      </View>
+
+      {/* Unused Apps Section */}
+      <View style={styles.unusedAppsContainer}>
+        <Text style={styles.sectionTitle}>
+          {t("Dashboard.UnusedApps")}
+        </Text>
+        <FlatList
+          data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item, index) => `${index}`}
+          renderItem={({ item }) => renderApps(item)}
+          contentContainerStyle={styles.flatListContainer}
+        />
+        <FlatList
+          data={dataApps.slice(Math.ceil(dataApps.length / 2))}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(item, index) => `${index}`}
+          renderItem={({ item }) => renderApps(item)}
+          contentContainerStyle={styles.flatListContainer}
+        />
+      </View>
+    </>
+  )
+) : (
+  <View style={{height:hp(80) , backgroundColor:'gray'}}>
+   {categoryComponents[selectedCategory]?.component || (
+      <Text>{t('NoDataAvailable')}</Text>
+    )}
+  </View>
+)}
+
+        {/* Mass App Category List */}
         {/* Vedio sections  start*/}
         <View style={styles.latestSearchList}>
           <View style={{ marginRight: 6 }}>
@@ -12704,6 +13705,127 @@ const Dashboard = () => {
     </View>
         {/* Marcket sections start*/}
       </ScrollView>
+
+      <CustomaddFavModal
+        visible={isLongPress}
+        onClose={() => setIsLongPress(false)}
+        actions={actionsForAddToFavourites}
+        isCancelModalVisible={isCancelModalVisible}
+        closeCancelModal={() => setIsCancelModalVisible(false)}
+      />
+
+      <CustomaddFavModal
+        visible={isLongPressRemove}
+        onClose={() => setIsLongPressRemove(false)}
+        actions={actionsForRemoveFavourites}
+        isCancelModalVisible={isCancelModalVisible}
+        closeCancelModal={() => setIsCancelModalVisible(false)}
+      />
+
+
+<CustomMassAppCateModal
+  visible={modalVisible}
+  onClose={() => setModalVisible(false)}
+  title={t("Dashboard.YourApps")}
+  data={dataApps}
+  // renderItem={({ item }) => renderAppsFav(item)}
+  renderItem={({ item }) => renderAppsFavItem({ item, selectedApps, setSelectedApps })}
+  handleSave={handleSave}
+/>
+
+<CustomMassAppCateModal
+  visible={modalVisible_b}
+  onClose={() => setModalVisible_b(false)}
+  title={t("Dashboard.YourApps")}
+  data={dataApps}
+  // renderItem={({ item }) => renderAppsFav_b(item)}
+  renderItem={({ item }) => renderAppsFavItem({ item, selectedApps: selectedApps_b, setSelectedApps: setSelectedApps_b })}
+  handleSave={handleSave_b}
+/>
+
+<CustomMassAppCateModal
+  visible={modalVisible_sp}
+  onClose={() => setModalVisible_sp(false)}
+  title={t("Dashboard.YourApps")}
+  data={dataApps}
+  // renderItem={({ item }) => renderAppsFav_sp(item)}
+  renderItem={({ item }) => renderAppsFavItem(item, selectedApps_sp, setSelectedApps_sp)}
+  handleSave={handleSave_sp}
+/>
+
+<CustomMassAppCateModal
+  visible={modalVisible_e}
+  onClose={() => setModalVisible_e(false)}
+  title={t("Dashboard.YourApps")}
+  data={dataApps}
+  // renderItem={({ item }) => renderAppsFav_e(item)}
+  renderItem={({ item }) => renderAppsFavItem(item, selectedApps_e, setSelectedApps_e)}
+  handleSave={handleSave_e}
+/>
+
+<CustomMassAppCateModal
+  visible={modalVisible_d}
+  onClose={() => setModalVisible_d(false)}
+  title={t("Dashboard.YourApps")}
+  data={dataApps}
+  // renderItem={({ item }) => renderAppsFav_d(item)}
+  renderItem={({ item }) => renderAppsFavItem(item, selectedApps_d, setSelectedApps_d)}
+  handleSave={handleSave_d}
+/>
+
+<CustomMassAppCateModal
+  visible={modalVisible_fd}
+  onClose={() => setModalVisible_fd(false)}
+  title={t("Dashboard.YourApps")}
+  data={dataApps}
+  // renderItem={({ item }) => renderAppsFav_fd(item)}
+  renderItem={({ item }) => renderAppsFavItem(item, selectedApps_fd, setSelectedApps_fd)}
+  handleSave={handleSave_fd}
+/>
+
+<CustomMassAppCateModal
+  visible={modalVisible_sm}
+  onClose={() => setModalVisible_sm(false)}
+  title={t("Dashboard.YourApps")}
+  data={dataApps}
+  // renderItem={({ item }) => renderAppsFav_sm(item)}
+  renderItem={({ item }) => renderAppsFavItem(item, selectedApps_sm, setSelectedApps_sm)}
+  handleSave={handleSave_sm}
+/>
+
+<CustomMassAppCateModal
+  visible={modalVisible_mw}
+  onClose={() => setModalVisible_mw(false)}
+  title={t("Dashboard.YourApps")}
+  data={dataApps}
+  // renderItem={({ item }) => renderAppsFav_mw(item)}
+  renderItem={({ item }) => renderAppsFavItem(item, selectedApps_mw, setSelectedApps_mw)}
+  handleSave={handleSave_mw}
+/>
+
+<CustomMassAppCateModal
+  visible={modalVisible_g}
+  onClose={() => setModalVisible_g(false)}
+  title={t("Dashboard.YourApps")}
+  data={dataApps}
+  // renderItem={({ item }) => renderAppsFav_g(item)}
+  renderItem={({ item }) => renderAppsFavItem(item, selectedApps_g, setSelectedApps_g)}
+  handleSave={handleSave_g}
+/>
+
+<CustomMassAppCateModal
+  visible={modalVisible_em}
+  onClose={() => setModalVisible_em(false)}
+  title={t("Dashboard.YourApps")}
+  data={dataApps}
+  // renderItem={({ item }) => renderAppsFav_em(item)}
+  renderItem={({ item }) => renderAppsFavItem(item, selectedApps_em, setSelectedApps_em)}
+
+  handleSave={handleSave_em}
+/>
+
+      {/* </>
+    } */}
     </View>
   );
 };
@@ -13005,9 +14127,198 @@ const styles = StyleSheet.create({
     fontFamily: "Inter-Medium",
     fontSize: hp(2),
     color: "gray",
+
+    textAlign: 'center',
+    marginVertical: 20,
   },
   flatList: {
     flex: 1,
+  },
+
+
+  // Mass apps
+  Masscontainer: {
+    marginTop: hp(2),
+    marginLeft: wp(-1),
+    height: hp(23),
+    width: wp(60),
+  },
+  loaderContainer: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyStateText: {
+    fontFamily: "Inter-Medium",
+    fontSize: hp(2),
+    color: "gray",
+  },
+  flatList: {
+    margin: 8,
+    flex: 1,
+  },
+  sectionMassContainer: {
+    marginTop: hp(-3),
+    height: hp(22),
+    marginBottom:8
+  },
+  sectionTitle: {
+    fontSize: hp(2.3),
+    marginLeft: wp(3),
+    fontFamily: "Inter-Bold",
+    color: "#4A4A4A",
+    fontWeight: "bold",
+  },
+  flatListContainer: {
+    // borderWidth: 1,
+    marginRight: wp(2),
+    // marginTop: hp(3),
+    borderColor: "#00000017",
+    borderRadius: wp(3),
+    // backgroundColor:'gray'
+  },
+  favoritesContainer: {
+    height: hp(22),
+    marginBottom:8
+  },
+  favoritesText: {
+    fontWeight: "bold",
+    fontSize: hp(2.1),
+    justifyContent: "center",
+    color: "gray",
+  },
+  unusedAppsContainer: {
+    marginTop: hp(1),
+    marginBottom: hp(5),
+    height: hp(25),
+  },
+    items: {
+    // flex: 1,
+    // justifyContent: "center",
+    alignItems: "center",
+    //borderWidth: 1,
+    borderColor: "black",
+    // padding: 10,
+    paddingHorizontal:10,
+    // backgroundColor:'red',
+    // height:hp(10)
+      marginTop:6,
+      
+  },
+
+
+
+    modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+  },
+    modalContent: {
+    backgroundColor: "transparent",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+  },
+
+  modalContentCross: {
+    position: "absolute",
+    backgroundColor: "white",
+    top: 18,
+    zIndex: 999,
+    right: 16,
+    width: wp(10),
+    height: wp(10),
+    borderRadius: wp(10),
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer1: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent1: {
+    flexDirection: "row",
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+    elevation: 5,
+    height: "40%",
+  },
+  leftContent1: {
+    flex: 1,
+    flexDirection: "row",
+    alignContent: "center",
+    top: "10%",
+
+  },
+  leftText1: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "black",
+    marginRight: 20
+  },
+
+
+
+  //App category component
+  Appcategorycontainer: {
+    flex: 1,
+  },
+  row: {
+    flexDirection: 'row',
+    margin: '2%',
+  },
+  appContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 6,
+  },
+  appImage: {
+    width: 40,
+    height: 40,
+    marginBottom: 5,
+    margin: '3%',
+  },
+  appText: {
+    color: 'black',
+    fontSize: wp(2.5),
+  },
+  placeholderText: {
+    color: 'grey',
+    fontSize: wp(3.5),
+    textAlign: 'center',
+    top: '40%',
+  },
+  addButton: {
+    position: 'absolute',
+    top: '70%',
+    right: 10,
+  },
+  itemFavContainer:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    paddingHorizontal:10,
+  },
+  checkmarkIcon: {
+    position: 'absolute', // Position the icon absolutely within the container.
+    top: -5, // Adjust this value to control the vertical alignment.
+    right: -5, // Adjust this value to control the horizontal alignment.
+    zIndex: 1, // Ensure the icon is above other elements.
   },
 });
 
