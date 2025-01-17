@@ -48,6 +48,7 @@ import { fetchBannerConfig, fetchBannerInActive } from "../../../../../API";
 import BannerCarousel from "../../../assets/Custom/BannerCarousel";
 //------------------------\\
 import { useTranslation } from "react-i18next";
+import DeviceInfo from 'react-native-device-info';
 const screenHeight = Dimensions.get("window").height;
 const itemHeight = 450;
 
@@ -60,6 +61,8 @@ export default function Categories(identifier) {
   const navigation = useNavigation();
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [dataApps, setData] = useState([]);
+    const [systemApps, setSystemApps] = useState([]);
+    const [userApps, setUserApps] = useState([]);
   const [isLongPress, setIsLongPress] = useState(false);
   const [categoryActive, setcategoryActive] = useState(true);
   const [banner, setBanners] = useState([]);
@@ -188,7 +191,7 @@ export default function Categories(identifier) {
         fetchBannerInActive(authToken, base_url),
       ]);
 
-      setAdsData(activeBannersResult.AllBanners || []);
+      setAdsData(activeBannersResult?.AllBanners || []);
       setAdsInActiveData(inactiveBannersResult || []);
     } catch (error) {
       console.error("Error fetching banners:", error);
@@ -283,233 +286,392 @@ export default function Categories(identifier) {
   //   fetchData();
   // }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const installedApps = InstalledApps.getSortedApps();
-      const packageNames = installedApps.map((app) => app.label);
-      const packageImages = installedApps.map((app) => app.icon);
-      const packageBundle = installedApps.map((app) => app.packageName);
-      const packageDataArray = packageNames.map((packageName, index) => ({
-        label: packageName,
-        bundle: packageBundle[index],
-        image: packageImages[index],
-      }));
 
-      setData(packageDataArray);
-      // setIsLoading(false);
-    };
 
-    fetchData();
-  }, []);
-  useEffect(() => {
-   
-      // Load favouriteData from AsyncStorage when the component mounts
-      const loadFavouriteData = async () => {
+
+
+
+
+
+
+
+
+
+
+  const initializeAppData = async () => {
+    // const initializeAppData = async (setDataApps, setSystemApps , setUserApps ,setTopData, setFavouriteData,  setUnusedApps ) => {
+      try {
+          const manufacturer = await DeviceInfo.getManufacturer();
+           console.log('Manufacturer------:', manufacturer);
+  
+        // Fetch all installed apps
+            const allApps = await InstalledApps.getApps();
+            const packageDataArray = allApps.map((app) => ({
+             label: app.label,
+             bundle: app.packageName,
+             image: app.icon,
+            }));
+            setData(packageDataArray);
+            // Normalize manufacturer name (to lowercase, without spaces) to match prefixes
+            const normalizedManufacturer = manufacturer.toLowerCase().replace(/\s/g, '');
+            console.log('normalizedManufacturer------??:', normalizedManufacturer);
+            const systemAppPrefixes = [
+              `com.${normalizedManufacturer}`, // Manufacturer-specific apps
+              'com.android',                  // Android system apps
+              'com.google',                   // Google apps
+              'com.sec',                      // Samsung apps
+              'com.miui',                     // Xiaomi apps
+              'com.huawei',                   // Huawei apps
+              'com.transsion',                // Transsion apps (e.g., Tecno, Infinix, Itel)
+              'com.oppo',                     // Oppo apps
+              'com.vivo',                     // Vivo apps
+              'com.realme',                   // Realme apps
+            ];
+            // Dynamically filter system and user apps
+            const systemAppsList = [];
+              const userAppsList = [];
+              packageDataArray.forEach((app) => {
+                const bundle = app.bundle.toLowerCase();
+                const isSystemApp = systemAppPrefixes.some((prefix) => bundle.startsWith(prefix));
+                  // Additional checks for gallery and phone apps
+                const isGalleryOrPhoneApp =
+                 app.bundle.toLowerCase().includes('gallery') || // Gallery apps
+                 app.bundle.toLowerCase().includes('dialer') ||  // Dialer apps
+                 app.bundle.toLowerCase().includes('phone');     // Phone apps
+
+                if (isSystemApp || isGalleryOrPhoneApp) {
+                  systemAppsList.push(app);
+                } else {
+                  userAppsList.push(app);
+                }
+              });
+          //   packageDataArray.forEach((app) => {
+          //  // Check for system apps based on manufacturer, android, and google prefixes
+          //  if (
+          //   app.bundle.toLowerCase().startsWith(`com.${normalizedManufacturer}`) || // Manufacturer-specific apps
+          //   app.bundle.toLowerCase().startsWith('com.android') || // Android system apps
+          //    app.bundle.toLowerCase().startsWith('com.google') // Google apps
+          //   ) {
+          //  systemAppsList.push(app);
+          //  } else {
+          //   userAppsList.push(app);
+          //  }
+          // });
+  
+          setSystemApps(systemAppsList);
+          setUserApps(userAppsList);
+        // Top 6 Apps
+        const storedTopData = await AsyncStorage.getItem("topData");
+        if (storedTopData) {
+          setTopData(JSON.parse(storedTopData));
+        } else {
+          const topSixApps = packageDataArray.slice(0, 6).map((item) => ({
+            ...item,
+            count: 2,
+          }));
+          await AsyncStorage.setItem("topData", JSON.stringify(topSixApps));
+          setTopData(topSixApps);
+        }
+    
+        // Favourite Apps
+        const storedFavouriteData = await AsyncStorage.getItem("StorefavouriteData");
+        setFavouriteData(JSON.parse(storedFavouriteData) || []);
+        // if (!storedFavouriteData) {
+        //   const initialFavouriteData = packageDataArray.slice(0, 4);
+        //   // const initialFavouriteData = appDataArray.slice(0, 4);
+        //   await AsyncStorage.setItem(
+        //     "favouriteData",
+        //     JSON.stringify(initialFavouriteData)
+        //   );
+        //   // setFavouriteData(initialFavouriteData);
+        // } else {
+        //   setFavouriteData(JSON.parse(storedFavouriteData));
+        // }
+  
+         // Unused Apps Logic
+      const currentDate = new Date();
+      const threeWeeksAgo = new Date(currentDate - 21 * 24 * 60 * 60 * 1000); // Three weeks ago
+      const unusedAppsData = [];
+  
+      for (const app of packageDataArray) {
         try {
-          const storedData = await AsyncStorage.getItem("favouriteData");
-
-          // it is conisdering empty array as 2 length thats why i a have added it
-          if (storedData.length === 2) {
-            const initialFavouriteData = dataApps.slice(0, 4);
-            await AsyncStorage.setItem(
-              "favouriteData",
-              JSON.stringify(initialFavouriteData)
-            );
-            setFavouriteData(initialFavouriteData);
-          } else {
-            const parsedData = JSON.parse(storedData);
-            setFavouriteData(parsedData);
-            console.log("FAVOURITE IS NOT NULL");
+          const lastUsageDate = await AsyncStorage.getItem(`lastUsageDate_${app.bundle}`);
+          if (!lastUsageDate || new Date(lastUsageDate) < threeWeeksAgo) {
+            unusedAppsData.push(app);
           }
         } catch (error) {
-          console.error(
-            "Error loading favourite data from AsyncStorage:",
-            error
-          );
+          console.error(`Error processing unused app: ${app.label}`, error);
         }
-      };
-
-      loadFavouriteData();
-    
-  }, []); // Run this effect only once when the component mounts
+      }
+      setUnusedApps(unusedAppsData);
+      } catch (error) {
+        console.error("Error initializing app data:", error);
+      }
+    };
 
   useEffect(() => {
+    initializeAppData();
+  }, []);
+
+
+
+  const handleSaveData = async (key, data) => {
+    try {
+      await AsyncStorage.setItem(key, JSON.stringify(data));
+    } catch (error) {
+      console.error(`Error saving ${key} to AsyncStorage:`, error);
+    }
+  };
   
-      // Save favouriteData to AsyncStorage whenever it changes
-      const saveFavouriteData = async () => {
-        try {
-          await AsyncStorage.setItem(
-            "favouriteData",
-            JSON.stringify(favouriteData)
-          );
-        } catch (error) {
-          console.error("Error saving favourite data to AsyncStorage:", error);
-        }
-      };
-      saveFavouriteData();
+  useEffect(() => {
+    // Save favourite and top data when updated
+    if (favouriteData.length) {
+      handleSaveData("StorefavouriteData", favouriteData);
+    }
+
+    if (topData.length) {
+      handleSaveData("topData", topData);
+    }
+  }, [favouriteData, topData]);
+
+
+
+  console.log('favouriteData----------', favouriteData);
+
+
+
+
+
+
+
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const installedApps = InstalledApps.getSortedApps();
+  //     const packageNames = installedApps.map((app) => app.label);
+  //     const packageImages = installedApps.map((app) => app.icon);
+  //     const packageBundle = installedApps.map((app) => app.packageName);
+  //     const packageDataArray = packageNames.map((packageName, index) => ({
+  //       label: packageName,
+  //       bundle: packageBundle[index],
+  //       image: packageImages[index],
+  //     }));
+
+  //     setData(packageDataArray);
+  //     // setIsLoading(false);
+  //   };
+
+  //   fetchData();
+  // }, []);
+  // useEffect(() => {
+   
+  //     // Load favouriteData from AsyncStorage when the component mounts
+  //     const loadFavouriteData = async () => {
+  //       try {
+  //         const storedData = await AsyncStorage.getItem("favouriteData");
+
+  //         // it is conisdering empty array as 2 length thats why i a have added it
+  //         if (storedData.length === 2) {
+  //           const initialFavouriteData = dataApps.slice(0, 4);
+  //           await AsyncStorage.setItem(
+  //             "favouriteData",
+  //             JSON.stringify(initialFavouriteData)
+  //           );
+  //           setFavouriteData(initialFavouriteData);
+  //         } else {
+  //           const parsedData = JSON.parse(storedData);
+  //           setFavouriteData(parsedData);
+  //           console.log("FAVOURITE IS NOT NULL");
+  //         }
+  //       } catch (error) {
+  //         console.error(
+  //           "Error loading favourite data from AsyncStorage:",
+  //           error
+  //         );
+  //       }
+  //     };
+
+  //     loadFavouriteData();
     
-  }, [favouriteData, ]); // Run this effect whenever favouriteData changes
+  // }, []); // Run this effect only once when the component mounts
+
+  // useEffect(() => {
+  
+  //     // Save favouriteData to AsyncStorage whenever it changes
+  //     const saveFavouriteData = async () => {
+  //       try {
+  //         await AsyncStorage.setItem(
+  //           "favouriteData",
+  //           JSON.stringify(favouriteData)
+  //         );
+  //       } catch (error) {
+  //         console.error("Error saving favourite data to AsyncStorage:", error);
+  //       }
+  //     };
+  //     saveFavouriteData();
+    
+  // }, [favouriteData, ]); // Run this effect whenever favouriteData changes
 
   //------------------------------------\\
 
   //-------------------Use Effect Top Apps---------\\
 
-  useEffect(() => {
+  // useEffect(() => {
 
-      // Load topData from AsyncStorage when the component mounts
-      const loadTopData = async () => {
-        //await AsyncStorage.removeItem('topData');
-        try {
-          const storedData = await AsyncStorage.getItem("topData");
-          if (storedData) {
-            const parsedData = JSON.parse(storedData);
-            setTopData(parsedData);
-          }
-        } catch (error) {
-          console.error("Error loading top data from AsyncStorage:", error);
-        }
-      };
+  //     // Load topData from AsyncStorage when the component mounts
+  //     const loadTopData = async () => {
+  //       //await AsyncStorage.removeItem('topData');
+  //       try {
+  //         const storedData = await AsyncStorage.getItem("topData");
+  //         if (storedData) {
+  //           const parsedData = JSON.parse(storedData);
+  //           setTopData(parsedData);
+  //         }
+  //       } catch (error) {
+  //         console.error("Error loading top data from AsyncStorage:", error);
+  //       }
+  //     };
 
-      loadTopData();
+  //     loadTopData();
     
-  }, []); // Run this effect only once when the component mounts
+  // }, []); // Run this effect only once when the component mounts
 
-  useEffect(() => {
+  // useEffect(() => {
    
-      // Save topData to AsyncStorage whenever it changes
-      const saveTopData = async () => {
-        try {
-          await AsyncStorage.setItem("topData", JSON.stringify(topData));
-        } catch (error) {
-          console.error("Error saving top data to AsyncStorage:", error);
-        }
-      };
+  //     // Save topData to AsyncStorage whenever it changes
+  //     const saveTopData = async () => {
+  //       try {
+  //         await AsyncStorage.setItem("topData", JSON.stringify(topData));
+  //       } catch (error) {
+  //         console.error("Error saving top data to AsyncStorage:", error);
+  //       }
+  //     };
 
-      saveTopData();
+  //     saveTopData();
     
-  }, [topData]); // Run this effect whenever topData changes
+  // }, [topData]); // Run this effect whenever topData changes
 
   //---------------------------------------------\\
 
   //----------------NEW FUNCTION ------------------\\
 
-  useEffect(() => {
-    const topSixItems = dataApps.slice(0, 6);
-    // console.log("APPS CALLED");
-    // Save topSixItems directly to AsyncStorage whenever it changes
-    const saveTopData = async () => {
-      try {
-        const updatedTopData = topSixItems.map((item) => ({
-          ...item,
-          count: 2, // Set count to 2 for each item
-        }));
-        await AsyncStorage.setItem("topData", JSON.stringify(updatedTopData));
-        setTopData(updatedTopData); // Update the state with updatedTopData
-      } catch (error) {
-        console.error("Error saving top data to AsyncStorage:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const topSixItems = dataApps.slice(0, 6);
+  //   // console.log("APPS CALLED");
+  //   // Save topSixItems directly to AsyncStorage whenever it changes
+  //   const saveTopData = async () => {
+  //     try {
+  //       const updatedTopData = topSixItems.map((item) => ({
+  //         ...item,
+  //         count: 2, // Set count to 2 for each item
+  //       }));
+  //       await AsyncStorage.setItem("topData", JSON.stringify(updatedTopData));
+  //       setTopData(updatedTopData); // Update the state with updatedTopData
+  //     } catch (error) {
+  //       console.error("Error saving top data to AsyncStorage:", error);
+  //     }
+  //   };
 
-    saveTopData();
-  }, [dataApps]); // Run this effect whenever dataApps changes
+  //   saveTopData();
+  // }, [dataApps]); // Run this effect whenever dataApps changes
 
   //-----------------------------------------------\\
 
   //------------------Use Effect Filtered Apps----------------\\
 
-  useEffect(() => {
-    const fetchUsedData = async () => {
-      const lastUsageDate = new Date().toISOString();
+  // useEffect(() => {
+  //   const fetchUsedData = async () => {
+  //     const lastUsageDate = new Date().toISOString();
 
-      const installedApps = InstalledApps.getSortedApps();
-      const packageNames = installedApps.map((app) => app.label);
-      const packageImages = installedApps.map((app) => app.icon);
-      const packageBundle = installedApps.map((app) => app.packageName);
-      const packageDataArray = packageNames.map((packageName, index) => ({
-        label: packageName,
-        bundle: packageBundle[index],
-        image: packageImages[index],
-        date: lastUsageDate,
-      }));
+  //     const installedApps = InstalledApps.getSortedApps();
+  //     const packageNames = installedApps.map((app) => app.label);
+  //     const packageImages = installedApps.map((app) => app.icon);
+  //     const packageBundle = installedApps.map((app) => app.packageName);
+  //     const packageDataArray = packageNames.map((packageName, index) => ({
+  //       label: packageName,
+  //       bundle: packageBundle[index],
+  //       image: packageImages[index],
+  //       date: lastUsageDate,
+  //     }));
 
-      setUnusedApps(packageDataArray);
+  //     setUnusedApps(packageDataArray);
 
-      await AsyncStorage.setItem(
-        "comparisonDate",
-        JSON.stringify(packageDataArray)
-      );
-      // setIsLoading(false);
-    };
+  //     await AsyncStorage.setItem(
+  //       "comparisonDate",
+  //       JSON.stringify(packageDataArray)
+  //     );
+  //     // setIsLoading(false);
+  //   };
 
-    fetchUsedData();
-  }, []);
+  //   fetchUsedData();
+  // }, []);
   const dismissSnackbar = () => {
     setSnackbarVisible(false);
   };
 
-  const filterUnusedApps = async (apps) => {
-    const currentDate = new Date();
-    const threeWeeksAgo = new Date(currentDate - 21 * 24 * 60 * 60 * 1000); // Three weeks ago
+  // const filterUnusedApps = async (apps) => {
+  //   const currentDate = new Date();
+  //   const threeWeeksAgo = new Date(currentDate - 21 * 24 * 60 * 60 * 1000); // Three weeks ago
 
-    const unusedAppsData = [];
+  //   const unusedAppsData = [];
 
-    for (const app of apps) {
-      const storedAppInfo = await AsyncStorage.getItem(`appInfo_${app.label}`);
-      let appInfo;
+  //   for (const app of apps) {
+  //     const storedAppInfo = await AsyncStorage.getItem(`appInfo_${app.label}`);
+  //     let appInfo;
 
-      if (storedAppInfo) {
-        appInfo = JSON.parse(storedAppInfo);
-      } else {
-        // Store app information for the first time
-        appInfo = {
-          label: app.label,
-          bundle: app.bundle,
-          image: app.image,
-        };
+  //     if (storedAppInfo) {
+  //       appInfo = JSON.parse(storedAppInfo);
+  //     } else {
+  //       // Store app information for the first time
+  //       appInfo = {
+  //         label: app.label,
+  //         bundle: app.bundle,
+  //         image: app.image,
+  //       };
 
-        await AsyncStorage.setItem(
-          `appInfo_${app.label}`,
-          JSON.stringify(appInfo)
-        );
-      }
+  //       await AsyncStorage.setItem(
+  //         `appInfo_${app.label}`,
+  //         JSON.stringify(appInfo)
+  //       );
+  //     }
 
-      const lastUsageDate = await AsyncStorage.getItem(
-        `lastUsageDate_${app.label}`
-      );
+  //     const lastUsageDate = await AsyncStorage.getItem(
+  //       `lastUsageDate_${app.label}`
+  //     );
 
-      if (!lastUsageDate || new Date(lastUsageDate) < threeWeeksAgo) {
-        unusedAppsData.push(appInfo);
-      }
-    }
+  //     if (!lastUsageDate || new Date(lastUsageDate) < threeWeeksAgo) {
+  //       unusedAppsData.push(appInfo);
+  //     }
+  //   }
 
-    return unusedAppsData;
-  };
+  //   return unusedAppsData;
+  // };
 
-  useEffect(() => {
-    const checkUnusedApps = async () => {
-      const installedApps = InstalledApps.getSortedApps();
-      const filteredApps = await filterUnusedApps(installedApps);
-      setUnusedApps(filteredApps);
-    };
+  // useEffect(() => {
+  //   const checkUnusedApps = async () => {
+  //     const installedApps = InstalledApps.getSortedApps();
+  //     const filteredApps = await filterUnusedApps(installedApps);
+  //     setUnusedApps(filteredApps);
+  //   };
 
-    checkUnusedApps();
-  }, []);
+  //   checkUnusedApps();
+  // }, []);
 
-  const openunusedApp = async (item) => {
-    try {
-      await RNLauncherKitHelper.launchApplication(item.bundle);
-      const now = new Date().toISOString();
-      await AsyncStorage.setItem(`lastUsageDate_${item.label}`, now);
+  // const openunusedApp = async (item) => {
+  //   try {
+  //     await RNLauncherKitHelper.launchApplication(item.bundle);
+  //     const now = new Date().toISOString();
+  //     await AsyncStorage.setItem(`lastUsageDate_${item.label}`, now);
 
-      // Remove app from unused apps list
-      const updatedUnusedApps = unusedApps.filter(
-        (app) => app.label !== item.label
-      );
-      setUnusedApps(updatedUnusedApps);
-    } catch (error) {
-      console.error("Error opening the app:", error);
-    }
-  };
+  //     // Remove app from unused apps list
+  //     const updatedUnusedApps = unusedApps.filter(
+  //       (app) => app.label !== item.label
+  //     );
+  //     setUnusedApps(updatedUnusedApps);
+  //   } catch (error) {
+  //     console.error("Error opening the app:", error);
+  //   }
+  // };
 
   //------------------------------------------------------------\\
 
@@ -607,6 +769,59 @@ export default function Categories(identifier) {
               color: "#000000",
               textAlign: "center",
               fontSize: hp(1.2),
+              fontWeight: "bold",
+            }}
+            ellipsizeMode="tail"
+            numberOfLines={1}
+          >
+            {item?.label}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const openunusedApp = (item) => {
+    // console.log('item at first', item.bundle);
+
+    
+    const openApp = async (items) => {
+
+      try {
+        await RNLauncherKitHelper.launchApplication(item.bundle);
+        const now = new Date().toISOString();
+        await AsyncStorage.setItem(`lastUsageDate_${item.bundle}`, now);
+    
+        // Remove app from unused apps list
+        const updatedUnusedApps = unusedApps.filter((app) => app.bundle !== item.bundle);
+        setUnusedApps(updatedUnusedApps);
+      } catch (error) {
+        console.error("Error opening the app:", error);
+        await RNLauncherKitHelper.launchApplication(item.bundle);
+        // Your additional error handling logic here
+      }
+    };
+
+    return (
+      <TouchableOpacity
+        // onLongPress={() => {
+        //   setIsLongPress(true);
+        //   setIsCancelModalVisible(true);
+        //   setFavouriteItem(item);
+        // }}
+        onPress={() => openApp(item?.bundle)}
+        style={styles.items}
+      >
+        <Image
+          style={{ width: 43, height: 43 }}
+          source={{ uri: `data:image/png;base64,${item?.image}` }}
+        />
+        <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Text
+            style={{
+              color: "#000000",
+              textAlign: "center",
+              fontSize: hp(1.4),
               fontWeight: "bold",
             }}
             ellipsizeMode="tail"
@@ -1172,7 +1387,7 @@ export default function Categories(identifier) {
     );
   };
   const renderFavouritesApps = (item) => {
-    //console.log('item at first', item);
+    // console.log('item at first----------', item.bundle);
     const openApp = async (items) => {
       try {
         // Launch the application
@@ -1628,6 +1843,7 @@ export default function Categories(identifier) {
                     fontFamily: "Inter-Bold",
                     color: "#4A4A4A",
                     fontWeight: "bold",
+                    marginBottom:hp(1) 
                   }}
                 >
                   {t("Dashboard.PhoneBasedApps")}
@@ -1651,7 +1867,7 @@ export default function Categories(identifier) {
                 ) : ( */}
                   <View style={{ flex: 1 }}>
                     <FlatList
-                      data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
+                      data={systemApps.slice(0, Math.ceil(systemApps.length / 2))}
                       horizontal
                       showsHorizontalScrollIndicator={false}
                       keyExtractor={(item, itemIndex) => `${itemIndex}`}
@@ -1659,14 +1875,14 @@ export default function Categories(identifier) {
                       contentContainerStyle={{
                         borderWidth: 1,
                         marginRight: wp(2.3),
-                        marginTop: hp(3),
+                        // marginTop: hp(3),
                         borderColor: "#00000017",
                         borderRadius: wp(3),
                       }}
                     />
 
                     <FlatList
-                      data={dataApps.slice(Math.ceil(dataApps.length / 2))}
+                      data={systemApps.slice(Math.ceil(systemApps.length / 2))}
                       horizontal
                       showsHorizontalScrollIndicator={false}
                       keyExtractor={(item, itemIndex) => `${itemIndex}`}
@@ -1674,7 +1890,7 @@ export default function Categories(identifier) {
                       contentContainerStyle={{
                         borderWidth: 1,
                         marginRight: wp(2.3),
-                        marginTop: hp(3),
+                        marginTop: hp(1),
                         borderColor: "#00000017",
                         borderRadius: wp(3),
                       }}
@@ -1696,7 +1912,7 @@ export default function Categories(identifier) {
                 ></View>
               </View>
 
-              <View style={{ marginTop: hp(-5), height: hp(28) }}>
+              <View style={{ marginTop: hp(-5), height: hp(25) }}>
                 <Text
                   style={{
                     fontSize: hp(2.3),
@@ -1725,7 +1941,7 @@ export default function Categories(identifier) {
                   </View>
                 ) : ( */}
                   <>
-                    {favouriteData?.length === 0 ? (
+                  {favouriteData?.length === 0 ? (
                       <View
                         style={{
                           flex: 1,
@@ -1738,6 +1954,7 @@ export default function Categories(identifier) {
                             fontWeight: "bold",
                             fontSize: hp(2.1),
                             justifyContent: "center",
+                            color:'gray'
                           }}
                         >
                           {t("Dashboard.NoFavouriteApps")}
@@ -1745,6 +1962,7 @@ export default function Categories(identifier) {
                         </Text>
                       </View>
                     ) : (
+                      <>
                       <FlatList
                         data={favouriteData.slice(
                           0,
@@ -1757,13 +1975,12 @@ export default function Categories(identifier) {
                         contentContainerStyle={{
                           borderWidth: 1,
                           marginRight: wp(2.3),
-                          marginTop: hp(3),
+                          // marginTop: hp(3),
                           borderColor: "#00000017",
                           borderRadius: wp(3),
                         }}
                       />
-                    )}
-                    <FlatList
+                      <FlatList
                       data={favouriteData.slice(
                         Math.ceil(favouriteData.length / 2)
                       )}
@@ -1774,14 +1991,67 @@ export default function Categories(identifier) {
                       contentContainerStyle={{
                         borderWidth: 1,
                         marginRight: wp(2.3),
-                        marginTop: hp(3),
+                        // marginTop: hp(1),
                         borderColor: "#00000017",
                         borderRadius: wp(3),
                       }}
                     />
+                    </>
+                    )}
+                   
                   </>
                 {/* )} */}
               </View>
+
+
+              <View style={{  height: hp(25),  marginBottom:hp(1) }}>
+                <Text
+                  style={{
+                    fontSize: hp(2.3),
+                    marginLeft: wp(3),
+                    fontFamily: "Inter-Bold",
+                    color: "#4A4A4A",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {t("AllOtherApps")}
+                  {/* Phone Based Apps */}
+                </Text>
+                
+                  <View style={{ flex: 1 }}>
+                    <FlatList
+                      data={userApps.slice(0, Math.ceil(userApps.length / 2))}
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      keyExtractor={(item, itemIndex) => `${itemIndex}`}
+                      renderItem={({ item }) => renderApps(item)}
+                      contentContainerStyle={{
+                        borderWidth: 1,
+                        marginRight: wp(2.3),
+                        // marginTop: hp(2),
+                        borderColor: "#00000017",
+                        borderRadius: wp(3),
+                      }}
+                    />
+
+                    <FlatList
+                      data={userApps.slice(Math.ceil(userApps.length / 2))}
+                      horizontal
+                      showsHorizontalScrollIndicator={false}
+                      keyExtractor={(item, itemIndex) => `${itemIndex}`}
+                      renderItem={({ item }) => renderApps(item)}
+                      contentContainerStyle={{
+                        borderWidth: 1,
+                        marginRight: wp(2.3),
+                        marginTop: hp(1),
+                        borderColor: "#00000017",
+                        borderRadius: wp(3),
+                      }}
+                    />
+                  </View>
+                
+              </View>
+
 
               <View
                 style={{
@@ -1820,30 +2090,30 @@ export default function Categories(identifier) {
                 ) : ( */}
                   <View style={{ flex: 1 }}>
                     <FlatList
-                      data={dataApps.slice(0, Math.ceil(dataApps.length / 2))}
+                      data={unusedApps.slice(0, Math.ceil(unusedApps.length / 2))}
                       horizontal
                       showsHorizontalScrollIndicator={false}
                       keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                      renderItem={({ item }) => renderApps(item)}
+                      renderItem={({ item }) => openunusedApp(item)}
                       contentContainerStyle={{
                         borderWidth: 1,
                         marginRight: wp(2.3),
-                        marginTop: hp(3),
+                        // marginTop: hp(3),
                         borderColor: "#00000017",
                         borderRadius: wp(3),
                       }}
                     />
 
                     <FlatList
-                      data={dataApps.slice(Math.ceil(dataApps.length / 2))}
+                      data={unusedApps.slice(Math.ceil(unusedApps.length / 2))}
                       horizontal
                       showsHorizontalScrollIndicator={false}
                       keyExtractor={(item, itemIndex) => `${itemIndex}`}
-                      renderItem={({ item }) => renderApps(item)}
+                      renderItem={({ item }) => openunusedApp(item)}
                       contentContainerStyle={{
                         borderWidth: 1,
                         marginRight: wp(2.3),
-                        marginTop: hp(3),
+                        marginTop: hp(1),
                         borderColor: "#00000017",
                         borderRadius: wp(3),
                       }}
@@ -3769,7 +4039,7 @@ const styles = StyleSheet.create({
   },
   items: {
     flex: 1,
-    justifyContent: "center",
+    // justifyContent: "center",
     alignItems: "center",
     //borderWidth: 1,
     borderColor: "black",

@@ -131,7 +131,7 @@ const TopContent = ({
       <View style={styles.descriptionContainer}>
         <Text
           ellipsizeMode="tail"
-          numberOfLines={7}
+          numberOfLines={6}
           style={[styles.description, descriptionStyle]}
         >
            {data?.description === undefined || data?.description === ''
@@ -146,16 +146,18 @@ const TopContent = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
+    marginTop: hp(1),
     flexDirection: "row",
-    height: 120,
+    height: hp(13),
     marginBottom: 40,
+    // backgroundColor:'yellow'
   },
   mediaContainer: {
     width: "35%",
-    height: "90%",
+    // height: "90%",
     borderRadius: 10,
     position: "relative",
+    // backgroundColor:'red'
   },
   placeholderImage: {
     position: "absolute",
@@ -182,7 +184,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     position: "absolute",
-    top: 120, // Adjust to fit media height
+    top: hp(13), // Adjust to fit media height
     left: 0,
     justifyContent: "center",
     alignItems: "center",

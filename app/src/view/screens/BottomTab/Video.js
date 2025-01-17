@@ -191,7 +191,7 @@ const fetchSubCategorySport = async (selectedItemId) => {
   
         const result = await response.json();
         // console.log("AllBanners---", result.AllBanners);
-        setAdsData(result.AllBanners);
+        setAdsData(result?.AllBanners || []);
       } catch (error) {
         console.error("Error AllBanners:", error);
       }

@@ -7,7 +7,22 @@ import App from './App';
 import messaging from '@react-native-firebase/messaging';
 import PushNotification , {Importance} from "react-native-push-notification";
 import {name as appName} from './app.json';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const setFirstTimeFlag = async () => {
+  try {
+    const isFirstTime = await AsyncStorage.getItem("isFirstTime");
+    if (isFirstTime === null || isFirstTime === "false") {
+      await AsyncStorage.setItem("isFirstTime", "true");
+      console.log("isFirstTime set to true");
+    } else {
+      console.log("isFirstTime already set:", isFirstTime);
+    }
+  } catch (error) {
+    console.error("Error setting isFirstTime:", error);
+  }
+};
+setFirstTimeFlag();
 
 PushNotification.configure({
 

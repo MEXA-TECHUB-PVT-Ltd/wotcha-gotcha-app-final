@@ -104,7 +104,7 @@ export default function QAFIScreen() {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       const result = await response.json();
-      const reverseData = result.AllCategories.reverse();
+      const reverseData = result?.AllCategories.reverse();
       setSearchesData(reverseData);
       if (selectedItemId === null && result.AllCategories.length > 0) {
         setSelectedItemId(result.AllCategories[0].id);
@@ -124,7 +124,7 @@ export default function QAFIScreen() {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       const result = await response.json();
-      setTopNewsData(result.data);
+      setTopNewsData(result?.data || []);
     } catch (error) {
       console.error("Error fetching top sports:", error);
     }
@@ -328,7 +328,7 @@ const name = language === "fr" && item.french_name ? item.french_name : item.nam
       );
 
       const result = await response.json();
-      setAdsData(result.AllBanners);
+      setAdsData(result?.AllBanners || []);
     } catch (error) {
       console.error("Error AllBanners:", error);
     }
@@ -350,7 +350,7 @@ const name = language === "fr" && item.french_name ? item.french_name : item.nam
       );
 
       const result = await response.json();
-      const updatedBanners = result.AllBanners.map((banner) => {
+      const updatedBanners = result?.AllBanners.map((banner) => {
         if (banner.image.startsWith("/fileUpload")) {
           banner.image = base_url+`${banner.image}`;
         }
