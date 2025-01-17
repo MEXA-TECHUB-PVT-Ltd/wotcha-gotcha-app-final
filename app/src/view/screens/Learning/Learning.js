@@ -276,8 +276,17 @@ export default function Learning({ route }) {
     // <TouchableOpacity onPress={handle_details}>
     <TouchableOpacity onPress={() => navigation.navigate('Learning_details', { videoData: item })}>
       <View style={styles.itemContainer}>
-        {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
-        <Image source={{ uri: item.thumbnail }} style={styles.image} />
+        {/* <Image source={{ uri: item.thumbnail }} style={styles.image} /> */}
+         <Image
+                          source={
+                            item?.thumbnail === "" ||
+                            item?.thumbnail === null ||
+                            item?.thumbnail === undefined
+                              ? appImages.galleryPlaceHolder
+                              : { uri: item.thumbnail }
+                          }
+                          style={styles.image}
+                        />
         <Text ellipsizeMode="tail"
           numberOfLines={1} style={styles.text}>{item.name}</Text>
         <Text ellipsizeMode="tail"

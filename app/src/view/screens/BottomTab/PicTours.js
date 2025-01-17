@@ -369,7 +369,17 @@ export default function PicTours() {
     >
       <View style={styles.itemContainer}>
         {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
-        <Image source={{ uri: item.image }} style={styles.image} />
+        {/* <Image source={{ uri: item.image }} style={styles.image} /> */}
+          <Image
+                          source={
+                            item?.image === "" ||
+                            item?.image === null ||
+                            item?.image === undefined
+                              ? appImages.galleryPlaceHolder
+                              : { uri: item.image }
+                          }
+                          style={styles.image}
+                        />
         <View
           style={{
             flexDirection: "row",

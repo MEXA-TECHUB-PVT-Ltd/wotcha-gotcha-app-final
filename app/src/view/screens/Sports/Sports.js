@@ -331,7 +331,17 @@ import {
       <TouchableOpacity onPress={() => navigation.navigate('SportsDetails', {SportsData: item, identifier: false})}>
       <View style={styles.itemContainer}>
   
-        <Image source={{ uri: item.image }} style={styles.image} />
+        {/* <Image source={{ uri: item.image }} style={styles.image} /> */}
+         <Image
+                          source={
+                            item?.image === "" ||
+                            item?.image === null ||
+                            item?.image === undefined
+                              ? appImages.galleryPlaceHolder
+                              : { uri: item.image }
+                          }
+                          style={styles.image}
+                        />
         <Text  ellipsizeMode="tail"
                   numberOfLines={1} style={styles.text}>{item.name}</Text>
         <Text  ellipsizeMode="tail"

@@ -38,12 +38,15 @@ const STYLES = StyleSheet.create({
         marginBottom: '5%',
     },
     circleBox: {
-        width: wp(28),
-        height: hp(14),
+        // width: wp(28),
+        width: wp(25),
+        // height: hp(14),
+        height: wp(25), 
         borderWidth: 1,
         overflow:'hidden',
         borderColor: '#0000001F',
-        borderRadius: wp(50),
+        // borderRadius: wp(50),
+        borderRadius: wp(25) / 2,
         justifyContent: 'center',
         alignItems: 'center',
       }, ti: {

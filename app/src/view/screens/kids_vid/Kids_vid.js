@@ -278,7 +278,17 @@ export default function Kids_vid({ route }) {
       }
     >
       <View style={styles.itemContainer}>
-        <Image source={{ uri: item.thumbnail }} style={styles.image} />
+        {/* <Image source={{ uri: item.thumbnail }} style={styles.image} /> */}
+         <Image
+                  source={
+                    item?.thumbnail === "" ||
+                    item?.thumbnail === null ||
+                    item?.thumbnail === undefined
+                      ? appImages.galleryPlaceHolder
+                      : { uri: item.thumbnail }
+                  }
+                  style={styles.image}
+                />
         <Text ellipsizeMode="tail" numberOfLines={1} style={styles.text}>
           {item.name}
         </Text>

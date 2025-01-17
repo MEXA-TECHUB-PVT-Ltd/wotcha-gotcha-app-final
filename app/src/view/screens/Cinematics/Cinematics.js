@@ -11,7 +11,7 @@ import {
   View,
   SectionList,
   Dimensions,
-  Platform
+  Platform,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import {
@@ -32,9 +32,9 @@ import { appImages } from "../../../assets/utilities";
 import Add from "../../../assets/svg/AddMainScreen.svg";
 import { base_url } from "../../../../../baseUrl";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
-import Carousel from 'react-native-snap-carousel';
+import Carousel from "react-native-snap-carousel";
 import Cinematiceactive from "../../../assets/svg/Cinematiceactive";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 export default function Cinematics({ route }) {
   const { t } = useTranslation();
@@ -53,7 +53,7 @@ export default function Cinematics({ route }) {
   const [noData, setNoData] = useState(false);
   const [adsinActiveData, setAdsInActiveData] = useState([]);
   const [language, setLanguage] = useState(null);
-    const [selectedButton, setSelectedButton] = useState(null);
+  const [selectedButton, setSelectedButton] = useState(null);
   useEffect(() => {
     const getAuthToken = async () => {
       try {
@@ -72,15 +72,13 @@ export default function Cinematics({ route }) {
     getAuthToken();
   }, []);
 
-  
-
   useEffect(() => {
     const fetchLanguage = async () => {
       try {
         const storedLanguage = await AsyncStorage.getItem("language");
         if (storedLanguage) {
           setLanguage(storedLanguage);
-          console.log('lanugage--------', storedLanguage)
+          console.log("lanugage--------", storedLanguage);
         }
       } catch (error) {
         console.error("Error fetching language:", error);
@@ -90,13 +88,11 @@ export default function Cinematics({ route }) {
     fetchLanguage();
   }, [isFocused]);
 
-
   useEffect(() => {
     if (authToken && isFocused) {
-      if (selectedItemId == null)
-      // console.log('useeffect mein id hai', selectedItemId)
-      {
-        setSelectedItemId(29)
+      if (selectedItemId == null) {
+        // console.log('useeffect mein id hai', selectedItemId)
+        setSelectedItemId(29);
       }
 
       // fetchAllData();
@@ -152,15 +148,12 @@ export default function Cinematics({ route }) {
     const token = authToken;
 
     try {
-      const response = await fetch(
-        base_url + "cinematics/getTopVideo",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(base_url + "cinematics/getTopVideo", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       const result = await response.json();
       //  console.log("getTopVideo------..", result.data);
@@ -187,9 +180,9 @@ export default function Cinematics({ route }) {
       const result = await response.json();
 
       if (Array.isArray(result.data) && result.data.length > 0) {
-        const formattedSections = result.data.map(category => ({
+        const formattedSections = result.data.map((category) => ({
           title:
-          language === "fr" && category.sub_category_french_name
+            language === "fr" && category.sub_category_french_name
               ? category.sub_category_french_name
               : category.sub_category_name,
           // title: category.sub_category_name,
@@ -200,7 +193,9 @@ export default function Cinematics({ route }) {
         setSections(formattedSections);
 
         // Check if there is no data
-        const hasNoData = formattedSections.every(section => section.title.length === 0);
+        const hasNoData = formattedSections.every(
+          (section) => section.title.length === 0
+        );
         setNoData(hasNoData);
       } else {
         setSections([]);
@@ -208,7 +203,7 @@ export default function Cinematics({ route }) {
       }
     } catch (error) {
       console.error("Error fetching subcategories:", error);
-      setNoData(true);  // Assume no data on error
+      setNoData(true); // Assume no data on error
     }
   };
   const [adsData, setAdsData] = useState([]);
@@ -216,7 +211,7 @@ export default function Cinematics({ route }) {
   useEffect(() => {
     if (authToken) {
       fetchBannerConfig();
-      fetchBannerInActive()
+      fetchBannerInActive();
     }
   }, [authToken]);
 
@@ -260,8 +255,8 @@ export default function Cinematics({ route }) {
 
       const result = await response.json();
       // setAdsInActiveData(result.AllBanners);
-      const updatedBanners = result?.AllBanners.map(banner => {
-        if (banner.image.startsWith('/fileUpload')) {
+      const updatedBanners = result?.AllBanners.map((banner) => {
+        if (banner.image.startsWith("/fileUpload")) {
           banner.image = base_url + `${banner.image}`;
         }
         return banner;
@@ -275,14 +270,32 @@ export default function Cinematics({ route }) {
   };
   const renderVideoItem = ({ item }) => (
     // <TouchableOpacity onPress={handle_details}>
-    <TouchableOpacity onPress={() => navigation.navigate('Cinematics_details', { videoData: item, identifier: false })}>
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate("Cinematics_details", {
+          videoData: item,
+          identifier: false,
+        })
+      }
+    >
       <View style={styles.itemContainer}>
-        {/* <Image source={require('../../../assets/images/img1.png')} style={styles.image} /> */}
-        <Image source={{ uri: item.thumbnail }} style={styles.image} />
-        <Text ellipsizeMode="tail"
-          numberOfLines={1} style={styles.text}>{item.name}</Text>
-        <Text ellipsizeMode="tail"
-          numberOfLines={2} style={styles.text1}>{item.description}</Text>
+        {/* <Image source={{ uri: item.thumbnail }} style={styles.image} /> */}
+        <Image
+          source={
+            item?.thumbnail === "" ||
+            item?.thumbnail === null ||
+            item?.thumbnail === undefined
+              ? appImages.galleryPlaceHolder
+              : { uri: item.thumbnail }
+          }
+          style={styles.image}
+        />
+        <Text ellipsizeMode="tail" numberOfLines={1} style={styles.text}>
+          {item.name}
+        </Text>
+        <Text ellipsizeMode="tail" numberOfLines={2} style={styles.text1}>
+          {item.description}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -291,7 +304,7 @@ export default function Cinematics({ route }) {
     <View style={styles.sectionContainer}>
       <Text style={styles.sectionHeader}>{item.title}</Text>
       {item.data.length === 0 ? (
-        <Text style={styles.noDataText}>{t('NoDataAvailable')}</Text>
+        <Text style={styles.noDataText}>{t("NoDataAvailable")}</Text>
       ) : (
         <FlatList
           data={item.data}
@@ -304,11 +317,9 @@ export default function Cinematics({ route }) {
     </View>
   );
 
-
   const handle_add = () => {
     ref_RBSheetCamera.current.open();
   };
-
 
   const handle_details = () => {
     navigation.navigate("Cinematics_details");
@@ -322,7 +333,6 @@ export default function Cinematics({ route }) {
         mediaType: "video",
       },
       (response) => {
-
         if (!response.didCancel) {
           if (response.assets && response.assets.length > 0) {
             setImageUri(response.assets[0].uri);
@@ -340,23 +350,25 @@ export default function Cinematics({ route }) {
     ref_RBSheetCamera.current.close();
     setTimeout(() => {
       launchImageLibrary({ mediaType: "video" }, (response) => {
-
         if (!response.didCancel && response.assets.length > 0) {
           setImageUri(response.assets[0].uri);
           setImageInfo(response.assets[0]);
           navigation.navigate("CameraUpload", {
-            imageUri: Platform.OS == "ios" ? response.assets[0].uri : response.assets[0],
+            imageUri:
+              Platform.OS == "ios"
+                ? response.assets[0].uri
+                : response.assets[0],
           });
         }
       });
     }, 500);
-
   };
 
   const renderSearches = (item) => {
     // console.log("Regions", item);
     const isSelected = selectedItemId === item.id;
-    const name = language === "fr" && item.french_name ? item.french_name : item.name;
+    const name =
+      language === "fr" && item.french_name ? item.french_name : item.name;
     // console.log('is selected hai---', isSelected)
     return (
       <TouchableOpacity
@@ -383,7 +395,6 @@ export default function Cinematics({ route }) {
     );
   };
 
-
   return (
     <View style={styles.container}>
       <StatusBar
@@ -401,7 +412,7 @@ export default function Cinematics({ route }) {
           showText={true}
           // onPressSearch={() => navigation.navigate("SearchProducts", { apiEndpoint: 'cinematics/searchByTitle' })}
           onPressSearch={() => navigation.navigate("SearchVideo")}
-          text={t('Drawer.Cinematics')}
+          text={t("Drawer.Cinematics")}
           showSearch={true}
         />
       </View>
@@ -414,12 +425,11 @@ export default function Cinematics({ route }) {
           marginHorizontal: wp(7),
         }}
       >
-
         {/* // */}
         {/* // start of banner slider */}
         <View
           style={{
-            alignItems: 'center',
+            alignItems: "center",
             height: hp(16),
             // marginLeft: 8,
             marginVertical: hp(2),
@@ -429,7 +439,9 @@ export default function Cinematics({ route }) {
             <ActivityIndicator size="large" color="#FACA4E" />
           ) : adsData.length === 0 ? (
             <View style={styles.TopBannerView}>
-              <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>{t('NoTopBanner')}</Text>
+              <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                {t("NoTopBanner")}
+              </Text>
             </View>
           ) : (
             <Carousel
@@ -438,29 +450,29 @@ export default function Cinematics({ route }) {
                 <View
                   key={item.id}
                   style={{
-                    justifyContent: 'center',
+                    justifyContent: "center",
                   }}
                 >
                   <Image
                     source={{ uri: item?.image }}
                     style={{
                       height: hp(15),
-                      width: '100%',
+                      width: "100%",
                       borderWidth: 1,
-                      resizeMode: Platform.OS == "ios" ? "cover" : 'contain',
+                      resizeMode: Platform.OS == "ios" ? "cover" : "contain",
                       borderRadius: 10,
                     }}
                   />
                 </View>
               )}
-              sliderWidth={Dimensions.get('window').width}
-              itemWidth={Dimensions.get('window').width * 0.86}
+              sliderWidth={Dimensions.get("window").width}
+              itemWidth={Dimensions.get("window").width * 0.86}
               loop={true}
               autoplay={true}
             />
           )}
         </View>
-    
+
         {/* ////slider end */}
 
         <View style={styles.latestSearchList}>
@@ -479,9 +491,22 @@ export default function Cinematics({ route }) {
           />
         </View>
         <View
-          style={{ marginTop: hp(1.5), flexDirection: "row", height: hp(16), marginBottom: 30 }}
+          style={{
+            marginTop: hp(1.5),
+            flexDirection: "row",
+            height: hp(16),
+            marginBottom: 30,
+          }}
         >
-          <TouchableOpacity onPress={() => navigation.navigate('Cinematics_details', { videoData: dataTopVideos, identifier: false })} style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Cinematics_details", {
+                videoData: dataTopVideos,
+                identifier: false,
+              })
+            }
+            style={{ width: wp(43), height: "100%", borderRadius: wp(5) }}
+          >
             {dataTopVideos === 0 ? (
               <Image
                 style={{
@@ -538,7 +563,13 @@ export default function Cinematics({ route }) {
             </View>
           </TouchableOpacity>
 
-          <View style={{ justifyContent: "flex-start", width: "50%", paddingTop: 2 }}>
+          <View
+            style={{
+              justifyContent: "flex-start",
+              width: "50%",
+              paddingTop: 2,
+            }}
+          >
             <Text
               ellipsizeMode="tail"
               numberOfLines={7}
@@ -551,19 +582,20 @@ export default function Cinematics({ route }) {
                 //fontWeight: '700',
               }}
             >
-
               {dataTopVideos === undefined || dataTopVideos === 0
-                ? t('NoTopCinematixShown') 
+                ? t("NoTopCinematixShown")
                 : dataTopVideos?.description}
             </Text>
           </View>
         </View>
 
         {/* //////////////////////////////////////////////////////////// */}
-        <View style={{
-          flex: 1,
-          paddingTop: 20
-        }}>
+        <View
+          style={{
+            flex: 1,
+            paddingTop: 20,
+          }}
+        >
           {loading ? (
             <ActivityIndicator size="large" color="#FACA4E" />
           ) : (
@@ -580,7 +612,7 @@ export default function Cinematics({ route }) {
         {/* // start of banner slider */}
         <View
           style={{
-            alignItems: 'center',
+            alignItems: "center",
             height: hp(16),
             // marginLeft: 8,
             marginVertical: hp(2),
@@ -590,7 +622,9 @@ export default function Cinematics({ route }) {
             <ActivityIndicator size="large" color="#FACA4E" />
           ) : adsinActiveData.length === 0 ? (
             <View style={styles.TopBannerView}>
-              <Text style={{ fontWeight: 'bold', fontSize: hp(2.1) }}>{t('NoBanner')}</Text>
+              <Text style={{ fontWeight: "bold", fontSize: hp(2.1) }}>
+                {t("NoBanner")}
+              </Text>
             </View>
           ) : (
             <Carousel
@@ -599,24 +633,24 @@ export default function Cinematics({ route }) {
                 <View
                   key={item.id}
                   style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
                   <Image
                     source={{ uri: item?.image }}
                     style={{
                       height: hp(15),
-                      width: '100%',
+                      width: "100%",
                       borderWidth: 1,
-                      resizeMode: Platform.OS == "ios" ? "cover" : 'contain',
+                      resizeMode: Platform.OS == "ios" ? "cover" : "contain",
                       borderRadius: 10,
                     }}
                   />
                 </View>
               )}
-              sliderWidth={Dimensions.get('window').width}
-              itemWidth={Dimensions.get('window').width * 0.9}
+              sliderWidth={Dimensions.get("window").width}
+              itemWidth={Dimensions.get("window").width * 0.9}
               loop={true}
               autoplay={true}
             />
@@ -667,8 +701,8 @@ export default function Cinematics({ route }) {
               fontSize: hp(2.3),
             }}
           >
-            {t('SelectAnOption')}
-           
+            {t("SelectAnOption")}
+
             {/* Select an option */}
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
@@ -680,7 +714,6 @@ export default function Cinematics({ route }) {
             />
           </TouchableOpacity>
         </View>
-
       </RBSheet>
 
       <RBSheet
@@ -722,8 +755,7 @@ export default function Cinematics({ route }) {
               fontSize: hp(2.1),
             }}
           >
-            {t('SelectAnOption')}
-      
+            {t("SelectAnOption")}
           </Text>
           <TouchableOpacity onPress={() => ref_RBSheetCamera.current.close()}>
             <Ionicons
@@ -746,8 +778,8 @@ export default function Cinematics({ route }) {
           }}
         >
           <TouchableOpacity
-            onPress={() => {takeVideoFromCamera("Camera"),
-              setSelectedButton('Camera');
+            onPress={() => {
+              takeVideoFromCamera("Camera"), setSelectedButton("Camera");
             }}
             // onPress={goto_camera}
             style={{
@@ -756,7 +788,7 @@ export default function Cinematics({ route }) {
               flex: 1,
               borderRadius: 10,
               // borderColor: "#FACA4E",
-              borderColor: selectedButton === 'Camera' ? "#FACA4E" : "gray",
+              borderColor: selectedButton === "Camera" ? "#FACA4E" : "gray",
               borderWidth: 1,
             }}
           >
@@ -772,23 +804,22 @@ export default function Cinematics({ route }) {
                 fontSize: hp(2.1),
               }}
             >
-              {t('TakeAVideo')}
+              {t("TakeAVideo")}
               {/* Take a Video */}
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-              onPress={() =>{ chooseVideoFromLibrary("gallery"),
-                setSelectedButton('Gallery');
-              }
-            }
+            onPress={() => {
+              chooseVideoFromLibrary("gallery"), setSelectedButton("Gallery");
+            }}
             style={{
               alignItems: "center",
               justifyContent: "center", // Center the icon and text vertically
               flex: 1,
               borderRadius: 10,
               // borderColor: "grey",
-              borderColor: selectedButton === 'Gallery' ? "#FACA4E" : "gray", 
+              borderColor: selectedButton === "Gallery" ? "#FACA4E" : "gray",
               borderWidth: 1,
               marginLeft: wp(8), // Add margin to separate the options
             }}
@@ -805,7 +836,7 @@ export default function Cinematics({ route }) {
                 fontSize: hp(2.1),
               }}
             >
-              {t('ChooseAVideo')}
+              {t("ChooseAVideo")}
               {/* Choose a Video */}
             </Text>
           </TouchableOpacity>
@@ -837,7 +868,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: hp(2.1),
     height: hp(7),
-
   },
   searchHeader: {
     flexDirection: "row",
@@ -861,8 +891,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     // width: wp(30),
-    paddingHorizontal:wp(3),
-    paddingVertical:hp(1.3),
+    paddingHorizontal: wp(3),
+    paddingVertical: hp(1.3),
     backgroundColor: "#F2F2F2",
     borderRadius: wp(5),
     // height: hp(5),
@@ -912,12 +942,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sectionHeader: {
-
     color: "#4A4A4A",
     fontSize: hp(2.3),
     textAlign: "left",
     fontFamily: "Inter-SemiBold",
-    marginBottom: 6
+    marginBottom: 6,
     // top: "6%",
   },
   videoItem: {
@@ -930,17 +959,17 @@ const styles = StyleSheet.create({
   },
   videoTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 5,
   },
   videoDescription: {
     fontSize: 14,
-    color: 'gray',
+    color: "gray",
   },
   noDataText: {
-    textAlign: 'center',
+    textAlign: "center",
     marginVertical: 20,
     fontSize: 18,
-    color: 'gray',
+    color: "gray",
   },
 });

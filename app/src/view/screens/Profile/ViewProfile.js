@@ -554,12 +554,15 @@ export default function ViewProfile({ navigation }) {
   };
 
   const renderAvailableAppsPic = (item) => {
-    const imageUrl =
-      item.image && item.image
-        ? item.image.startsWith("/fileUpload")
-          ? base_url + `${item.image}`
-          : item.image
-        : null;
+    // const imageUrl =
+    //   item.image && item.image
+    //     ? item.image.startsWith("/fileUpload")
+    //       ? base_url + `${item.image}`
+    //       : item.image
+    //     : null;
+    const imageUrl = item.image && item.image.trim() !== '' 
+  ? (item.image.startsWith("/fileUpload") ? `${base_url}${item.image}` : item.image)
+  : null;
     return (
       <TouchableOpacity
         onPress={() =>
@@ -584,7 +587,8 @@ export default function ViewProfile({ navigation }) {
               borderRadius: wp(2.1),
               resizeMode: "cover",
             }}
-            source={{ uri: imageUrl }}
+            // source={{ uri: imageUrl }}
+            source={imageUrl ? { uri: imageUrl } : appImages.galleryPlaceHolder}
           />
         </View>
         <View
@@ -613,12 +617,15 @@ export default function ViewProfile({ navigation }) {
   };
 
   const renderAvailableSports = (item) => {
-    const imageUrl =
-      item.image && item.image
-        ? item.image.startsWith("/fileUpload")
-          ? base_url + `${item.image}`
-          : item.image
-        : null;
+    // const imageUrl =
+    //   item.image && item.image
+    //     ? item.image.startsWith("/fileUpload")
+    //       ? base_url + `${item.image}`
+    //       : item.image
+    //     : null;
+    const imageUrl = item.image && item.image.trim() !== '' 
+    ? (item.image.startsWith("/fileUpload") ? `${base_url}${item.image}` : item.image)
+    : null;
     return (
       <TouchableOpacity
         onPress={() =>
@@ -643,7 +650,8 @@ export default function ViewProfile({ navigation }) {
               borderRadius: wp(2.1),
               resizeMode: "cover",
             }}
-            source={{ uri: imageUrl }}
+            // source={{ uri: imageUrl }}
+            source={imageUrl ? { uri: imageUrl } : appImages.galleryPlaceHolder}
           />
         </View>
         <View
@@ -698,7 +706,14 @@ export default function ViewProfile({ navigation }) {
               borderRadius: wp(2.1),
               resizeMode: "cover",
             }}
-            source={{ uri: item.thumbnail }}
+            // source={{ uri: item.thumbnail }}
+            source={
+              item?.thumbnail === "" ||
+              item?.thumbnail === null ||
+              item?.thumbnail === undefined
+                ? appImages.galleryPlaceHolder
+                : { uri: item.thumbnail }
+            }
           />
         </View>
         <View
@@ -752,7 +767,14 @@ export default function ViewProfile({ navigation }) {
               borderRadius: wp(2.1),
               resizeMode: "cover",
             }}
-            source={{ uri: item.thumbnail }}
+            // source={{ uri: item.thumbnail }}
+            source={
+              item?.thumbnail === "" ||
+              item?.thumbnail === null ||
+              item?.thumbnail === undefined
+                ? appImages.galleryPlaceHolder
+                : { uri: item.thumbnail }
+            }
           />
         </View>
         <View
@@ -803,7 +825,14 @@ export default function ViewProfile({ navigation }) {
               borderRadius: wp(2.1),
               resizeMode: "cover",
             }}
-            source={{ uri: item.thumbnail }}
+            // source={{ uri: item.thumbnail }}
+            source={
+              item?.thumbnail === "" ||
+              item?.thumbnail === null ||
+              item?.thumbnail === undefined
+                ? appImages.galleryPlaceHolder
+                : { uri: item.thumbnail }
+            }
           />
         </View>
         <View
@@ -854,7 +883,13 @@ export default function ViewProfile({ navigation }) {
               borderRadius: wp(2.1),
               resizeMode: "cover",
             }}
-            source={{ uri: item.thumbnail }}
+            source={
+              item?.thumbnail === "" ||
+              item?.thumbnail === null ||
+              item?.thumbnail === undefined
+                ? appImages.galleryPlaceHolder
+                : { uri: item.thumbnail }
+            }
           />
         </View>
         <View
@@ -906,7 +941,13 @@ export default function ViewProfile({ navigation }) {
               borderRadius: wp(2.1),
               resizeMode: "cover",
             }}
-            source={{ uri: item.thumbnail }}
+            source={
+              item?.thumbnail === "" ||
+              item?.thumbnail === null ||
+              item?.thumbnail === undefined
+                ? appImages.galleryPlaceHolder
+                : { uri: item.thumbnail }
+            }
           />
         </View>
         <View
@@ -957,7 +998,13 @@ export default function ViewProfile({ navigation }) {
               borderRadius: wp(2.1),
               resizeMode: "cover",
             }}
-            source={{ uri: item.thumbnail }}
+            source={
+              item?.thumbnail === "" ||
+              item?.thumbnail === null ||
+              item?.thumbnail === undefined
+                ? appImages.galleryPlaceHolder
+                : { uri: item.thumbnail }
+            }
           />
         </View>
         <View
