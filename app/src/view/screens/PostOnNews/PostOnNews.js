@@ -11,6 +11,8 @@ import {
   View,
   TouchableOpacity,
   Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -425,6 +427,7 @@ export default function PostOnNews({navigation}) {
         keyboardShouldPersistTaps="always"
         showsVerticalScrollIndicator={false}
         style={{flex: 1}}>
+          
         <View
           style={{
             flexDirection: 'row',
@@ -477,6 +480,8 @@ export default function PostOnNews({navigation}) {
           </Text>
         </View>
 
+       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+               <View style={{ flex: 1, justifyContent: 'center' }}>
         <View
           style={{
             justifyContent: 'center',
@@ -496,7 +501,8 @@ export default function PostOnNews({navigation}) {
         <View style={{marginHorizontal:hp('4%'), marginTop:hp('-2%')}}>
 {profileNameError ? <Text style={styles.errorText}>{profileNameError}</Text> : null}
         </View>
-
+        </View>
+        </TouchableWithoutFeedback>
         <TouchableOpacity
           onPress={() => ref_RBSheetCamera.current.open()}
           style={{

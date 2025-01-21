@@ -12,6 +12,8 @@ import {
   TouchableOpacity,
   Platform,
   Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -587,7 +589,8 @@ export default function PostLetterInfo({ navigation }) {
           {t("SenderInformation")}
           {/* Sender's Information */}
         </Text>
-
+  <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                         <View style={{ flex: 1, justifyContent: 'center' }}>
         <TextInput
           mode="outlined"
           label={t("Name")}
@@ -640,7 +643,8 @@ export default function PostLetterInfo({ navigation }) {
           onFocus={handleFocusEmail}
           onBlur={handleBlurEmail}
         />
-
+</View>
+</TouchableWithoutFeedback>
         <View style={{ marginHorizontal: wp(7) }}>
           <Dropdown
             style={

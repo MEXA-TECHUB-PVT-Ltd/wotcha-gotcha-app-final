@@ -14,6 +14,8 @@ import {
   Alert,
   ActivityIndicator,
   Platform,
+  Keyboard,
+
 } from "react-native";
 import Video from "react-native-video";
 import React, { useState, useRef, useEffect } from "react";
@@ -51,7 +53,7 @@ import {
 } from "../../../../../cloudinaryConfig";
 import { useTranslation } from "react-i18next";
 
-export default function Tv_promax_upload({ navigation }) {
+export default function CameraUpload({ navigation }) {
   const { t } = useTranslation();
   const route = useRoute();
   const ref_RBSheetCamera = useRef(null);
@@ -92,6 +94,28 @@ export default function Tv_promax_upload({ navigation }) {
   const [descriptionError, setDescriptionError] = useState("");
   const [thumbnailError, setthumbnailImageUritwoError] = useState("");
   const [imageUriVideo, setimageUri] = useState(imageUri);
+
+    const [isCategoryActive, setIsCategoryActive] = useState(false); // Track if category dropdown is active
+  const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
+    const handleCategoryFocus = () => {
+      setIsCategoryActive(true);
+      setIsSubCategoryActive(false); // Make the sub-category dropdown inactive
+    };
+    
+    const handleCategoryBlur = () => {
+      setIsCategoryActive(false);
+    };
+    
+    const handleSubCategoryFocus = () => {
+      setIsSubCategoryActive(true);
+      setIsCategoryActive(false); // Make the category dropdown inactive
+    };
+    
+    const handleSubCategoryBlur = () => {
+      setIsSubCategoryActive(false);
+    };
+
+    
   // const [iosThumbnail, setiosThumbnail] = useState(imageUri)
   useEffect(() => {
     setimageUri(imageUri);
@@ -553,6 +577,8 @@ export default function Tv_promax_upload({ navigation }) {
         showsVerticalScrollIndicator={false}
         style={{ flex: 1 }}
       >
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={{ flex: 1, justifyContent: 'center' }}>
         <View style={{ flexDirection: "row" }}>
           <View
             style={{
@@ -703,10 +729,11 @@ export default function Tv_promax_upload({ navigation }) {
           ) : null}
         </View>
 
+
         <View style={{ marginHorizontal: wp(7) }}>
           <Dropdown
             style={
-              isFocus
+              isCategoryActive
                 ? styles.textInputSelectedCategory
                 : styles.textInputCategoryNonSelected
             }
@@ -737,8 +764,10 @@ export default function Tv_promax_upload({ navigation }) {
             valueField="value"
             placeholder={t("SelectCategory")}
             searchPlaceholder="Search..."
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
+            // onFocus={() => setIsFocus(true)}
+            // onBlur={() => setIsFocus(false)}
+            onFocus={handleCategoryFocus}
+            onBlur={handleCategoryBlur}
             onChange={(item) => {
               console.log("kon main category id hai----", item.value);
               setCategory(item.value);
@@ -761,7 +790,7 @@ export default function Tv_promax_upload({ navigation }) {
         <View style={{ marginHorizontal: wp(7) }}>
           <Dropdown
             style={
-              isFocus
+              isSubCategoryActive
                 ? styles.textInputSelectedCategory
                 : styles.textInputCategoryNonSelected
             }
@@ -797,8 +826,10 @@ export default function Tv_promax_upload({ navigation }) {
             valueField="value"
             placeholder={t("SelectSubCategory")}
             searchPlaceholder="Search..."
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
+            // onFocus={() => setIsFocus(true)}
+            // onBlur={() => setIsFocus(false)}
+            onFocus={handleSubCategoryFocus}
+            onBlur={handleSubCategoryBlur}
             onChange={(item) => {
               console.log("kon sub category id hai----", item.value);
               setSubCategory(item.value);
@@ -836,11 +867,15 @@ export default function Tv_promax_upload({ navigation }) {
             height={hp(20)}
           />
         </View>
+ 
         <View style={{ marginLeft: hp(4), marginTop: -10, marginBottom: 15 }}>
           {descriptionError ? (
             <Text style={styles.errorText}>{descriptionError}</Text>
           ) : null}
         </View>
+
+        </View>
+        </TouchableWithoutFeedback>
         <View style={styles.loaderButtonView}>
           <View style={styles.loaderButtonInner}>
             <CustomLoaderButton

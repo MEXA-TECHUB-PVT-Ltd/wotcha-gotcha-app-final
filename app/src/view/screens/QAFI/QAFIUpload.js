@@ -10,6 +10,8 @@ import {
     ImageBackground,
     View,
     TouchableOpacity,
+    TouchableWithoutFeedback,
+    Keyboard,
   } from 'react-native';
   import React, {useState, useEffect, useRef} from 'react';
   import RBSheet from 'react-native-raw-bottom-sheet';
@@ -489,6 +491,8 @@ import { useIsFocused } from "@react-navigation/native";
             </Text>
           </View>
   
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                 <View style={{ flex: 1, justifyContent: 'center' }}>
           <View
             style={{
               justifyContent: 'center',
@@ -505,9 +509,10 @@ import { useIsFocused } from "@react-navigation/native";
               onChangeText={handleCommentChange}
               //height={hp(5)}
             />
-            
-
+            </View>
           </View>
+          </TouchableWithoutFeedback>
+
           <View style={{marginHorizontal:hp('4%'), marginTop:hp('-2%')}}>
 {profileNameError ? <Text style={styles.errorText}>{profileNameError}</Text> : null}
         </View>

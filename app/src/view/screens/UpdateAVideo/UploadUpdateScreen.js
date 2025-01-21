@@ -10,6 +10,8 @@ import {
   ImageBackground,
   View,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -987,6 +989,8 @@ console.log('category id comes from video', categoryId)
           </TouchableOpacity>
         </View>
 
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
         <View style={{marginRight: wp(1)}}>
           <TextInput
             mode="outlined"
@@ -1003,6 +1007,8 @@ console.log('category id comes from video', categoryId)
             // left={isTextInputActive ? <Oemail /> : <Gemail />}
           />
         </View>
+        </View>
+        </TouchableWithoutFeedback>
         <View style={{marginHorizontal:hp('4%'),}}>
 {profileNameError ? <Text style={styles.errorText}>{profileNameError}</Text> : null}
         </View>
@@ -1065,6 +1071,8 @@ console.log('category id comes from video', categoryId)
           </View>
         </View>
 
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
         <View
           style={{
             justifyContent: 'center',
@@ -1080,6 +1088,8 @@ console.log('category id comes from video', categoryId)
             height={hp(20)}
           />
         </View>
+        </View>
+        </TouchableWithoutFeedback>
            <View style={{ marginTop:hp(-1), marginBottom:hp(3), marginHorizontal:hp('4%')}}>
           {descriptionError ? <Text style={styles.errorText}>{descriptionError}</Text> : null}
           </View>

@@ -11,6 +11,8 @@ import {
   View,
   TouchableOpacity,
   Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -738,6 +740,8 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
           )}
         </View>
 
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
         <View style={{marginRight: wp(2)}}>
           <TextInput
             mode="outlined"
@@ -754,6 +758,8 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
             // left={isTextInputActive ? <Oemail /> : <Gemail />}
           />
         </View>
+        </View>
+        </TouchableWithoutFeedback>
         <View style={{marginHorizontal:hp('4%'),}}>
 {profileNameError ? <Text style={styles.errorText}>{profileNameError}</Text> : null}
         </View>
@@ -872,6 +878,8 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
           </View>
         </View>
 
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
         <View
           style={{
             justifyContent: 'center',
@@ -887,6 +895,8 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
             height={hp(20)}
           />
         </View>
+        </View>
+        </TouchableWithoutFeedback>
         <View style={{ marginTop:hp(-1), marginBottom:hp(3), marginHorizontal:hp('4%')}}>
           {descriptionError ? <Text style={styles.errorText}>{descriptionError}</Text> : null}
           </View>

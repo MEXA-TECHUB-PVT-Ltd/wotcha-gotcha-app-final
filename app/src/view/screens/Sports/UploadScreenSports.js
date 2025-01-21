@@ -11,6 +11,8 @@ import {
   ImageBackground,
   View,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import React, {useState, useRef, useEffect} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -456,6 +458,8 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
         keyboardShouldPersistTaps="always"
         showsVerticalScrollIndicator={false}
         style={{flex: 1}}>
+              <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+               <View style={{ flex: 1, justifyContent: 'center' }}>
         <View
           style={{
             marginTop: hp(5),
@@ -667,6 +671,8 @@ const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
             <View style={{marginLeft:hp(4), marginTop:-10, marginBottom:15}}>
         {descriptionError ? <Text style={styles.errorText}>{descriptionError}</Text> : null}
         </View>
+                </View>
+                                     </TouchableWithoutFeedback>
         <View
           style={{
             marginTop: hp(5),
