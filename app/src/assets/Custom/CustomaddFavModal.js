@@ -61,13 +61,13 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    backgroundColor: "#333",
+    backgroundColor: "white",
     padding: 20,
     borderRadius: 10,
     alignItems: "center",
   },
   overlayButton: {
-    backgroundColor: "#444",
+    backgroundColor: "#FACA4E",
     padding: 10,
     marginVertical: 5,
     borderRadius: 5,

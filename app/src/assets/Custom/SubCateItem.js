@@ -7,6 +7,7 @@ import {
   widthPercentageToDP as wp,
 } from "react-native-responsive-screen";
 import NonVerified from "../svg/NonVerified.svg";
+import { appImages } from "../utilities";
 const SubCateItem = ({
   item,
   onPress,
@@ -17,44 +18,55 @@ const SubCateItem = ({
   ShowThumbnail,
   CinematicContent,
   ShowUserImage,
-  showNOImage
+  showNOImage,
 }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.itemContainer}>
-        {/* Main Image */}
-
-        {/* <Image source={{ uri: item.image }} style={styles.image} /> */}
-
-        {ShowEmoji ? (
-          <View
-            style={{
-              width: "100%",
-              justifyContent: "center",
-              alignItems: "center",
-              height: hp(10),
-              borderRadius: wp(1),
-              resizeMode: "stretch",
-              borderWidth: 1, // Border width
-              borderColor: "grey", // Border color
-            }}
-          >
-            <Text style={{ fontSize: hp(5) }}>{item.image}</Text>
-          </View>
-        ) : null
-        // <Image source={{ uri: item.image }} style={styles.image} />
+        {
+          ShowEmoji ? (
+            <View
+              style={{
+                width: "100%",
+                justifyContent: "center",
+                alignItems: "center",
+                height: hp(10),
+                borderRadius: wp(1),
+                resizeMode: "stretch",
+                borderWidth: 1, // Border width
+                borderColor: "grey", // Border color
+              }}
+            >
+              <Text style={{ fontSize: hp(5) }}>{item.image}</Text>
+            </View>
+          ) : null
+          // <Image source={{ uri: item.image }} style={styles.image} />
         }
         {/* {ShowThumbnail && item.thumbnail ? (
           <Image source={{ uri: item.thumbnail }} style={styles.image} />
         ) : (
           <Image source={{ uri: item.image }} style={styles.image} />
         )} */}
-
-{ShowThumbnail && item.thumbnail ? (
-  <Image source={{ uri: item.thumbnail }} style={styles.image} />
-) : showNOImage ? null : (
-  <Image source={{ uri: item.image }} style={styles.image} />
-)}
+        {ShowThumbnail && item.thumbnail ? (
+          item.thumbnail === "" ||
+          item.thumbnail === null ||
+          item.thumbnail === undefined ? (
+            <Image style={styles.thumbnail} source={appImages.galleryPlaceHolder} />
+          ) : (
+            <Image style={styles.image} source={{ uri: item.thumbnail }} />
+          )
+        ) : showNOImage ? null : item.image === "" ||
+          item.image === null ||
+          item.image === undefined ? (
+          <Image style={styles.thumbnail} source={appImages.galleryPlaceHolder} />
+        ) : (
+          <Image style={styles.image} source={{ uri: item.image }} />
+        )}
+        {/* {ShowThumbnail && item.thumbnail ? (
+          <Image source={{ uri: item.thumbnail }} style={styles.image} />
+        ) : showNOImage ? null : (
+          <Image source={{ uri: item.image }} style={styles.image} />
+        )} */}
         {/* User Info Section */}
         <View style={styles.userInfoContainer}>
           {/* User Image */}
@@ -129,7 +141,7 @@ const SubCateItem = ({
                 {item.description}
               </Text>
             </View>
-          ) }
+          )}
           {/* Username */}
           {/* <View style={styles.usernameContainer}>
             <Text
@@ -155,7 +167,6 @@ const SubCateItem = ({
 
 const styles = StyleSheet.create({
   itemContainer: {
-    // Add any specific styles for the main container
     marginRight: wp(2),
     width: wp(35),
     // alignItems: "center",
@@ -169,7 +180,7 @@ const styles = StyleSheet.create({
   userInfoContainer: {
     flexDirection: "row",
     alignItems: "center",
-    height: hp(4),
+    height: hp(5),
     width: wp(25),
   },
   userImageContainer: {

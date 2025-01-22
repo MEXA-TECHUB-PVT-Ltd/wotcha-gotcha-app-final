@@ -59,8 +59,6 @@ import Add from "../../../assets/svg/AddMainScreen.svg";
 import DotLoader from "../../../assets/Custom/DotLoader";
 import CustomaddFavModal from "../../../assets/Custom/CustomaddFavModal";
 import CustomMassAppCateModal from "../../../assets/Custom/CustomMassAppCateModal";
-import AppGrid from "../../../assets/Custom/AppGrid";
-import { use } from "i18next";
 import DeviceInfo from 'react-native-device-info';
 
 
@@ -142,7 +140,7 @@ const Dashboard = () => {
           const timeout = setTimeout(() => {
             setDotLoading(false);
             AsyncStorage.setItem("isFirstTime", "false"); // Mark it as false after showing the loader
-          }, 15000); // 15 seconds delay
+          }, 3000); // 15 seconds delay
 
           return () => clearTimeout(timeout); // Clear timeout on unmount
         }
@@ -238,8 +236,8 @@ const Dashboard = () => {
 
 const [unusedApps, setUnusedApps] = useState([]);
 
-  const initializeAppData = async () => {
-  // const initializeAppData = async (setDataApps, setSystemApps , setUserApps ,setTopData, setFavouriteData,  setUnusedApps ) => {
+  // const initializeAppData = async () => {
+  const initializeAppData = async (setDataApps, setSystemApps , setUserApps , setUnusedApps ) => {
     try {
         const manufacturer = await DeviceInfo.getManufacturer();
         
@@ -270,7 +268,6 @@ const [unusedApps, setUnusedApps] = useState([]);
           // Dynamically filter system and user apps
           const systemAppsList = [];
             const userAppsList = [];
-
             packageDataArray.forEach((app) => {
               const bundle = app.bundle.toLowerCase();
               const isSystemApp = systemAppPrefixes.some((prefix) => bundle.startsWith(prefix));
@@ -279,7 +276,6 @@ const [unusedApps, setUnusedApps] = useState([]);
               app.bundle.toLowerCase().includes('gallery') || // Gallery apps
               app.bundle.toLowerCase().includes('dialer') ||  // Dialer apps
               app.bundle.toLowerCase().includes('phone');     // Phone apps
-
               if (isSystemApp || isGalleryOrPhoneApp) {
                 systemAppsList.push(app);
               } else {
@@ -298,26 +294,25 @@ const [unusedApps, setUnusedApps] = useState([]);
         //   userAppsList.push(app);
         //  }
         // });
-
         setSystemApps(systemAppsList);
         setUserApps(userAppsList);
       // Top 6 Apps
-      const storedTopData = await AsyncStorage.getItem("topData");
-      if (storedTopData) {
-        setTopData(JSON.parse(storedTopData));
-      } else {
-        const topSixApps = packageDataArray.slice(0, 6).map((item) => ({
-        // const topSixApps = appDataArray.slice(0, 6).map((item) => ({
-          ...item,
-          count: 2,
-        }));
-        await AsyncStorage.setItem("topData", JSON.stringify(topSixApps));
-        setTopData(topSixApps);
-      }
+      // const storedTopData = await AsyncStorage.getItem("topData");
+      // if (storedTopData) {
+      //   setTopData(JSON.parse(storedTopData));
+      // } else {
+      //   const topSixApps = packageDataArray.slice(0, 6).map((item) => ({
+      //   // const topSixApps = appDataArray.slice(0, 6).map((item) => ({
+      //     ...item,
+      //     count: 2,
+      //   }));
+      //   await AsyncStorage.setItem("topData", JSON.stringify(topSixApps));
+      //   setTopData(topSixApps);
+      // }
   
       // Favourite Apps
-      const storedFavouriteData = await AsyncStorage.getItem("StorefavouriteData");
-      setFavouriteData(JSON.parse(storedFavouriteData));
+      // const storedFavouriteData = await AsyncStorage.getItem("StorefavouriteData");
+      // setFavouriteData(JSON.parse(storedFavouriteData));
       // if (!storedFavouriteData) {
       //   const initialFavouriteData = packageDataArray.slice(0, 4);
       //   // const initialFavouriteData = appDataArray.slice(0, 4);
@@ -361,22 +356,109 @@ const [unusedApps, setUnusedApps] = useState([]);
   
   useEffect(() => {
     // Initialize apps and related data
-    // initializeAppData(setDataApps, setSystemApps , setUserApps ,setTopData, setFavouriteData,  setUnusedApps );
-    initializeAppData();
+    initializeAppData(setDataApps, setSystemApps , setUserApps , setUnusedApps );
+    // initializeAppData();
     // Fetch unused apps
     // fetchAndStoreUnusedApps(setUnusedApps);
   }, []);
 
-  useEffect(() => {
-    // Save favourite and top data when updated
-    if (favouriteData) {
-      handleSaveData("StorefavouriteData", favouriteData);
-    }
 
-    if (topData) {
-      handleSaveData("topData", topData);
+  useEffect(() => {
+   
+    // Load favouriteData from AsyncStorage when the component mounts
+    const loadFavouriteData = async () => {
+      try {
+        const storedData = await AsyncStorage.getItem("StorefavouriteData");
+
+        // it is conisdering empty array as 2 length thats why i a have added it
+        if (!storedData) {
+          const initialFavouriteData = dataApps.slice(0, 4);
+          await AsyncStorage.setItem(
+            "StorefavouriteData",
+            JSON.stringify(initialFavouriteData)
+          );
+          console.log('initialFavouriteData----------', initialFavouriteData.length);
+          setFavouriteData(initialFavouriteData);
+        } else {
+          const parsedData = JSON.parse(storedData);
+          console.log('favouriteData----------', parsedData.length);
+          setFavouriteData(parsedData);
+          console.log("FAVOURITE IS NOT NULL??");
+        }
+      } catch (error) {
+        console.error(
+          "Error loading favourite data from AsyncStorage:",
+          error
+        );
+      }
+    };
+
+    loadFavouriteData();
+  
+}, []); 
+useEffect(() => {
+  
+  // Save favouriteData to AsyncStorage whenever it changes
+  const saveFavouriteData = async () => {
+    try {
+      await AsyncStorage.setItem(
+        "StorefavouriteData",
+        JSON.stringify(favouriteData)
+      );
+      // console.log('get       --- favouriteData----------', favouriteData);
+    } catch (error) {
+      console.error("Error saving favourite data to AsyncStorage:", error);
     }
-  }, [favouriteData, topData]);
+  };
+  saveFavouriteData();
+
+}, [favouriteData, ]); 
+
+ useEffect(() => {
+      // Load topData from AsyncStorage when the component mounts
+      const loadTopData = async () => {
+        //await AsyncStorage.removeItem('topData');
+        try {
+          const storedData = await AsyncStorage.getItem("topData");
+          if (storedData) {
+            const parsedData = JSON.parse(storedData);
+            setTopData(parsedData);
+          }
+        } catch (error) {
+          console.error("Error loading top data from AsyncStorage:", error);
+        }
+      };
+
+      loadTopData();
+    
+  }, []); // Run this effect only once when the component mounts
+
+  useEffect(() => {
+   
+      // Save topData to AsyncStorage whenever it changes
+      const saveTopData = async () => {
+        try {
+          await AsyncStorage.setItem("topData", JSON.stringify(topData));
+        } catch (error) {
+          console.error("Error saving top data to AsyncStorage:", error);
+        }
+      };
+
+      saveTopData();
+    
+  }, [topData]);
+
+
+  // useEffect(() => {
+  //   // Save favourite and top data when updated
+  //   if (favouriteData) {
+  //     handleSaveData("StorefavouriteData", favouriteData);
+  //   }
+
+  //   if (topData) {
+  //     handleSaveData("topData", topData);
+  //   }
+  // }, [favouriteData, topData]);
 
   // const openunusedApp = async (item) => {
   //   try {
@@ -2408,8 +2490,9 @@ const [unusedApps, setUnusedApps] = useState([]);
   };
 
     const renderAvailableApps = (item) => {
+      console.log('topData----------', item?.label);
     // Render the item only if count is equal to 2
-    if (item.count >= 2) {
+    // if (item.count >= 2) {
       return (
         <View style={{ height: hp(8), padding: 5 }}>
           <Image
@@ -2419,7 +2502,7 @@ const [unusedApps, setUnusedApps] = useState([]);
           />
         </View>
       );
-    } 
+    // } 
     // else {
     //   // Return null or an empty view if count is not equal to 2
     //   return (
@@ -2436,44 +2519,87 @@ const [unusedApps, setUnusedApps] = useState([]);
 
     const renderApps = (item) => {
     //console.log('item at first', item);
-    const openApp = async (items) => {
+    const openApp = async (bundle) => {
       try {
+        // Log the current topData labels
+        console.log("Current topData labels:", topData.map((app) => app.label));
+  
         // Check if the app is already in the topData array
-        const appIndex = topData.findIndex((app) => app.bundle === item.bundle);
-
+        const appIndex = topData.findIndex((app) => app.bundle === bundle);
+  
         if (appIndex !== -1) {
           // If the app is already in the array, update the count
+          console.log(`Updating count for app: ${topData[appIndex].label}`);
           const updatedTopData = [...topData];
           updatedTopData[appIndex] = {
             ...updatedTopData[appIndex],
             count: updatedTopData[appIndex].count + 1,
           };
-
           setTopData(updatedTopData);
-
-          await RNLauncherKitHelper.launchApplication(item.bundle);
-
         } else {
-          // If the app is not in the array, add it with count 1
-          const randomIndex = Math.floor(Math.random() * 6); // Random index between 0 and 5
-          const updatedTopData = [...topData];
-          updatedTopData[randomIndex] = {
-            label: item.label,
-            bundle: item.bundle,
-            image: item.image,
-            count: 1,
-          };
-
+          // If the app is not in the array, add it to the topData
+          console.log(`Adding new app to topData: ${item.label}`);
+          const updatedTopData = [
+            ...topData,
+            {
+              label: item.label,
+              bundle: item.bundle,
+              image: item.image,
+              count: 1,
+            },
+          ].slice(0, 6); // Ensure topData contains only 6 items
+  
           setTopData(updatedTopData);
-
-          await RNLauncherKitHelper.launchApplication(item.bundle);
         }
+  
+        // Log the updated topData labels
+        console.log("Updated topData labels:", topData.map((app) => app.label));
+  
+        // Launch the app
+        console.log(`Launching app: ${item.label}`);
+        await RNLauncherKitHelper.launchApplication(bundle);
       } catch (error) {
         console.error("Error opening the app:", error);
-        await RNLauncherKitHelper.launchApplication(item.bundle);
-        // Your additional error handling logic here
       }
     };
+    // const openApp = async (items) => {
+    //   try {
+    //     // Check if the app is already in the topData array
+    //     const appIndex = topData.findIndex((app) => app.bundle === item.bundle);
+
+    //     if (appIndex !== -1) {
+    //       // If the app is already in the array, update the count
+    //       const updatedTopData = [...topData];
+    //       updatedTopData[appIndex] = {
+    //         ...updatedTopData[appIndex],
+    //         count: updatedTopData[appIndex].count + 1,
+    //       };
+
+    //       setTopData(updatedTopData);
+
+    //       await RNLauncherKitHelper.launchApplication(item.bundle);
+
+    //     } else {
+    //       // If the app is not in the array, add it with count 1
+    //       const randomIndex = Math.floor(Math.random() * 6); // Random index between 0 and 5
+    //       const updatedTopData = [...topData];
+    //       updatedTopData[randomIndex] = {
+    //         label: item.label,
+    //         bundle: item.bundle,
+    //         image: item.image,
+    //         count: 1,
+    //       };
+
+    //       setTopData(updatedTopData);
+
+    //       await RNLauncherKitHelper.launchApplication(item.bundle);
+    //     }
+    //   } catch (error) {
+    //     console.log("Error opening the app:", error);
+    //     await RNLauncherKitHelper.launchApplication(item.bundle);
+    //     // Your additional error handling logic here
+    //   }
+    // };
 
     return (
       <TouchableOpacity
@@ -2482,7 +2608,7 @@ const [unusedApps, setUnusedApps] = useState([]);
           setIsCancelModalVisible(true);
           setFavouriteItem(item);
         }}
-        onPress={() => openApp(item?.bundle)}
+        onPress={() => openApp(item.bundle)}
         style={styles.items}
       >
         <Image
@@ -2563,42 +2689,79 @@ const [unusedApps, setUnusedApps] = useState([]);
 
     const renderFavouritesApps = (item) => {
     //console.log('item at first', item);
-    const openApp = async (items) => {
-      try {
-        // Launch the application
-        await RNLauncherKitHelper.launchApplication(item.bundle);
+        const openApp = async (item) => {
+          try {
+            // Check if the app is already in the topData array
+            const appIndex = topData.findIndex((app) => app.bundle === item.bundle);
+      
+            let updatedTopData = [...topData];
+      
+            if (appIndex !== -1) {
+              // If the app is already in the array, update the count
+              updatedTopData[appIndex] = {
+                ...updatedTopData[appIndex],
+                count: updatedTopData[appIndex].count + 1,
+              };
+            } else {
+              // If the app is not in the array, add it with count 1
+              updatedTopData.push({
+                label: item.label,
+                bundle: item.bundle,
+                image: item.image,
+                count: 1,
+              });
+            }
+      
+            setTopData(updatedTopData);
+      
+            // Launch the app
+            await RNLauncherKitHelper.launchApplication(item.bundle);
+      
+            //----------------------\\
+            // Your additional logic here
+            //----------------------\\
+          } catch (error) {
+            console.error("Error opening the app:", error);
+            // Optionally, notify the user or show an error message
+            // await RNLauncherKitHelper.launchApplication(item.bundle);
+          }
+        };
+    // const openApp = async (items) => {
+    //   try {
+    //     // Launch the application
+    //     await RNLauncherKitHelper.launchApplication(item.bundle);
 
-        // Check if the app is already in the topData array
-        const appIndex = topData.findIndex((app) => app.bundle === item.bundle);
+    //     // Check if the app is already in the topData array
+    //     const appIndex = topData.findIndex((app) => app.bundle === item.bundle);
 
-        if (appIndex !== -1) {
-          // If the app is already in the array, update the count
-          const updatedTopData = [...topData];
-          updatedTopData[appIndex] = {
-            ...updatedTopData[appIndex],
-            count: updatedTopData[appIndex].count + 1,
-          };
+    //     if (appIndex !== -1) {
+    //       // If the app is already in the array, update the count
+    //       const updatedTopData = [...topData];
+    //       updatedTopData[appIndex] = {
+    //         ...updatedTopData[appIndex],
+    //         count: updatedTopData[appIndex].count + 1,
+    //       };
 
-          setTopData(updatedTopData);
-        } else {
-          // If the app is not in the array, add it with count 1
-          setTopData((prevData) => [
-            ...prevData,
-            {
-              label: item.label,
-              bundle: item.bundle,
-              image: item.image,
-              count: 1,
-            },
-          ]);
-        }
+    //       setTopData(updatedTopData);
+    //     } else {
+    //       // If the app is not in the array, add it with count 1
+    //       setTopData((prevData) => [
+    //         ...prevData,
+    //         {
+    //           label: item.label,
+    //           bundle: item.bundle,
+    //           image: item.image,
+    //           count: 1,
+    //         },
+    //       ]);
+    //     }
 
-        await RNLauncherKitHelper.launchApplication(items); // Assuming 'item.label' is the package name
-      } catch (error) {
-        console.error("Error opening the app:", error);
-        await RNLauncherKitHelper.launchApplication(items); // Assuming 'item.label' is the package name
-      }
-    };
+    //     await RNLauncherKitHelper.launchApplication(items); // Assuming 'item.label' is the package name
+    //   } catch (error) {
+    //     console.error("Error opening the app:", error);
+    //     await RNLauncherKitHelper.launchApplication(items); // Assuming 'item.label' is the package name
+    //   }
+    // };
 
     return (
       <TouchableOpacity
@@ -2641,7 +2804,8 @@ const [unusedApps, setUnusedApps] = useState([]);
 
   const actionsForAddToFavourites = [
     {
-      label: "Add to Favorites",
+      label: t("Dashboard.AddtoFavorites"),
+      // label: "Add to Favorites",
       onPress: () => {
         if (favouriteItem) {
           const isItemInFavourites = favouriteData.some(
@@ -2655,13 +2819,34 @@ const [unusedApps, setUnusedApps] = useState([]);
       },
     },
     {
-      label: "Remove From Wotcha Gotcha App",
+      label: t("Dashboard.RemoveFromWotchaGotchaApp"),
+      // label: "Remove From Wotcha Gotcha App",
       onPress: () => {
         if (favouriteItem) {
           const updatedData = dataApps.filter(
             (item) => item.bundle !== favouriteItem.bundle
           );
           setDataApps(updatedData);
+
+           // Update `systemApps` by removing the app if it exists
+        const updatedSystemApps = systemApps.filter(
+          (item) => item.bundle !== favouriteItem.bundle
+        );
+        setSystemApps(updatedSystemApps);
+
+           // Update `userApps` by removing the app if it exists
+        const updateduserApps = userApps.filter(
+          (item) => item.bundle !== favouriteItem.bundle
+        );
+        setUserApps(updateduserApps);
+
+        // Optional: Remove from `favouriteData` if needed
+        const updatedFavouriteData = favouriteData.filter(
+          (item) => item.bundle !== favouriteItem.bundle
+        );
+        setFavouriteData(updatedFavouriteData);
+
+
           setIsCancelModalVisible(false);
           setIsLongPress(false);
         }
@@ -2671,7 +2856,8 @@ const [unusedApps, setUnusedApps] = useState([]);
 
   const actionsForRemoveFavourites = [
     {
-      label: "Remove Favorites",
+      label: t("Dashboard.RemoveFavorites"),
+      // label: "Remove Favorites",
       onPress: () => {
         if (removeFavouriteItem) {
           const updatedData = favouriteData.filter(
@@ -2683,13 +2869,27 @@ const [unusedApps, setUnusedApps] = useState([]);
       },
     },
     {
-      label: "Remove From Wotcha Gotcha App",
+      label: t("Dashboard.RemoveFromWotchaGotchaApp"),
+      // label: "Remove From Wotcha Gotcha App",
       onPress: () => {
         if (removeFavouriteItem) {
           const updatedData = dataApps.filter(
             (item) => item.bundle !== removeFavouriteItem.bundle
           );
           setDataApps(updatedData);
+
+    // Update `systemApps` by removing the app if it exists
+    const updatedSystemApps = systemApps.filter(
+      (item) => item.bundle !== favouriteItem.bundle
+    );
+    setSystemApps(updatedSystemApps);
+
+       // Update `userApps` by removing the app if it exists
+    const updateduserApps = userApps.filter(
+      (item) => item.bundle !== favouriteItem.bundle
+    );
+    setUserApps(updateduserApps);
+
           setIsCancelModalVisible(false);
           setIsLongPressRemove(false);
         }
@@ -4735,7 +4935,7 @@ const styles = StyleSheet.create({
     color: "#4A4A4A",
   },
   categoryContent: {
-    marginTop: hp(1),
+    marginTop: hp(.8),
     height: "100%",
   },
   loadingContainer: {

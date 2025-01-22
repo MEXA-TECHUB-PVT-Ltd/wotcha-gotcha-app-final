@@ -298,8 +298,8 @@ export default function Categories(identifier) {
 
 
 
-  const initializeAppData = async () => {
-    // const initializeAppData = async (setDataApps, setSystemApps , setUserApps ,setTopData, setFavouriteData,  setUnusedApps ) => {
+  // const initializeAppData = async () => {
+    const initializeAppData = async (setData, setSystemApps , setUserApps , setUnusedApps ) => {
       try {
           const manufacturer = await DeviceInfo.getManufacturer();
            console.log('Manufacturer------:', manufacturer);
@@ -361,21 +361,22 @@ export default function Categories(identifier) {
           setSystemApps(systemAppsList);
           setUserApps(userAppsList);
         // Top 6 Apps
-        const storedTopData = await AsyncStorage.getItem("topData");
-        if (storedTopData) {
-          setTopData(JSON.parse(storedTopData));
-        } else {
-          const topSixApps = packageDataArray.slice(0, 6).map((item) => ({
-            ...item,
-            count: 2,
-          }));
-          await AsyncStorage.setItem("topData", JSON.stringify(topSixApps));
-          setTopData(topSixApps);
-        }
+        // const storedTopData = await AsyncStorage.getItem("topData");
+        // if (storedTopData) {
+        //   setTopData(JSON.parse(storedTopData));
+        // } else {
+        //   const topSixApps = packageDataArray.slice(0, 6).map((item) => ({
+        //     ...item,
+        //     count: 2,
+        //   }));
+        //   await AsyncStorage.setItem("topData", JSON.stringify(topSixApps));
+        //   setTopData(topSixApps);
+        // }
     
         // Favourite Apps
-        const storedFavouriteData = await AsyncStorage.getItem("StorefavouriteData");
-        setFavouriteData(JSON.parse(storedFavouriteData) || []);
+        // const storedFavouriteData = await AsyncStorage.getItem("StorefavouriteData");
+        // console.log('favouriteData----------', storedFavouriteData);
+        // setFavouriteData(JSON.stringify(storedFavouriteData) || []);
         // if (!storedFavouriteData) {
         //   const initialFavouriteData = packageDataArray.slice(0, 4);
         //   // const initialFavouriteData = appDataArray.slice(0, 4);
@@ -410,33 +411,35 @@ export default function Categories(identifier) {
     };
 
   useEffect(() => {
-    initializeAppData();
+
+    initializeAppData(setData, setSystemApps , setUserApps ,  setUnusedApps );
+
   }, []);
 
 
 
-  const handleSaveData = async (key, data) => {
-    try {
-      await AsyncStorage.setItem(key, JSON.stringify(data));
-    } catch (error) {
-      console.error(`Error saving ${key} to AsyncStorage:`, error);
-    }
-  };
+  // const handleSaveData = async (key, data) => {
+  //   try {
+  //     await AsyncStorage.setItem(key, JSON.stringify(data));
+  //   } catch (error) {
+  //     console.error(`Error saving ${key} to AsyncStorage:`, error);
+  //   }
+  // };
   
-  useEffect(() => {
-    // Save favourite and top data when updated
-    if (favouriteData.length) {
-      handleSaveData("StorefavouriteData", favouriteData);
-    }
+  // useEffect(() => {
+  //   // Save favourite and top data when updated
+  //   if (favouriteData.length) {
+  //     handleSaveData("StorefavouriteData", favouriteData);
+  //   }
 
-    if (topData.length) {
-      handleSaveData("topData", topData);
-    }
-  }, [favouriteData, topData]);
+  //   if (topData.length) {
+  //     handleSaveData("topData", topData);
+  //   }
+  // }, [favouriteData, topData]);
 
 
 
-  console.log('favouriteData----------', favouriteData);
+
 
 
 
@@ -463,93 +466,96 @@ export default function Categories(identifier) {
 
   //   fetchData();
   // }, []);
-  // useEffect(() => {
+  useEffect(() => {
    
-  //     // Load favouriteData from AsyncStorage when the component mounts
-  //     const loadFavouriteData = async () => {
-  //       try {
-  //         const storedData = await AsyncStorage.getItem("favouriteData");
+      // Load favouriteData from AsyncStorage when the component mounts
+      const loadFavouriteData = async () => {
+        try {
+          const storedData = await AsyncStorage.getItem("StorefavouriteData");
 
-  //         // it is conisdering empty array as 2 length thats why i a have added it
-  //         if (storedData.length === 2) {
-  //           const initialFavouriteData = dataApps.slice(0, 4);
-  //           await AsyncStorage.setItem(
-  //             "favouriteData",
-  //             JSON.stringify(initialFavouriteData)
-  //           );
-  //           setFavouriteData(initialFavouriteData);
-  //         } else {
-  //           const parsedData = JSON.parse(storedData);
-  //           setFavouriteData(parsedData);
-  //           console.log("FAVOURITE IS NOT NULL");
-  //         }
-  //       } catch (error) {
-  //         console.error(
-  //           "Error loading favourite data from AsyncStorage:",
-  //           error
-  //         );
-  //       }
-  //     };
+          // it is conisdering empty array as 2 length thats why i a have added it
+          if (!storedData) {
+            const initialFavouriteData = dataApps.slice(0, 4);
+            await AsyncStorage.setItem(
+              "StorefavouriteData",
+              JSON.stringify(initialFavouriteData)
+            );
+            console.log('initialFavouriteData----------', initialFavouriteData.length);
+            setFavouriteData(initialFavouriteData);
+          } else {
+            const parsedData = JSON.parse(storedData);
+            console.log('favouriteData----------', parsedData.length);
+            setFavouriteData(parsedData);
+            console.log("FAVOURITE IS NOT NULL??");
+          }
+        } catch (error) {
+          console.error(
+            "Error loading favourite data from AsyncStorage:",
+            error
+          );
+        }
+      };
 
-  //     loadFavouriteData();
+      loadFavouriteData();
     
-  // }, []); // Run this effect only once when the component mounts
+  }, [isFocused]); // Run this effect only once when the component mounts
 
-  // useEffect(() => {
+  useEffect(() => {
   
-  //     // Save favouriteData to AsyncStorage whenever it changes
-  //     const saveFavouriteData = async () => {
-  //       try {
-  //         await AsyncStorage.setItem(
-  //           "favouriteData",
-  //           JSON.stringify(favouriteData)
-  //         );
-  //       } catch (error) {
-  //         console.error("Error saving favourite data to AsyncStorage:", error);
-  //       }
-  //     };
-  //     saveFavouriteData();
+      // Save favouriteData to AsyncStorage whenever it changes
+      const saveFavouriteData = async () => {
+        try {
+          await AsyncStorage.setItem(
+            "StorefavouriteData",
+            JSON.stringify(favouriteData)
+          );
+
+        } catch (error) {
+          console.error("Error saving favourite data to AsyncStorage:", error);
+        }
+      };
+      saveFavouriteData();
     
-  // }, [favouriteData, ]); // Run this effect whenever favouriteData changes
+  }, [favouriteData, ]); // Run this effect whenever favouriteData changes
 
-  //------------------------------------\\
+  // //------------------------------------\\
 
-  //-------------------Use Effect Top Apps---------\\
+  // //-------------------Use Effect Top Apps---------\\
+  // console.log('topData----------', topData);
+  useEffect(() => {
 
-  // useEffect(() => {
+      // Load topData from AsyncStorage when the component mounts
+      const loadTopData = async () => {
+        //await AsyncStorage.removeItem('topData');
+        try {
+          const storedData = await AsyncStorage.getItem("topData");
+          if (storedData) {
+            const parsedData = JSON.parse(storedData);
+            setTopData(parsedData);
+          }
+        } catch (error) {
+          console.error("Error loading top data from AsyncStorage:", error);
+        }
+      };
 
-  //     // Load topData from AsyncStorage when the component mounts
-  //     const loadTopData = async () => {
-  //       //await AsyncStorage.removeItem('topData');
-  //       try {
-  //         const storedData = await AsyncStorage.getItem("topData");
-  //         if (storedData) {
-  //           const parsedData = JSON.parse(storedData);
-  //           setTopData(parsedData);
-  //         }
-  //       } catch (error) {
-  //         console.error("Error loading top data from AsyncStorage:", error);
-  //       }
-  //     };
-
-  //     loadTopData();
+      loadTopData();
     
-  // }, []); // Run this effect only once when the component mounts
+  }, [isFocused]); // Run this effect only once when the component mounts
 
-  // useEffect(() => {
+  useEffect(() => {
    
-  //     // Save topData to AsyncStorage whenever it changes
-  //     const saveTopData = async () => {
-  //       try {
-  //         await AsyncStorage.setItem("topData", JSON.stringify(topData));
-  //       } catch (error) {
-  //         console.error("Error saving top data to AsyncStorage:", error);
-  //       }
-  //     };
+      // Save topData to AsyncStorage whenever it changes
+      const saveTopData = async () => {
+        try {
+          await AsyncStorage.setItem("topData", JSON.stringify(topData));
+        } catch (error) {
+          console.error("Error saving top data to AsyncStorage:", error);
+        }
+      };
 
-  //     saveTopData();
+      saveTopData();
     
-  // }, [topData]); // Run this effect whenever topData changes
+  }, [topData]); // Run this effect whenever topData changes
 
   //---------------------------------------------\\
 
@@ -703,51 +709,94 @@ export default function Categories(identifier) {
   };
 
   const renderApps = (item) => {
-    const openApp = async (items) => {
-      try {
-        // Check if the app is already in the topData array
-        const appIndex = topData.findIndex((app) => app.bundle === item.bundle);
+     const openApp = async (bundle) => {
+         try {
+           // Log the current topData labels
+           console.log("Current topData labels:", topData.map((app) => app.label));
+     
+           // Check if the app is already in the topData array
+           const appIndex = topData.findIndex((app) => app.bundle === bundle);
+     
+           if (appIndex !== -1) {
+             // If the app is already in the array, update the count
+             console.log(`Updating count for app: ${topData[appIndex].label}`);
+             const updatedTopData = [...topData];
+             updatedTopData[appIndex] = {
+               ...updatedTopData[appIndex],
+               count: updatedTopData[appIndex].count + 1,
+             };
+             setTopData(updatedTopData);
+           } else {
+             // If the app is not in the array, add it to the topData
+             console.log(`Adding new app to topData: ${item.label}`);
+             const updatedTopData = [
+               ...topData,
+               {
+                 label: item.label,
+                 bundle: item.bundle,
+                 image: item.image,
+                 count: 1,
+               },
+             ].slice(0, 6); // Ensure topData contains only 6 items
+     
+             setTopData(updatedTopData);
+           }
+     
+           // Log the updated topData labels
+           console.log("Updated topData labels:", topData.map((app) => app.label));
+     
+           // Launch the app
+           console.log(`Launching app: ${item.label}`);
+           await RNLauncherKitHelper.launchApplication(bundle);
+         } catch (error) {
+           console.error("Error opening the app:", error);
+         }
+       };
+    // const openApp = async (items) => {
+    //   try {
+    //     // Check if the app is already in the topData array
+    //     const appIndex = topData.findIndex((app) => app.bundle === item.bundle);
 
-        if (appIndex !== -1) {
-          // If the app is already in the array, update the count
-          const updatedTopData = [...topData];
-          updatedTopData[appIndex] = {
-            ...updatedTopData[appIndex],
-            count: updatedTopData[appIndex].count + 1,
-          };
+    //     if (appIndex !== -1) {
+    //       // If the app is already in the array, update the count
+    //       const updatedTopData = [...topData];
+    //       updatedTopData[appIndex] = {
+    //         ...updatedTopData[appIndex],
+    //         count: updatedTopData[appIndex].count + 1,
+    //       };
 
-          setTopData(updatedTopData);
+    //       setTopData(updatedTopData);
 
-          await RNLauncherKitHelper.launchApplication(item.bundle);
+    //       await RNLauncherKitHelper.launchApplication(item.bundle);
 
-          //----------------------\\
-          // Your additional logic here
-          //----------------------\\
-        } else {
-          // If the app is not in the array, add it with count 1
-          const randomIndex = Math.floor(Math.random() * 6); // Random index between 0 and 5
-          const updatedTopData = [...topData];
-          updatedTopData[randomIndex] = {
-            label: item.label,
-            bundle: item.bundle,
-            image: item.image,
-            count: 1,
-          };
+    //       //----------------------\\
+    //       // Your additional logic here
+    //       //----------------------\\
+    //     } else {
+    //       // If the app is not in the array, add it with count 1
+    //       const randomIndex = Math.floor(Math.random() * 6); // Random index between 0 and 5
+    //       const updatedTopData = [...topData];
+    //       updatedTopData[randomIndex] = {
+    //         label: item.label,
+    //         bundle: item.bundle,
+    //         image: item.image,
+    //         count: 1,
+    //       };
 
-          setTopData(updatedTopData);
+    //       setTopData(updatedTopData);
 
-          await RNLauncherKitHelper.launchApplication(item.bundle);
+    //       await RNLauncherKitHelper.launchApplication(item.bundle);
 
-          //----------------------\\
-          // Your additional logic here
-          //----------------------\\
-        }
-      } catch (error) {
-        console.error("Error opening the app:", error);
-        await RNLauncherKitHelper.launchApplication(item.bundle);
-        // Your additional error handling logic here
-      }
-    };
+    //       //----------------------\\
+    //       // Your additional logic here
+    //       //----------------------\\
+    //     }
+    //   } catch (error) {
+    //     console.log("Error opening the app:", error);
+    //     await RNLauncherKitHelper.launchApplication(item.bundle);
+    //     // Your additional error handling logic here
+    //   }
+    // };
 
     return (
       <TouchableOpacity
@@ -756,7 +805,8 @@ export default function Categories(identifier) {
           setIsCancelModalVisible(true);
           setFavouriteItem(item);
         }}
-        onPress={() => openApp(item?.bundle)}
+        onPress={() => openApp(item.bundle)}
+        // onPress={() => openApp(item)}
         style={styles.items}
       >
         <Image
@@ -1456,8 +1506,9 @@ export default function Categories(identifier) {
   };
 
   const renderAvailableApps = (item) => {
+    console.log('topData---------in cate-----', item?.label);
     // Render the item only if count is equal to 2
-    if (item.count >= 2) {
+    // if (item.count >= 2) {
       return (
         <View style={{ height: hp(8), padding: 5 }}>
           <Image
@@ -1467,18 +1518,19 @@ export default function Categories(identifier) {
           />
         </View>
       );
-    } else {
-      // Return null or an empty view if count is not equal to 2
-      return (
-        <View style={{ height: hp(8), padding: 5 }}>
-          <Image
-            style={{ width: wp(12), height: wp(12) }}
-            resizeMode="contain"
-            source={appImages.logoTransparent}
-          />
-        </View>
-      );
-    }
+    // } 
+    // else {
+    //   // Return null or an empty view if count is not equal to 2
+    //   return (
+    //     <View style={{ height: hp(8), padding: 5 }}>
+    //       <Image
+    //         style={{ width: wp(12), height: wp(12) }}
+    //         resizeMode="contain"
+    //         source={appImages.logoTransparent}
+    //       />
+    //     </View>
+    //   );
+    // }
   };
 
   const handleItemPress = (category) => {
@@ -1551,6 +1603,25 @@ export default function Categories(identifier) {
       );
       setModalDeleteApps(false);
       setData(updatedInstallData);
+
+        // Update `systemApps` by removing the app if it exists
+        const updatedSystemApps = systemApps.filter(
+          (item) => item.bundle !== removeFavouriteItem.bundle
+        );
+        setSystemApps(updatedSystemApps);
+
+           // Update `userApps` by removing the app if it exists
+        const updateduserApps = userApps.filter(
+          (item) => item.bundle !== removeFavouriteItem.bundle
+        );
+        setUserApps(updateduserApps);
+
+        // Optional: Remove from `favouriteData` if needed
+        const updatedFavouriteData = favouriteData.filter(
+          (item) => item.bundle !== removeFavouriteItem.bundle
+        );
+        setFavouriteData(updatedFavouriteData);
+        
     } else {
       setModalDeleteApps(false);
       console.log("CANCEL");
@@ -1625,7 +1696,45 @@ export default function Categories(identifier) {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <TouchableOpacity
+          <TouchableOpacity
+  onPress={async () => {
+    if (favouriteItem) {
+      const isItemInFavourites = favouriteData.some(
+        (item) => item.bundle === favouriteItem.bundle
+      );
+
+      if (isItemInFavourites) {
+        console.log("Item is already in favourites");
+      } else {
+        // Update state with the new favorite item
+        const updatedFavouriteData = [...favouriteData, favouriteItem];
+        setFavouriteData(updatedFavouriteData);
+
+        // Save the updated favorites to AsyncStorage
+        try {
+          await AsyncStorage.setItem(
+            "StorefavouriteData",
+            JSON.stringify(updatedFavouriteData)
+          );
+          console.log(
+            "Add to Favorites pressed and stored for:",
+            favouriteItem.label
+          );
+        } catch (error) {
+          console.error("Error storing favorite data:", error);
+        }
+      }
+
+      setIsLongPress(false);
+    }
+  }}
+  style={styles.overlayButton}
+>
+  <Text style={{ color: "white" }}>
+    {t("Dashboard.AddtoFavorites")}
+  </Text>
+</TouchableOpacity>
+            {/* <TouchableOpacity
               onPress={() => {
                 if (favouriteItem) {
                   const isItemInFavourites = favouriteData.some(
@@ -1653,7 +1762,7 @@ export default function Categories(identifier) {
               <Text style={{ color: "white" }}>
                 {t("Dashboard.AddtoFavorites")}
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               onPress={() => {
                 setIsCancelModalVisible(false);

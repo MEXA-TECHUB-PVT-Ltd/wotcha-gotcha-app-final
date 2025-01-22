@@ -207,7 +207,6 @@ const name = language === "fr" && item.french_name ? item.french_name : item.nam
               position: "absolute",
               top: 0,
               left: 0,
-
               zIndex: 1, // Ensure it's on top of other elements
               //flex: 1,
               width: "100%",
@@ -215,7 +214,12 @@ const name = language === "fr" && item.french_name ? item.french_name : item.nam
               borderRadius: wp(1),
               resizeMode: "cover",
             }}
-            source={{ uri: item.image }}
+            source={
+              item?.image === '' || item?.image === null || item?.image === undefined
+                ? appImages.galleryPlaceHolder
+                : { uri: item.image }
+            }
+            // source={{ uri: item.image }}
           />
         </View>
 

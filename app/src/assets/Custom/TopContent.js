@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontWeight: "700",
+    fontFamily: "Inter-Regular",
     color: "black",
     // marginLeft: 12,
   },

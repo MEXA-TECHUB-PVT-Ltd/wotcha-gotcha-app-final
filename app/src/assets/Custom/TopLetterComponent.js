@@ -31,7 +31,7 @@ const top_post_date = convertTimeAndDate(topLetterData?.post_date );
   if (!topLetterData) {
     return (
       <View style={styles.noLetterContainer}>
-        <Text style={styles.noLetterText}>No Top Letter Available</Text>
+        <Text style={styles.noLetterText}>{t("NoTopAvailable")}</Text>
       </View>
     );
   }
@@ -179,11 +179,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: hp(14),
+
   },
   noLetterText: {
-    fontSize: 14,
-    color: "#595959",
-    fontFamily: "Inter-Bold",
+    fontFamily: "Inter-Regular",
+    fontSize: hp(2),
+    color: "gray",
   },
 });
 
