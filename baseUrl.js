@@ -5,8 +5,8 @@
 // export const base_url = "https://d36a-2407-d000-1a-7273-2115-54b7-f620-f10b.ngrok-free.app/"
 // export const base_url = "https://44f2-2407-d000-1a-956c-293d-56c9-5892-2fea.ngrok-free.app/"
 // export const base_url = "http://192.168.18.25:3005/"
-export const base_url = "http://192.168.18.142:305/"
-// export const base_url = "https://wotcha-gotcha-backend.caprover-testing.mtechub.com/"
+// export const base_url = "http://192.168.18.142:305/"
+export const base_url = "https://wotcha-gotcha-backend.caprover-testing.mtechub.com/"
 
 
 

@@ -1091,7 +1091,7 @@ export default function ViewNews({navigation, route}) {
       </Modal>
       <RBSheet
           ref={refCommentsSheet}
-          // height={450}
+          height={450}
           openDuration={250}
           closeOnDragDown={true}
           customStyles={{

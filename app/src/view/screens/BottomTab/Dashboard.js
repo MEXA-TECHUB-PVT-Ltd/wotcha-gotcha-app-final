@@ -367,7 +367,7 @@ const [unusedApps, setUnusedApps] = useState([]);
   }, []);
 
 
-  useEffect(() => {
+
    
     // Load favouriteData from AsyncStorage when the component mounts
     const loadFavouriteData = async () => {
@@ -397,10 +397,11 @@ const [unusedApps, setUnusedApps] = useState([]);
       }
     };
 
+    useEffect(() => {
     loadFavouriteData();
   
 }, []); 
-useEffect(() => {
+
   
   // Save favouriteData to AsyncStorage whenever it changes
   const saveFavouriteData = async () => {
@@ -414,45 +415,50 @@ useEffect(() => {
       console.error("Error saving favourite data to AsyncStorage:", error);
     }
   };
-  saveFavouriteData();
 
+  useEffect(() => {
+  saveFavouriteData();
 }, [favouriteData, ]); 
 
- useEffect(() => {
-      // Load topData from AsyncStorage when the component mounts
-      const loadTopData = async () => {
-        //await AsyncStorage.removeItem('topData');
-        try {
-          const storedData = await AsyncStorage.getItem("topData");
-          if (!storedData || storedData.length === 0) {
-            // If no data exists, initialize with the first 6 apps
-            
-            const topSixItems = dataApps.slice(0, 6).map(item => ({
-              ...item,
-              count: 2, // Initialize count to 2
-            }));
-            await AsyncStorage.setItem('topData', JSON.stringify(topSixItems));
-            setTopData(topSixItems);
-          } else {
-            // Parse and set the existing data from AsyncStorage
-            const parsedData = JSON.parse(storedData);
-            setTopData(parsedData);
-          }
-          // if (storedData) {
-          //   const parsedData = JSON.parse(storedData);
-          //   setTopData(parsedData);
-          // }
-        } catch (error) {
-          console.error("Error loading top data from AsyncStorage:", error);
+
+  const loadTopData = async () => {
+    try {
+      const storedData = await AsyncStorage.getItem("topData");
+      console.log("Retrieved storedData:", storedData);
+
+      if (!storedData || JSON.parse(storedData).length === 0) {
+        // If no data exists or stored data is an empty array
+        console.log("No data found or empty data, initializing with top 6 apps.");
+        if (dataApps && dataApps.length > 0) {
+          const topSixItems = dataApps.slice(0, 6).map(item => ({
+            ...item,
+            count: 3, // Initialize count to 3
+          }));
+          await AsyncStorage.setItem("topData", JSON.stringify(topSixItems));
+          setTopData(topSixItems);
+        } else {
+          console.warn("dataApps is empty, cannot initialize topData.");
         }
-      };
+      } else {
+        // Parse and set the existing data
+        const parsedData = JSON.parse(storedData);
+        console.log("Parsed data from AsyncStorage:", parsedData);
+        setTopData(parsedData);
+      }
+    } catch (error) {
+      console.error("Error loading top data from AsyncStorage:", error);
+    }
+  };
 
-      loadTopData();
-    
-  }, [dataApps]); 
-
-  console.log('get       --- favouriteData----------', topData.length);
   useEffect(() => {
+ // Only initialize topData when dataApps is first populated
+ if (dataApps?.length > 0 && topData.length === 0) {
+  loadTopData();
+}
+}, [dataApps]);
+
+
+
    
       // Save topData to AsyncStorage whenever it changes
       const saveTopData = async () => {
@@ -465,9 +471,12 @@ useEffect(() => {
         }
       };
 
-      saveTopData();
+    useEffect(() => {
+      if (topData.length > 0) {
+        saveTopData();
+      }
+    }, [topData]);
     
-  }, [topData]);
 
   // useEffect(() => {
   //   const initializeTopData = async () => {
@@ -2548,10 +2557,19 @@ useEffect(() => {
   };
 
     const renderAvailableApps = (item) => {
+      const openApp = async (bundle) => {
+        try {
+          await RNLauncherKitHelper.launchApplication(bundle);
+        } catch (error) {
+          console.error('Error opening the app:', error);
+        }
+      }
       console.log('topData---count-------', item?.count);
     // Render the item only if count is equal to 2
-    if (item?.count >= 2) {
+    if (item?.count > 2) {
       return (
+        <TouchableOpacity onPress={() => openApp(item?.bundle)}>
+
         <View style={{ height: hp(8), padding: 5 }}>
           <Image
             style={{ width: wp(12), height: wp(12) }}
@@ -2559,6 +2577,7 @@ useEffect(() => {
             source={{ uri: `data:image/png;base64,${item?.image}` }}
           />
         </View>
+        </TouchableOpacity>
       );
     } 
     // else {
@@ -2581,7 +2600,7 @@ useEffect(() => {
     if (words.length > 1) {
       return words[0]; // Return the first word if there are multiple words
     }
-    return label.length > 11 ? `${label.slice(0, 11)}...` : label; // Shorten if longer than 10 characters
+    return label.length > 12 ? `${label.slice(0, 12)}...` : label; // Shorten if longer than 10 characters
   };
     const renderApps = (item) => {
     //console.log('item at first', item);

@@ -10,6 +10,8 @@ import {
   ImageBackground,
   View,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -664,6 +666,7 @@ export default function UpdatePostLetterInfo({navigation, route}) {
       </View>
 
       <ScrollView style={{flexGrow: 1}}>
+        
         <View
           style={{
             flexDirection: 'row',
@@ -737,7 +740,8 @@ export default function UpdatePostLetterInfo({navigation, route}) {
             <Ionicons name="chevron-down" size={21} color="#FACA4E" />
           </TouchableOpacity> */}
         </View>
-
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={{ flex: 1, justifyContent: 'center' }}>
         <Text
           style={{
             color: '#FACA4E',
@@ -906,7 +910,8 @@ export default function UpdatePostLetterInfo({navigation, route}) {
 
 
 
-
+</View>
+</TouchableWithoutFeedback>
 
 
         <View style={{ marginHorizontal: wp(7)}}>

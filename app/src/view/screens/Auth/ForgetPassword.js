@@ -14,7 +14,9 @@ import {
   Animated,
   ImageBackground,
   Pressable,
-  StatusBar,
+  StatusBar, 
+  TouchableWithoutFeedback,
+  Keyboard
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -237,13 +239,14 @@ const ForgetPassword = ({navigation}) => {
             }}
           />
         </View>
+            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+            <View style={{ flex: 1, justifyContent: 'center' }}>
 
         <Text style={styles.resetPasswordHeadingTxt}>{t('signin.ForgetPassword')}</Text>
         
         <Text style={styles.resetPasswordTxt}>
         {t('ForgotP.resetPasswordText')}
         </Text>
-
         <TextInput
           mode="outlined"
           label= {t('signin.EmailAddress')}
@@ -281,7 +284,8 @@ const ForgetPassword = ({navigation}) => {
             Please Enter Your Email!
           </Text>
         ) : null}
-
+  </View>
+  </TouchableWithoutFeedback>
         <View style={{marginTop: '25%', alignSelf: 'center'}}>
           <CustomButton
             title= {t('ForgotP.SendCode')}

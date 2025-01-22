@@ -9,6 +9,8 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import Back from '../../assets/svg/back.svg';
@@ -504,12 +506,15 @@ export default function UpdateSellProduct({navigation, route}) {
           showBackIcon={true}
           text={'Update Item'}
           showText={true}
-        />
+        /> 
       </View>
       <ScrollView
         keyboardShouldPersistTaps="always"
         showsVerticalScrollIndicator={false}
         style={styles.container}>
+
+                <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                           <View style={{ flex: 1, justifyContent: 'center' }}>
         <View style={{marginHorizontal: null}}>
           <FlatList
             style={{marginTop: hp(3)}}
@@ -744,6 +749,8 @@ export default function UpdateSellProduct({navigation, route}) {
             height={hp(20)}
           />
         </View>
+        </View>
+        </TouchableWithoutFeedback>
 
         <TouchableOpacity
           onPress={() => handleCheckboxChange()}
