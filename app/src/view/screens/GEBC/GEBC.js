@@ -10,6 +10,8 @@ import {
   ImageBackground,
   View,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -466,6 +468,8 @@ export default function GEBC({navigation}) {
           </Text>
         </View>
 
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                 <View style={{ flex: 1, justifyContent: 'center' }}>
         <View
           style={{
             justifyContent: 'center',
@@ -482,6 +486,9 @@ export default function GEBC({navigation}) {
             height={hp(14)}
           />
         </View>
+        </View>
+        </TouchableWithoutFeedback>
+
         <View style={{marginHorizontal:hp('4%'), marginTop:hp('-2%')}}>
 {profileNameError ? <Text style={styles.errorText}>{profileNameError}</Text> : null}
         </View>

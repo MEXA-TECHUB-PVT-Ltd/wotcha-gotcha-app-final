@@ -13,6 +13,7 @@ import {
   Linking,
   Alert,
   ActivityIndicator,
+  Keyboard,
 } from "react-native";
 import Video from "react-native-video";
 import React, { useState, useRef, useEffect } from "react";
@@ -555,6 +556,27 @@ export default function Tv_promax_upload({ navigation }) {
   const handle_changeCOntent = () => {
     ref_RBSheetCamera1.current.open();
   };
+
+
+   const [isCategoryActive, setIsCategoryActive] = useState(false); // Track if category dropdown is active
+    const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
+      const handleCategoryFocus = () => {
+        setIsCategoryActive(true);
+        setIsSubCategoryActive(false); // Make the sub-category dropdown inactive
+      };
+      
+      const handleCategoryBlur = () => {
+        setIsCategoryActive(false);
+      };
+      
+      const handleSubCategoryFocus = () => {
+        setIsSubCategoryActive(true);
+        setIsCategoryActive(false); // Make the category dropdown inactive
+      };
+      
+      const handleSubCategoryBlur = () => {
+        setIsSubCategoryActive(false);
+      };
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: "white" }}
@@ -577,6 +599,10 @@ export default function Tv_promax_upload({ navigation }) {
         showsVerticalScrollIndicator={false}
         style={{ flex: 1 }}
       >
+           <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+              <View style={{ flex: 1, justifyContent: 'center' }}>
+
+
         <View style={{ flexDirection: "row" }}>
           <View
             style={{
@@ -754,7 +780,7 @@ export default function Tv_promax_upload({ navigation }) {
         <View style={{ marginHorizontal: wp(7) }}>
           <Dropdown
             style={
-              isFocus
+              isCategoryActive
                 ? styles.textInputSelectedCategory
                 : styles.textInputCategoryNonSelected
             }
@@ -787,8 +813,10 @@ export default function Tv_promax_upload({ navigation }) {
             valueField="value"
             placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
+            // onFocus={() => setIsFocus(true)}
+            // onBlur={() => setIsFocus(false)}
+            onFocus={handleCategoryFocus}
+            onBlur={handleCategoryBlur}
             onChange={(item) => {
               console.log("kon main category id hai----", item.value);
               setCategory(item.value);
@@ -811,7 +839,7 @@ export default function Tv_promax_upload({ navigation }) {
         <View style={{ marginHorizontal: wp(7) }}>
           <Dropdown
             style={
-              isFocus
+              isSubCategoryActive
                 ? styles.textInputSelectedCategory
                 : styles.textInputCategoryNonSelected
             }
@@ -847,8 +875,10 @@ export default function Tv_promax_upload({ navigation }) {
             valueField="value"
             placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
+            // onFocus={() => setIsFocus(true)}
+            // onBlur={() => setIsFocus(false)}
+            onFocus={handleSubCategoryFocus}
+            onBlur={handleSubCategoryBlur}
             onChange={(item) => {
               console.log("kon sub category id hai----", item.value);
               setSubCategory(item.value);
@@ -891,6 +921,9 @@ export default function Tv_promax_upload({ navigation }) {
             <Text style={styles.errorText}>{descriptionError}</Text>
           ) : null}
         </View>
+
+        </View>
+        </TouchableWithoutFeedback>
         <View style={styles.loaderButtonView}>
           <View style={styles.loaderButtonInner}>
             <CustomLoaderButton

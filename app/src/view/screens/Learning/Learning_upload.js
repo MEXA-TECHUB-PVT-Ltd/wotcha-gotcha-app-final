@@ -13,6 +13,7 @@ import {
   Linking,
   Alert,
   ActivityIndicator,
+  Keyboard,
 } from "react-native";
 import Video from "react-native-video";
 import React, { useState, useRef, useEffect } from "react";
@@ -505,6 +506,26 @@ export default function Learning_upload({ navigation }) {
   const handle_changeCOntent = () => {
     ref_RBSheetCamera1.current.open();
   };
+
+      const [isCategoryActive, setIsCategoryActive] = useState(false); // Track if category dropdown is active
+          const [isSubCategoryActive, setIsSubCategoryActive] = useState(false);
+            const handleCategoryFocus = () => {
+              setIsCategoryActive(true);
+              setIsSubCategoryActive(false); // Make the sub-category dropdown inactive
+            };
+            
+            const handleCategoryBlur = () => {
+              setIsCategoryActive(false);
+            };
+            
+            const handleSubCategoryFocus = () => {
+              setIsSubCategoryActive(true);
+              setIsCategoryActive(false); // Make the category dropdown inactive
+            };
+            
+            const handleSubCategoryBlur = () => {
+              setIsSubCategoryActive(false);
+            };
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: "white" }}
@@ -527,6 +548,9 @@ export default function Learning_upload({ navigation }) {
         showsVerticalScrollIndicator={false}
         style={{ flex: 1 }}
       >
+               <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                  <View style={{ flex: 1, justifyContent: 'center' }}>
+                    
         <View style={{ flexDirection: "row" }}>
           <View
             style={{
@@ -704,7 +728,7 @@ export default function Learning_upload({ navigation }) {
         <View style={{ marginHorizontal: wp(7) }}>
           <Dropdown
             style={
-              isFocus
+              isCategoryActive
                 ? styles.textInputSelectedCategory
                 : styles.textInputCategoryNonSelected
             }
@@ -735,8 +759,10 @@ export default function Learning_upload({ navigation }) {
             // valueField="id"
             placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
+            onFocus={handleCategoryFocus}
+            onBlur={handleCategoryBlur}
+            // onFocus={() => setIsFocus(true)}
+            // onBlur={() => setIsFocus(false)}
             onChange={(item) => {
               console.log("kon sub category id hai----", item.value);
               setCategory(item.value);
@@ -759,7 +785,7 @@ export default function Learning_upload({ navigation }) {
         <View style={{ marginHorizontal: wp(7) }}>
           <Dropdown
             style={
-              isFocus
+              isSubCategoryActive
                 ? styles.textInputSelectedCategory
                 : styles.textInputCategoryNonSelected
             }
@@ -794,8 +820,10 @@ export default function Learning_upload({ navigation }) {
             // valueField="id"
             placeholder={t('Select Sub Category')}
             searchPlaceholder="Search..."
-            onFocus={() => setIsFocus(true)}
-            onBlur={() => setIsFocus(false)}
+            onFocus={handleSubCategoryFocus}
+            onBlur={handleSubCategoryBlur}
+            // onFocus={() => setIsFocus(true)}
+            // onBlur={() => setIsFocus(false)}
             onChange={(item) => {
               console.log("kon sub category id hai----", item.value);
               setSubCategory(item.value);
@@ -838,6 +866,8 @@ export default function Learning_upload({ navigation }) {
             <Text style={styles.errorText}>{descriptionError}</Text>
           ) : null}
         </View>
+           </View>
+                             </TouchableWithoutFeedback>
         <View style={styles.loaderButtonView}>
           <View style={styles.loaderButtonInner}>
             <CustomLoaderButton

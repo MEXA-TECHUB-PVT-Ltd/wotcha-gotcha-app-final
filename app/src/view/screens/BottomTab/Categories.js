@@ -547,6 +547,8 @@ export default function Categories(identifier) {
       // Save topData to AsyncStorage whenever it changes
       const saveTopData = async () => {
         try {
+          // const reversedTopData = [...topData].reverse();
+          // await AsyncStorage.setItem("topData", JSON.stringify(reversedTopData));
           await AsyncStorage.setItem("topData", JSON.stringify(topData));
         } catch (error) {
           console.error("Error saving top data to AsyncStorage:", error);
@@ -1604,24 +1606,36 @@ export default function Categories(identifier) {
       setModalDeleteApps(false);
       setData(updatedInstallData);
 
+       // Update `topData` by removing the app if it exists
+       const updatedTopData = topData.filter(
+        (app) => app.bundle !== favouriteItem.bundle
+      );
+      setTopData(updatedTopData);
+
         // Update `systemApps` by removing the app if it exists
         const updatedSystemApps = systemApps.filter(
-          (item) => item.bundle !== removeFavouriteItem.bundle
+          (item) => item.bundle !== favouriteItem.bundle
         );
         setSystemApps(updatedSystemApps);
 
            // Update `userApps` by removing the app if it exists
         const updateduserApps = userApps.filter(
-          (item) => item.bundle !== removeFavouriteItem.bundle
+          (item) => item.bundle !== favouriteItem.bundle
         );
         setUserApps(updateduserApps);
 
         // Optional: Remove from `favouriteData` if needed
         const updatedFavouriteData = favouriteData.filter(
-          (item) => item.bundle !== removeFavouriteItem.bundle
+          (item) => item.bundle !== favouriteItem.bundle
         );
         setFavouriteData(updatedFavouriteData);
         
+        // Optional: Remove from `UnusedApps` if needed
+        const updatedUnusedApps = unusedApps.filter(
+          (item) => item.bundle !== favouriteItem.bundle
+        );
+        setUnusedApps(updatedUnusedApps);
+
     } else {
       setModalDeleteApps(false);
       console.log("CANCEL");
@@ -1934,10 +1948,12 @@ export default function Categories(identifier) {
                         style={{ margin: 8, flex: 1 }}
                         //contentContainerStyle={{marginBottom:hp(5)}}
                         showsVerticalScrollIndicator={false}
-                        data={topData}
+                        // data={topData}
+                        data={[...topData].reverse()} 
                         //keyExtractor={item => item.id.toString()}
                         numColumns={3} // Set the number of columns to 3
                         renderItem={({ item }) => renderAvailableApps(item)}
+                        keyExtractor={(item, index) => `${item.bundle}-${index}`}
                       />
                     )}
                   </>

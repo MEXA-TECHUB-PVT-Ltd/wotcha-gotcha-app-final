@@ -180,7 +180,9 @@ const styles = StyleSheet.create({
   userInfoContainer: {
     flexDirection: "row",
     alignItems: "center",
-    height: hp(5),
+    // height: hp(6),
+    paddingBottom:hp(.8),
+    // backgroundColor:'red',
     width: wp(25),
   },
   userImageContainer: {

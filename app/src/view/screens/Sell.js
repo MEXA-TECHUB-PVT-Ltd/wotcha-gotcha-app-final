@@ -11,6 +11,8 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 
@@ -740,6 +742,8 @@ export default function Sell({ navigation }) {
         showsVerticalScrollIndicator={false}
         style={styles.container}
       >
+               <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+               <View style={{ flex: 1, justifyContent: 'center' }}>
         {/* //post letter */}
 
         <TouchableOpacity
@@ -775,7 +779,7 @@ export default function Sell({ navigation }) {
               color: "#939393",
             }}
           >
-            You can upload a minimum of 1 and {"\n"}a maximum of 10 images.
+            You can upload a minimum of one video and {"\n"}a maximum of 10 images.
           </Text>
         </TouchableOpacity>
 
@@ -866,6 +870,7 @@ export default function Sell({ navigation }) {
           // left={isTextInputActive ? <Oemail /> : <Gemail />}
         />
 
+ 
         <View>
           <Dropdown
             style={
@@ -1042,7 +1047,8 @@ export default function Sell({ navigation }) {
           onFocus={handleFocusDescription}
           onBlur={handleBlurDescription}
         />
-
+       </View>
+       </TouchableWithoutFeedback>
         <TouchableOpacity
           onPress={() => handleCheckboxChange()}
           style={{ flexDirection: "row", marginTop: hp(3), width: "100%" }}

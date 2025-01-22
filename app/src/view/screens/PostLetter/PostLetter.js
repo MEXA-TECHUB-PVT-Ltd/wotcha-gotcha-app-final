@@ -9,6 +9,8 @@ import {
   ImageBackground,
   View,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -331,6 +333,8 @@ export default function PostLetter({ navigation, route }) {
       </View>
 
       <ScrollView style={{ flex: 1 }}>
+         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                         <View style={{ flex: 1, justifyContent: 'center' }}>
         <View style={{ marginLeft: wp(8), marginTop: hp(3) }}>
           <CPaperInput
             placeholder={t("SubjectOfLetter")}
@@ -374,7 +378,8 @@ export default function PostLetter({ navigation, route }) {
             height={hp(15)}
           />
         </View>
-
+        </View>
+        </TouchableWithoutFeedback>
         <View style={{ marginTop: hp(1), marginHorizontal: wp(8) }}>
           <CustomButton
             title={t("Next")}
