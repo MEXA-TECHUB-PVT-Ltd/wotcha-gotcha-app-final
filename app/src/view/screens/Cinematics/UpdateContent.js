@@ -10,6 +10,8 @@ import {
   ImageBackground,
   View,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import RBSheet from "react-native-raw-bottom-sheet";
@@ -862,6 +864,8 @@ export default function UpdateContent({ navigation, route }) {
         showsVerticalScrollIndicator={false}
         style={{ flex: 1 }}
       >
+             <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                <View style={{ flex: 1, justifyContent: 'center' }}>
         <View
           style={{
             height: hp(30),
@@ -1146,6 +1150,8 @@ export default function UpdateContent({ navigation, route }) {
             height={hp(20)}
           />
         </View>
+        </View>
+        </TouchableWithoutFeedback>
         <View
           style={{
             marginTop: hp(5),

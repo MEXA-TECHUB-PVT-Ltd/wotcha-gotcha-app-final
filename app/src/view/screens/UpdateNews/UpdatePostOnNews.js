@@ -10,6 +10,8 @@ import {
   ImageBackground,
   View,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -704,7 +706,8 @@ console.log('subcategory---------', subcategory)
             {userName}
           </Text>
         </View>
-
+ <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                 <View style={{ flex: 1, justifyContent: 'center' }}>
         <View
           style={{
             justifyContent: 'center',
@@ -713,14 +716,15 @@ console.log('subcategory---------', subcategory)
           }}>
           <CPaperInput
             multiline={true}
-            placeholder={'Add Post News'}
+            placeholder={t('Addanews')}
             placeholderTextColor="#B0B0B0"
             value={comment}
             onChangeText={text => setComment(text)}
             height={hp(8)}
           />
         </View>
-
+        </View>
+        </TouchableWithoutFeedback>
         <TouchableOpacity
           onPress={() => ref_RBSheetCamera.current.open()}
           style={{
@@ -860,7 +864,7 @@ console.log('subcategory---------', subcategory)
             // valueField="id"
             labelField="label"
             valueField="value"
-            placeholder={'Select Category'}
+            placeholder={t('SelectCategory')}
             searchPlaceholder="Search..."
             onFocus={handleCategoryFocus}
             onBlur={handleCategoryBlur}
@@ -919,7 +923,7 @@ console.log('subcategory---------', subcategory)
             // valueField="id"
             labelField="label"
             valueField="value"
-            placeholder={"Select Sub Category"}
+            placeholder={t('SelectSubCategory')}
             searchPlaceholder="Search..."
             onFocus={handleSubCategoryFocus}
             onBlur={handleSubCategoryBlur}
@@ -950,7 +954,7 @@ console.log('subcategory---------', subcategory)
           alignSelf: 'center',
         }}>
         <CustomButton
-          title="Update"
+          title={t('Update')}
           load={false}
           // checkdisable={inn == '' && cm == '' ? true : false}
           customClick={() => {

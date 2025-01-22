@@ -466,7 +466,7 @@ export default function Categories(identifier) {
 
   //   fetchData();
   // }, []);
-  useEffect(() => {
+
    
       // Load favouriteData from AsyncStorage when the component mounts
       const loadFavouriteData = async () => {
@@ -495,12 +495,11 @@ export default function Categories(identifier) {
           );
         }
       };
-
+      useEffect(() => {
       loadFavouriteData();
-    
   }, [isFocused]); // Run this effect only once when the component mounts
 
-  useEffect(() => {
+
   
       // Save favouriteData to AsyncStorage whenever it changes
       const saveFavouriteData = async () => {
@@ -514,35 +513,71 @@ export default function Categories(identifier) {
           console.error("Error saving favourite data to AsyncStorage:", error);
         }
       };
+      useEffect(() => {
       saveFavouriteData();
-    
   }, [favouriteData, ]); // Run this effect whenever favouriteData changes
 
   // //------------------------------------\\
 
   // //-------------------Use Effect Top Apps---------\\
   // console.log('topData----------', topData);
-  useEffect(() => {
+  // useEffect(() => {
 
-      // Load topData from AsyncStorage when the component mounts
-      const loadTopData = async () => {
-        //await AsyncStorage.removeItem('topData');
-        try {
-          const storedData = await AsyncStorage.getItem("topData");
-          if (storedData) {
-            const parsedData = JSON.parse(storedData);
-            setTopData(parsedData);
-          }
-        } catch (error) {
-          console.error("Error loading top data from AsyncStorage:", error);
-        }
-      };
+  //     // Load topData from AsyncStorage when the component mounts
+  //     const loadTopData = async () => {
+  //       //await AsyncStorage.removeItem('topData');
+  //       try {
+  //         const storedData = await AsyncStorage.getItem("topData");
+  //         if (storedData) {
+  //           const parsedData = JSON.parse(storedData);
+  //           setTopData(parsedData);
+  //         }
+  //       } catch (error) {
+  //         console.error("Error loading top data from AsyncStorage:", error);
+  //       }
+  //     };
 
-      loadTopData();
+  //     loadTopData();
     
-  }, [isFocused]); // Run this effect only once when the component mounts
+  // }, [isFocused]); // Run this effect only once when the component mounts
+ 
+    const loadTopData = async () => {
+      try {
+        const storedData = await AsyncStorage.getItem("topData");
+        console.log("Retrieved storedData:", storedData);
+  
+        if (!storedData || JSON.parse(storedData).length === 0) {
+          // If no data exists or stored data is an empty array
+          console.log("No data found or empty data, initializing with top 6 apps.");
+          if (dataApps && dataApps.length > 0) {
+            const topSixItems = dataApps.slice(0, 6).map(item => ({
+              ...item,
+              count: 3, // Initialize count to 2
+            }));
+            await AsyncStorage.setItem("topData", JSON.stringify(topSixItems));
+            setTopData(topSixItems);
+          } else {
+            console.warn("dataApps is empty, cannot initialize topData.");
+          }
+        } else {
+          // Parse and set the existing data
+          const parsedData = JSON.parse(storedData);
+          console.log("Parsed data from AsyncStorage:", parsedData);
+          setTopData(parsedData);
+        }
+      } catch (error) {
+        console.error("Error loading top data from AsyncStorage:", error);
+      }
+    };
 
-  useEffect(() => {
+    useEffect(() => {
+   // Only initialize topData when dataApps is first populated
+   if (dataApps?.length > 0 && topData.length === 0) {
+    loadTopData();
+  }
+  }, [dataApps]);
+  
+ 
    
       // Save topData to AsyncStorage whenever it changes
       const saveTopData = async () => {
@@ -555,9 +590,11 @@ export default function Categories(identifier) {
         }
       };
 
-      saveTopData();
-    
-  }, [topData]); // Run this effect whenever topData changes
+      useEffect(() => {
+      if (topData.length > 0) {
+        saveTopData();
+      }
+    }, [topData]);
 
   //---------------------------------------------\\
 
@@ -616,6 +653,7 @@ export default function Categories(identifier) {
   const dismissSnackbar = () => {
     setSnackbarVisible(false);
   };
+
 
   // const filterUnusedApps = async (apps) => {
   //   const currentDate = new Date();
@@ -710,49 +748,87 @@ export default function Categories(identifier) {
     setFlatListKey(Date.now()); // Update the key to force re-render
   };
 
+  const shortenLabel = (label) => {
+    if (!label) return ''; // Handle undefined or null labels
+    const words = label.split(' ');
+    if (words.length > 1) {
+      return words[0]; // Return the first word if there are multiple words
+    }
+    return label.length > 12 ? `${label.slice(0, 12)}...` : label; // Shorten if longer than 10 characters
+  };
+
   const renderApps = (item) => {
      const openApp = async (bundle) => {
          try {
-           // Log the current topData labels
-           console.log("Current topData labels:", topData.map((app) => app.label));
+          const appIndex = topData.findIndex(app => app.bundle === bundle);
+    
+          let updatedTopData = [...topData];
+      
+          if (appIndex !== -1) {
+            // Update the count for the existing app
+            updatedTopData[appIndex].count += 1;
+      
+            // If the count exceeds 3, move the app to the front of the list
+            if (updatedTopData[appIndex].count > 3) {
+              const [selectedApp] = updatedTopData.splice(appIndex, 1);
+              updatedTopData = [selectedApp, ...updatedTopData].slice(0, 6);
+            }
+          } else {
+            // Add new app to the top data with an initial count of 1
+            const newApp = { ...item, count: 1 };
+            updatedTopData = [newApp, ...updatedTopData].slice(0, 6);
+          }
+      
+          // Save the updated top data
+          setTopData(updatedTopData);
+          await AsyncStorage.setItem('topData', JSON.stringify(updatedTopData));
+      
+          // Launch the app
+          console.log(`Launching app: ${item.label}`);
+          await RNLauncherKitHelper.launchApplication(bundle);
+        } catch (error) {
+          console.error('Error opening the app:', error);
+        }
+        //    // Log the current topData labels
+        //    console.log("Current topData labels:", topData.map((app) => app.label));
      
-           // Check if the app is already in the topData array
-           const appIndex = topData.findIndex((app) => app.bundle === bundle);
+        //    // Check if the app is already in the topData array
+        //    const appIndex = topData.findIndex((app) => app.bundle === bundle);
      
-           if (appIndex !== -1) {
-             // If the app is already in the array, update the count
-             console.log(`Updating count for app: ${topData[appIndex].label}`);
-             const updatedTopData = [...topData];
-             updatedTopData[appIndex] = {
-               ...updatedTopData[appIndex],
-               count: updatedTopData[appIndex].count + 1,
-             };
-             setTopData(updatedTopData);
-           } else {
-             // If the app is not in the array, add it to the topData
-             console.log(`Adding new app to topData: ${item.label}`);
-             const updatedTopData = [
-               ...topData,
-               {
-                 label: item.label,
-                 bundle: item.bundle,
-                 image: item.image,
-                 count: 1,
-               },
-             ].slice(0, 6); // Ensure topData contains only 6 items
+        //    if (appIndex !== -1) {
+        //      // If the app is already in the array, update the count
+        //      console.log(`Updating count for app: ${topData[appIndex].label}`);
+        //      const updatedTopData = [...topData];
+        //      updatedTopData[appIndex] = {
+        //        ...updatedTopData[appIndex],
+        //        count: updatedTopData[appIndex].count + 1,
+        //      };
+        //      setTopData(updatedTopData);
+        //    } else {
+        //      // If the app is not in the array, add it to the topData
+        //      console.log(`Adding new app to topData: ${item.label}`);
+        //      const updatedTopData = [
+        //        ...topData,
+        //        {
+        //          label: item.label,
+        //          bundle: item.bundle,
+        //          image: item.image,
+        //          count: 1,
+        //        },
+        //      ].slice(0, 6); // Ensure topData contains only 6 items
      
-             setTopData(updatedTopData);
-           }
+        //      setTopData(updatedTopData);
+        //    }
      
-           // Log the updated topData labels
-           console.log("Updated topData labels:", topData.map((app) => app.label));
+        //    // Log the updated topData labels
+        //    console.log("Updated topData labels:", topData.map((app) => app.label));
      
-           // Launch the app
-           console.log(`Launching app: ${item.label}`);
-           await RNLauncherKitHelper.launchApplication(bundle);
-         } catch (error) {
-           console.error("Error opening the app:", error);
-         }
+        //    // Launch the app
+        //    console.log(`Launching app: ${item.label}`);
+        //    await RNLauncherKitHelper.launchApplication(bundle);
+        //  } catch (error) {
+        //    console.error("Error opening the app:", error);
+        //  }
        };
     // const openApp = async (items) => {
     //   try {
@@ -826,7 +902,8 @@ export default function Categories(identifier) {
             ellipsizeMode="tail"
             numberOfLines={1}
           >
-            {item?.label}
+            {/* {item?.label} */}
+            {shortenLabel(item?.label)}
           </Text>
         </View>
       </TouchableOpacity>
@@ -879,7 +956,8 @@ export default function Categories(identifier) {
             ellipsizeMode="tail"
             numberOfLines={1}
           >
-            {item?.label}
+            {/* {item?.label} */}
+            {shortenLabel(item?.label)}
           </Text>
         </View>
       </TouchableOpacity>
@@ -1054,7 +1132,8 @@ export default function Categories(identifier) {
             ellipsizeMode="tail"
             numberOfLines={1}
           >
-            {item?.label}
+            {/* {item?.label} */}
+            {shortenLabel(item?.label)}
           </Text>
         </View>
       </TouchableOpacity>
@@ -1096,7 +1175,8 @@ export default function Categories(identifier) {
             ellipsizeMode="tail"
             numberOfLines={1}
           >
-            {item?.label}
+            {/* {item?.label} */}
+            {shortenLabel(item?.label)}
           </Text>
         </View>
       </TouchableOpacity>
@@ -1138,7 +1218,8 @@ export default function Categories(identifier) {
             ellipsizeMode="tail"
             numberOfLines={1}
           >
-            {item?.label}
+            {/* {item?.label} */}
+            {shortenLabel(item?.label)}
           </Text>
         </View>
       </TouchableOpacity>
@@ -1180,7 +1261,8 @@ export default function Categories(identifier) {
             ellipsizeMode="tail"
             numberOfLines={1}
           >
-            {item?.label}
+            {/* {item?.label} */}
+            {shortenLabel(item?.label)}
           </Text>
         </View>
       </TouchableOpacity>
@@ -1222,7 +1304,8 @@ export default function Categories(identifier) {
             ellipsizeMode="tail"
             numberOfLines={1}
           >
-            {item?.label}
+            {/* {item?.label} */}
+            {shortenLabel(item?.label)}
           </Text>
         </View>
       </TouchableOpacity>
@@ -1264,7 +1347,8 @@ export default function Categories(identifier) {
             ellipsizeMode="tail"
             numberOfLines={1}
           >
-            {item?.label}
+            {/* {item?.label} */}
+            {shortenLabel(item?.label)}
           </Text>
         </View>
       </TouchableOpacity>
@@ -1306,7 +1390,8 @@ export default function Categories(identifier) {
             ellipsizeMode="tail"
             numberOfLines={1}
           >
-            {item?.label}
+            {/* {item?.label} */}
+            {shortenLabel(item?.label)}
           </Text>
         </View>
       </TouchableOpacity>
@@ -1348,7 +1433,8 @@ export default function Categories(identifier) {
             ellipsizeMode="tail"
             numberOfLines={1}
           >
-            {item?.label}
+            {/* {item?.label} */}
+            {shortenLabel(item?.label)}
           </Text>
         </View>
       </TouchableOpacity>
@@ -1390,7 +1476,8 @@ export default function Categories(identifier) {
             ellipsizeMode="tail"
             numberOfLines={1}
           >
-            {item?.label}
+            {/* {item?.label} */}
+            {shortenLabel(item?.label)}
           </Text>
         </View>
       </TouchableOpacity>
@@ -1432,7 +1519,8 @@ export default function Categories(identifier) {
             ellipsizeMode="tail"
             numberOfLines={1}
           >
-            {item?.label}
+            {/* {item?.label} */}
+            {shortenLabel(item?.label)}
           </Text>
         </View>
       </TouchableOpacity>
@@ -1442,39 +1530,68 @@ export default function Categories(identifier) {
     // console.log('item at first----------', item.bundle);
     const openApp = async (items) => {
       try {
-        // Launch the application
-        await RNLauncherKitHelper.launchApplication(item.bundle);
-
-        // Check if the app is already in the topData array
-        const appIndex = topData.findIndex((app) => app.bundle === item.bundle);
-
+        const appIndex = topData.findIndex(app => app.bundle === bundle);
+    
+        let updatedTopData = [...topData];
+    
         if (appIndex !== -1) {
-          // If the app is already in the array, update the count
-          const updatedTopData = [...topData];
-          updatedTopData[appIndex] = {
-            ...updatedTopData[appIndex],
-            count: updatedTopData[appIndex].count + 1,
-          };
-
-          setTopData(updatedTopData);
+          // Update the count for the existing app
+          updatedTopData[appIndex].count += 1;
+    
+          // If the count exceeds 3, move the app to the front of the list
+          if (updatedTopData[appIndex].count > 3) {
+            const [selectedApp] = updatedTopData.splice(appIndex, 1);
+            updatedTopData = [selectedApp, ...updatedTopData].slice(0, 6);
+          }
         } else {
-          // If the app is not in the array, add it with count 1
-          setTopData((prevData) => [
-            ...prevData,
-            {
-              label: item.label,
-              bundle: item.bundle,
-              image: item.image,
-              count: 1,
-            },
-          ]);
+          // Add new app to the top data with an initial count of 1
+          const newApp = { ...item, count: 1 };
+          updatedTopData = [newApp, ...updatedTopData].slice(0, 6);
         }
-
-        await RNLauncherKitHelper.launchApplication(items); // Assuming 'item.label' is the package name
+    
+        // Save the updated top data
+        setTopData(updatedTopData);
+        await AsyncStorage.setItem('topData', JSON.stringify(updatedTopData));
+    
+        // Launch the app
+        console.log(`Launching app: ${item.label}`);
+        await RNLauncherKitHelper.launchApplication(bundle);
       } catch (error) {
-        console.error("Error opening the app:", error);
-        await RNLauncherKitHelper.launchApplication(items); // Assuming 'item.label' is the package name
+        console.error('Error opening the app:', error);
       }
+      //   // Launch the application
+      //   await RNLauncherKitHelper.launchApplication(item.bundle);
+
+      //   // Check if the app is already in the topData array
+      //   const appIndex = topData.findIndex((app) => app.bundle === item.bundle);
+
+      //   if (appIndex !== -1) {
+      //     // If the app is already in the array, update the count
+      //     const updatedTopData = [...topData];
+      //     updatedTopData[appIndex] = {
+      //       ...updatedTopData[appIndex],
+      //       count: updatedTopData[appIndex].count + 1,
+      //     };
+
+      //     setTopData(updatedTopData);
+      //   } else {
+      //     // If the app is not in the array, add it with count 1
+      //     setTopData((prevData) => [
+      //       ...prevData,
+      //       {
+      //         label: item.label,
+      //         bundle: item.bundle,
+      //         image: item.image,
+      //         count: 1,
+      //       },
+      //     ]);
+      //   }
+
+      //   await RNLauncherKitHelper.launchApplication(items); // Assuming 'item.label' is the package name
+      // } catch (error) {
+      //   console.error("Error opening the app:", error);
+      //   await RNLauncherKitHelper.launchApplication(items); // Assuming 'item.label' is the package name
+      // }
     };
 
     return (
@@ -1501,17 +1618,26 @@ export default function Categories(identifier) {
           ellipsizeMode="tail"
           numberOfLines={1}
         >
-          {item?.label}
+          {/* {item?.label} */}
+          {shortenLabel(item?.label)}
         </Text>
       </TouchableOpacity>
     );
   };
 
   const renderAvailableApps = (item) => {
-    console.log('topData---------in cate-----', item?.label);
+       const openApp = async (bundle) => {
+            try {
+              await RNLauncherKitHelper.launchApplication(bundle);
+            } catch (error) {
+              console.error('Error opening the app:', error);
+            }
+          }
+    console.log('topData---------in cate-----', item?.count);
     // Render the item only if count is equal to 2
-    // if (item.count >= 2) {
+    if (item.count > 2) {
       return (
+         <TouchableOpacity onPress={() => openApp(item?.bundle)}>
         <View style={{ height: hp(8), padding: 5 }}>
           <Image
             style={{ width: wp(12), height: wp(12) }}
@@ -1519,8 +1645,9 @@ export default function Categories(identifier) {
             source={{ uri: `data:image/png;base64,${item?.image}` }}
           />
         </View>
+        </TouchableOpacity>
       );
-    // } 
+    } 
     // else {
     //   // Return null or an empty view if count is not equal to 2
     //   return (
@@ -1873,7 +2000,7 @@ export default function Categories(identifier) {
         <BannerCarousel
           isLoading={isLoading}
           adsData={adsData}
-          noDataMessage="No Top Banner"
+          noDataMessage={t('Dashboard.NoTopBanner')}
           onBannerPress={handleBannerPress}
         />
 
@@ -3242,7 +3369,7 @@ export default function Categories(identifier) {
         <BannerCarousel
           isLoading={isLoading}
           adsData={adsInActiveData}
-          noDataMessage="No Banner"
+          noDataMessage={t("Dashboard.NoBanner")}
           onBannerPress={handleBannerPress}
         />
         {/* ////slider end */}

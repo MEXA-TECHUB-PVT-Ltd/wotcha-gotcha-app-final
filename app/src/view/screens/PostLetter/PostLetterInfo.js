@@ -553,7 +553,6 @@ export default function PostLetterInfo({ navigation }) {
           </Text>
           {/* <TouchableOpacity
             onPress={() => {
-
               setTimeout(() => {
                 ref_RBSheetCamera.current.open()
               }, 500);

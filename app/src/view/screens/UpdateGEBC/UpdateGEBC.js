@@ -993,6 +993,8 @@ import {
   ImageBackground,
   View,
   TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -1824,6 +1826,7 @@ console.log('subcategory---------', subcategory)
         //keyboardShouldPersistTaps="always"
         showsVerticalScrollIndicator={false}
         style={{flex: 1}}>
+          
         <View
           style={{
             flexDirection: 'row',
@@ -1891,6 +1894,8 @@ console.log('subcategory---------', subcategory)
           </Text>
         </View>
 
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                 <View style={{ flex: 1, justifyContent: 'center' }}>
         <View
           style={{
             justifyContent: 'center',
@@ -1900,13 +1905,15 @@ console.log('subcategory---------', subcategory)
           <CPaperInput
             multiline={true}
             style={{flex: 1}}
-            placeholder={'Add EBC'}
+            placeholder={t('AddEBC')}
             placeholderTextColor="#B0B0B0"
             value={comment}
             onChangeText={text => setComment(text)}
             height={hp(14)}
           />
         </View>
+        </View>
+        </TouchableWithoutFeedback>
 
         {/*   <TouchableOpacity
           onPress={() => ref_RBSheetCamera.current.open()}
